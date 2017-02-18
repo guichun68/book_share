@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="zyzx.linke">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <application
+        android:name=".base.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.SplashAct" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.LoginAct" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.HomeAct" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SMSLoginAct" android:screenOrientation="portrait"/>
+        <!-- 友盟统计 -->
+        <meta-data android:value="58a69d50f43e4839d30007ce" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="baidu_pan" android:name="UMENG_CHANNEL"/>
+    </application>
+
+</manifest>

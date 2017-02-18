@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">自由自行</string>
+    <string name="sms_login"><u>短信验证码登录</u></string>
+    <string name="forget_psw"><u>忘记密码</u></string>
+    <string name="regist"><b><u>用户注册</u></b></string>
+    <string name="phone">手机号</string>
+    <string name="username">用户名</string>
+    <string name="input_username">请输入用户名</string>
+    <string name="password">密码</string>
+    <string name="verifycode">发送验证码</string>
+    <string name="input_verifycode">请输入验证码</string>
+    <string name="input_phone">请输入手机号码</string>
+</resources>
