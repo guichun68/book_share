@@ -3,7 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/title_bar"/>
+    <include layout="@layout/title_bar_home"
+        />
+
 
     <TextView
         android:layout_width="wrap_content"

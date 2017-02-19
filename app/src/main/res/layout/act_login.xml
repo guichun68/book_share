@@ -32,7 +32,7 @@
         <View
             android:layout_width="1.0px"
             android:layout_height="fill_parent"
-            android:background="#ffd2d2d2" />
+            android:background="@color/ver_line" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_login_name"
@@ -42,6 +42,7 @@
             android:layout_marginStart="5dp"
             android:hint="@string/input_username"
             android:background="@null"
+            android:text="aaa"
             android:maxLength="11" />
     </LinearLayout>
 
@@ -67,7 +68,7 @@
         <View
             android:layout_width="1.0px"
             android:layout_height="fill_parent"
-            android:background="#ffd2d2d2" />
+            android:background="@color/ver_line" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_psw"
@@ -78,6 +79,7 @@
             android:hint="@string/input_username"
             android:background="@null"
             android:inputType="textPassword"
+            android:text="aaa"
             android:maxLength="11" />
 
         <View

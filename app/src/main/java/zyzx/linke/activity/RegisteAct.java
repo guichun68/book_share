@@ -54,7 +54,6 @@ public class RegisteAct extends BaseActivity{
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        UIUtil.showTestLog("zyzxT1",Thread.currentThread().getName());
         switch (view.getId()){
             case R.id.btn_regist:
                 if(!checkInput()){
@@ -68,7 +67,6 @@ public class RegisteAct extends BaseActivity{
                             @Override
                             public void run() {
                                 CustomProgressDialog.dismissDialog(progressDialog);
-                                UIUtil.showTestLog("zyzxT2",Thread.currentThread().getName());
                                 Integer code = (Integer) obj;
                                 switch (code){
                                     case 200:
@@ -98,6 +96,7 @@ public class RegisteAct extends BaseActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                UIUtil.showToastSafe("访问出错，请稍后再试");
                                 CustomProgressDialog.dismissDialog(progressDialog);
                             }
                         });

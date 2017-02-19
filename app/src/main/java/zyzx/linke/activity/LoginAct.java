@@ -103,7 +103,8 @@ public class LoginAct extends BaseActivity{
                     public void onFailure(Object obj) {
                         CustomProgressDialog.dismissDialog(progressBar);
 //                        UIUtil.showToastSafe("用户名或密码错误.");
-                        Snackbar.make(view, (String)obj, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "访问超时，请重试", Snackbar.LENGTH_SHORT).show();
+//                        Snackbar.make(view, (String)obj, Snackbar.LENGTH_SHORT).show();
                     }
                 });
 

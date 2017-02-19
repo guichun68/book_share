@@ -3,6 +3,8 @@ package zyzx.linke.activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import zyzx.linke.R;
 
@@ -13,6 +15,7 @@ import zyzx.linke.R;
 
 public class HomeAct extends BaseActivity {
 
+    private ImageView ivScan;
     @Override
     protected int getLayoutId() {
         return R.layout.act_home;
@@ -20,13 +23,35 @@ public class HomeAct extends BaseActivity {
 
     @Override
     protected void initView() {
-        mBackBtn.setVisibility(View.INVISIBLE);
+        ivScan = (ImageView) findViewById(R.id.iv_scan);
+        ivScan.setOnClickListener(this);
         mTitleText.setText("自由自行");
+        mBackBtn.setImageResource(R.mipmap.me2);
+        mBackBtn.setClickable(true);
+        mBackBtn.setOnClickListener(this);
+        mRightBtn.setClickable(true);
+        mRightBtn.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.back_img:
+                Toast.makeText(HomeAct.this,"点击了我",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_scan:
+                Toast.makeText(HomeAct.this,"点击了扫描",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.right_img:
+                Toast.makeText(HomeAct.this,"点击了搜索",Toast.LENGTH_SHORT).show();
+                gotoActivity(GeoFence_Activity.class,false);
+                break;
+        }
     }
 
     //确定要退出App?

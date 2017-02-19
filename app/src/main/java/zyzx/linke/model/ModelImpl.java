@@ -10,6 +10,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import zyzx.linke.utils.UIUtil;
 
@@ -36,6 +37,9 @@ public class ModelImpl implements IModel {
                 .post(body)
                 .build();
 
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);
+        client.setReadTimeout(30, TimeUnit.SECONDS);
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -45,7 +49,6 @@ public class ModelImpl implements IModel {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                UIUtil.showTestLog("zyzxT0",Thread.currentThread().getName());
                 callBack.onSuccess(response.body().string());
             }
         });

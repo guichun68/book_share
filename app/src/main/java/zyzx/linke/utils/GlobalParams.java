@@ -2,6 +2,7 @@ package zyzx.linke.utils;
 
 
 import android.app.Activity;
+import android.graphics.Color;
 
 import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
