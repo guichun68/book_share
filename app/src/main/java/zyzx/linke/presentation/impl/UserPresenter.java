@@ -43,7 +43,7 @@ public class UserPresenter implements IUserPresenter {
                    String response = (String)obj;
                    if(response.contains("<html>")){
                        if(viewCallBack!=null){
-                           viewCallBack.onFailure("服务器错误");
+                           viewCallBack.onFailure("服务器错误，请检查URL");
                        }
                        return;
                    }
@@ -99,7 +99,7 @@ public class UserPresenter implements IUserPresenter {
                     String response = (String)obj;
                     if(response.contains("<html>")){
                         if(viewCallBack!=null){
-                            viewCallBack.onFailure("服务器错误");
+                            viewCallBack.onFailure("服务器错误，请检查URL");
                         }
                         return;
                     }
@@ -110,6 +110,45 @@ public class UserPresenter implements IUserPresenter {
                         GlobalParams.gUser = jsonObject.getObject("user",User.class);
                     }else{
                         GlobalParams.gVerifyCode = 0;
+                    }
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(code);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void regist(String userName, String psw, String phone, final CallBack viewCallBack) {
+        HashMap<String,String> param = new HashMap<>();
+        param.put("login_name",userName);
+        param.put("password",psw);
+        param.put("phone",phone);
+        try {
+            getModel().post(GlobalParams.urlRegist, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    String response = (String)obj;
+                    if(response.contains("<html>")){
+                        if(viewCallBack!=null){
+                            viewCallBack.onFailure("服务器错误，请检查URL");
+                        }
+                        return;
+                    }
+                    JSONObject jsonObject = JSON.parseObject(response);
+                    int code = jsonObject.getInteger("code");
+                    if(code == 200){
+                        GlobalParams.gUser = jsonObject.getObject("user",User.class);
+                    }else{
+                        GlobalParams.gUser = null;
                     }
                     if(viewCallBack!=null){
                         viewCallBack.onSuccess(code);

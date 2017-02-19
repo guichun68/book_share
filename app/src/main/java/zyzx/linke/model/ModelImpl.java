@@ -45,6 +45,7 @@ public class ModelImpl implements IModel {
 
             @Override
             public void onResponse(Response response) throws IOException {
+                UIUtil.showTestLog("zyzxT0",Thread.currentThread().getName());
                 callBack.onSuccess(response.body().string());
             }
         });

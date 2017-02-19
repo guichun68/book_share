@@ -18,4 +18,12 @@ public interface IUserPresenter {
      * 发送登录用的短信验证码
      */
     void sendLoginSMSVerifyCode(String phone,CallBack viewCallBack);
+
+    /**
+     * 注册
+     * @param userName
+     * @param psw
+     * @param phone
+     */
+    void regist(String userName, String psw, String phone,CallBack viewCallBack);
 }

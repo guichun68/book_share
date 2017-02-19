@@ -35,7 +35,7 @@ public class LoginAct extends BaseActivity{
     private IUserPresenter presenter;
     private AppCompatEditText aetLoginName,aetPsw;
     private Button btnLogin;
-    private TextView tvSmsLogin,tvForgetPsw,tvRegist;
+    private TextView tvSmsLogin,tvForgetPsw,tvRegist,tvAboutus;
     private Dialog progressBar;
 
     @Override
@@ -52,14 +52,17 @@ public class LoginAct extends BaseActivity{
         btnLogin = (Button) findViewById(R.id.btn_login);
         tvSmsLogin = (TextView) findViewById(R.id.tv_sms_login);
         tvForgetPsw = (TextView) findViewById(R.id.tv_forget_psw);
+        tvAboutus = (TextView) findViewById(R.id.tv_about_us);
         tvRegist = (TextView) findViewById(R.id.tv_regist);
 
         mTitleText.setClickable(true);
+        tvAboutus.setClickable(true);
         mTitleText.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         tvSmsLogin.setOnClickListener(this);
         tvForgetPsw.setOnClickListener(this);
         tvRegist.setOnClickListener(this);
+        tvAboutus.setOnClickListener(this);
 
         aetLoginName = (AppCompatEditText) findViewById(R.id.aet_login_name);
         aetPsw = (AppCompatEditText) findViewById(R.id.aet_psw);
@@ -70,7 +73,8 @@ public class LoginAct extends BaseActivity{
         aetLoginName.setHint(new SpannedString(ss));
 
         SpannableString ss2 = new SpannableString("请输入密码");//定义hint的值
-        ss.setSpan(ass, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(16,true);//设置字体大小 true表示单位是sp
+        ss.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         aetPsw.setHint(new SpannedString(ss2));
     }
 
@@ -111,17 +115,26 @@ public class LoginAct extends BaseActivity{
                 break;
             case R.id.tv_forget_psw:
                 break;
-            case R.id.tv_regist:
+            case R.id.tv_regist://用户注册
+                Intent intent2 = new Intent(LoginAct.this,RegisteAct.class);
+                startActivityForResult(intent2,300);
+//                gotoActivity(RegisteAct.class,false);
                 break;
             case R.id.title_text:
                 threeClick();
+                break;
+            case R.id.tv_about_us:
+                gotoActivity(AboutUsAct.class,false);
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 200){
+        if(requestCode == 200 && resultCode==200){//手机号登录页登录成功返回
+            gotoActivity(HomeAct.class,true);
+        }
+        if(requestCode==300 && resultCode==300){//注册页注册成功返回
             gotoActivity(HomeAct.class,true);
         }
     }
@@ -129,9 +142,11 @@ public class LoginAct extends BaseActivity{
     private boolean checkInput() {
         if(StringUtil.isEmpty(aetLoginName.getText().toString())){
             aetLoginName.setError("用户名不能为空");
+            Snackbar.make(aetLoginName,"用户名不能为空",Snackbar.LENGTH_SHORT).show();
             return false;
         }
         if(StringUtil.isEmpty(aetPsw.getText().toString())){
+            Snackbar.make(aetLoginName,"密码不能为空",Snackbar.LENGTH_SHORT).show();
             aetPsw.setError("密码不能为空");
             return false;
         }

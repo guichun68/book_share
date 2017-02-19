@@ -86,6 +86,7 @@ public class SMSLoginAct extends BaseActivity{
                 if(!checkVerifyInput()){
                     return;
                 }
+                setResult(200);
                 this.finish();
                 break;
         }
@@ -137,5 +138,11 @@ public class SMSLoginAct extends BaseActivity{
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        this.setResult(300);
+        super.onDestroy();
     }
 }

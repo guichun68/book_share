@@ -35,8 +35,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:contentDescription="@null"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/refresh"
         android:visibility="gone"/>
 
     <include
