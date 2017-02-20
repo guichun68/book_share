@@ -198,7 +198,7 @@ public class GeoFence_Round_Activity extends CheckPermissionsActivity
 		// 自定义精度范围的圆形边框宽度
 		myLocationStyle.strokeWidth(0);
 		// 设置圆形的填充颜色
-		myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
+		myLocationStyle.radiusFillColor(Color.argb(102, 102, 204, 255));
 		// 将自定义的 myLocationStyle 对象添加到地图上
 		mAMap.setMyLocationStyle(myLocationStyle);
 		mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
