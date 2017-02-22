@@ -26,16 +26,22 @@ public class ModelImpl implements IModel {
     @Override
     public void post(String url, HashMap<String, String> param, final CallBack callBack) throws IOException {
         FormEncodingBuilder fb = new FormEncodingBuilder();
+        Request request;
+        if(param != null){
+            for (Map.Entry<String, String> et : param.entrySet()) {
+                fb.add(et.getKey(), et.getValue());
+            }
+            RequestBody body = fb.build();
 
-        for (Map.Entry<String, String> et : param.entrySet()) {
-            fb.add(et.getKey(), et.getValue());
-        }
-        RequestBody body = fb.build();
-
-        Request request = new Request.Builder()
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+        }else{
+            request = new Request.Builder()
                 .url(url)
-                .post(body)
                 .build();
+        }
 
         client.setConnectTimeout(10, TimeUnit.SECONDS);
         client.setWriteTimeout(10, TimeUnit.SECONDS);

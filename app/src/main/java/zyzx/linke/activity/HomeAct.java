@@ -1,17 +1,20 @@
 package zyzx.linke.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.amap.api.fence.GeoFenceClient;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -27,11 +30,11 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.zip.Inflater;
 
+import zxing.CaptureActivity;
 import zyzx.linke.R;
-import zyzx.linke.utils.UIUtil;
+import zyzx.linke.activity.amap.GeoFence_Activity;
 
 /**
  * Created by austin on 2017/2/17.
@@ -39,6 +42,7 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.OnMapClickListener, LocationSource {
+    private static final int CAMERA_REQUEST_CODE = 200;
     private MapView mMapView;
     private AMap mAMap;
     private ImageView ivScan;
@@ -81,16 +85,25 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
      * 设置一些amap的属性
      */
     private void setUpMap() {
+
         if (mAMap == null) {
             mAMap = mMapView.getMap();
             //设置可以旋转地图
             mAMap.getUiSettings().setRotateGesturesEnabled(true);
             mAMap.moveCamera(CameraUpdateFactory.zoomBy(14));
-            mAMap.moveCamera(CameraUpdateFactory.zoomTo(14));
         }
         markerOption = new MarkerOptions().draggable(true);
         mAMap.setOnMapClickListener(this);
         mAMap.setLocationSource(this);// 设置定位监听
+
+        mAMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
+            @Override
+            public void onMapLoaded() {
+                mAMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+            }
+        });
+
+
         mAMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         // 自定义系统定位蓝点
         MyLocationStyle myLocationStyle = new MyLocationStyle();
@@ -115,15 +128,40 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_img:
-                Toast.makeText(HomeAct.this, "点击了我", Toast.LENGTH_SHORT).show();
+                PopupWindow popupWindow = new PopupWindow(mContext);
+                popupWindow.setContentView(View.inflate(mContext,R.layout.act_about_us,null));
+
                 break;
             case R.id.iv_scan:
-                Toast.makeText(HomeAct.this, "点击了扫描", Toast.LENGTH_SHORT).show();
-//                mAMap.moveCamera(CameraUpdateFactory.zoomBy(14));
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //申请CAMERA权限
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                            CAMERA_REQUEST_CODE);
+                }else{
+                    gotoActivity(CaptureActivity.class,false);
+                }
                 break;
             case R.id.right_img:
                 Toast.makeText(HomeAct.this, "点击了搜索", Toast.LENGTH_SHORT).show();
                 gotoActivity(GeoFence_Activity.class, false);
+                break;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    gotoActivity(CaptureActivity.class, false);
+                } else {
+                    // Permission Denied
+                    Toast.makeText(mContext, "未获取相机权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 break;
         }
     }

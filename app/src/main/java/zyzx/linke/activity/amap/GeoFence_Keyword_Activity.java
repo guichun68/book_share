@@ -1,5 +1,5 @@
 
-package zyzx.linke.activity;
+package zyzx.linke.activity.amap;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.activity.CheckPermissionsActivity;
 
 /**
  * 新版地理围栏

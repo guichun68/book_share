@@ -13,6 +13,7 @@ import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.BeanFactoryUtil;
 import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/2/17.
@@ -21,14 +22,6 @@ import zyzx.linke.utils.GlobalParams;
 
 public class UserPresenter implements IUserPresenter {
 
-    private IModel model;
-
-    private IModel getModel(){
-        if(model !=null){
-            return model;
-        }
-        return model = BeanFactoryUtil.getImpl(IModel.class);
-    }
 
     @Override
     public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
@@ -37,7 +30,7 @@ public class UserPresenter implements IUserPresenter {
         param.put("password",password);
 
         try {
-           getModel().post(GlobalParams.urlLogin, param, new CallBack() {
+           GlobalParams.getgModel().post(GlobalParams.urlLogin, param, new CallBack() {
                @Override
                public void onSuccess(Object obj) {
                    String response = (String)obj;
@@ -93,7 +86,7 @@ public class UserPresenter implements IUserPresenter {
         HashMap<String,String> param = new HashMap<>();
         param.put("phone",phone);
         try {
-            getModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
+            GlobalParams.getgModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
@@ -118,7 +111,7 @@ public class UserPresenter implements IUserPresenter {
 
                 @Override
                 public void onFailure(Object obj) {
-
+                    UIUtil.showTestLog("zyzx","beijing");
                 }
             });
         } catch (IOException e) {
@@ -133,7 +126,7 @@ public class UserPresenter implements IUserPresenter {
         param.put("password",psw);
         param.put("phone",phone);
         try {
-            getModel().post(GlobalParams.urlRegist, param, new CallBack() {
+            GlobalParams.getgModel().post(GlobalParams.urlRegist, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
@@ -162,6 +155,7 @@ public class UserPresenter implements IUserPresenter {
             });
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 }

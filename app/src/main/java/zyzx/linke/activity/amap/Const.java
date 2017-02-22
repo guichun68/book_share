@@ -1,4 +1,4 @@
-package zyzx.linke.activity;
+package zyzx.linke.activity.amap;
 
 import android.graphics.Color;
 

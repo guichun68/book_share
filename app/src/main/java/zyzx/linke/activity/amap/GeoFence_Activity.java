@@ -1,4 +1,4 @@
-package zyzx.linke.activity;
+package zyzx.linke.activity.amap;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import zyzx.linke.R;
+import zyzx.linke.activity.Location_Activity;
 import zyzx.linke.views.FeatureView;
 
 

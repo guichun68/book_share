@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="zyzx.linke">
 
-
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <!-- Normal Permissions 不需要运行时注册 -->
     <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -62,42 +64,42 @@
         <activity android:name=".activity.RegisteAct" android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.GeoFence_Activity"
+            android:name=".activity.amap.GeoFence_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Old_Activity"
+            android:name=".activity.amap.GeoFence_Old_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_District_Activity"
+            android:name=".activity.amap.GeoFence_District_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Keyword_Activity"
+            android:name=".activity.amap.GeoFence_Keyword_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Multiple_Activity"
+            android:name=".activity.amap.GeoFence_Multiple_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Nearby_Activity"
+            android:name=".activity.amap.GeoFence_Nearby_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Polygon_Activity"
+            android:name=".activity.amap.GeoFence_Polygon_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity
-            android:name=".activity.GeoFence_Round_Activity"
+            android:name=".activity.amap.GeoFence_Round_Activity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
@@ -106,6 +108,8 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
+        <activity android:name="zxing.CaptureActivity"/>
+        <activity android:name=".activity.BookDetailAct" android:screenOrientation="portrait"/>
         <!-- 友盟统计 -->
         <meta-data android:value="58a69d50f43e4839d30007ce" android:name="UMENG_APPKEY"/>
         <meta-data android:value="baidu_pan" android:name="UMENG_CHANNEL"/>

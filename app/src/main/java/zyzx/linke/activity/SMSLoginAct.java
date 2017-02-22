@@ -21,7 +21,6 @@ import zyzx.linke.utils.UIUtil;
  */
 public class SMSLoginAct extends BaseActivity{
 
-    IUserPresenter presenter;
     private AppCompatEditText aetPhone,aetVerifyCode;
     private Button btnSendVerifyCode,btnLogin;
 
@@ -43,7 +42,6 @@ public class SMSLoginAct extends BaseActivity{
 
     @Override
     protected void initData() {
-        presenter = BeanFactoryUtil.getImpl(IUserPresenter.class);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class SMSLoginAct extends BaseActivity{
                     return;
                 }
                 final TimeUtils tu = new TimeUtils(btnSendVerifyCode,"发送验证码");
-                presenter.sendLoginSMSVerifyCode(aetPhone.getText().toString().trim(), new CallBack() {
+                GlobalParams.getUserPresenter().sendLoginSMSVerifyCode(aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         Integer code = (Integer) obj;

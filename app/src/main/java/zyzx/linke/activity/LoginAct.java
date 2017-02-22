@@ -32,7 +32,6 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 登录页面
  */
 public class LoginAct extends BaseActivity{
-    private IUserPresenter presenter;
     private AppCompatEditText aetLoginName,aetPsw;
     private Button btnLogin;
     private TextView tvSmsLogin,tvForgetPsw,tvRegist,tvAboutus;
@@ -80,7 +79,6 @@ public class LoginAct extends BaseActivity{
 
     @Override
     protected void initData() {
-        presenter = BeanFactoryUtil.getImpl(IUserPresenter.class);
     }
 
     @Override
@@ -92,7 +90,7 @@ public class LoginAct extends BaseActivity{
                     return;
                 }
                 progressBar.show();
-                presenter.loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
+                GlobalParams.getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         CustomProgressDialog.dismissDialog(progressBar);

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import zyzx.linke.model.IModel;
+import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.presentation.IUserPresenter;
 
 /**
@@ -48,6 +49,17 @@ public class BeanFactoryUtil {
 			try {
 				GlobalParams.gModel = (IModel) Class.forName(className).newInstance();
 				return (T) GlobalParams.gModel;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if(key.equals("IBookPresenter")){
+			if(GlobalParams.gBookPresenter!=null){
+				return (T) GlobalParams.gBookPresenter;
+			}
+			try {
+				GlobalParams.gBookPresenter = (IBookPresenter) Class.forName(className).newInstance();
+				return (T) GlobalParams.gBookPresenter;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

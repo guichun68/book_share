@@ -1,4 +1,4 @@
-package zyzx.linke.activity;
+package zyzx.linke.activity.amap;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -26,6 +26,7 @@ import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
 
 import zyzx.linke.R;
+import zyzx.linke.activity.CheckPermissionsActivity;
 import zyzx.linke.utils.Utils;
 
 /**

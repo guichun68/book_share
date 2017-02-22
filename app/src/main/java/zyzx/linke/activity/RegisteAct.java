@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.TimingLogger;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,6 +14,7 @@ import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.BeanFactoryUtil;
 import zyzx.linke.utils.CheckPhone;
 import zyzx.linke.utils.CustomProgressDialog;
+import zyzx.linke.utils.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -24,7 +26,6 @@ public class RegisteAct extends BaseActivity{
 
     private AppCompatEditText aetLoginName,aetPhone,aetPsw,aetRePsw;
     private Button btnRegist;
-    private IUserPresenter presenter;
     private Dialog progressDialog;
 
     @Override
@@ -48,7 +49,6 @@ public class RegisteAct extends BaseActivity{
 
     @Override
     protected void initData() {
-        presenter = BeanFactoryUtil.getImpl(IUserPresenter.class);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RegisteAct extends BaseActivity{
                     return;
                 }
                 progressDialog.show();
-                presenter.regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
+                GlobalParams.getUserPresenter().regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess(final Object obj) {
                         RegisteAct.this.runOnUiThread(new Runnable() {
