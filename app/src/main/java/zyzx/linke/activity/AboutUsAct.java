@@ -29,7 +29,7 @@ public class AboutUsAct extends BaseActivity{
         mRightBtn.setVisibility(View.VISIBLE);
 
         mTitleText.setText("关于临客");
-
+        mRightBtn.setVisibility(View.INVISIBLE);
         mRightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,7 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/title_bar_home"
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/title_bar_home"
         />
 
     <com.amap.api.maps.MapView

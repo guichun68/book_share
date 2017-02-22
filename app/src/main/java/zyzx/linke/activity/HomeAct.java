@@ -3,7 +3,9 @@ package zyzx.linke.activity;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +13,7 @@ import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ import java.util.zip.Inflater;
 import zxing.CaptureActivity;
 import zyzx.linke.R;
 import zyzx.linke.activity.amap.GeoFence_Activity;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/2/17.
@@ -128,9 +132,10 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_img:
-                PopupWindow popupWindow = new PopupWindow(mContext);
-                popupWindow.setContentView(View.inflate(mContext,R.layout.act_about_us,null));
-
+                PopupWindow window = new PopupWindow(View.inflate(mContext,R.layout.popwindow,null), UIUtil.dip2px(120),ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                window.setOutsideTouchable(true);
+                window.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+                window.showAsDropDown(findViewById(R.id.top_title));
                 break;
             case R.id.iv_scan:
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
