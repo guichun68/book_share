@@ -132,10 +132,17 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_img:
-                PopupWindow window = new PopupWindow(View.inflate(mContext,R.layout.popwindow,null), UIUtil.dip2px(120),ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                View popView = View.inflate(mContext,R.layout.popwindow,null);
+                PopupWindow window = new PopupWindow(popView, UIUtil.dip2px(120),ViewGroup.LayoutParams.WRAP_CONTENT,true);
                 window.setOutsideTouchable(true);
                 window.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
                 window.showAsDropDown(findViewById(R.id.top_title));
+                popView.findViewById(R.id.ll_ihave).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gotoActivity(PersonalCenter.class,false);
+                    }
+                });
                 break;
             case R.id.iv_scan:
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)

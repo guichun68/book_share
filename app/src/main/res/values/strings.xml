@@ -156,5 +156,7 @@
 	    17     相同的地理围栏已经存在，无需重复添加\n
 	</string>
     <string name="confirm">确定</string>
+    <string name="newbookcheckin">新书登记</string>
+    <string name="manage_book">管理我的书籍</string>
     <!-- 高德导航end-->
 </resources>
