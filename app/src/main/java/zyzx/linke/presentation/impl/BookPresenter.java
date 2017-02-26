@@ -60,4 +60,19 @@ public class BookPresenter implements IBookPresenter {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void addBook2MyLib(BookDetail mBook,Integer userId,CallBack viewCallBack) {
+        HashMap<String,String> param = new HashMap<>();
+        param.put("book",JSON.toJSONString(mBook));
+        param.put("userId",userId+"");
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlAddBook2MyLib, param, viewCallBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("发生错误,请重试");
+            }
+        }
+    }
 }

@@ -9,12 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail;
 import zyzx.linke.model.bean.Tags;
+import zyzx.linke.presentation.IBookPresenter;
+import zyzx.linke.presentation.impl.BookPresenter;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.GlobalParams;
 import zyzx.linke.utils.StringUtil;
@@ -31,7 +35,7 @@ public class BookDetailAct extends BaseActivity {
     private BookHandler handler = new BookHandler();
 
     private ImageView ivBookImage;
-    private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog;
+    private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
     private BookDetail mBook;
 
     @Override
@@ -49,10 +53,54 @@ public class BookDetailAct extends BaseActivity {
         tvTags = (TextView) findViewById(R.id.tv_book_tags);
         tvSummary = (TextView) findViewById(R.id.tv_summary);
         tvCatalog = (TextView) findViewById(R.id.tv_catalog);
-
+        tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
+        tvAdd2MyLib.setClickable(true);
         mTitleText.setText("图书详情");
+        if(!GlobalParams.gIsPersonCenterScan){
+            tvAdd2MyLib.setVisibility(View.INVISIBLE);
+        }
+        tvAdd2MyLib.setText("添加");
+        tvAdd2MyLib.setOnClickListener(this);
         progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
         progressDialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.tv_add_mylib:
+                if(mBook == null){
+                    Toast.makeText(mContext, "没有要添加的书籍", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(progressDialog == null){
+                    progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
+                }
+                progressDialog.show();
+                mBook.setFromDouban(true);
+                GlobalParams.getBookPresenter().addBook2MyLib(mBook,GlobalParams.gUser.getUserid(), new CallBack() {
+                    @Override
+                    public void onSuccess(Object obj) {
+                        CustomProgressDialog.dismissDialog(progressDialog);
+                        String responseJson = (String)obj;
+                        JSONObject jsonObject = JSON.parseObject(responseJson);
+                        int code = jsonObject.getInteger("code");
+                        if(code == 200){
+                            UIUtil.showToastSafe("添加成功");
+                            finish();
+                        }else if(code == 500){
+                            UIUtil.showToastSafe("未能成功添加书籍信息");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object obj) {
+                        CustomProgressDialog.dismissDialog(progressDialog);
+                    }
+                });
+                break;
+        }
     }
 
     @Override
@@ -125,6 +173,7 @@ public class BookDetailAct extends BaseActivity {
                         tvCatalog.setText(mBook.getCatalog());
                     }
                     break;
+
             }
 
         }
@@ -133,6 +182,7 @@ public class BookDetailAct extends BaseActivity {
             @Override
             public void onClick(View v) {
                 CustomProgressDialog.dismissDialog(promt);
+                finish();
             }
         }
     }

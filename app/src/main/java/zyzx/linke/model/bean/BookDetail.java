@@ -15,7 +15,9 @@ public class BookDetail {
 	private String binding;
 
 	private String catalog;
-
+	/**
+	 * 表示豆瓣中该书籍的id
+	 */
 	private String id;
 
 	private String image;
@@ -50,7 +52,12 @@ public class BookDetail {
 
 	private List<String> translator;
 
+	/**
+	 * 豆瓣的获取该图书详情的json串的地址
+	 */
 	private String url;
+	//标记是否是来自豆瓣的数据
+	private boolean isFromDouban;
 
 	public void setAlt(String alt) {
 		this.alt = alt;
@@ -244,4 +251,11 @@ public class BookDetail {
 		return this.url;
 	}
 
+	public boolean isFromDouban() {
+		return isFromDouban;
+	}
+
+	public void setFromDouban(boolean fromDouban) {
+		isFromDouban = fromDouban;
+	}
 }

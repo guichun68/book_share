@@ -190,7 +190,7 @@ public class LoginAct extends BaseActivity{
         btnChan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_fjjsp");
+                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
                 GlobalParams.refreshIP();
                 UIUtil.showToastSafe("已设置为:"+GlobalParams.BASE_URL);
             }
@@ -225,7 +225,7 @@ public class LoginAct extends BaseActivity{
 
             @Override
             public void onClick(View v) {
-                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("FJJSP");
+                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_fjjsp");
                 GlobalParams.refreshIP();
                 UIUtil.showToastSafe("已设置为:"+GlobalParams.BASE_URL);
             }

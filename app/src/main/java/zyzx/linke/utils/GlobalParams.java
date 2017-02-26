@@ -13,9 +13,10 @@ import zyzx.linke.presentation.IUserPresenter;
 public class GlobalParams {
 
 	public static String BASE_URL ;
-	public static IUserPresenter gUserPresenter;
-	public static IModel gModel;
-	public static IBookPresenter gBookPresenter;
+	protected static IUserPresenter gUserPresenter;
+	protected static IModel gModel;
+	protected static IBookPresenter gBookPresenter;
+	public static boolean gIsPersonCenterScan;//是否是个人中心的扫描行为
 
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
@@ -38,6 +39,7 @@ public class GlobalParams {
 	 */
 	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login";
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
+	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
 	public static int gVerifyCode ;
 
 	public static User gUser;//登录成功后记录的用户
@@ -46,6 +48,7 @@ public class GlobalParams {
 		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login";
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
+		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
 	}
 
 	public static IBookPresenter getBookPresenter(){

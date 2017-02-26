@@ -38,6 +38,7 @@ import java.util.zip.Inflater;
 import zxing.CaptureActivity;
 import zyzx.linke.R;
 import zyzx.linke.activity.amap.GeoFence_Activity;
+import zyzx.linke.utils.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -127,13 +128,13 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
 
-
+    private PopupWindow window;
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_img:
                 View popView = View.inflate(mContext,R.layout.popwindow,null);
-                PopupWindow window = new PopupWindow(popView, UIUtil.dip2px(120),ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                window = new PopupWindow(popView, UIUtil.dip2px(120),ViewGroup.LayoutParams.WRAP_CONTENT,true);
                 window.setOutsideTouchable(true);
                 window.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
                 window.showAsDropDown(findViewById(R.id.top_title));
@@ -143,8 +144,10 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
                         gotoActivity(PersonalCenter.class,false);
                     }
                 });
+
                 break;
             case R.id.iv_scan:
+                GlobalParams.gIsPersonCenterScan = false;
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
                     //申请CAMERA权限
@@ -292,6 +295,9 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     @Override
     protected void onResume() {
         super.onResume();
+        if(window!=null && window.isShowing()){
+            window.dismiss();
+        }
         mMapView.onResume();
     }
 

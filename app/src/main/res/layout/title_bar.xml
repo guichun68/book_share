@@ -39,6 +39,19 @@
         android:src="@mipmap/refresh"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/tv_add_mylib"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        tools:text="加入我的书库"
+        android:textSize="20sp"
+        android:paddingRight="10dp"
+        android:textColor="@color/gray_white"
+        />
+
     <include
         android:layout_width="match_parent"
         android:layout_height="1px"

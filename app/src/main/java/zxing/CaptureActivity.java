@@ -278,6 +278,7 @@ public class CaptureActivity extends Activity implements Callback {
 		});
 		((TextView)dialogView.findViewById(R.id.tv_result)).setText(rawResult.getText());
 		builder.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 
 		// Intent intent = new Intent();
