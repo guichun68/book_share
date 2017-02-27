@@ -1,9 +1,11 @@
 package zyzx.linke.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -88,7 +90,12 @@ public class BookDetailAct extends BaseActivity {
                         int code = jsonObject.getInteger("code");
                         if(code == 200){
                             UIUtil.showToastSafe("添加成功");
-                            finish();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showAskIfShareOnMapDialog();
+                                }
+                            });
                         }else if(code == 500){
                             UIUtil.showToastSafe("未能成功添加书籍信息");
                         }
@@ -101,6 +108,26 @@ public class BookDetailAct extends BaseActivity {
                 });
                 break;
         }
+    }
+
+    private void showAskIfShareOnMapDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("添加成功,是否在地图分享此书?");
+        dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                gotoActivity(BookShareOnMapAct.class,true);
+            }
+        });
+        dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.show();
     }
 
     @Override

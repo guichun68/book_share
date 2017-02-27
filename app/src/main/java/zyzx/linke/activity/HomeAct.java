@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
@@ -144,6 +146,12 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
                         gotoActivity(PersonalCenter.class,false);
                     }
                 });
+                popView.findViewById(R.id.ll_seting).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAMap.clear();
+                    }
+                });
 
                 break;
             case R.id.iv_scan:
@@ -231,8 +239,9 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
        if (mListener != null && amapLocation != null) {
-            if (amapLocation != null && amapLocation.getErrorCode() == 0) {
+            if (amapLocation != null && amapLocation.getErrorCode() == 0) {/*amapLocation.getCity();*/
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                GlobalParams.gCurrCity=amapLocation.getCity();
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": "
                         + amapLocation.getErrorInfo();
@@ -281,6 +290,7 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
             mlocationClient.startLocation();
         }
     }
+
 
     @Override
     public void deactivate() {

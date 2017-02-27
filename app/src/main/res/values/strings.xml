@@ -158,5 +158,7 @@
     <string name="confirm">确定</string>
     <string name="newbookcheckin">新书登记</string>
     <string name="manage_book">管理我的书籍</string>
+    <string name="no_result">对不起，没有搜索到相关数据!</string>
+    <string name="no_next_page">对不起，没有更多结果了！</string>
     <!-- 高德导航end-->
 </resources>

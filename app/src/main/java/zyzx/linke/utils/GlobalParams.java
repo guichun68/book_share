@@ -17,6 +17,7 @@ public class GlobalParams {
 	protected static IModel gModel;
 	protected static IBookPresenter gBookPresenter;
 	public static boolean gIsPersonCenterScan;//是否是个人中心的扫描行为
+	public static String gCurrCity="北京";//当前所在城市，默认北京
 
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");

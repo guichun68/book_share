@@ -111,6 +111,7 @@
         <activity android:name="zxing.CaptureActivity"/>
         <activity android:name=".activity.BookDetailAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.PersonalCenter" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BookShareOnMapAct" android:screenOrientation="portrait"/>
         <!-- 友盟统计 -->
         <meta-data android:value="58a69d50f43e4839d30007ce" android:name="UMENG_APPKEY"/>
         <meta-data android:value="baidu_pan" android:name="UMENG_CHANNEL"/>
