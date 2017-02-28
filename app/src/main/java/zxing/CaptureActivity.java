@@ -2,6 +2,7 @@ package zxing;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
@@ -22,6 +23,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,7 @@ public class CaptureActivity extends Activity implements Callback {
 	private boolean vibrate;
 	CameraManager cameraManager;
 
+	private Button btnInputISBN;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,14 @@ public class CaptureActivity extends Activity implements Callback {
 
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
+
+		btnInputISBN = (Button) findViewById(R.id.btn_input_ISBN);
+		btnInputISBN.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showResult(null,null);
+			}
+		});
 	}
 
 	@Override
@@ -212,7 +223,7 @@ public class CaptureActivity extends Activity implements Callback {
 		playBeepSoundAndVibrate();
 		showResult(obj, barcode);
 	}
-
+	AlertDialog dialog;
 	private void showResult(final Result rawResult, Bitmap barcode) {
 /*
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -246,7 +257,7 @@ public class CaptureActivity extends Activity implements Callback {
 		builder.setView(dialogView);
 		Drawable drawable = new BitmapDrawable(barcode);
 		builder.setIcon(drawable);
-		final AlertDialog dialog = builder.create();
+		dialog = builder.create();
 		dialogView.findViewById(R.id.re_scan).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -276,10 +287,21 @@ public class CaptureActivity extends Activity implements Callback {
 				}
 			}
 		});
-		((TextView)dialogView.findViewById(R.id.tv_result)).setText(rawResult.getText());
+		((TextView)dialogView.findViewById(R.id.tv_result)).setText(rawResult!=null?rawResult.getText():null);
 		builder.setCancelable(false);
 		dialog.setCanceledOnTouchOutside(false);
+
+		if(rawResult==null && barcode == null){
+			dialogView.findViewById(R.id.tv_result).setVisibility(View.GONE);
+			dialogView.findViewById(R.id.ll_center).setVisibility(View.GONE);
+		}
 		dialog.show();
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				restartPreviewAfterDelay(0L);
+			}
+		});
 
 		// Intent intent = new Intent();
 		// intent.putExtra(QR_RESULT, rawResult.getText());
@@ -292,6 +314,8 @@ public class CaptureActivity extends Activity implements Callback {
 		startActivity(in);
 		finish();
 	}
+
+
 
 	public void restartPreviewAfterDelay(long delayMS) {
 		if (handler != null) {

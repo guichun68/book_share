@@ -601,11 +601,11 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
             } else {
                 holder = (MyViewHolder) convertView.getTag();
             }
-            String district="";
+            holder.tvAddress.setText(getItem(position).getName());
             if(StringUtil.isEmpty(getItem(position).getDistrict())){
-                holder.textView.setText(getItem(position).getName());
+                holder.tvDistrict.setText(null);
             }else{
-                holder.textView.setText(getItem(position).getName() + "[" + getItem(position).getDistrict() + "]");
+                holder.tvDistrict.setText(getItem(position).getDistrict());
             }
             return convertView;
         }
@@ -651,10 +651,12 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         }
 
         class MyViewHolder {
-            private final TextView textView;
+            private final TextView tvAddress;
+            private final TextView tvDistrict;
 
             MyViewHolder(View root) {
-                this.textView = (TextView) root.findViewById(R.id.tv);
+                this.tvAddress = (TextView) root.findViewById(R.id.tv_address);
+                this.tvDistrict = (TextView) root.findViewById(R.id.tv_district);
             }
         }
     }

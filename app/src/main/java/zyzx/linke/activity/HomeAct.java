@@ -149,7 +149,12 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
                 popView.findViewById(R.id.ll_seting).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mAMap.clear();
+                    }
+                });
+                popView.findViewById(R.id.ll_record).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
                     }
                 });
 

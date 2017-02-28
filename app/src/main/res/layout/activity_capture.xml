@@ -17,7 +17,17 @@
         android:background="#00000000" >
     </zxing.view.ViewfinderView>
 
+    <Button
+        android:id="@+id/btn_input_ISBN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_centerHorizontal="true"
+        android:text="手动输入ISBN"/>
+
     <TextView
+        android:id="@+id/tv_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
