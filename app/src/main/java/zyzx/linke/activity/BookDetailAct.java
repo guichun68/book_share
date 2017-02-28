@@ -3,6 +3,7 @@ package zyzx.linke.activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -67,6 +68,8 @@ public class BookDetailAct extends BaseActivity {
         progressDialog.show();
     }
 
+    String bookId;//添加地图成功后返回的bookId
+
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -89,6 +92,7 @@ public class BookDetailAct extends BaseActivity {
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code = jsonObject.getInteger("code");
                         if(code == 200){
+                            bookId = jsonObject.getString("bookId");
                             UIUtil.showToastSafe("添加成功");
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -117,7 +121,9 @@ public class BookDetailAct extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                gotoActivity(BookShareOnMapAct.class,true);
+                Bundle bundle = new Bundle();
+                bundle.putString("bookId",bookId);
+                gotoActivity(BookShareOnMapAct.class,true,bundle);
             }
         });
         dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
@@ -175,14 +181,17 @@ public class BookDetailAct extends BaseActivity {
                     promt.show();
                     break;
 
-                case BOOKWHAT:
+                case BOOKWHAT://成功获取图书信息
                     mBook = (BookDetail) msg.obj;
                     //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
                     Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
                     tvTitle.setText(mBook.getTitle());
+                    StringBuilder sb = new StringBuilder();
                     for (String author: mBook.getAuthor()) {
-                        tvAuthor.append(author+";");
+                        sb.append(author).append(";");
                     }
+                    sb.deleteCharAt(sb.length()-1);
+                    tvAuthor.setText(sb);
                     tvPublisher.setText(mBook.getPublisher());
                     tvPublishDate.setText(mBook.getPubdate());
                     for (Tags tag:

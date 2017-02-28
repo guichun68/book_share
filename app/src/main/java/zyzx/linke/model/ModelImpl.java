@@ -55,7 +55,12 @@ public class ModelImpl implements IModel {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                callBack.onSuccess(response.body().string());
+                String res = new String(response.body().string());
+                if(res.toLowerCase().contains("<html>")){
+                    UIUtil.showToastSafe("网络或服务器故障，请检查");
+                    return;
+                }
+                callBack.onSuccess(res);
             }
         });
         /*if (response.isSuccessful()) {

@@ -18,7 +18,7 @@ public class BookDetail {
 	/**
 	 * 表示豆瓣中该书籍的id
 	 */
-	private String id;
+	private String b_id;
 
 	private String image;
 
@@ -107,12 +107,12 @@ public class BookDetail {
 		return this.catalog;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getB_id() {
+		return b_id;
 	}
 
-	public String getId() {
-		return this.id;
+	public void setB_id(String b_id) {
+		this.b_id = b_id;
 	}
 
 	public void setImage(String image) {

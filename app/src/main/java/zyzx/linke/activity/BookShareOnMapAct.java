@@ -1,8 +1,10 @@
 package zyzx.linke.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,6 +19,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -51,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.model.CallBack;
 import zyzx.linke.overlay.PoiOverlay;
 import zyzx.linke.utils.AMapUtil;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -64,6 +69,7 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class BookShareOnMapAct extends BaseActivity implements Inputtips.InputtipsListener,AMapLocationListener, AMap.OnMapClickListener, LocationSource,PoiSearch.OnPoiSearchListener, GeocodeSearch.OnGeocodeSearchListener {
+    private String bookId;
     ArrayList<Tip> suggest = new ArrayList<>();
     private String keyWord;
     private MapView mMapView;
@@ -95,6 +101,8 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMapView.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        bookId = extras.getString("bookId");
     }
 
     @Override
@@ -216,12 +224,24 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     Log.e("zyzx","NullPointException");
                 }else{
                     Log.i("zyzx","not null");
-                    LatLonPoint point = tip.getPoint();
-                    LatLng latLng = new LatLng(point.getLatitude(),point.getLongitude());
+                    mClickPoint = tip.getPoint();
+                    LatLng latLng = new LatLng(mClickPoint.getLatitude(),mClickPoint.getLongitude());
                     CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                            latLng, 18, 0, 30));
+                            latLng, 18, 0, 0));
                     mAMap.animateCamera(update, 1000, null);
-                    onMapClick(latLng);
+//                    onMapClick(latLng);
+                    mAMap.clear();// 清理之前的图标
+
+                    PoiItem item = new PoiItem(null,mClickPoint,keyWord,null);
+                    if(poiItems!=null){
+                        poiItems.clear();
+                    }else{
+                        poiItems = new ArrayList<PoiItem>();
+                    }
+                    poiItems.add(item);
+                    PoiOverlay poiOverlay = new PoiOverlay(mAMap, poiItems);
+                    poiOverlay.removeFromMap();
+                    poiOverlay.addToMap();
                 }
 
             }
@@ -289,12 +309,16 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             if (result != null && result.getRegeocodeAddress() != null
                     && result.getRegeocodeAddress().getFormatAddress() != null) {
-                addressName = result.getRegeocodeAddress().getFormatAddress()
-                        + "附近";
+                if(StringUtil.isEmpty(result.getRegeocodeAddress().getFormatAddress())){
+                    addressName = "未识别区域点";
+                }else{
+                    addressName=result.getRegeocodeAddress().getFormatAddress()+"附近";
+                }
                 mAMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        AMapUtil.convertToLatLng(mClickPoint), 15));
+                        AMapUtil.convertToLatLng(mClickPoint), mAMap.getCameraPosition().zoom));
 //                regeoMarker.setPosition(AMapUtil.convertToLatLng(latLonPoint));
                 UIUtil.showToastSafe(addressName);
+                actv.setText(addressName);
             } else {
                 UIUtil.showToastSafe(R.string.no_result);
             }
@@ -392,12 +416,92 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 
                 break;
             case R.id.btn_ok:
+                if(mClickPoint==null){
+                    UIUtil.showToastSafe("请选择具体的点");
+                    return;
+                }
+//                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
+                    GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+                        @Override
+                        public void onSuccess(Object obj) {
+                            String resJson = (String) obj;
+                            JSONObject jsonObject = JSON.parseObject(resJson);
+                            int code = jsonObject.getInteger("code");
+                            switch (code) {
+                                case 200:
+                                    UIUtil.showToastSafe("分享成功");
+                                    finish();
+                                    break;
+                                case 400://已经分享过同名的书籍了，是否还要继续再分享此书(+1)
+                                    int bookCount= jsonObject.getInteger("book_count");//已经分享的同名书籍个数
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showSameBookShareDialog();
+                                        }
+                                    });
+                                    break;
+                                case 500:
+                                    UIUtil.showToastSafe("未能成功分享");
+                                    break;
+                                default:
+                                    UIUtil.showToastSafe("服务器错误");
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Object obj) {
+                            UIUtil.showToastSafe(obj.toString());
+                        }
+                    });
                 break;
             case R.id.btn_next_page:
                 nextButton();
                 break;
         }
+    }
+
+    /**
+     * 发现已分享同名的书籍了，是否继续分享 dialog
+     */
+    private void showSameBookShareDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("检测到您已分享过该书了,是否在地图中再次添加分享点?");
+        dialog.setNegativeButton("添加", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(mClickPoint==null){
+                    UIUtil.showToastSafe("请返回地图选择具体的点");
+                    return;
+                }
+                GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),true, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+                    @Override
+                    public void onSuccess(Object obj) {
+                        String resJson = (String) obj;
+                        JSONObject jsonObject = JSON.parseObject(resJson);
+                        int code = jsonObject.getInteger("code");
+                        if (code==200){
+                            UIUtil.showToastSafe("添加分享成功");
+                            finish();
+                        }else{
+                            UIUtil.showToastSafe("添加分享失败");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object obj) {
+                        UIUtil.showToastSafe(obj.toString());
+                    }
+                });
+            }
+        });
+        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -433,6 +537,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     PoiItem poiItem;
     private GeocodeSearch geocoderSearch;
     private LatLonPoint mClickPoint;
+
     @Override
     public void onMapClick(LatLng latLng) {
         if(mProgressDialog==null){
@@ -444,12 +549,6 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         RegeocodeQuery query = new RegeocodeQuery(mClickPoint, 200,
                 GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
         geocoderSearch.getFromLocationAsyn(query);// 设置异步逆地理编码请求
-        /*if(icon == null){
-            icon = BitmapDescriptorFactory.fromResource(R.mipmap.book);
-        }
-        markerOption.icon(icon);
-        centerLatLng = latLng;
-        addCenterMarker(centerLatLng);*/
     }
 
     private void addCenterMarker(LatLng latlng) {

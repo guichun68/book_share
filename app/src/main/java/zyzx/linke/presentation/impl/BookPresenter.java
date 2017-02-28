@@ -75,4 +75,36 @@ public class BookPresenter implements IBookPresenter {
             }
         }
     }
+
+    @Override
+    public void addBook2Map(String bookId, Integer userid,boolean isSameBookAdded2Map, double latitude, double longitude, final CallBack viewCallBack) {
+        HashMap<String,String> param = new HashMap<>();
+        param.put("userId",userid+"");
+        param.put("bookId",bookId);
+        param.put("lat",latitude+"");
+        param.put("long",longitude+"");
+        param.put("isAddSameBook",isSameBookAdded2Map?"1":"0");
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlAddBook2Map, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(obj);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                    if(viewCallBack!=null){
+                        viewCallBack.onFailure("发生错误");
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("发生错误,请重试");
+            }
+        }
+    }
 }

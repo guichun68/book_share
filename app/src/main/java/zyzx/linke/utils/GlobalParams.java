@@ -41,6 +41,7 @@ public class GlobalParams {
 	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login";
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
 	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
+	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
 	public static int gVerifyCode ;
 
 	public static User gUser;//登录成功后记录的用户
@@ -50,6 +51,7 @@ public class GlobalParams {
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
+		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
 	}
 
 	public static IBookPresenter getBookPresenter(){
