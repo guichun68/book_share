@@ -42,6 +42,24 @@ public class GlobalParams {
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
 	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
 	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
+	/**
+	 *高德web服务--临客-存储图书经纬度--key
+	 */
+	public static String key = "49f0e1fd42a68fcf794c5e135a357f1a";
+	/**
+	 *高德web服务--临客-存储图书经纬度--tableid标识高德后台创建的哪一个地图表
+	 */
+	public static String tableid = "58b687cc305a2a6810d2b236";
+	//向高德地图中添加一条记录
+	public static String urlAddbook2Gaode = "http://yuntuapi.amap.com/datamanage/data/create";
+	/**
+	 * 更新数据，单条
+	 */
+	public static String urlGaodeBookUpdate = "http://yuntuapi.amap.com/datamanage/data/update";
+	/**
+	 * 在指定tableid的数据表内，搜索指定中心点和半径范围内的数据
+	 */
+	public static String urlQueryBookFromMapAround = "http://yuntuapi.amap.com/datasearch/around";
 	public static int gVerifyCode ;
 
 	public static User gUser;//登录成功后记录的用户

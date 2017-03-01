@@ -420,20 +420,23 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     UIUtil.showToastSafe("请选择具体的点");
                     return;
                 }
+                if(mProgressDialog==null){
+                    mProgressDialog= CustomProgressDialog.getNewProgressBar(mContext);
+                }
+                mProgressDialog.show();
 //                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
                     GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                         @Override
                         public void onSuccess(Object obj) {
-                            String resJson = (String) obj;
-                            JSONObject jsonObject = JSON.parseObject(resJson);
-                            int code = jsonObject.getInteger("code");
+                            CustomProgressDialog.dismissDialog(mProgressDialog);
+                            int code = Integer.parseInt(obj.toString());
+                            int d = 90;
                             switch (code) {
-                                case 200:
+                                case 200://初次在该坐标分享
                                     UIUtil.showToastSafe("分享成功");
                                     finish();
                                     break;
-                                case 400://已经分享过同名的书籍了，是否还要继续再分享此书(+1)
-                                    int bookCount= jsonObject.getInteger("book_count");//已经分享的同名书籍个数
+                                case 400://分享成功，已经在该点分享过该书籍了
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -451,6 +454,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 
                         @Override
                         public void onFailure(Object obj) {
+                            CustomProgressDialog.dismissDialog(mProgressDialog);
                             UIUtil.showToastSafe(obj.toString());
                         }
                     });
@@ -466,15 +470,16 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
      */
     private void showSameBookShareDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("检测到您已分享过该书了,是否在地图中再次添加分享点?");
-        dialog.setNegativeButton("添加", new DialogInterface.OnClickListener() {
+        dialog.setTitle("您已经在该点分享过此书了，无须重复分享!");
+        dialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(mClickPoint==null){
+                dialog.dismiss();
+               /*    if(mClickPoint==null){
                     UIUtil.showToastSafe("请返回地图选择具体的点");
                     return;
                 }
-                GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),true, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+             GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),true, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         String resJson = (String) obj;
@@ -492,7 +497,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     public void onFailure(Object obj) {
                         UIUtil.showToastSafe(obj.toString());
                     }
-                });
+                });*/
             }
         });
         dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {

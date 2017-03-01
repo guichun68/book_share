@@ -1,5 +1,6 @@
 package zyzx.linke.model;
 
+import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -57,6 +58,7 @@ public class ModelImpl implements IModel {
             public void onResponse(Response response) throws IOException {
                 String res = new String(response.body().string());
                 if(res.toLowerCase().contains("<html>")){
+                    callBack.onFailure(res);
                     UIUtil.showToastSafe("网络或服务器故障，请检查");
                     return;
                 }
@@ -69,5 +71,46 @@ public class ModelImpl implements IModel {
             throw new IOException("Unexpected code " + response);
         }*/
     }
+
+    @Override
+    public void get(String url, HashMap<String, String> param, final CallBack callBack) {
+
+        Request.Builder builder = new Request.Builder();
+        StringBuilder sb = new StringBuilder("?");
+        for (Map.Entry<String,String> entry:param.entrySet()) {
+           sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        final Request request = builder
+                .url(url+sb.toString())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                UIUtil.showTestLog("zyzx","访问网络出错！");
+                if(callBack!=null){
+                    callBack.onFailure(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                String responseJson;
+                //NOT UI Thread
+                if(response.isSuccessful()){
+                    responseJson= new String(response.body().string());
+                    if(callBack!=null){
+                        callBack.onSuccess(responseJson);
+                    }
+                }else{
+                    if(callBack!=null){
+                        callBack.onFailure(response.body().string());
+                    }
+                }
+            }
+        });
+    }
+
 
 }

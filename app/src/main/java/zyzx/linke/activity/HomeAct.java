@@ -35,11 +35,14 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.zip.Inflater;
 
 import zxing.CaptureActivity;
 import zyzx.linke.R;
 import zyzx.linke.activity.amap.GeoFence_Activity;
+import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
@@ -149,6 +152,28 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
                 popView.findViewById(R.id.ll_seting).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        HashMap<String,String> param =new HashMap<String, String>();
+                        param.put("key","49f0e1fd42a68fcf794c5e135a357f1a");
+                        param.put("tableid","58b687cc305a2a6810d2b236");
+                        param.put("data","{\"_location\": \"116.401125,39.922503\",\"_name\": \"故宫角楼故事\",  \"book_image_url\": \"http://www.wbaidu.com\",  \"uid\": \"1016\" }");
+
+                        try {
+                            GlobalParams.getgModel().post(GlobalParams.urlAddbook2Gaode, param, new CallBack() {
+                                @Override
+                                public void onSuccess(Object obj) {
+                                    Log.i("zyzx","post success");
+                                    Log.e("zyzx",obj.toString());
+                                }
+
+                                @Override
+                                public void onFailure(Object obj) {
+                                    Log.i("zyzx","post failure");
+                                    Log.e("zyzx",obj.toString());
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 popView.findViewById(R.id.ll_record).setOnClickListener(new View.OnClickListener() {

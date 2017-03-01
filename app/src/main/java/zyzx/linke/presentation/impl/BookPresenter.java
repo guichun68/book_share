@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.IModel;
+import zyzx.linke.model.bean.AMapQueryResult;
 import zyzx.linke.model.bean.BookDetail;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IBookPresenter;
@@ -77,34 +79,140 @@ public class BookPresenter implements IBookPresenter {
     }
 
     @Override
-    public void addBook2Map(String bookId, Integer userid,boolean isSameBookAdded2Map, double latitude, double longitude, final CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
-        param.put("userId",userid+"");
-        param.put("bookId",bookId);
-        param.put("lat",latitude+"");
-        param.put("long",longitude+"");
-        param.put("isAddSameBook",isSameBookAdded2Map?"1":"0");
-        try {
-            GlobalParams.getgModel().post(GlobalParams.urlAddBook2Map, param, new CallBack() {
-                @Override
-                public void onSuccess(Object obj) {
-                    if(viewCallBack!=null){
-                        viewCallBack.onSuccess(obj);
+    public void addBook2Map(final String bookId, Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
+        // 首先查询该点用户是否已经分享过图书了
+        final HashMap<String,String> param = new HashMap<>();
+        param.put("key",GlobalParams.key);
+        param.put("tableid",GlobalParams.tableid);
+        param.put("keywords","");
+        param.put("center",longitude+","+latitude);
+        param.put("radius","0");
+        param.put("filter","uid:"+userid+"");
+        GlobalParams.getgModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
+            @Override
+            public void onSuccess(Object obj) {
+                String json = (String) obj;
+                AMapQueryResult resultBean = JSON.parseObject(json, AMapQueryResult.class);
+                if(resultBean.getStatus()==0){
+                        if(viewCallBack!=null){
+                            viewCallBack.onFailure("地图访问出错");
+                        }
+                }
+                else if(Integer.parseInt(resultBean.getCount())>0){
+                    //该用户在该点分享过图书，进一步核实是否包含此书
+                    List<AMapQueryResult.DatasEntity> datas = resultBean.getDatas();
+                    for (AMapQueryResult.DatasEntity book:datas) {
+                        if(book.getBookIds().contains(bookId)){
+                            //包含此书
+                            if(viewCallBack!=null){
+                                viewCallBack.onSuccess(400);
+                            }
+                        }else{
+                            //不包含此书，可以继续在该坐标添加本次书籍
+                            //1 首先得到之前的所有书籍的id
+                            String newBookIds = resultBean.getDatas().get(0).getBookIds()+"#"+bookId;
+                            //2得到此次要更新的记录的id
+                            String id = resultBean.getDatas().get(0).get_id();
+
+
+                            HashMap<String,String> param2 = new HashMap<String, String>();
+                            param2.put("key",GlobalParams.key);
+                            param2.put("tableid",GlobalParams.tableid);
+                            param2.put("data","{     \"_id\": \""+id+"\",   \"bookIds\":\""+newBookIds+"\" }");
+                            try {
+                                GlobalParams.getgModel().post(GlobalParams.urlGaodeBookUpdate, param2, new CallBack() {
+                                    @Override
+                                    public void onSuccess(Object obj) {
+                                        String json = (String) obj;
+                                        JSONObject jsonObject = JSON.parseObject(json);
+                                        /**
+                                         * {
+                                         "info": "OK",
+                                         "infocode": "10000",
+                                         "status": 1,
+                                         "_id": "4"
+                                         }
+                                         */
+                                        int status = jsonObject.getInteger("status");
+                                        if(status==1){
+                                            if(viewCallBack!=null){
+                                                viewCallBack.onSuccess(200);
+                                            }
+                                        }else{
+                                            if(viewCallBack!=null){
+                                                viewCallBack.onSuccess(500);
+                                                UIUtil.showTestLog("zyzx","分享失败，插入高德云存储表单条数据失败，错误码:"+status);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Object obj) {
+                                        if(viewCallBack!=null){
+                                            viewCallBack.onFailure(obj);
+                                        }
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    /*if(viewCallBack!=null){
+                        viewCallBack.onSuccess(400);
+                    }*/
+                }else {
+                    //该点该用户未曾放置过任何书籍，可以插入数据，调用高德api插入数据
+                    HashMap<String,String> param2 = new HashMap<String, String>();
+                    param2.put("key",GlobalParams.key);
+                    param2.put("tableid",GlobalParams.tableid);
+                    param2.put("data","{     \"_location\": \""+longitude+","+latitude+"\",     \"_name\": \""+GlobalParams.gUser.getUserid()+"\",     \"book_image_url\": \"\",  \"bookIds\":\""+bookId+"\",   \"uid\": \""+GlobalParams.gUser.getUserid()+"\" }");
+                    try {
+                        GlobalParams.getgModel().post(GlobalParams.urlAddbook2Gaode, param2, new CallBack() {
+                            @Override
+                            public void onSuccess(Object obj) {
+                                String json = (String) obj;
+                                JSONObject jsonObject = JSON.parseObject(json);
+                                /**
+                                 * {
+                                 "info": "OK",
+                                 "infocode": "10000",
+                                 "status": 1,
+                                 "_id": "4"
+                                 }
+                                 */
+                                int status = jsonObject.getInteger("status");
+                                if(status==1){
+                                    if(viewCallBack!=null){
+                                        viewCallBack.onSuccess(200);
+                                    }
+                                }else{
+                                    if(viewCallBack!=null){
+                                        viewCallBack.onSuccess(500);
+                                        UIUtil.showTestLog("zyzx","分享失败，插入高德云存储表单条数据失败，错误码:"+status);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Object obj) {
+                                if(viewCallBack!=null){
+                                    viewCallBack.onFailure(obj);
+                                }
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
 
-                @Override
-                public void onFailure(Object obj) {
-                    if(viewCallBack!=null){
-                        viewCallBack.onFailure("发生错误");
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(viewCallBack!=null){
-                viewCallBack.onFailure("发生错误,请重试");
+
             }
-        }
+
+            @Override
+            public void onFailure(Object obj) {
+
+            }
+        });
     }
 }

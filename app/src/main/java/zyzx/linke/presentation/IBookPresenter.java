@@ -19,7 +19,7 @@ public interface IBookPresenter {
     void addBook2MyLib(BookDetail mBook,Integer userId,CallBack viewCallBack);
 
     /**
-     * 向地图中添加图书坐标
+     * 向高德地图中添加图书坐标
      * @param bookId 指定图书
      * @param userid 指定用户
      * @param isSameBookNewPoint 如果服务器检测到用户分享过同名书籍了，是否继续增加地图分享点
