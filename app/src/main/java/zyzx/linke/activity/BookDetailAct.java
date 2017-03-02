@@ -47,7 +47,7 @@ public class BookDetailAct extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);
@@ -122,7 +122,7 @@ public class BookDetailAct extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Bundle bundle = new Bundle();
-                bundle.putString("bookId",bookId);
+                bundle.putParcelable("book",mBook);
                 gotoActivity(BookShareOnMapAct.class,true,bundle);
             }
         });

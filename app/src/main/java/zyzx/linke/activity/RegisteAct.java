@@ -1,6 +1,7 @@
 package zyzx.linke.activity;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
@@ -34,7 +35,7 @@ public class RegisteAct extends BaseActivity{
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         mTitleText.setText("用户注册");
         //aetLoginName,aetPhone,aetPsw,aetRePsw;
         aetLoginName = (AppCompatEditText) findViewById(R.id.aet_login_name);

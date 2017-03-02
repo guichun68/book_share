@@ -12,6 +12,7 @@ import zyzx.linke.presentation.IUserPresenter;
 
 public class GlobalParams {
 
+	public static final Integer AROUND = 5000;//查询地图时默认搜索的半径
 	public static String BASE_URL ;
 	protected static IUserPresenter gUserPresenter;
 	protected static IModel gModel;
@@ -49,7 +50,7 @@ public class GlobalParams {
 	/**
 	 *高德web服务--临客-存储图书经纬度--tableid标识高德后台创建的哪一个地图表
 	 */
-	public static String tableid = "58b687cc305a2a6810d2b236";
+	public static String mTableID = "58b687cc305a2a6810d2b236";
 	//向高德地图中添加一条记录
 	public static String urlAddbook2Gaode = "http://yuntuapi.amap.com/datamanage/data/create";
 	/**

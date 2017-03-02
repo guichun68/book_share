@@ -56,6 +56,7 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail;
 import zyzx.linke.overlay.PoiOverlay;
 import zyzx.linke.utils.AMapUtil;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -69,7 +70,6 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class BookShareOnMapAct extends BaseActivity implements Inputtips.InputtipsListener,AMapLocationListener, AMap.OnMapClickListener, LocationSource,PoiSearch.OnPoiSearchListener, GeocodeSearch.OnGeocodeSearchListener {
-    private String bookId;
     ArrayList<Tip> suggest = new ArrayList<>();
     private String keyWord;
     private MapView mMapView;
@@ -96,13 +96,15 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     private PoiSearch.Query query;// Poi查询条件类
     private PoiSearch poiSearch;// POI搜索
     private PoiResult poiResult; // poi返回的结果
+    private BookDetail mBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMapView.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        bookId = extras.getString("bookId");
+        mBook = extras.getParcelable("book");
+
     }
 
     @Override
@@ -193,7 +195,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         btnSearch = (Button) findViewById(R.id.btn_search);
         btnCurrPosition = (Button) findViewById(R.id.btn_curr_position);
         btnOK = (Button) findViewById(R.id.btn_ok);
@@ -425,7 +427,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                 }
                 mProgressDialog.show();
 //                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
-                    GlobalParams.getBookPresenter().addBook2Map(bookId, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+                    GlobalParams.getBookPresenter().addBook2Map(mBook, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                         @Override
                         public void onSuccess(Object obj) {
                             CustomProgressDialog.dismissDialog(mProgressDialog);

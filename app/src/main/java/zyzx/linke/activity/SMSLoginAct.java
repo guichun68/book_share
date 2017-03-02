@@ -1,5 +1,6 @@
 package zyzx.linke.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
@@ -30,7 +31,7 @@ public class SMSLoginAct extends BaseActivity{
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         mTitleText.setText("手机号登录");
         aetPhone = (AppCompatEditText) findViewById(R.id.aet_phone);
         aetVerifyCode= (AppCompatEditText) findViewById(R.id.aet_verifycode);

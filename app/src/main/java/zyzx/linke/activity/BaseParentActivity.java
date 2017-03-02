@@ -23,11 +23,11 @@ public abstract class BaseParentActivity extends AppCompatActivity{
         mInflater = getLayoutInflater();
         mContext = this;
         initTitleBar();
-        initView();
+        initView(savedInstanceState);
         initData();
     }
 
-    protected abstract void initView();
+    protected abstract void initView(Bundle saveInstanceState);
     protected abstract void initData();
 
 

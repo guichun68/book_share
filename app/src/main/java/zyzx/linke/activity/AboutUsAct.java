@@ -1,5 +1,6 @@
 package zyzx.linke.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,7 +25,7 @@ public class AboutUsAct extends BaseActivity{
         return R.layout.act_about_us;
     }
 
-    public void initView() {
+    public void initView(Bundle savedInstanceState) {
         ((TextView) findViewById(R.id.tv_version_name)).setText(AppUtil.getAppVersionName(this));
         mRightBtn.setVisibility(View.VISIBLE);
 

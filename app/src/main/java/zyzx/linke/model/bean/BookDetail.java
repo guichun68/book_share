@@ -1,8 +1,14 @@
 package zyzx.linke.model.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class BookDetail {
+public class BookDetail implements Parcelable{
+
+	public BookDetail() {
+	}
 
 	private String alt;
 
@@ -58,6 +64,72 @@ public class BookDetail {
 	private String url;
 	//标记是否是来自豆瓣的数据
 	private boolean isFromDouban;
+
+	protected BookDetail(Parcel in) {
+		alt = in.readString();
+		alt_title = in.readString();
+		author = in.createStringArrayList();
+		author_intro = in.readString();
+		binding = in.readString();
+		catalog = in.readString();
+		b_id = in.readString();
+		image = in.readString();
+		isbn10 = in.readString();
+		isbn13 = in.readString();
+		origin_title = in.readString();
+		pages = in.readString();
+		price = in.readString();
+		pubdate = in.readString();
+		publisher = in.readString();
+		subtitle = in.readString();
+		summary = in.readString();
+		title = in.readString();
+		translator = in.createStringArrayList();
+		url = in.readString();
+		isFromDouban = in.readByte() != 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(alt);
+		dest.writeString(alt_title);
+		dest.writeStringList(author);
+		dest.writeString(author_intro);
+		dest.writeString(binding);
+		dest.writeString(catalog);
+		dest.writeString(b_id);
+		dest.writeString(image);
+		dest.writeString(isbn10);
+		dest.writeString(isbn13);
+		dest.writeString(origin_title);
+		dest.writeString(pages);
+		dest.writeString(price);
+		dest.writeString(pubdate);
+		dest.writeString(publisher);
+		dest.writeString(subtitle);
+		dest.writeString(summary);
+		dest.writeString(title);
+		dest.writeStringList(translator);
+		dest.writeString(url);
+		dest.writeByte((byte) (isFromDouban ? 1 : 0));
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Creator<BookDetail> CREATOR = new Creator<BookDetail>() {
+		@Override
+		public BookDetail createFromParcel(Parcel in) {
+			return new BookDetail(in);
+		}
+
+		@Override
+		public BookDetail[] newArray(int size) {
+			return new BookDetail[size];
+		}
+	};
 
 	public void setAlt(String alt) {
 		this.alt = alt;

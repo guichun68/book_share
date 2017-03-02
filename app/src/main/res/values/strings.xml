@@ -72,6 +72,18 @@
 
     <string name="title_errorCode">错误码说明</string>
     <string name="errorCode">错误码说明</string>
+
+    <string name="error_network">搜索失败,请检查网络连接！</string>
+    <string name="error_key">key验证无效！</string>
+    <string name="error_other">未知错误，请稍后重试!错误码为</string>
+    <string name="error_no_result">对不起，没有搜索到相关数据！</string>
+    <string name="error_no_more_item">"没有数据了"</string>
+    <string name="error_socket_timeout">连接超时</string>
+    <string name="error_scode">安全码错误</string>
+    <string name="error_table_id">tableID不存在</string>
+    <string name="error_route_result_walk">抱歉，没有帮您规划出合适的步行路线</string>
+    <string name="error_route_result_bus">抱歉，没有帮您规划出合适的公交路线</string>
+    <string name="error_route_result_drive">抱歉，没有帮您规划出合适的驾车路线</string>
     <string name="errorCode_dec">错误码说明以及对应的解决方法</string>
 
     <string name="defaultInteval">2000</string>
@@ -160,5 +172,6 @@
     <string name="manage_book">管理我的书籍</string>
     <string name="no_result">对不起，没有搜索到相关数据!</string>
     <string name="no_next_page">对不起，没有更多结果了！</string>
+    <string name="detail">详情</string>
     <!-- 高德导航end-->
 </resources>

@@ -1,6 +1,7 @@
 package zyzx.linke.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import java.util.Timer;
@@ -21,7 +22,7 @@ public class SplashAct extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             @Override

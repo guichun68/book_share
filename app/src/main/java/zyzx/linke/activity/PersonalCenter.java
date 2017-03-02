@@ -1,5 +1,6 @@
 package zyzx.linke.activity;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -30,7 +31,7 @@ public class PersonalCenter extends BaseActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         //得到控件
         btnScan = (Button) findViewById(R.id.btn_scan);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_galary);

@@ -52,6 +52,13 @@
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:drawableLeft">@drawable/shape_oval</item>
     </style>
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
-
+    <color name="white">#ffffff</color>
 </resources>

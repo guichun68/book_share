@@ -18,4 +18,7 @@
     <color name="bg_gray">#D6D0D0</color>
     <color name="ver_line">#fff2f2f2</color>
     <color name="gary">#898989</color>
+    <color name="Calendar_DayBgColor">#5566b8</color>
+    <color name="poi_name">#333333</color>
+    <color name="blue_cloud_scheme">#0091ff</color>
 </resources>

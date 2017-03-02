@@ -3,6 +3,7 @@ package zyzx.linke.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
@@ -43,7 +44,7 @@ public class LoginAct extends BaseActivity{
     }
 
     @Override
-    protected void initView() {
+    protected void initView(Bundle savedInstanceState) {
         progressBar = CustomProgressDialog.getNewProgressBar(this);
         mTitleText.setText("用户登录");
         mBackBtn.setVisibility(View.INVISIBLE);

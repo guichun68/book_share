@@ -27,5 +27,14 @@ public interface IBookPresenter {
      * @param longitude 经度
      * @param viewCallBack 回调
      */
-    void addBook2Map(String bookId, Integer userid, boolean isSameBookNewPoint,double latitude, double longitude,CallBack viewCallBack);
+    void addBook2Map(BookDetail bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
+
+    /**
+     * 查询指定位置为中心，方圆around范围内的所有的图书信息
+     * @param mLongti
+     * @param mLati
+     * @param around
+     * @param callBack
+     */
+    void getMapBookAllAround(double mLongti, double mLati, Integer around, CallBack callBack);
 }
