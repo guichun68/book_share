@@ -8,10 +8,8 @@ import android.widget.Button;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.utils.BeanFactoryUtil;
 import zyzx.linke.utils.CheckPhone;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.TimeUtils;
 import zyzx.linke.utils.UIUtil;

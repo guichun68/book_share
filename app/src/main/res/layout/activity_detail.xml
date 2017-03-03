@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/act_background"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        layout="@layout/header_white" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/zero"
+                android:paddingLeft="@dimen/detail_common_offset_left"
+                android:paddingRight="@dimen/zero"
+                android:paddingStart="@dimen/detail_common_offset_left" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/detail_img_offset_top"
+                    android:layout_marginTop="@dimen/detail_img_offset_top"
+                    android:orientation="horizontal" >
+
+                    <FrameLayout
+                        android:id="@+id/detail_image_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="@dimen/detail_img_offset_right"
+                        android:layout_marginRight="@dimen/detail_img_offset_right"
+                        android:clickable="true"
+                        android:onClick="OnImageLayoutClick" >
+
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:id="@+id/cloud_detail_image"
+                            android:layout_width="@dimen/detail_img_size"
+                            android:layout_height="@dimen/detail_img_size"
+                            android:background="@mipmap/no_pictures"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/detail_image_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|bottom"
+                            android:background="@drawable/detail_image_corner"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/detail_size_img_des"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/zero"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/detail_poi_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/detail_txt_name_size" />
+
+                            <TextView
+                                android:id="@+id/detail_poi_location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_toEndOf="@id/detail_poi_name"
+                                android:layout_toRightOf="@id/detail_poi_name"
+                                android:textColor="@color/detail_name_address"
+                                android:textSize="@dimen/detail_size_name_address"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/zero"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/detail_txt_name_size" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/zero"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/detail_txt_name_size" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_width"
+                    android:background="@color/bg_divider_line"
+                    android:contentDescription="@string/app_name" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onLocationClick" >
+
+                    <TextView
+                        android:id="@+id/detail_locaiotn_go"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/detail_offset_right"
+                        android:layout_marginRight="@dimen/detail_offset_right"
+                        android:text="@string/go_here"
+                        android:textColor="@color/blue_cloud_scheme"
+                        android:textSize="@dimen/identify_text_size" />
+
+                    <View
+                        android:id="@+id/divider_line"
+                        android:layout_width="@dimen/divider_width"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/busroute_offset"
+                        android:layout_marginRight="@dimen/busroute_offset"
+                        android:layout_toLeftOf="@id/detail_locaiotn_go"
+                        android:layout_toStartOf="@id/detail_locaiotn_go"
+                        android:contentDescription="@string/app_name"
+                        android:src="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/detail_location_icon"
+                        android:layout_width="@dimen/detail_phone_icon_size"
+                        android:layout_height="@dimen/detail_phone_icon_size"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/location_icon" />
+
+                    <TextView
+                        android:id="@+id/detail_locaiotn_des"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/busroute_offset"
+                        android:layout_marginEnd="@dimen/busroute_offset"
+                        android:layout_marginLeft="@dimen/busroute_offset"
+                        android:layout_marginRight="@dimen/busroute_offset"
+                        android:layout_marginTop="@dimen/busroute_offset"
+                        android:layout_toEndOf="@id/detail_location_icon"
+                        android:layout_toLeftOf="@id/divider_line"
+                        android:layout_toRightOf="@id/detail_location_icon"
+                        android:layout_toStartOf="@id/divider_line"
+                        android:textColor="@color/cloud_item_title"
+                        android:textSize="@dimen/identify_text_size" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/call_divider_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_width"
+                    android:background="@color/bg_divider_line"
+                    android:contentDescription="@string/app_name"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/detail_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCallClick"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/detail_phone_calll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/detail_call"
+                        android:layout_marginEnd="@dimen/busroute_offset"
+                        android:layout_marginRight="@dimen/busroute_offset"
+                        android:textColor="@color/blue_cloud_scheme"
+                        android:textSize="@dimen/identify_text_size" />
+
+                    <View
+                        android:id="@+id/divider_phone_line"
+                        android:layout_width="@dimen/divider_width"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/busroute_offset"
+                        android:layout_marginRight="@dimen/busroute_offset"
+                        android:layout_toLeftOf="@id/detail_phone_calll"
+                        android:layout_toStartOf="@id/detail_phone_calll"
+                        android:contentDescription="@string/app_name"
+                        android:src="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/detail_phone_icon"
+                        android:layout_width="@dimen/detail_phone_icon_size"
+                        android:layout_height="@dimen/detail_phone_icon_size"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/phone_icon" />
+
+                    <TextView
+                        android:id="@+id/detail_phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/busroute_offset"
+                        android:layout_marginEnd="@dimen/busroute_offset"
+                        android:layout_marginLeft="@dimen/busroute_offset"
+                        android:layout_marginRight="@dimen/busroute_offset"
+                        android:layout_marginTop="@dimen/busroute_offset"
+                        android:layout_toEndOf="@id/detail_phone_icon"
+                        android:layout_toLeftOf="@id/divider_phone_line"
+                        android:layout_toRightOf="@id/detail_phone_icon"
+                        android:layout_toStartOf="@id/divider_phone_line"
+                        android:textColor="@color/cloud_item_title"
+                        android:textSize="@dimen/identify_text_size" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_width"
+                android:background="@color/bg_divider_line"
+                android:contentDescription="@string/app_name" />
+
+            <LinearLayout
+                android:id="@+id/detail_identify_des"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

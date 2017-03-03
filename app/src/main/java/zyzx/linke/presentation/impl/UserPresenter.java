@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.utils.BeanFactoryUtil;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 /**

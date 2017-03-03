@@ -15,10 +15,43 @@
     <color name="backgroud_btn">#99C3C3C3</color>
     <color name="backgroud_black">#DD444444</color>
     <color name="common_black_color">#FF333333</color>
+    <color name="black">#000000</color>
     <color name="bg_gray">#D6D0D0</color>
     <color name="ver_line">#fff2f2f2</color>
     <color name="gary">#898989</color>
     <color name="Calendar_DayBgColor">#5566b8</color>
     <color name="poi_name">#333333</color>
     <color name="blue_cloud_scheme">#0091ff</color>
+    <color name="change_city">#999999</color>
+    <color name="pre_image_bg">#202020</color>
+    <color name="act_background">#efefef</color>
+    <color name="title_color">#545454</color>
+    <color name="white">#ffffff</color>
+    <color name="watermark_hint">#ccffffff</color>
+    <color name="map_topTip_text">#a5a5a5</color>
+    <color name="transparent">#00000000</color>
+    <color name="bg_divider_line">#993c3c3c</color>
+    <color name="item_press">#e5e5e5</color>
+
+    <!-- 地图选点分享页 -->
+    <color name="item_tip_color">#9f9f9f</color>
+    <color name="cloud_item_title">#333333</color>
+    <color name="cloud_item_gray">#999999</color>
+    <!-- claim search -->
+    <color name="claim_search_black">#000000</color>
+    <color name="claim_search_gray_text">#ccffffff</color>
+    <color name="city_letter_bg">#5566b8</color>
+    <color name="bg_all">#efeff4</color>
+    <color name="line_gray">#CECECE</color>
+
+    <!-- 详情页 -->
+    <color name="identify_title_text">#999999</color>
+    <color name="identify_content_text">#333333</color>
+    <color name="detail_name_address">#666666</color>
+    <color name="phone_bg">#f6f6f6</color>
+    <color name="phone_num_press">#cccccc</color>
+    <color name="gray_button_press">#7a7a7a</color>
+    <color name="line">#dddddd</color>
+    <color name="blueStatus">#1680E2</color>
+
 </resources>

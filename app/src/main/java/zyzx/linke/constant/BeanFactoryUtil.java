@@ -1,4 +1,4 @@
-package zyzx.linke.utils;
+package zyzx.linke.constant;
 
 import java.io.IOException;
 import java.util.Properties;

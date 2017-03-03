@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/act_background"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/routemap_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        layout="@layout/header_white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/busroute_offset"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/title_bus_route"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/busroute_line_des_height"
+            android:layout_marginLeft="@dimen/busroute_offset"
+            android:layout_marginStart="@dimen/busroute_offset"
+            android:singleLine="true"
+            android:textColor="@color/poi_name"
+            android:textSize="@dimen/busroute_text_size_big" />
+
+        <TextView
+            android:id="@+id/des_bus_route"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/busroute_line_des_height"
+            android:layout_marginLeft="@dimen/busroute_offset"
+            android:layout_marginStart="@dimen/busroute_offset"
+            android:singleLine="true"
+            android:textColor="@color/change_city"
+            android:textSize="@dimen/busroute_text_size_small" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_width"
+        android:background="@color/bg_divider_line"
+        android:contentDescription="@string/app_name" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/bus_segment_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@null"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="@dimen/zero"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:listSelector="@color/transparent" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</LinearLayout>

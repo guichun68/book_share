@@ -2,20 +2,16 @@ package zyzx.linke.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.TimingLogger;
 import android.view.View;
 import android.widget.Button;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.utils.BeanFactoryUtil;
 import zyzx.linke.utils.CheckPhone;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 

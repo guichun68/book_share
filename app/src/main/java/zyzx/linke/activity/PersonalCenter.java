@@ -13,7 +13,7 @@ import java.util.List;
 import zxing.CaptureActivity;
 import zyzx.linke.R;
 import zyzx.linke.adapter.GalleryAdapter;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 
 /**
  * Created by austin on 2017/2/22.

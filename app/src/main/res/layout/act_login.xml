@@ -42,7 +42,7 @@
             android:layout_marginStart="5dp"
             android:hint="@string/input_username"
             android:background="@null"
-            android:text="aaa"
+            android:text="孤傲王者"
             android:maxLength="11" />
     </LinearLayout>
 

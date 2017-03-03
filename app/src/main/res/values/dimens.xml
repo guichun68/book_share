@@ -41,5 +41,31 @@
     <dimen name="margin_left">15dp</dimen>
     <dimen name="margin_right">15dp</dimen>
     <dimen name="margin_middle">2dp</dimen>
-    <!-- 高德导航 end-->
+    <dimen name="titlebar_height">48dp</dimen>
+    <dimen name="busroute_offset">12dp</dimen>
+    <dimen name="detail_size_img_des">13sp</dimen>
+    <dimen name="index_offset">4dp</dimen>
+    <dimen name="index_input_height">32dp</dimen>
+    <dimen name="detail_img_offset_top">8dp</dimen>
+    <dimen name="index_map_width">25dp</dimen>
+    <dimen name="index_map_hight">34dp</dimen>
+    <dimen name="offset_left">14dp</dimen>
+    <dimen name="offset_noData_text_top">30dp</dimen>
+    <dimen name="textsize_noData_text">18sp</dimen>
+    <dimen name="divider_width">1dp</dimen>
+    <dimen name="title_height">48dp</dimen>
+    <dimen name="titlebar_height_city_choose">98dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="detail_common_offset_left">12dp</dimen>
+    <dimen name="detail_img_offset_right">11dp</dimen>
+    <dimen name="detail_img_size">80dp</dimen>
+    <dimen name="detail_txt_name_size">16sp</dimen>
+    <dimen name="detail_size_name_address">13sp</dimen>
+    <dimen name="detail_offset_right">12dp</dimen>
+    <dimen name="identify_text_size">14sp</dimen>
+    <dimen name="detail_phone_icon_size">20dp</dimen>
+    <dimen name="bus_strategy_corners">3dp</dimen>
+    <dimen name="busroute_line_des_height">35dp</dimen>
+    <dimen name="busroute_text_size_big">16sp</dimen>
+    <dimen name="busroute_text_size_small">13sp</dimen>
 </resources>

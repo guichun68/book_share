@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/linearLayoutCompat">
 
         <android.support.v7.widget.AppCompatAutoCompleteTextView
             android:id="@+id/auto_tv"
@@ -22,6 +23,7 @@
             android:layout_weight="6"
             android:ellipsize="end"
             android:hint="请输入地址或点击地图选点"
+            android:textColor="@color/black"
             android:maxLines="2" />
 
         <Button

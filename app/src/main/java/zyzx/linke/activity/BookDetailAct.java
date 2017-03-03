@@ -20,10 +20,8 @@ import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail;
 import zyzx.linke.model.bean.Tags;
-import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.presentation.impl.BookPresenter;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -114,8 +112,32 @@ public class BookDetailAct extends BaseActivity {
         }
     }
 
+    View.OnClickListener myOk;
+    View.OnClickListener myCancel;
+    Dialog askDialog = null;
     private void showAskIfShareOnMapDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+       myOk =new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(askDialog!=null)
+                    askDialog.dismiss();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("book",mBook);
+                gotoActivity(BookShareOnMapAct.class,true,bundle);
+            }
+        };
+        myCancel = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(askDialog!=null && askDialog.isShowing())
+                    askDialog.dismiss();
+                finish();
+            }
+        };
+        askDialog =  CustomProgressDialog.getPromptDialog2Btn(this, "添加成功,是否在地图分享此书?", "分享", "不需要", myOk,myCancel);
+
+
+        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("添加成功,是否在地图分享此书?");
         dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
             @Override
@@ -132,8 +154,8 @@ public class BookDetailAct extends BaseActivity {
                 dialog.dismiss();
                 finish();
             }
-        });
-        dialog.show();
+        });*/
+        askDialog.show();
     }
 
     @Override

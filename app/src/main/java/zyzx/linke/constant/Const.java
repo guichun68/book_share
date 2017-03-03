@@ -1,4 +1,4 @@
-package zyzx.linke.activity.amap;
+package zyzx.linke.constant;
 
 import android.graphics.Color;
 
@@ -8,6 +8,16 @@ import android.graphics.Color;
  */
 
 public class Const {
+	public static final int SUCCESSCODE = 1000;
+	/**
+	 *高德web服务--临客-存储图书经纬度--key
+	 */
+	public static String key = "49f0e1fd42a68fcf794c5e135a357f1a";
+	/**
+	 *高德web服务--临客-存储图书经纬度--tableid标识高德后台创建的哪一个地图表
+	 */
+	public static String mTableID = "58b687cc305a2a6810d2b236";
+
 	/**
 	 * 地图中绘制多边形、圆形的边界颜色
 	 * @since 3.3.0

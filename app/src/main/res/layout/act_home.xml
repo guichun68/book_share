@@ -6,8 +6,8 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/title_bar_home"
-        />
-
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <com.amap.api.maps.MapView
         android:id="@+id/map"
@@ -80,5 +80,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/top_title"
         android:text="下一页"/>
+
+
 
 </RelativeLayout>

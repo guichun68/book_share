@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.amap.api.services.core.AMapException;
 
 import zyzx.linke.base.BaseApplication;
+import zyzx.linke.constant.GlobalParams;
 
 
 public class UIUtil {

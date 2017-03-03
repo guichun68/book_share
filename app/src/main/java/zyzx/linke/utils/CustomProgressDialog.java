@@ -3,6 +3,7 @@ package zyzx.linke.utils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -129,6 +130,23 @@ public class CustomProgressDialog {
 		dialog2.setView(view, 0, 0, 0, 0);
 		dialog_txt.setText(msg);
 		dialog_btn.setOnClickListener(listener);
+		dialog2.setCanceledOnTouchOutside(false);
+		dialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		return dialog2;
+	}
+	public static Dialog getPromptDialog2Btn(Context context, String msg, String okBtnText, String cancelBtnText, View.OnClickListener okListener, View.OnClickListener cancelListener) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.dialog_text_btn2, null);
+		TextView dialog_txt = (TextView) view.findViewById(R.id.dialog_txt);
+		Button dialog_btn = (Button) view.findViewById(R.id.dialog_btn);
+		Button dialog_btn2 = (Button) view.findViewById(R.id.dialog_btn2);
+
+		AlertDialog dialog2 = adb.create();
+		dialog2.setView(view, 0, 0, 0, 0);
+		dialog_txt.setText(msg);
+		dialog_btn.setOnClickListener(okListener);
+		dialog_btn2.setOnClickListener(cancelListener);
 		dialog2.setCanceledOnTouchOutside(false);
 		dialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		return dialog2;

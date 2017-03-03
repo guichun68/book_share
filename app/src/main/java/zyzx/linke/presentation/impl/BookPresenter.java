@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import zyzx.linke.constant.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.AMapQueryResult;
 import zyzx.linke.model.bean.BookDetail;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -79,8 +80,8 @@ public class BookPresenter implements IBookPresenter {
     public void addBook2Map(final BookDetail bookDetail, Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
         // 首先查询该点用户是否已经分享过图书了
         final HashMap<String,String> param = new HashMap<>();
-        param.put("key",GlobalParams.key);
-        param.put("mTableID",GlobalParams.mTableID);
+        param.put("key", Const.key);
+        param.put("tableid",Const.mTableID);
         param.put("keywords","");
         param.put("center",longitude+","+latitude);
         param.put("radius","0");
@@ -94,8 +95,7 @@ public class BookPresenter implements IBookPresenter {
                         if(viewCallBack!=null){
                             viewCallBack.onFailure("地图访问出错");
                         }
-                }
-                else if(Integer.parseInt(resultBean.getCount())>0){
+                } else if(Integer.parseInt(resultBean.getCount())>0){
                     //该用户在该点分享过图书，进一步核实是否包含此书
                     List<AMapQueryResult.DatasEntity> datas = resultBean.getDatas();
                     for (AMapQueryResult.DatasEntity book:datas) {
@@ -113,8 +113,8 @@ public class BookPresenter implements IBookPresenter {
 
 
                             HashMap<String,String> param2 = new HashMap<String, String>();
-                            param2.put("key",GlobalParams.key);
-                            param2.put("mTableID",GlobalParams.mTableID);
+                            param2.put("key",Const.key);
+                            param2.put("tableid",Const.mTableID);
                             param2.put("data","{     \"_id\": \""+id+"\",   \"bookIds\":\""+newBookIds+"\" }");
                             try {
                                 GlobalParams.getgModel().post(GlobalParams.urlGaodeBookUpdate, param2, new CallBack() {
@@ -161,8 +161,8 @@ public class BookPresenter implements IBookPresenter {
                 }else {
                     //该点该用户未曾放置过任何书籍，可以插入数据，调用高德api插入数据
                     HashMap<String,String> param2 = new HashMap<>();
-                    param2.put("key",GlobalParams.key);
-                    param2.put("mTableID",GlobalParams.mTableID);
+                    param2.put("key",Const.key);
+                    param2.put("tableid",Const.mTableID);
                     param2.put("data","{     \"_location\": \""+longitude+","+latitude+"\",     \"_name\": \""+GlobalParams.gUser.getLogin_name()+"\",     \"book_image_url\": \""+ bookDetail.getImage()+"\",  \"bookIds\":\""+bookDetail.getB_id()+"\",   \"uid\": \""+GlobalParams.gUser.getUserid()+"\" }");
                     try {
                         GlobalParams.getgModel().post(GlobalParams.urlAddbook2Gaode, param2, new CallBack() {
@@ -219,8 +219,8 @@ public class BookPresenter implements IBookPresenter {
     @Override
     public void getMapBookAllAround(double mLongti, double mLati, Integer around, final CallBack callBack) {
         HashMap<String,String> param = new HashMap<>();
-        param.put("key",GlobalParams.key);
-        param.put("mTableID",GlobalParams.mTableID);
+        param.put("key",Const.key);
+        param.put("tableid",Const.mTableID);
         param.put("center",mLongti+","+mLati);
         param.put("radius",GlobalParams.AROUND+"");
 

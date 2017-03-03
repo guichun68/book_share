@@ -50,12 +50,12 @@ import java.util.List;
 
 import zxing.CaptureActivity;
 import zyzx.linke.R;
-import zyzx.linke.activity.amap.Const;
+import zyzx.linke.constant.Const;
 import zyzx.linke.activity.amap.GeoFence_Activity;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MarkerStatus;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -485,7 +485,7 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
                 mCenterPoint.getLatitude(), mCenterPoint.getLongitude()),
                 Const.SEARCH_AROUND);
         try {
-            mQuery = new CloudSearch.Query(GlobalParams.mTableID, mKeywords, bound);
+            mQuery = new CloudSearch.Query(Const.mTableID, mKeywords, bound);
             mQuery.setPageSize(10);
             mQuery.setPageNum(pagenum);
             mCloudSearch.searchCloudAsyn(mQuery);

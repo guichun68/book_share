@@ -3,10 +3,13 @@
  */
 package zyzx.linke.utils;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.amap.api.location.AMapLocation;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -93,5 +96,34 @@ public class Utils {
 			sdf.applyPattern(strPattern);
 		}
 		return sdf == null ? "NULL" : sdf.format(l);
+	}
+
+	public static String getAssetsFie(Context context, String name)
+			throws IOException {
+
+		InputStream is = context.getAssets().open(name);
+		int size = is.available();
+
+		// Read the entire asset into a local byte buffer.
+		byte[] buffer = new byte[size];
+		is.read(buffer);
+		is.close();
+		String content = new String(buffer, "UTF-8");
+
+		return content;
+
+	}
+
+	public static String getDisDsrc(float dis) {
+		if (dis <= 0) {
+			return "";
+		}
+		String disStr = null;
+		if (dis > 1000) {
+			disStr = (float) Math.round(dis / 1000 * 10) / 10 + "km";
+		} else {
+			disStr = dis + "m";
+		}
+		return disStr;
 	}
 }

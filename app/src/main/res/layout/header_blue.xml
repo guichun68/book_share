@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_layout"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@drawable/title_background_blue"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/title_back_img"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        android:onClick="onBackClick"
+        android:scaleType="center"
+        android:src="@mipmap/title_back_img_write" />
+
+    <TextView
+        android:id="@+id/title_des_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/detail_title_des"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/title_text_size" >
+    </TextView>
+
+</RelativeLayout>

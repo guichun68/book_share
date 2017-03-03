@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import zyzx.linke.R;
 import zyzx.linke.utils.AppUtil;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 
 /**
  * Created by austin on 2017/2/19.

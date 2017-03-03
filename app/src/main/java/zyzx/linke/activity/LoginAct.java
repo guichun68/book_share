@@ -15,15 +15,13 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.utils.BeanFactoryUtil;
+import zyzx.linke.constant.BeanFactoryUtil;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.utils.GlobalParams;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -95,7 +93,7 @@ public class LoginAct extends BaseActivity{
                     @Override
                     public void onSuccess(Object obj) {
                         CustomProgressDialog.dismissDialog(progressBar);
-                        gotoActivity(HomeAct.class,true);
+                        gotoActivity(IndexActivity2.class,true);
                     }
 
                     @Override

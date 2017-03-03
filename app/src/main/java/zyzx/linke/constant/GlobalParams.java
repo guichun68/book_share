@@ -1,9 +1,7 @@
-package zyzx.linke.utils;
+package zyzx.linke.constant;
 
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.support.annotation.Nullable;
 
 import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
@@ -19,6 +17,7 @@ public class GlobalParams {
 	protected static IBookPresenter gBookPresenter;
 	public static boolean gIsPersonCenterScan;//是否是个人中心的扫描行为
 	public static String gCurrCity="北京";//当前所在城市，默认北京
+	public static boolean isDrawerOpened;
 
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
@@ -43,14 +42,7 @@ public class GlobalParams {
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
 	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
 	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
-	/**
-	 *高德web服务--临客-存储图书经纬度--key
-	 */
-	public static String key = "49f0e1fd42a68fcf794c5e135a357f1a";
-	/**
-	 *高德web服务--临客-存储图书经纬度--tableid标识高德后台创建的哪一个地图表
-	 */
-	public static String mTableID = "58b687cc305a2a6810d2b236";
+
 	//向高德地图中添加一条记录
 	public static String urlAddbook2Gaode = "http://yuntuapi.amap.com/datamanage/data/create";
 	/**
