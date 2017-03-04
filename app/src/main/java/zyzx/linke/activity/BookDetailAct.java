@@ -91,6 +91,7 @@ public class BookDetailAct extends BaseActivity {
                         int code = jsonObject.getInteger("code");
                         if(code == 200){
                             bookId = jsonObject.getString("bookId");
+                            mBook.setB_id(bookId);
                             UIUtil.showToastSafe("添加成功");
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -212,7 +213,10 @@ public class BookDetailAct extends BaseActivity {
                     for (String author: mBook.getAuthor()) {
                         sb.append(author).append(";");
                     }
-                    sb.deleteCharAt(sb.length()-1);
+                    if(sb.length()>0)
+                    {
+                        sb.deleteCharAt(sb.length()-1);
+                    }
                     tvAuthor.setText(sb);
                     tvPublisher.setText(mBook.getPublisher());
                     tvPublishDate.setText(mBook.getPubdate());

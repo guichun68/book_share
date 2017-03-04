@@ -19,9 +19,12 @@ public class GlobalParams {
 	public static String gCurrCity="北京";//当前所在城市，默认北京
 	public static boolean isDrawerOpened;
 
+
+
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
 	}
+
 	public static Activity gCurrAct;
 	/**
 	 * 登录URL
@@ -32,9 +35,21 @@ public class GlobalParams {
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 	/**
+	 * 通过用户id获取其下所有书籍和其用户基本信息
+	 */
+	public static String urlGetUserInfo= GlobalParams.BASE_URL+"/zyzx/getUserinfo";
+	/**
+	 * 获取用户的所有书籍
+	 */
+	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
+	/**
 	 * 注册
 	 */
 	public static String urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
+	/**
+	 * 当用户在地图中分享图书成功后，立即更改表zyzx_user_books表中该书籍的状态为“已添加到地图"
+	 */
+	public static String urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status";
 	/**
 	 * 发送SMS登录验证码用
 	 */
@@ -63,6 +78,9 @@ public class GlobalParams {
 		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
 		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
+		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo";
+		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status";
+		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
 	}
 
 	public static IBookPresenter getBookPresenter(){

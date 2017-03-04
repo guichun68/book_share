@@ -227,7 +227,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     mClickPoint = tip.getPoint();
                     LatLng latLng = new LatLng(mClickPoint.getLatitude(),mClickPoint.getLongitude());
                     CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                            latLng, 18, 0, 0));
+                            latLng, 17, 0, 0));
                     mAMap.animateCamera(update, 1000, null);
 //                    onMapClick(latLng);
                     mAMap.clear();// 清理之前的图标
@@ -434,6 +434,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                             switch (code) {
                                 case 200://初次在该坐标分享
                                     UIUtil.showToastSafe("分享成功");
+
                                     finish();
                                     break;
                                 case 400://分享成功，已经在该点分享过该书籍了

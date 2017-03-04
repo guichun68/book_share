@@ -37,4 +37,13 @@ public interface IBookPresenter {
      * @param callBack
      */
     void getMapBookAllAround(double mLongti, double mLati, Integer around, CallBack callBack);
+
+    /**
+     * 获取用户信息和其下所有书籍
+     * @param uid 用户id
+     * @param pageNum 页数
+     * @param viewCallBack 回调
+     */
+    void getUserBooks(String uid,final int pageNum,final CallBack viewCallBack);
+
 }

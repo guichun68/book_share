@@ -156,4 +156,30 @@ public class UserPresenter implements IUserPresenter {
 
         }
     }
+
+    @Override
+    public void getUserInfo(String uid, final CallBack viewCallBack) {
+            HashMap<String,String> param = new HashMap<>();
+        param.put("uid",uid);
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    if(obj != null){
+                        if(viewCallBack!=null){
+                            viewCallBack.onSuccess(obj);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                    UIUtil.showTestLog("zyzx","根据uid获取用户信息失败！");
+                    UIUtil.showTestLog("zyzx",obj.toString());
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

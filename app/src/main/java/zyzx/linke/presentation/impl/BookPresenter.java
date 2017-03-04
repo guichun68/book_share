@@ -77,7 +77,7 @@ public class BookPresenter implements IBookPresenter {
     }
 
     @Override
-    public void addBook2Map(final BookDetail bookDetail, Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
+    public void addBook2Map(final BookDetail bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
         // 首先查询该点用户是否已经分享过图书了
         final HashMap<String,String> param = new HashMap<>();
         param.put("key", Const.key);
@@ -121,19 +121,12 @@ public class BookPresenter implements IBookPresenter {
                                     @Override
                                     public void onSuccess(Object obj) {
                                         String json = (String) obj;
-                                        JSONObject jsonObject = JSON.parseObject(json);
-                                        /**
-                                         * {
-                                         "info": "OK",
-                                         "infocode": "10000",
-                                         "status": 1,
-                                         "_id": "4"
-                                         }
-                                         */
+                                        final JSONObject jsonObject = JSON.parseObject(json);
                                         int status = jsonObject.getInteger("status");
                                         if(status==1){
                                             if(viewCallBack!=null){
-                                                viewCallBack.onSuccess(200);
+//                                                viewCallBack.onSuccess(200);
+                                                modifyBookStauts(bookDetail,userid);
                                             }
                                         }else{
                                             if(viewCallBack!=null){
@@ -170,19 +163,9 @@ public class BookPresenter implements IBookPresenter {
                             public void onSuccess(Object obj) {
                                 String json = (String) obj;
                                 JSONObject jsonObject = JSON.parseObject(json);
-                                /**
-                                 * {
-                                 "info": "OK",
-                                 "infocode": "10000",
-                                 "status": 1,
-                                 "_id": "4"
-                                 }
-                                 */
                                 int status = jsonObject.getInteger("status");
                                 if(status==1){
-                                    if(viewCallBack!=null){
-                                        viewCallBack.onSuccess(200);
-                                    }
+                                    modifyBookStauts(bookDetail,userid);
                                 }else{
                                     if(viewCallBack!=null){
                                         viewCallBack.onSuccess(500);
@@ -204,6 +187,38 @@ public class BookPresenter implements IBookPresenter {
                 }
 
 
+            }
+            // 分享成功，修改zyzx_user_book表中我的图书中该书的状态为“已分享”
+            private void modifyBookStauts(BookDetail bookDetail2,Integer userId2) {
+                HashMap<String,String> param2 = new HashMap<String, String>();
+                param2.put("book_id",bookDetail2.getB_id());
+                param2.put("uid",userId2+"");
+                try {
+                    GlobalParams.getgModel().post(GlobalParams.urlSetBookStatus, param2, new CallBack() {
+                        @Override
+                        public void onSuccess(Object obj) {
+                            String jsonResult = (String) obj;
+                            JSONObject jsonObject1 = JSON.parseObject(jsonResult);
+                            int code = jsonObject1.getInteger("code");
+                            if(code==200) {
+                                if (viewCallBack != null) {
+                                    viewCallBack.onSuccess(200);
+                                }
+                            }else{
+                                if(viewCallBack !=null){
+                                    viewCallBack.onFailure(obj);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object obj) {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -240,5 +255,31 @@ public class BookPresenter implements IBookPresenter {
                 UIUtil.showTestLog("zyzx_failure",obj.toString());
             }
         });
+    }
+
+    @Override
+    public void getUserBooks(String uid, final int pageNum,final CallBack viewCallBack) {
+        HashMap<String,String> param = new HashMap<>();
+        param.put("uid",uid);
+        param.put("pageNum",pageNum+"");
+
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlGetUserBooks, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    String jsonResult = (String) obj;
+                    List<BookDetail> bookDetails = JSONObject.parseArray(jsonResult, BookDetail.class);
+                    for (BookDetail b:bookDetails) {
+                        UIUtil.showTestLog("zyzx",b.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

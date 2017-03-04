@@ -24,7 +24,7 @@ public class User implements Serializable{
 	private String city;
 	
 	private String lastLoginTime;
-	private String bak2;
+	private String signature;
 	private String bak3;
 	private String bak4;
 	private String bak5;
@@ -181,16 +181,18 @@ public class User implements Serializable{
 	}
 
 
-
-
-	public String getBak2() {
-		return bak2;
+	public String getSignature() {
+		return signature;
 	}
 
 
-	public void setBak2(String bak2) {
-		this.bak2 = bak2;
+
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
+
+
 
 
 	public String getBak3() {

@@ -71,9 +71,11 @@
         </activity>
         <activity
             android:name=".activity.IndexActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FriendHomePageAct"
             android:screenOrientation="portrait"
-            >
-        </activity>
+            />
         <activity
             android:name=".activity.KeywordListActivity"
             android:screenOrientation="portrait"

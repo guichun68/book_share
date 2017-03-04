@@ -26,4 +26,11 @@ public interface IUserPresenter {
      * @param phone
      */
     void regist(String userName, String psw, String phone,CallBack viewCallBack);
+
+    /**
+     * 获取用户信息
+     * @param uid
+     * @param callBack
+     */
+    void getUserInfo(String uid, CallBack callBack);
 }

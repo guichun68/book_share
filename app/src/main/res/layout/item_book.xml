@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="2dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_book_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tool:text="历史深处的民国"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:drawablePadding="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableLeft="@drawable/press_shape"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tool:text="江城"
+            android:textStyle="bold"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:drawableLeft="@drawable/press_shape"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_intro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="3"
+            android:drawableLeft="@drawable/press_shape"
+            android:ellipsize="end"
+            tool:text="这是一部讲述民国历史的记录书籍，书中从各个角度阐述了旧中国由一个任人宰割的社会年代逐渐变成一个半殖民地，有到现代化改革的历程。"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

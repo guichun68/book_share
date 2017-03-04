@@ -80,7 +80,10 @@ public class ModelImpl implements IModel {
         for (Map.Entry<String,String> entry:param.entrySet()) {
            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
-        sb.deleteCharAt(sb.length()-1);
+        if(sb.length()>0)
+        {
+            sb.deleteCharAt(sb.length()-1);
+        }
         final Request request = builder
                 .url(url+sb.toString())
                 .build();
