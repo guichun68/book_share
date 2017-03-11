@@ -125,6 +125,16 @@ public class RegisteAct extends BaseActivity{
             aetRePsw.setError("请再次输入密码");
             return false;
         }
+        if(aetPsw.getText().toString().contains(" ")){
+            Snackbar.make(aetRePsw,"密码不能包含空字符",Snackbar.LENGTH_SHORT).show();
+            aetRePsw.setError("密码不能包含空字符");
+            return false;
+        }
+        if(aetPsw.getText().toString().length()<6){
+            Snackbar.make(aetRePsw,"密码至少6位",Snackbar.LENGTH_SHORT).show();
+            aetRePsw.setError("密码至少6位");
+            return false;
+        }
         //判断手机号是否合法
         if(!CheckPhone.isPhone(aetPhone.getText().toString())) {
             Snackbar.make(aetPhone,"手机号不合法",Snackbar.LENGTH_SHORT).show();

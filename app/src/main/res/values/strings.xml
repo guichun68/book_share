@@ -4,6 +4,7 @@
     <string name="forget_psw"><u>忘记密码</u></string>
     <string name="regist"><b><u>用户注册</u></b></string>
     <string name="about_us"><b><u>关于临客</u></b></string>
+    <string name="no_user">无此用户</string>
     <string name="server_err">服务器出错，请稍后再试</string>
     <string name="regist_succ">注册成功</string>
     <string name="usernameOccupation">用户名已被占用,请使用其他名称</string>
@@ -15,7 +16,7 @@
     <string name="verifycode">发送验证码</string>
     <string name="input_verifycode">请输入验证码</string>
     <string name="input_phone">请输入手机号码</string>
-    <string name="phoneOccupation">该手机号已注册,请直接返回登录</string>
+    <string name="phoneOccupation">该手机号已注册,请直接手机号登录</string>
     <string name="input_psw">请输入密码</string>
 
 <!-- 高德导航start-->
@@ -204,4 +205,5 @@
     <string name="map_title">用户</string>
     <string name="open">打开</string>
     <string name="close">关闭</string>
+    <string name="book_name">书名</string>
 </resources>

@@ -1,38 +1,28 @@
-/*
 package zyzx.linke.model.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.List;
 
-public class BookDetail implements Parcelable{
-
-	public BookDetail() {
-	}
+public class BookDetail2 implements Serializable{
 
 	private String alt;
 
 	private String alt_title;
-	private String douban_url;
+
 	private List<String> author;
 
 	private String author_intro;
-	private String image_medium;
 
 	private String binding;
 
 	private String catalog;
-	*/
-/**
-	 * 表示豆瓣中该书籍的id
-	 *//*
 
 	private String b_id;
 
 	private String image;
 
 	private Images images;
+	private String image_medium;
 
 	private String isbn10;
 
@@ -61,98 +51,27 @@ public class BookDetail implements Parcelable{
 	private String title;
 
 	private List<String> translator;
-
-	*/
-/**
-	 * 豆瓣的获取该图书详情的json串的地址
-	 *//*
+	private String douban_url;
 
 	private String url;
 	//标记是否是来自豆瓣的数据
 	private boolean isFromDouban;
 
-	protected BookDetail(Parcel in) {
-		alt = in.readString();
-		alt_title = in.readString();
-		author = in.createStringArrayList();
-		author_intro = in.readString();
-		binding = in.readString();
-		catalog = in.readString();
-		b_id = in.readString();
-		image = in.readString();
-		isbn10 = in.readString();
-		image_medium = in.readString();
-		isbn13 = in.readString();
-		douban_url = in.readString();
-		origin_title = in.readString();
-		pages = in.readString();
-		price = in.readString();
-		pubdate = in.readString();
-		publisher = in.readString();
-		subtitle = in.readString();
-		summary = in.readString();
-		title = in.readString();
-		translator = in.createStringArrayList();
-		url = in.readString();
-		isFromDouban = in.readByte() != 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(alt);
-		dest.writeString(alt_title);
-		dest.writeStringList(author);
-		dest.writeString(author_intro);
-		dest.writeString(binding);
-		dest.writeString(douban_url);
-		dest.writeString(catalog);
-		dest.writeString(b_id);
-		dest.writeString(image);
-		dest.writeString(isbn10);
-		dest.writeString(image_medium);
-		dest.writeString(isbn13);
-		dest.writeString(origin_title);
-		dest.writeString(pages);
-		dest.writeString(price);
-		dest.writeString(pubdate);
-		dest.writeString(publisher);
-		dest.writeString(subtitle);
-		dest.writeString(summary);
-		dest.writeString(title);
-		dest.writeStringList(translator);
-		dest.writeString(url);
-		dest.writeByte((byte) (isFromDouban ? 1 : 0));
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	public static final Creator<BookDetail> CREATOR = new Creator<BookDetail>() {
-		@Override
-		public BookDetail createFromParcel(Parcel in) {
-			return new BookDetail(in);
-		}
-
-		@Override
-		public BookDetail[] newArray(int size) {
-			return new BookDetail[size];
-		}
-	};
-	public String getDouban_url() {
-		return douban_url;
-	}
-
-	public void setDouban_url(String douban_url) {
-		this.douban_url = douban_url;
-	}
 	public void setAlt(String alt) {
 		this.alt = alt;
 	}
 
 	public String getAlt() {
 		return this.alt;
+	}
+
+
+	public String getImage_medium() {
+		return image_medium;
+	}
+
+	public void setImage_medium(String image_medium) {
+		this.image_medium = image_medium;
 	}
 
 	public void setAlt_title(String alt_title) {
@@ -165,6 +84,14 @@ public class BookDetail implements Parcelable{
 
 	public List<String> getAuthor() {
 		return author;
+	}
+
+	public String getDouban_url() {
+		return douban_url;
+	}
+
+	public void setDouban_url(String douban_url) {
+		this.douban_url = douban_url;
 	}
 
 	public void setAuthor(List<String> author) {
@@ -187,14 +114,6 @@ public class BookDetail implements Parcelable{
 		return this.binding;
 	}
 
-	public String getImage_medium() {
-		return image_medium;
-	}
-
-	public void setImage_medium(String image_medium) {
-		this.image_medium = image_medium;
-	}
-
 	public void setCatalog(String catalog) {
 		this.catalog = catalog;
 	}
@@ -202,6 +121,7 @@ public class BookDetail implements Parcelable{
 	public String getCatalog() {
 		return this.catalog;
 	}
+
 
 	public String getB_id() {
 		return b_id;
@@ -351,8 +271,9 @@ public class BookDetail implements Parcelable{
 		return isFromDouban;
 	}
 
-	public void setFromDouban(boolean fromDouban) {
-		isFromDouban = fromDouban;
+	public void setFromDouban(boolean isFromDouban) {
+		this.isFromDouban = isFromDouban;
 	}
+
+
 }
-*/

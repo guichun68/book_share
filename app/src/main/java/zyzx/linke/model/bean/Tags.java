@@ -1,6 +1,8 @@
 package zyzx.linke.model.bean;
 
-public class Tags {
+import java.io.Serializable;
+
+public class Tags implements Serializable{
 	private int count;
 
 	private String name;

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.services.cloud.CloudImage;
 import com.amap.api.services.cloud.CloudItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -20,29 +19,34 @@ import com.android.volley.toolbox.Volley;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.activity.BookDetailAct;
 import zyzx.linke.activity.DetailActivity;
 import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.model.bean.IndexItem;
+import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.utils.AMApCloudImageCache;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.Utils;
 
 /**
- * 云图poi列表页Adapter
+ * 所有用户的书籍的listView的adapter（其集合个数>=地图中的坐标点数--因为一个用户(坐标点)可能分享了多本书籍）
+ *
  * @author ligen
  */
-public class CloudItemListAdapter extends BaseAdapter {
+public class AllUserBooksListAdapter extends BaseAdapter {
     private Context mContext;
-    private List<CloudItem> mItemList;
+    private List<IndexItem> mItemList;
     private int mIndex = -1;
     private ImageLoader imageLoader = null;
 
-    public CloudItemListAdapter(Context context, List<CloudItem> list) {
+    public AllUserBooksListAdapter(Context context, List<IndexItem> list) {
         this.mContext = context;
         this.mItemList = list;
         RequestQueue mQueue = Volley.newRequestQueue(mContext);
         imageLoader = new ImageLoader(mQueue, new AMApCloudImageCache());
     }
 
-    public void setData(List<CloudItem> list) {
+    public void setData(List<IndexItem> list) {
         this.mItemList = list;
     }
 
@@ -54,7 +58,7 @@ public class CloudItemListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int arg0) {
+    public IndexItem getItem(int arg0) {
         return mItemList.get(arg0);
     }
 
@@ -71,7 +75,7 @@ public class CloudItemListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = null;
         if (convertView == null) {
@@ -81,38 +85,35 @@ public class CloudItemListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        final CloudItem item = mItemList.get(position);
         convertView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext.getApplicationContext(),
-                        DetailActivity.class);
-                intent.putExtra(BundleFlag.CLOUD_ITEM, item);
+                        BookDetailAct.class);
+//                intent.putExtra(BundleFlag.CLOUD_ITEM, getItem(position).getBookDetail());
+                intent.putExtra(BundleFlag.BOOK, getItem(position).getBookDetail());
+//                intent.putExtra(BundleFlag.isFromIndexAct,true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
         });
-        if (item != null && item.getCustomfield().get("book_image_url") != null) {
-            String imageUrl = item.getCustomfield().get("book_image_url");
-            /*List<CloudImage> imageList = item.getCloudImage();
-            String preImageUrl = imageList.get(0).getPreurl();*/
-            // holder.imgCliam.setTag(preImageUrl);
-            // if (holder.imgCliam.getTag() != null
-            // && holder.imgCliam.getTag().equals(preImageUrl)) {
+        if (getItem(position) != null && !StringUtil.isEmpty(getItem(position).getBookDetail().getImage_medium())) {
+            String imageUrl = getItem(position).getBookDetail().getImage_medium();
+            if(StringUtil.isEmpty(imageUrl)){
+                imageUrl = getItem(position).getBookDetail().getImages().getMedium();
+            }
             holder.imgCliam.setImageUrl(imageUrl, imageLoader);
             holder.imageCorner.setVisibility(View.GONE);
-            // }
         } else {
             holder.imgCliam.setImageUrl(null, null);
             holder.imageCorner.setVisibility(View.GONE);
         }
 
-        holder.title.setText(item.getTitle());
-        holder.address.setText(item.getSnippet());
-        float dis = item.getDistance();
+        holder.title.setText(getItem(position).getmTitle());
+        holder.address.setText(getItem(position).getAddress());
+        float dis = getItem(position).getDistance();
         dis = Math.round(dis * 10) / 10;
         if (dis > 0) {
             holder.dis.setText(Utils.getDisDsrc(dis));

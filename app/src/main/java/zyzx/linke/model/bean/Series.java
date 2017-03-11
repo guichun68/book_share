@@ -1,6 +1,8 @@
 package zyzx.linke.model.bean;
 
-public class Series {
+import java.io.Serializable;
+
+public class Series implements Serializable{
 	//id:4542
 	//title : "计算机科学丛书"
 	private String id;

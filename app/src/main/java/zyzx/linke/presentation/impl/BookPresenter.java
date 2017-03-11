@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import zyzx.linke.R;
 import zyzx.linke.constant.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.AMapQueryResult;
-import zyzx.linke.model.bean.BookDetail;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.QueryBookAroundMap;
+import zyzx.linke.model.bean.RequestParamGetBookInfos;
+import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
@@ -45,7 +48,7 @@ public class BookPresenter implements IBookPresenter {
                         UIUtil.showTestLog("zyzx",jsonObject.getString("msg"));
                         return;
                     }
-                    BookDetail bookDetail = JSON.parseObject(response, BookDetail.class);
+                    BookDetail2 bookDetail = JSON.parseObject(response, BookDetail2.class);
                     if(viewCallBack!=null){
                         viewCallBack.onSuccess(bookDetail);
                     }
@@ -62,7 +65,7 @@ public class BookPresenter implements IBookPresenter {
     }
 
     @Override
-    public void addBook2MyLib(BookDetail mBook,Integer userId,CallBack viewCallBack) {
+    public void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack) {
         HashMap<String,String> param = new HashMap<>();
         param.put("book",JSON.toJSONString(mBook));
         param.put("userId",userId+"");
@@ -77,7 +80,7 @@ public class BookPresenter implements IBookPresenter {
     }
 
     @Override
-    public void addBook2Map(final BookDetail bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
+    public void addBook2Map(final BookDetail2 bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
         // 首先查询该点用户是否已经分享过图书了
         final HashMap<String,String> param = new HashMap<>();
         param.put("key", Const.key);
@@ -189,7 +192,7 @@ public class BookPresenter implements IBookPresenter {
 
             }
             // 分享成功，修改zyzx_user_book表中我的图书中该书的状态为“已分享”
-            private void modifyBookStauts(BookDetail bookDetail2,Integer userId2) {
+            private void modifyBookStauts(BookDetail2 bookDetail2,Integer userId2) {
                 HashMap<String,String> param2 = new HashMap<String, String>();
                 param2.put("book_id",bookDetail2.getB_id());
                 param2.put("uid",userId2+"");
@@ -268,18 +271,49 @@ public class BookPresenter implements IBookPresenter {
                 @Override
                 public void onSuccess(Object obj) {
                     String jsonResult = (String) obj;
-                    List<BookDetail> bookDetails = JSONObject.parseArray(jsonResult, BookDetail.class);
-                    for (BookDetail b:bookDetails) {
-                        UIUtil.showTestLog("zyzx",b.toString());
+                    List<BookDetail2> bookDetails = JSONObject.parseArray(jsonResult, BookDetail2.class);
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(bookDetails);
                     }
                 }
 
                 @Override
                 public void onFailure(Object obj) {
+                    if(viewCallBack!=null){
+                        viewCallBack.onFailure(obj);
+                    }
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson, final CallBack viewCallBack) {
+        String json = JSON.toJSONString(requestParamJson);
+        HashMap<String,String> param = new HashMap<>();
+        param.put("ids",json);
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    if(obj.toString().toLowerCase().contains("</html>")){
+                        UIUtil.showToastSafe(R.string.network_error);
+                        onFailure(obj);
+                    }else if(viewCallBack!=null){
+                        viewCallBack.onSuccess(obj);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                        UIUtil.showTestLog("zyzx","access book interface failure.");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            UIUtil.showToastSafe("网络错误，请重试");
         }
     }
 }

@@ -40,13 +40,16 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.cloud.CloudItem;
 import com.amap.api.services.core.LatLonPoint;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.model.bean.MarkerStatus;
 import zyzx.linke.utils.CustomProgressDialog;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * 通过地图marker展示列表当前在屏幕内的可见item
@@ -85,6 +88,9 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 	 */
 	private OnLocationChangedListener mListener;
 	private AMapLocationClient mlocationClient;
+	private Button mBtnNextPage;
+	private int mCurrPage =1;
+	private int mPageNum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,12 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		// 获取列表页中的云图数据
 		mCloudItems = getIntent().getParcelableArrayListExtra(
 				BundleFlag.CLOUD_ITEM_LIST);
+		//分页算法（计算页数）
+		//totalRecord:总记录数  maxResult:每页个数
+//		int totalPage = (totalRecord + maxResult -1) / maxResult;
+		if(mCloudItems!=null){
+			mPageNum = (mCloudItems.size()+10-1)/10;
+		}
 
 		setUpInteractiveControls();
 
@@ -110,10 +122,12 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 	private void setUpInteractiveControls() {
 
 		mBottomRlayout = (RelativeLayout) findViewById(R.id.bottom_layout);
+		mBtnNextPage = (Button) findViewById(R.id.btn_next_page);
 		if (mCloudItems.size() == 0) {
 			mBottomRlayout.setVisibility(View.GONE);
 		}
 
+		mBtnNextPage.setOnClickListener(this);
 		mTitleDesTv = (TextView) findViewById(R.id.title_des_text);
 		mTitleDesTv.setText(getResources().getString(R.string.map_title));
 
@@ -158,9 +172,27 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 
 		setMapListener();
 
-		addMarkersToMap();
+		addMarker();
 	}
-
+//本方法主要是为了分离当前页面的兴趣点，把其他页的兴趣点暂时不显示
+	public void addMarker(){
+		if(mCurrPage>mPageNum){
+			UIUtil.showToastSafe("已经是最后一页");
+			return;
+		}
+		if(mCloudItems.size()<10)
+		{
+			addMarkersToMap(mCloudItems);
+		}else{
+			if((mCurrPage-1)*10<mCloudItems.size() ){
+				if(mCurrPage*10<=mCloudItems.size()){
+					addMarkersToMap(mCloudItems.subList((mCurrPage-1)*10,mCurrPage*10));
+				}else{
+					addMarkersToMap(mCloudItems.subList((mCurrPage-1)*10,mCloudItems.size()));
+				}
+			}
+		}
+	}
 	/**
 	 * 为地图增加一些事件监听
 	 */
@@ -202,13 +234,17 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		// 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
 		mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
 	}
-
+	private ArrayList<Marker> currShowMarkers = new ArrayList<>();
 	/**
 	 * 往地图上添加marker，为列表页获得的数据
 	 */
-	private void addMarkersToMap() {
+	private void addMarkersToMap(List<CloudItem> mCloudItems) {
+		for(Marker marker : currShowMarkers){
+			marker.remove();
+		}
 
 		int size = mCloudItems.size();
+
 		for (int i = 0; i < size; i++) {
 
 			// 根据该poi的经纬度进行marker点的添加
@@ -217,7 +253,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 					.getLatLonPoint().getLatitude(), mCloudItems.get(i)
 					.getLatLonPoint().getLongitude()));
 			Marker marker = mAMap.addMarker(markerOption);
-
+			currShowMarkers.add(marker);
 			// 每个marker点上带有一个状态类，来说明这个marker是否是被选中的状态
 			// 会根据是否被选中来决定一些事件处理
 			MarkerStatus markerStatus = new MarkerStatus(i);
@@ -230,7 +266,11 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 			setMarkerBasedonStatus(markerStatus);
 			marker.setObject(markerStatus);
 		}
-
+//		LatLonPoint point = new LatLonPoint();
+		LatLng latLng = new LatLng(mCloudItems.get(0).getLatLonPoint().getLatitude(),mCloudItems.get(0).getLatLonPoint().getLongitude());
+		CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(
+				latLng, mAMap.getCameraPosition().zoom, 0, 0));
+		mAMap.animateCamera(update, 500, null);
 	}
 
 	/**
@@ -291,7 +331,11 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		case R.id.minus_layout:
 			ZoomOut();
 			break;
-
+		case R.id.btn_next_page:
+			//TODO
+			mCurrPage ++;
+			addMarker();
+			break;
 		default:
 			break;
 		}
@@ -414,7 +458,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		mLastMarkerStatus = newMarkerStatus;
 		CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(
 				marker.getPosition(), mAMap.getCameraPosition().zoom, 0, 0));
-		mAMap.animateCamera(update, 500, null);
+		mAMap.animateCamera(update, 400, null);
 		return true;
 	}
 

@@ -45,10 +45,12 @@ public class UserPresenter implements IUserPresenter {
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
                        }
-                   }else{
-                       if(viewCallBack!=null){
-                           viewCallBack.onFailure("用户名或密码错误");
+                   }else if(code==404){
+                       if(viewCallBack!=null) {
+                           viewCallBack.onFailure("无此用户");
                        }
+                   }else if(viewCallBack!=null){
+                           viewCallBack.onFailure("用户名或密码错误");
                    }
                }
 

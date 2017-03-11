@@ -23,7 +23,7 @@ public class PersonalCenter extends BaseActivity {
     private RecyclerView mRecyclerView;//显示我的所有书籍
     private GalleryAdapter mAdapter;
     private List<Integer> mDatas;
-    private Button btnScan;
+    private Button btnScan,btnManual;//ISBN扫描、手动录入
 
     @Override
     protected int getLayoutId() {
@@ -34,8 +34,10 @@ public class PersonalCenter extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         //得到控件
         btnScan = (Button) findViewById(R.id.btn_scan);
+        btnManual = (Button) findViewById(R.id.btn_manual);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_galary);
         btnScan.setOnClickListener(this);
+        btnManual.setOnClickListener(this);
     }
 
     @Override
@@ -69,6 +71,9 @@ public class PersonalCenter extends BaseActivity {
             case R.id.btn_scan:
                 GlobalParams.gIsPersonCenterScan = true;
                 gotoActivity(CaptureActivity.class,false);
+                break;
+            case R.id.btn_manual:
+                gotoActivity(ManualInputAct.class,false);
                 break;
         }
     }

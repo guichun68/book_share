@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 
 
-public abstract class BaseParentActivity extends AppCompatActivity{
+public abstract class BaseParentActivity extends CheckPermissionsActivity{
     private static BaseParentActivity mForegroundActivity;
     protected LayoutInflater mInflater;
     protected Context mContext;

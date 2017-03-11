@@ -12,10 +12,12 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import zyzx.linke.R;
 import zyzx.linke.model.CallBack;
@@ -100,7 +102,8 @@ public class LoginAct extends BaseActivity{
                     public void onFailure(Object obj) {
                         CustomProgressDialog.dismissDialog(progressBar);
 //                        UIUtil.showToastSafe("用户名或密码错误.");
-                        Snackbar.make(view, "访问超时，请重试", Snackbar.LENGTH_SHORT).show();
+                        UIUtil.showToastSafe((String)obj);
+//                        Snackbar.make(view, obj.toString(), Snackbar.LENGTH_SHORT).show();
 //                        Snackbar.make(view, (String)obj, Snackbar.LENGTH_SHORT).show();
                     }
                 });
@@ -130,10 +133,10 @@ public class LoginAct extends BaseActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 200 && resultCode==200){//手机号登录页登录成功返回
-            gotoActivity(HomeAct.class,true);
+            gotoActivity(IndexActivity2.class,true);
         }
         if(requestCode==300 && resultCode==300){//注册页注册成功返回
-            gotoActivity(HomeAct.class,true);
+            gotoActivity(IndexActivity2.class,true);
         }
     }
 
@@ -232,6 +235,25 @@ public class LoginAct extends BaseActivity{
         final AlertDialog dialog = adb.create();
         dialog.setView(view, 0,0,0,0);
         dialog.show();
+    }
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 1500) {
+                Toast.makeText(
+                        this,
+                        getResources().getString(R.string.press_more_then_exit),
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

@@ -30,8 +30,9 @@
                 android:id="@+id/btn_area_choose"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:paddingLeft="5dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 >
 
@@ -59,9 +60,9 @@
                 android:layout_height="@dimen/index_input_height"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="20dp"
                 android:background="@drawable/search_bar_blue"
-                android:gravity="center_vertical|center_horizontal"
+                android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <ImageView
@@ -109,7 +110,6 @@
         android:id="@+id/id_drawerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:layout_below="@id/id_toolbar">
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -134,7 +134,7 @@
             android:id="@+id/ll_drawer"
             android:layout_width="120dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:clickable="true"
             android:background="#78C4EC"
             android:orientation="vertical">
@@ -142,39 +142,30 @@
             <TextView
                 android:id="@+id/tv_ihave"
                 style="@style/item_menu_style"
-                android:background="@drawable/slide_item_sel"
-                android:text="我有"
+                android:text="个人中心"
                 android:drawableBottom="@color/change_city"
                 />
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_white"/>
-
-            <TextView
-                android:id="@+id/tv_record"
-                style="@style/item_menu_style"
-                android:text="我的记录"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_white"/>
+               style="@style/line"/>
             <TextView
                 android:id="@+id/tv_setting"
                 style="@style/item_menu_style"
                 android:text="设置"/>
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_white"/>
+                style="@style/line"/>
+
             <TextView
                 android:id="@+id/tv_check_update"
                 style="@style/item_menu_style"
                 android:text="检查更新"/>
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_white"/>
+                style="@style/line"/>
+            <TextView
+                android:id="@+id/tv_log_out"
+                style="@style/item_menu_style"
+                android:text="退出登录"/>
+            <View
+                style="@style/line"/>
             <TextView
                 android:id="@+id/tv_about"
                 style="@style/item_menu_style"

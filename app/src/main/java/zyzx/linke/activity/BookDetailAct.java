@@ -1,12 +1,10 @@
 package zyzx.linke.activity;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,8 +15,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import zyzx.linke.R;
+import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.BookDetail;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.constant.GlobalParams;
@@ -37,7 +36,8 @@ public class BookDetailAct extends BaseActivity {
 
     private ImageView ivBookImage;
     private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
-    private BookDetail mBook;
+    private BookDetail2 mBook;
+//    private boolean isFromIndexAct;//是否是从首页进入的图书详情页（如果是，则不显示添加按钮）
 
     @Override
     protected int getLayoutId() {
@@ -123,7 +123,9 @@ public class BookDetailAct extends BaseActivity {
                 if(askDialog!=null)
                     askDialog.dismiss();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("book",mBook);
+//                bundle.putParcelable("book",mBook);
+                bundle.putSerializable(BundleFlag.BOOK,mBook);
+
                 gotoActivity(BookShareOnMapAct.class,true,bundle);
             }
         };
@@ -163,39 +165,48 @@ public class BookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         String isbn = in.getStringExtra("isbn");
-        UIUtil.showTestLog("isbn",isbn);
-        GlobalParams.getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
-            @Override
-            public void onSuccess(Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
-                if(obj == null){
-                    Toast.makeText(mContext, "未能获取书籍信息", Toast.LENGTH_SHORT).show();
-                    handler.sendMessage(Message.obtain(handler,BOOKNOTGET));
-                    return;
+        if(StringUtil.isEmpty(isbn)){
+//            mBook = (BookDetail) in.getParcelableExtra("book");
+            mBook = (BookDetail2)in.getSerializableExtra("book");
+            tvAdd2MyLib.setVisibility(View.INVISIBLE);
+//            Bundle bookbundle = in.getBundleExtra("book");
+            Message msg = handler.obtainMessage();
+            msg.obj = mBook;
+            msg.what = BOOKWHAT;
+            handler.sendMessage(msg);
+        }else {
+            UIUtil.showTestLog("isbn", isbn);
+            GlobalParams.getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    CustomProgressDialog.dismissDialog(progressDialog);
+                    if (obj == null) {
+                        Toast.makeText(mContext, "未能获取书籍信息", Toast.LENGTH_SHORT).show();
+                        handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                        return;
+                    }
+                    BookDetail2 book = (BookDetail2) obj;
+                    Message msg = handler.obtainMessage();
+                    msg.obj = book;
+                    msg.what = BOOKWHAT;
+                    handler.sendMessage(msg);
                 }
-                BookDetail book = (BookDetail) obj;
-                Message msg = handler.obtainMessage();
-                msg.obj = book;
-                msg.what = BOOKWHAT;
-                handler.sendMessage(msg);
-            }
 
-            @Override
-            public void onFailure(Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
-                UIUtil.showTestLog("zyzx failure", (String) obj);
-                handler.sendMessage(Message.obtain(handler,BOOKNOTGET));
-            }
-        });
-
-
-
+                @Override
+                public void onFailure(Object obj) {
+                    CustomProgressDialog.dismissDialog(progressDialog);
+                    UIUtil.showTestLog("zyzx failure", (String) obj);
+                    handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                }
+            });
+        }
     }
 
     class BookHandler extends Handler{
         private Dialog promt ;
         @Override
         public void handleMessage(Message msg) {
+            CustomProgressDialog.dismissDialog(progressDialog);
             switch (msg.what){
                 case BOOKNOTGET:
                     if(promt == null){
@@ -205,7 +216,7 @@ public class BookDetailAct extends BaseActivity {
                     break;
 
                 case BOOKWHAT://成功获取图书信息
-                    mBook = (BookDetail) msg.obj;
+                    mBook = (BookDetail2) msg.obj;
                     //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
                     Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
                     tvTitle.setText(mBook.getTitle());
@@ -220,9 +231,10 @@ public class BookDetailAct extends BaseActivity {
                     tvAuthor.setText(sb);
                     tvPublisher.setText(mBook.getPublisher());
                     tvPublishDate.setText(mBook.getPubdate());
-                    for (Tags tag:
-                            mBook.getTags()) {
-                        tvTags.append(tag.getName()+";");
+                    if(mBook.getTags()!=null) {
+                        for (Tags tag : mBook.getTags()) {
+                            tvTags.append(tag.getName() + ";");
+                        }
                     }
                     if(StringUtil.isEmpty(mBook.getSummary())){
                         tvSummary.setText("无");

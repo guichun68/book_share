@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import zyzx.linke.R;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/1/23.
@@ -23,6 +24,7 @@ public class SplashAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        UIUtil.showTestLog("zyzxSha",UIUtil.sHA1(this));
         Timer t = new Timer();
         TimerTask task = new TimerTask() {
             @Override

@@ -53,8 +53,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.BookDetail;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.overlay.PoiOverlay;
 import zyzx.linke.utils.AMapUtil;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -94,14 +95,15 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     private PoiSearch.Query query;// Poi查询条件类
     private PoiSearch poiSearch;// POI搜索
     private PoiResult poiResult; // poi返回的结果
-    private BookDetail mBook;
+    private BookDetail2 mBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMapView.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
-        mBook = extras.getParcelable("book");
+//        Bundle extras = getIntent().getExtras();
+//        mBook = extras.getParcelable("book");
+        mBook = (BookDetail2) getIntent().getSerializableExtra(BundleFlag.BOOK);
 
     }
 

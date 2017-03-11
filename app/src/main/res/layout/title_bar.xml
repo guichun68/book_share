@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:padding="@dimen/dp_14"
-        android:src="@mipmap/back_narrow_btn"
+        android:src="@mipmap/arrow_left_backbtn_white"
         android:contentDescription="@null"
         />
 
@@ -49,6 +49,7 @@
         tools:text="加入我的书库"
         android:textSize="20sp"
         android:paddingRight="10dp"
+        android:clickable="true"
         android:textColor="@color/gray_white"
         />
 

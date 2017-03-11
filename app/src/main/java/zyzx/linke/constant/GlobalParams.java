@@ -22,7 +22,7 @@ public class GlobalParams {
 
 
 	static{
-		BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
+		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
 
 	public static Activity gCurrAct;
@@ -42,6 +42,10 @@ public class GlobalParams {
 	 * 获取用户的所有书籍
 	 */
 	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
+	/**
+	 *通过给定的bookId集合来批量获取这些书籍的详细信息
+	 */
+	public static String urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds";
 	/**
 	 * 注册
 	 */
@@ -81,6 +85,7 @@ public class GlobalParams {
 		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
+		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds";
 	}
 
 	public static IBookPresenter getBookPresenter(){

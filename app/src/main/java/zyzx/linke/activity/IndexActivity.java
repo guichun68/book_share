@@ -62,7 +62,7 @@ import zyzx.linke.utils.UIUtil;
 import zyzx.linke.utils.Utils;
 import zyzx.linke.views.CityChoosePopupWindow;
 
-/**
+/**已废弃，使用IndexActivity2
  * 云图Item list展现，进入APP先提示定位。如果定位成功，按照当前位置10km周边搜索；如果定位失败，按照默认城市北京搜索
  * 点击城市名称可选择该城市某个区或者切换城市进行本地搜索。
  *
@@ -348,8 +348,7 @@ public class IndexActivity extends Activity implements OnClickListener,
 
         ArrayList<CloudItem> currentVisibleItems = new ArrayList<CloudItem>();
 
-        for (int i = mFirstVisibleItem; i < mCoudItemList.size()
-                && i < mFirstVisibleItem + mVisibleItemCount; i++) {
+        for (int i = mFirstVisibleItem; i < mCoudItemList.size() && i < mFirstVisibleItem + mVisibleItemCount; i++) {
             currentVisibleItems.add(mCoudItemList.get(i));
         }
         Intent intent = new Intent(this, MapActivity.class);

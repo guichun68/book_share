@@ -1,36 +1,40 @@
 package zyzx.linke.model.bean;
 
-public class Rating {
-	private String average;
+import java.io.Serializable;
 
-	private int max;
+public class Rating implements Serializable{
+	private Double average;
 
-	private int min;
+	private Double max;
+
+	private Double min;
 
 	private int numRaters;
 
-	public void setAverage(String average) {
+
+	public Double getAverage() {
+		return average;
+	}
+
+	public void setAverage(Double average) {
 		this.average = average;
 	}
 
-	public String getAverage() {
-		return this.average;
+
+	public Double getMax() {
+		return max;
 	}
 
-	public void setMax(int max) {
+	public void setMax(Double max) {
 		this.max = max;
 	}
 
-	public int getMax() {
-		return this.max;
+	public Double getMin() {
+		return min;
 	}
 
-	public void setMin(int min) {
+	public void setMin(Double min) {
 		this.min = min;
-	}
-
-	public int getMin() {
-		return this.min;
 	}
 
 	public void setNumRaters(int numRaters) {

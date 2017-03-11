@@ -604,6 +604,7 @@ public class RouteMapActivity extends Activity implements
 		if (location == null) {
 			return;
 		}
+
 		if (location.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
 			stopLocation();
 			Double geoLat = location.getLatitude();

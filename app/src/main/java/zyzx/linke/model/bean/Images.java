@@ -1,6 +1,8 @@
 package zyzx.linke.model.bean;
 
-public class Images {
+import java.io.Serializable;
+
+public class Images implements Serializable{
 	private String large;
 
 	private String medium;

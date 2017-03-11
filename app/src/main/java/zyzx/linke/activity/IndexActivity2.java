@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,9 +7,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +24,7 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -50,16 +47,23 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.adapter.CloudItemListAdapter;
+import zyzx.linke.adapter.AllUserBooksListAdapter;
 import zyzx.linke.adapter.DistrictListAdapter;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.constant.BundleResult;
 import zyzx.linke.constant.Const;
+import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.City;
+import zyzx.linke.model.bean.IndexItem;
+import zyzx.linke.model.bean.RequestParamGetBookInfos;
+import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.utils.CityUtil;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
@@ -105,11 +109,12 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
             "U", "V", "W", "X", "Y", "Z"};
 
 
-    private CloudItemListAdapter mAdapter;
+    private AllUserBooksListAdapter mAdapter;
     private CloudSearch mCloudSearch;
     private CloudSearch.Query mQuery;
     private LatLonPoint mCenterPoint = new LatLonPoint(39.911823, 116.394829);
     private String mKeywords = "";
+    //,跳转到地图页面时携带的兴趣点集合--地图中的点（基本上等同于用户的集合，但不是图书的集合）
     private ArrayList<CloudItem> mCoudItemList = new ArrayList<CloudItem>();
     private Dialog mProgressDialog = null;
     private Context mApplicationContext;
@@ -150,6 +155,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
             mCurrentCityDistrictTextview.setText(getCurrentCity()
                     + mCurrentDistrict);
             mCoudItemList.clear();
+            mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
             searchByLocal(0);
             mPopupWindow.dismiss();
@@ -173,17 +179,16 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawerlayout);
         TextView item1 = (TextView) findViewById(R.id.tv_ihave);
-        TextView item2 = (TextView) findViewById(R.id.tv_record);
         TextView item3 = (TextView) findViewById(R.id.tv_setting);
         TextView item4 = (TextView) findViewById(R.id.tv_check_update);
         TextView item5 = (TextView) findViewById(R.id.tv_about);
+        TextView item6 = (TextView) findViewById(R.id.tv_log_out);
         item1.setOnClickListener(this);
-        item2.setOnClickListener(this);
         item3.setOnClickListener(this);
         item4.setOnClickListener(this);
         item5.setOnClickListener(this);
+        item6.setOnClickListener(this);
         mSidebarMenus.add(item1);
-        mSidebarMenus.add(item2);
         mSidebarMenus.add(item3);
         mSidebarMenus.add(item4);
         mSidebarMenus.add(item5);
@@ -230,12 +235,6 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     protected void onPause() {
         super.onPause();
         stopLocation();// 停止定位
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     private long exitTime = 0;
@@ -365,7 +364,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         ListView actualListView = mPullRefreshListView.getRefreshableView();
         // Need to use the Actual ListView when registering for Context Menu
         registerForContextMenu(actualListView);
-        mAdapter = new CloudItemListAdapter(mApplicationContext, mCoudItemList);
+        mAdapter = new AllUserBooksListAdapter(mApplicationContext, mListViewItems);
         // You can also just use setListAdapter(mAdapter) or
         // mPullRefreshListView.setAdapter(mAdapter)
         actualListView.setAdapter(mAdapter);
@@ -378,6 +377,9 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         switch (v.getId()) {
 
             case R.id.btn_area_choose:
+                if(GlobalParams.isDrawerOpened){
+                    mActionBarDrawerToggle.toggle();
+                }
                 showAreaPopupWindow();
                 break;
 
@@ -392,18 +394,20 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 gotoActivity(PersonalCenter.class,false);
                 mActionBarDrawerToggle.toggle();
                 break;
-            case R.id.tv_record:
-                break;
             case R.id.tv_setting:
                 break;
             case R.id.tv_check_update:
                 break;
             case R.id.tv_about:
+                gotoActivity(AboutUsAct.class,false);
+                mActionBarDrawerToggle.toggle();
+                break;
+            case R.id.tv_log_out:
+                gotoActivity(LoginAct.class,true);
                 break;
             default:
                 break;
         }
-
     }
 
     private void gotoKeywordInputActivity() {
@@ -411,18 +415,9 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         Intent intent = new Intent(this, KeywordListActivity.class);
         startActivityForResult(intent, POI_CHOOSE_REQUEST_CODE);
     }
-
     private void gotoMapActivity() {
-
-        ArrayList<CloudItem> currentVisibleItems = new ArrayList<CloudItem>();
-
-        for (int i = mFirstVisibleItem; i < mCoudItemList.size()
-                && i < mFirstVisibleItem + mVisibleItemCount; i++) {
-            currentVisibleItems.add(mCoudItemList.get(i));
-        }
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putParcelableArrayListExtra(BundleFlag.CLOUD_ITEM_LIST,
-                currentVisibleItems);
+        intent.putParcelableArrayListExtra(BundleFlag.CLOUD_ITEM_LIST,mCoudItemList);
         startActivity(intent);
     }
 
@@ -553,6 +548,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (CITY_CHOOSE_REQUEST_CODE == requestCode
                 && resultCode == BundleResult.SUCCESS) {
             City city = (City) data.getSerializableExtra(BundleFlag.CITY_MODEL);
@@ -560,6 +556,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 setCity(city);
             }
             mCoudItemList.clear();
+            mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
             mCurrentDistrict = "";
             searchByLocal(0);
@@ -572,6 +569,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                     .getSerializableExtra(BundleFlag.POI_ITEM);
             mKeywords = selectedItem;
             mCoudItemList.clear();
+            mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
             searchByLocal(0);
             minputEditText.setText(selectedItem);
@@ -632,41 +630,109 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
     @Override
     public void onCloudSearched(CloudResult result, int errorCode) {
-        // TODO Auto-generated method stub
         mPullRefreshListView.onRefreshComplete();
         mPullRefreshListView.clearAnimation();
-        dissmissProgressDialog();
+
         if (errorCode == Const.NO_ERROR && result != null) {
             ArrayList<CloudItem> cloudResult = result.getClouds();
             if (cloudResult != null && cloudResult.size() > 0) {
                 mCoudItemList.addAll(cloudResult);
-                mAdapter.notifyDataSetChanged();
+               parseData(cloudResult);
             } else {
+                dissmissProgressDialog();
                 Toast.makeText(mApplicationContext,
                         R.string.error_no_more_item, Toast.LENGTH_SHORT).show();
             }
-
         } else if (errorCode == Const.ERROR_CODE_SOCKE_TIME_OUT) {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_socket_timeout);
 
         } else if (errorCode == Const.ERROR_CODE_UNKNOW_HOST) {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_network);
         } else if (errorCode == Const.ERROR_CODE_FAILURE_AUTH) {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_key);
         } else if (errorCode == Const.ERROR_CODE_SCODE) {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_scode);
         } else if (errorCode == Const.ERROR_CODE_TABLEID) {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_table_id);
         } else {
+            dissmissProgressDialog();
             UIUtil.showToastSafe(this.getApplicationContext(),UIUtil.getString(R.string.error_other)+errorCode);
         }
-        if (mCoudItemList == null || mCoudItemList.size() == 0) {
-            // mPullRefreshListView.setMode(Mode.DISABLED);
-            mLLYNoData.setVisibility(View.VISIBLE);
-        } else {
-            mLLYNoData.setVisibility(View.GONE);
-            // mPullRefreshListView.setMode(Mode.PULL_FROM_END);
+
+    }
+
+    private ArrayList<IndexItem> mListViewItems = new ArrayList<>();
+    private boolean isRefresh;//是否是下拉刷新，默认false
+    /**
+     * 解析数据（将每个坐标点数据中包含的书籍全部解析出来）
+     * @param cloudResult
+     */
+    private void parseData(ArrayList<CloudItem> cloudResult) {
+
+        List<RequestParamGetBookInfos> params = new ArrayList<>();
+        for(int i=0;i<cloudResult.size();i++){
+            //遍历地图每个点
+            CloudItem cloudItem = cloudResult.get(i);
+            String bookIds = cloudItem.getCustomfield().get("bookIds");
+            Integer uid = Integer.parseInt(cloudItem.getCustomfield().get("uid"));
+            List<String> ids = Arrays.asList( bookIds.split("#"));
+            RequestParamGetBookInfos param = new RequestParamGetBookInfos(ids,uid,cloudItem.getTitle(),cloudItem.getSnippet(),cloudItem.getLatLonPoint().getLatitude(),cloudItem.getLatLonPoint().getLongitude(),cloudItem.getDistance());
+            params.add(param);
         }
+
+        GlobalParams.getBookPresenter().getBookInfosByBookIds(params, new CallBack() {
+            @Override
+            public void onSuccess(Object obj) {
+                final List<ResponseBooks> responseBookses = JSON.parseArray((String) obj, ResponseBooks.class);
+                if(responseBookses!=null && responseBookses.size()>0){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dissmissProgressDialog();
+                            if(isRefresh){
+                                mListViewItems.clear();
+                            }
+
+                            for(int i=0;i<responseBookses.size();i++){
+                                List<BookDetail2> bookDetails = responseBookses.get(i).getBookDetails();
+                                for(int j=0;j<bookDetails.size();j++){
+                                    IndexItem item = new IndexItem();
+                                    item.setAddress(responseBookses.get(i).getAddress());
+                                    item.setLat(responseBookses.get(i).getLat());
+                                    item.setLongi(responseBookses.get(i).getLongi());
+                                    item.setmTitle(responseBookses.get(i).getmTitle());
+                                    item.setUid(responseBookses.get(i).getUid());
+                                    item.setDistance(responseBookses.get(i).getDistance());
+                                    item.setBookDetail(bookDetails.get(j));
+                                    mListViewItems.add(item);
+                                }
+                            }
+                            if (mListViewItems == null || mListViewItems.size() == 0) {
+                                dissmissProgressDialog();
+                                // mPullRefreshListView.setMode(Mode.DISABLED);
+                                mLLYNoData.setVisibility(View.VISIBLE);
+                            } else {
+                                dissmissProgressDialog();
+                                mLLYNoData.setVisibility(View.GONE);
+                                // mPullRefreshListView.setMode(Mode.PULL_FROM_END);
+                            }
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onFailure(Object obj) {
+
+            }
+        });
     }
 
     public String getCurrentCity() {

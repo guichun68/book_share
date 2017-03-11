@@ -1,7 +1,10 @@
 package zyzx.linke.presentation;
 
+import java.util.List;
+
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.BookDetail;
+import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.RequestParamGetBookInfos;
 
 /**
  * Created by austin on 2017/2/17.
@@ -16,7 +19,7 @@ public interface IBookPresenter {
     /*
     *将图书添加到我的书库（仅仅添加，不在地图中展示）
      */
-    void addBook2MyLib(BookDetail mBook,Integer userId,CallBack viewCallBack);
+    void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack);
 
     /**
      * 向高德地图中添加图书坐标
@@ -27,7 +30,7 @@ public interface IBookPresenter {
      * @param longitude 经度
      * @param viewCallBack 回调
      */
-    void addBook2Map(BookDetail bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
+    void addBook2Map(BookDetail2 bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
 
     /**
      * 查询指定位置为中心，方圆around范围内的所有的图书信息
@@ -46,4 +49,8 @@ public interface IBookPresenter {
      */
     void getUserBooks(String uid,final int pageNum,final CallBack viewCallBack);
 
+    /**
+     * 通过给定的bookId集合来批量获取这些书籍的详细信息
+     */
+    void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson,CallBack viewCallBack);
 }

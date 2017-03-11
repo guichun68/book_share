@@ -1,3 +1,4 @@
+/*
 package zyzx.linke.activity;
 
 import android.Manifest;
@@ -59,10 +60,13 @@ import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 
+*/
 /**
+ * 已废弃
  * Created by austin on 2017/2/17.
  * Desc: 登录后的主页面
- */
+ *//*
+
 
 public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.OnMapClickListener, LocationSource, AMap.OnMarkerDragListener, AMap.OnMapLoadedListener, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.InfoWindowAdapter, CloudSearch.OnCloudSearchListener {
     private Dialog mProgressDialog = null;
@@ -141,9 +145,11 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     }
 
 
-    /**
+    */
+/**
      * 设置一些amap的属性
-     */
+     *//*
+
     private void setUpMap() {
         mAMap.setLocationSource(this);
         setMapUi();
@@ -152,9 +158,11 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
 
     }
 
-    /**
+    */
+/**
      * 往地图上添加marker，为列表页获得的数据
-     */
+     *//*
+
     private void addMarkersToMap() {
 
         int size = mCloudItemList.size();
@@ -188,11 +196,13 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
 
     }
 
-    /**
+    */
+/**
      * marker被选中之后，需要更改marker的样式，以及在底部bar显示信息
      *
      * @param markerStatus
-     */
+     *//*
+
     private void markerChosen(MarkerStatus markerStatus) {
         markerStatus.pressStatusToggle();
         mCurrentItem = (CloudItem) markerStatus.getCloudItem();
@@ -201,11 +211,13 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
         setMarkerBasedonStatus(markerStatus);
     }
 
-    /**
+    */
+/**
      * 根据该marker的最新状态决定应该显示什么样的marker
      *
      * @param status
-     */
+     *//*
+
     private void setMarkerBasedonStatus(MarkerStatus status) {
         if (status.getIsPressed()) {
             status.getMarker().setIcon(
@@ -401,7 +413,9 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
     public void onLocationChanged(AMapLocation amapLocation) {
         CustomProgressDialog.dismissDialog(mProgressDialog);
        if (mListener != null && amapLocation != null) {
-            if (amapLocation != null && amapLocation.getErrorCode() == 0) {/*amapLocation.getCity();*/
+            if (amapLocation != null && amapLocation.getErrorCode() == 0) {*/
+/*amapLocation.getCity();*//*
+
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
                 GlobalParams.gCurrCity=amapLocation.getCity();
                 //云存储查询周边搜索图书
@@ -467,11 +481,13 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
         mlocationClient = null;
     }
 
-    /**
+    */
+/**
      * 根据经纬度进行周边搜索
      *
      * @param pagenum
-     */
+     *//*
+
     private void searchByArround(int pagenum) {
         mCurrentSearchType = ARROUND_SEARCH_TYPE;
         if (mCloudItemList == null || mCloudItemList.size() == 0) {
@@ -596,3 +612,4 @@ public class HomeAct extends BaseActivity implements AMapLocationListener, AMap.
         mProgressDialog.show();
     }
 }
+*/

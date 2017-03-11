@@ -4,7 +4,6 @@
 package zyzx.linke.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import zyzx.linke.R;
  * @类型名称：PermissionsChecker
  * @since 2.5.0
  */
-public class CheckPermissionsActivity extends Activity
+public class CheckPermissionsActivity extends AppCompatActivity
 		implements
 			ActivityCompat.OnRequestPermissionsResultCallback {
 	/**
@@ -43,7 +43,8 @@ public class CheckPermissionsActivity extends Activity
 			Manifest.permission.WRITE_EXTERNAL_STORAGE,
 			Manifest.permission.READ_EXTERNAL_STORAGE,
 			Manifest.permission.READ_PHONE_STATE,
-			Manifest.permission.CALL_PHONE
+			Manifest.permission.CALL_PHONE,
+			Manifest.permission.CAMERA
 			};
 	
 	private static final int PERMISSON_REQUESTCODE = 0;

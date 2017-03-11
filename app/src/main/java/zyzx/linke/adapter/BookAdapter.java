@@ -1,6 +1,8 @@
 package zyzx.linke.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,7 +14,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.model.bean.BookDetail;
+import zyzx.linke.activity.BookDetailAct;
+import zyzx.linke.model.bean.BookDetail2;
 
 /**
  * Created by austin on 2017/3/4.
@@ -21,10 +24,10 @@ import zyzx.linke.model.bean.BookDetail;
 
 public class BookAdapter extends BaseAdapter{
 
-    private ArrayList<BookDetail> books;
+    private ArrayList<BookDetail2> books;
     private Context context;
 
-    public BookAdapter(Context ctx, ArrayList<BookDetail> books){
+    public BookAdapter(Context ctx, ArrayList<BookDetail2> books){
         this.context = ctx;
         this.books = books;
     }
@@ -35,7 +38,7 @@ public class BookAdapter extends BaseAdapter{
     }
 
     @Override
-    public BookDetail getItem(int position) {
+    public BookDetail2 getItem(int position) {
         return books.get(position);
     }
 
@@ -45,7 +48,7 @@ public class BookAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         BookViewHolder holder;
         if(convertView == null){
             convertView = View.inflate(context,R.layout.item_book,null);
@@ -54,16 +57,30 @@ public class BookAdapter extends BaseAdapter{
         }else{
             holder = (BookViewHolder) convertView.getTag();
         }
-        Glide.with(context).load(getItem(position).getImage()).into(holder.ivCover);
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,BookDetailAct.class);
+                Bundle bundle = new Bundle();
+//                bundle.putParcelable("book",getItem(position));
+                bundle.putSerializable("book",getItem(position));
+//                intent.putExtra("book",bundle);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+        Glide.with(context).load(getItem(position).getImage_medium()).into(holder.ivCover);
         holder.tvBookName.setText(getItem(position).getTitle());
         StringBuilder sb = new StringBuilder();
-        for(String author:getItem(position).getAuthor()){
-            sb.append(author).append(";");
+        if(getItem(position).getAuthor()!=null){
+            for(String author:getItem(position).getAuthor()){
+                sb.append(author).append(";");
+            }
+            if(sb.length()>0) {
+                sb.deleteCharAt(sb.length()-1);
+            }
         }
-        if(sb.length()>0)
-        {
-            sb.deleteCharAt(sb.length()-1);
-        }
+
         holder.tvAuthor.setText(sb.toString());
         holder.tvIntro.setText(getItem(position).getSummary());
 

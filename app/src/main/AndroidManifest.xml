@@ -49,7 +49,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="7e1bbce396224930b84151d2bcd7fb9d" />
+            android:value="b9660f04c7b88af227816af318d88ccf" />
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.SplashAct" android:screenOrientation="portrait">
@@ -71,6 +71,9 @@
         </activity>
         <activity
             android:name=".activity.IndexActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ManualInputAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FriendHomePageAct"
