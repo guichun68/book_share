@@ -17,7 +17,7 @@ public class ManualInputAct extends BaseActivity {
 
     private TextView tvSave;
     private AppCompatEditText acetBookName,acetISBN,acetAuthor,acetPublisher,acetIntro;
-    private AppCompatImageView acivCover;
+    private AppCompatImageView acivCover;//
 
     @Override
     protected int getLayoutId() {
