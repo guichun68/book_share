@@ -1,5 +1,6 @@
 package zyzx.linke.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,16 +13,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.constant.Const;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.utils.CapturePhoto;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -33,13 +38,14 @@ import zyzx.linke.views.UserInfoImagePOP;
  */
 
 public class ManualInputAct extends BaseActivity {
-
+    private Dialog progressDialog;
     private TextView tvSave;
     private AppCompatEditText acetBookName,acetISBN,acetAuthor,acetPublisher,acetIntro;
     private AppCompatImageView acivCover;
     private static UserInfoImagePOP uimp;
-    private Uri imageUri;
+//    private Uri imageUri;
     private CapturePhoto capture;
+    private BookDetail2 mBook;
 
     @Override
     protected int getLayoutId() {
@@ -48,6 +54,7 @@ public class ManualInputAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);
         acetBookName = (AppCompatEditText) findViewById(R.id.acet_book_name);
         acetISBN = (AppCompatEditText) findViewById(R.id.acet_isbn);
@@ -149,7 +156,7 @@ public class ManualInputAct extends BaseActivity {
                     boolean permission = (PackageManager.PERMISSION_GRANTED ==
                             pm.checkPermission("android.permission.CAMERA", getPackageName()));
                     if (permission) {
-                        imageUri = Uri.parse(FileUtil.getImageFileLocation());
+//                        imageUri = Uri.parse(FileUtil.getImageFileLocation());
                         capture.dispatchTakePictureIntent(CapturePhoto.SHOT_IMAGE, requestCode);
                         uimp.dismiss();
                     }else {
@@ -198,32 +205,52 @@ public class ManualInputAct extends BaseActivity {
     }
 
     public void saveBook() {
+
+        mBook = new BookDetail2();
         HashMap<String,Object> params = new HashMap<>();
-        params.put("book_name",acetBookName.getText().toString().trim());
-        if(!StringUtil.isEmpty(acetISBN.getText().toString())){
-            params.put("book_isbn",acetISBN.getText().toString());
+//        params.put("book_name",acetBookName.getText().toString().trim());
+        mBook.setTitle(acetBookName.getText().toString().trim());
+        String isbn = acetISBN.getText().toString();
+        if(!StringUtil.isEmpty(isbn)){
+//            params.put("book_isbn",acetISBN.getText().toString());
+            if(isbn.length()==13){
+                mBook.setIsbn13(isbn);
+            }else if(isbn.length()==10){
+                mBook.setIsbn10(isbn);
+            }
         }
         if(!StringUtil.isEmpty(acetAuthor.getText().toString())){
-            params.put("book_author",acetAuthor.getText().toString());
+//            params.put("book_author",acetAuthor.getText().toString());
+            ArrayList<String> authos = new ArrayList<>();
+            authos.add(acetAuthor.getText().toString());
+            mBook.setAuthor(authos);
         }
         if(!StringUtil.isEmpty(acetPublisher.getText().toString())){
-           params.put("book_publisher",acetPublisher.getText().toString());
+//           params.put("book_publisher",acetPublisher.getText().toString());
+            mBook.setPublisher(acetPublisher.getText().toString());
         }
         if(!StringUtil.isEmpty(acetIntro.getText().toString())){
-            params.put("book_intro",acetIntro.getText().toString());
+//            params.put("book_intro",acetIntro.getText().toString());
+            mBook.setSummary(acetIntro.getText().toString());
         }
-        if(!StringUtil.isEmpty(mCoverImagePath)){
+        if(!StringUtil.isEmpty(mCoverImagePath)){//加入图片本地手机路径参数
             params.put("book_cover",new File(mCoverImagePath));
         }
+        params.put("user_id",GlobalParams.gUser.getUserid());
+        params.put("book", JSON.toJSONString(mBook));
+        mBook.setFromDouban(false);
+        progressDialog.show();
         GlobalParams.getBookPresenter().uploadBook(params, new CallBack() {
             @Override
             public void onSuccess(Object obj) {
-                UIUtil.showTestLog("zyzx","上传成功");
+                CustomProgressDialog.dismissDialog(progressDialog);
+                UIUtil.showToastSafe("保存成功");
             }
 
             @Override
             public void onFailure(Object obj) {
-                UIUtil.showTestLog("zyzx","上传失败");
+                CustomProgressDialog.dismissDialog(progressDialog);
+                UIUtil.showToastSafe("上传失败");
             }
         });
     }

@@ -2,13 +2,7 @@ package zyzx.linke.presentation.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.Request;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +14,6 @@ import zyzx.linke.model.bean.AMapQueryResult;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
-import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.UIUtil;
@@ -326,7 +319,7 @@ public class BookPresenter implements IBookPresenter {
     @Override
     public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {
         try {
-            GlobalParams.getgModel().post2(GlobalParams.urlUploadPic,params,viewCallBack);
+            GlobalParams.getgModel().post2(GlobalParams.urlUploadBook,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {

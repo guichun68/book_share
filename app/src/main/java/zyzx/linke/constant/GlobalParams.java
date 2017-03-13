@@ -34,7 +34,7 @@ public class GlobalParams {
 	/**
 	 * 上传图片url
 	 */
-	public static String urlUploadPic = GlobalParams.BASE_URL+"/zyzy/uploadImage.action";
+	public static String urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 	/**
 	 * 关于临客
 	 */
@@ -91,7 +91,7 @@ public class GlobalParams {
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
-		urlUploadPic = GlobalParams.BASE_URL+"/zyzy/uploadImage.action";
+		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 	}
 
 	public static IBookPresenter getBookPresenter(){
