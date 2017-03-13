@@ -206,4 +206,5 @@
     <string name="open">打开</string>
     <string name="close">关闭</string>
     <string name="book_name">书名</string>
+    <string name="album_name">Camera</string>
 </resources>

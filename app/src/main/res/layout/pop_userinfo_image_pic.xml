@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33000000" >
+
+    <LinearLayout
+        android:id="@+id/ll_popup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/pop_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/actionmenu_bg"
+            android:gravity="center_vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp"
+            android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="30dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text="照片上传"
+                android:textColor="@color/shen_grey"
+                android:textSize="14sp" />
+
+            <View
+               style="@style/graly_line"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                 />
+
+            <Button
+                android:id="@+id/tv_camera"
+                style="@style/select_photo"
+                android:background="@null"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="拍照" />
+
+            <View
+                style="@style/graly_line"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+               />
+
+            <Button
+                android:id="@+id/tv_photo"
+                style="@style/select_photo"
+                android:background="@null"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="选择照片" />
+            <View
+                style="@style/graly_line"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+               />
+             
+<!--  
+<View
+                 android:id="@+id/look_lin"
+                style="@style/graly_line"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
+            <Button
+                android:id="@+id/tv_look_image"
+                style="@style/select_photo"
+                android:background="@null"
+                android:text="查看大头像" />
+                -->
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/gone"
+            style="@style/select_photo"
+            android:layout_height="48dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:background="@drawable/actionmenu_bg"
+            android:text="取消"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

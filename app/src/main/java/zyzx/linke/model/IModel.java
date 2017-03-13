@@ -9,6 +9,15 @@ import java.util.HashMap;
  */
 
 public interface IModel {
-    void post(String url, HashMap<String,String> param,CallBack callBack)throws IOException;
+    void post(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
+
+    /**
+     * 目前针对上传时带图片的参数用
+     * @param url
+     * @param param
+     * @param callBack
+     * @throws IOException
+     */
+    void post2(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
     void get(String url,HashMap<String,String> param,CallBack callBack);
 }

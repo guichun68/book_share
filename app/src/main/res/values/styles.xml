@@ -82,6 +82,8 @@
     <color name="text_bg">#CDD1D3</color>
     <color name="main_blue_light">#3F56B5</color>
     <color name="bar_color">#A103A9F4</color>
+    <color name="qian_garly">#DCDCDC</color>
+    <color name="blue">#ff4455db</color>
 
 
     <!-- 蓝色为主色调 -->
@@ -92,7 +94,8 @@
         <item name="colorPrimaryDark">@color/bar_color</item>
         <item name="colorAccent">@color/main_blue_light</item>
         <!--正常状态下字体颜色和icon颜色-->
-        <item name="android:textColorPrimary">@color/white</item>
+       <!-- <item name="android:textColorPrimary">@color/white</item>-->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
@@ -107,13 +110,39 @@
         <item name="android:background">@color/gray_white</item>
     </style>
 
-    <style name="start">
+    <style name="star">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">*</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:visibility">gone</item>
     </style>
 
+    <!-- DrawerArrowStyle -->
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="graly_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:background">@color/qian_garly</item>
+    </style>
+    <style name="select_photo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">38dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+    <style name="AnimBottom2" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/fl_push_bottom_out</item>
+        <item name="android:windowExitAnimation">@anim/fl_push_bottom_in</item>
+    </style>
 </resources>

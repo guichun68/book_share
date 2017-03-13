@@ -19,17 +19,22 @@ public class GlobalParams {
 	public static String gCurrCity="北京";//当前所在城市，默认北京
 	public static boolean isDrawerOpened;
 
-
-
+	public static String image_file_location;//图片本地存储地址
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
 
+
 	public static Activity gCurrAct;
+
 	/**
 	 * 登录URL
 	 */
-	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login";
+	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+	/**
+	 * 上传图片url
+	 */
+	public static String urlUploadPic = GlobalParams.BASE_URL+"/zyzy/uploadImage.action";
 	/**
 	 * 关于临客
 	 */
@@ -37,30 +42,30 @@ public class GlobalParams {
 	/**
 	 * 通过用户id获取其下所有书籍和其用户基本信息
 	 */
-	public static String urlGetUserInfo= GlobalParams.BASE_URL+"/zyzx/getUserinfo";
+	public static String urlGetUserInfo= GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
 	/**
 	 * 获取用户的所有书籍
 	 */
-	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
+	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 	/**
 	 *通过给定的bookId集合来批量获取这些书籍的详细信息
 	 */
-	public static String urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds";
+	public static String urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
 	/**
 	 * 注册
 	 */
-	public static String urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
+	public static String urlRegist = GlobalParams.BASE_URL+"/zyzx/regist.action";
 	/**
 	 * 当用户在地图中分享图书成功后，立即更改表zyzx_user_books表中该书籍的状态为“已添加到地图"
 	 */
-	public static String urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status";
+	public static String urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 	/**
 	 * 发送SMS登录验证码用
 	 */
-	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login";
+	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
-	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
-	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
+	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
+	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 
 	//向高德地图中添加一条记录
 	public static String urlAddbook2Gaode = "http://yuntuapi.amap.com/datamanage/data/create";
@@ -76,16 +81,17 @@ public class GlobalParams {
 
 	public static User gUser;//登录成功后记录的用户
 	public static void refreshIP(){
-		urlLogin = GlobalParams.BASE_URL+"/zyzx/login";
-		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login";
+		urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
-		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist";
-		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib";
-		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map";
-		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo";
-		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status";
-		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks";
-		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds";
+		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist.action";
+		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
+		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
+		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
+		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
+		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
+		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
+		urlUploadPic = GlobalParams.BASE_URL+"/zyzy/uploadImage.action";
 	}
 
 	public static IBookPresenter getBookPresenter(){

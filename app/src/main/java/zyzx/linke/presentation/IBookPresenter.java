@@ -1,5 +1,6 @@
 package zyzx.linke.presentation;
 
+import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.model.CallBack;
@@ -53,4 +54,11 @@ public interface IBookPresenter {
      * 通过给定的bookId集合来批量获取这些书籍的详细信息
      */
     void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson,CallBack viewCallBack);
+
+    /**
+     * 上传图片
+     * @param
+     * @param
+     */
+    void uploadBook(HashMap<String,Object> params, CallBack viewCallBack);
 }

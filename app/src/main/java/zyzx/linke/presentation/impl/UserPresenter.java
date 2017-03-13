@@ -23,7 +23,7 @@ public class UserPresenter implements IUserPresenter {
 
     @Override
     public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("loginName",login_name);
         param.put("password",password);
 
@@ -57,7 +57,7 @@ public class UserPresenter implements IUserPresenter {
                @Override
                public void onFailure(Object obj) {
                    if(viewCallBack!=null){
-                       viewCallBack.onFailure(false);
+                       viewCallBack.onFailure("连接服务器失败");
                    }
                }
            });
@@ -83,7 +83,7 @@ public class UserPresenter implements IUserPresenter {
 
     @Override
     public void sendLoginSMSVerifyCode(String phone,final CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("phone",phone);
         try {
             GlobalParams.getgModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
@@ -121,7 +121,7 @@ public class UserPresenter implements IUserPresenter {
 
     @Override
     public void regist(String userName, String psw, String phone, final CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("login_name",userName);
         param.put("password",psw);
         param.put("phone",phone);
@@ -161,7 +161,7 @@ public class UserPresenter implements IUserPresenter {
 
     @Override
     public void getUserInfo(String uid, final CallBack viewCallBack) {
-            HashMap<String,String> param = new HashMap<>();
+            HashMap<String,Object> param = new HashMap<>();
         param.put("uid",uid);
         try {
             GlobalParams.getgModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {

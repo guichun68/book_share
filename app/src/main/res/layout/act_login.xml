@@ -79,7 +79,7 @@
             android:hint="@string/input_username"
             android:background="@null"
             android:inputType="textPassword"
-            android:text="aaa"
+            android:text="123456"
             android:maxLength="11" />
 
         <View

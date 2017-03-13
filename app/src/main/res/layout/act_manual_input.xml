@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_munual"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_white"
@@ -34,7 +35,7 @@
                     android:text="@string/book_name"
                     android:textSize="19sp" />
 
-                <TextView style="@style/start" />
+                <TextView style="@style/star" />
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/acet_book_name"
@@ -42,7 +43,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/vertical_line_shape"
                     android:maxLength="80"
                     android:maxLines="1"
                     android:paddingRight="10dp" />
@@ -69,7 +69,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/vertical_line_shape"
                     android:inputType="number"
                     android:maxLength="13"
                     android:maxLines="1"
@@ -98,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/vertical_line_shape"
+                    
                     android:maxLength="100"
                     android:maxLines="1"
                     android:paddingRight="10dp" />
@@ -125,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/vertical_line_shape"
+                    
                     android:maxLength="100"
                     android:maxLines="1"
                     android:paddingRight="10dp" />
@@ -152,7 +151,7 @@
                     android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/vertical_line_shape"
+                    
                     android:maxLines="30"
                     android:paddingRight="10dp" />
 

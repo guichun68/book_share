@@ -53,5 +53,6 @@
     <color name="gray_button_press">#7a7a7a</color>
     <color name="line">#dddddd</color>
     <color name="blueStatus">#1680E2</color>
+    <color name="shen_grey">#969696</color>
 
 </resources>

@@ -1,13 +1,18 @@
 package zyzx.linke.model;
 
+import android.util.Log;
+
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,12 +30,12 @@ public class ModelImpl implements IModel {
     private OkHttpClient client = new OkHttpClient();
 
     @Override
-    public void post(String url, HashMap<String, String> param, final CallBack callBack) throws IOException {
+    public void post(String url, HashMap<String, Object> param, final CallBack callBack) throws IOException {
         FormEncodingBuilder fb = new FormEncodingBuilder();
         Request request;
         if(param != null){
-            for (Map.Entry<String, String> et : param.entrySet()) {
-                fb.add(et.getKey(), et.getValue());
+            for (Map.Entry<String, Object> et : param.entrySet()) {
+                fb.add(et.getKey(), (String)et.getValue());
             }
             RequestBody body = fb.build();
 
@@ -115,5 +120,57 @@ public class ModelImpl implements IModel {
         });
     }
 
+    @Override
+    public void post2(String url, HashMap<String, Object> param, final CallBack callBack) throws IOException {
+        //补全请求地址
+        MultipartBuilder builder = new MultipartBuilder();
+//        MultipartBody.Builder builder = new MultipartBody.Builder();
+        //设置类型
+        builder.type(MediaType.parse("multipart/form-data"));
+//        builder.setType(MultipartBody.FORM);
+        //追加参数
+        for (String key : param.keySet()) {
+            Object object = param.get(key);
+            if (!(object instanceof File)) {
+                builder.addFormDataPart(key, object.toString());
+            } else {
+                File file = (File) object;
+                builder.addFormDataPart(key, file.getName(), RequestBody.create(null, file));
+            }
+        }
+        //创建RequestBody
+        RequestBody body = builder.build();
+        //创建Request
+        final Request request = new Request.Builder().url(url).post(body).build();
+        //单独设置参数 比如读取超时时间
+        client.setWriteTimeout(50, TimeUnit.SECONDS);
+        Call call = client.newCall(request);
+//        final Call call = client.build(newCall(request)
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.e("zyzx", e.toString());
+                if(callBack!=null){
+                    callBack.onFailure("上传失败");
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String string = response.body().string();
+                    Log.e("zyzx", "response ----->" + string);
+                    if(callBack!=null){
+                        callBack.onSuccess("success");
+                    }
+                } else {
+                    if(callBack!=null){
+                        callBack.onFailure("上传失败");
+                    }
+                }
+            }
+        });
+
+    }
 
 }

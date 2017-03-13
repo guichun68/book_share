@@ -2,7 +2,13 @@ package zyzx.linke.presentation.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.android.volley.Request;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.MultipartBuilder;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +72,7 @@ public class BookPresenter implements IBookPresenter {
 
     @Override
     public void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("book",JSON.toJSONString(mBook));
         param.put("userId",userId+"");
         try {
@@ -115,7 +121,7 @@ public class BookPresenter implements IBookPresenter {
                             String id = resultBean.getDatas().get(0).get_id();
 
 
-                            HashMap<String,String> param2 = new HashMap<String, String>();
+                            HashMap<String,Object> param2 = new HashMap<>();
                             param2.put("key",Const.key);
                             param2.put("tableid",Const.mTableID);
                             param2.put("data","{     \"_id\": \""+id+"\",   \"bookIds\":\""+newBookIds+"\" }");
@@ -156,7 +162,7 @@ public class BookPresenter implements IBookPresenter {
                     }*/
                 }else {
                     //该点该用户未曾放置过任何书籍，可以插入数据，调用高德api插入数据
-                    HashMap<String,String> param2 = new HashMap<>();
+                    HashMap<String,Object> param2 = new HashMap<>();
                     param2.put("key",Const.key);
                     param2.put("tableid",Const.mTableID);
                     param2.put("data","{     \"_location\": \""+longitude+","+latitude+"\",     \"_name\": \""+GlobalParams.gUser.getLogin_name()+"\",     \"book_image_url\": \""+ bookDetail.getImage()+"\",  \"bookIds\":\""+bookDetail.getB_id()+"\",   \"uid\": \""+GlobalParams.gUser.getUserid()+"\" }");
@@ -193,7 +199,7 @@ public class BookPresenter implements IBookPresenter {
             }
             // 分享成功，修改zyzx_user_book表中我的图书中该书的状态为“已分享”
             private void modifyBookStauts(BookDetail2 bookDetail2,Integer userId2) {
-                HashMap<String,String> param2 = new HashMap<String, String>();
+                HashMap<String,Object> param2 = new HashMap<>();
                 param2.put("book_id",bookDetail2.getB_id());
                 param2.put("uid",userId2+"");
                 try {
@@ -262,7 +268,7 @@ public class BookPresenter implements IBookPresenter {
 
     @Override
     public void getUserBooks(String uid, final int pageNum,final CallBack viewCallBack) {
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("uid",uid);
         param.put("pageNum",pageNum+"");
 
@@ -292,7 +298,7 @@ public class BookPresenter implements IBookPresenter {
     @Override
     public void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson, final CallBack viewCallBack) {
         String json = JSON.toJSONString(requestParamJson);
-        HashMap<String,String> param = new HashMap<>();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("ids",json);
         try {
             GlobalParams.getgModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
@@ -314,6 +320,18 @@ public class BookPresenter implements IBookPresenter {
         } catch (IOException e) {
             e.printStackTrace();
             UIUtil.showToastSafe("网络错误，请重试");
+        }
+    }
+
+    @Override
+    public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {
+        try {
+            GlobalParams.getgModel().post2(GlobalParams.urlUploadPic,params,viewCallBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null) {
+                viewCallBack.onFailure("上传失败");
+            }
         }
     }
 }

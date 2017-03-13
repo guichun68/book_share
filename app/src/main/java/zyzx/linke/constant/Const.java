@@ -81,4 +81,7 @@ public class Const {
 	public static final int NO_ERROR = 1000;
 	public static final int IAMGE_MAX_WIDTH = 960;
 	public static final int IMAGE_MAX_HEIGHT = 1024;
+
+	//-----------------------zyzx------
+	public static final int CAMERA_REQUEST_CODE=0x37F;
 }
