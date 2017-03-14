@@ -25,18 +25,27 @@ android {
          */
         debug {
             //keystore中key的别名
-            keyAlias 'androiddebugkey'
+      //      keyAlias 'androiddebugkey'
             //keystore中key的密码
-            keyPassword 'android'
+      //      keyPassword 'android'
             //keystore的文件路径，可以是绝对路径也可以是相对路径
-            storeFile file('D:\\debug.keystore')
+       //     storeFile file('D:\\debug.keystore')
             //keystore的密码
-            storePassword 'android'
+       //     storePassword 'android'
+
+            //keystore中key的别名
+            keyAlias 'austin'
+            //keystore中key的密码
+            keyPassword '1006000'
+            //keystore的文件路径，可以是绝对路径也可以是相对路径
+            storeFile file('C:\\Users\\austin\\Desktop\\sakuraGo')
+            //keystore的密码
+            storePassword '1006000'
         }
         release {//发布版签名配置
             storeFile file('C:\\Users\\austin\\Desktop\\sakuraGo')//密钥文件路径
             storePassword '1006000'//密钥文件密码
-            keyAlias ''//key别名
+            keyAlias 'austin'//key别名
             keyPassword '1006000'//key密码
         }
     }

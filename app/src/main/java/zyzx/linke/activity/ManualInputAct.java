@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import zyzx.linke.R;
+import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.constant.Const;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.model.CallBack;
@@ -114,11 +116,11 @@ public class ManualInputAct extends BaseActivity {
                 shake(acetISBN);
                 return false;
             }
-            if(!StringUtil.isISBN(acetISBN.getText().toString())){
+            /*if(!StringUtil.isISBN(acetISBN.getText().toString())){
                 acetISBN.setError("非法的ISBN号,请检查");
                 shake(acetISBN);
                 return false;
-            }
+            }*/
         }
 
         return true;
@@ -208,11 +210,9 @@ public class ManualInputAct extends BaseActivity {
 
         mBook = new BookDetail2();
         HashMap<String,Object> params = new HashMap<>();
-//        params.put("book_name",acetBookName.getText().toString().trim());
         mBook.setTitle(acetBookName.getText().toString().trim());
         String isbn = acetISBN.getText().toString();
         if(!StringUtil.isEmpty(isbn)){
-//            params.put("book_isbn",acetISBN.getText().toString());
             if(isbn.length()==13){
                 mBook.setIsbn13(isbn);
             }else if(isbn.length()==10){
@@ -220,17 +220,14 @@ public class ManualInputAct extends BaseActivity {
             }
         }
         if(!StringUtil.isEmpty(acetAuthor.getText().toString())){
-//            params.put("book_author",acetAuthor.getText().toString());
             ArrayList<String> authos = new ArrayList<>();
             authos.add(acetAuthor.getText().toString());
             mBook.setAuthor(authos);
         }
         if(!StringUtil.isEmpty(acetPublisher.getText().toString())){
-//           params.put("book_publisher",acetPublisher.getText().toString());
             mBook.setPublisher(acetPublisher.getText().toString());
         }
         if(!StringUtil.isEmpty(acetIntro.getText().toString())){
-//            params.put("book_intro",acetIntro.getText().toString());
             mBook.setSummary(acetIntro.getText().toString());
         }
         if(!StringUtil.isEmpty(mCoverImagePath)){//加入图片本地手机路径参数
@@ -242,9 +239,50 @@ public class ManualInputAct extends BaseActivity {
         progressDialog.show();
         GlobalParams.getBookPresenter().uploadBook(params, new CallBack() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(final Object obj) {
                 CustomProgressDialog.dismissDialog(progressDialog);
                 UIUtil.showToastSafe("保存成功");
+                final String json = (String)obj;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject jsonObject = JSON.parseObject(json);
+                        Integer code = jsonObject.getInteger("code");
+                        String bookId = jsonObject.getString("book_id");
+                        String bookImageUrl = jsonObject.getString("book_image");
+                        if(code == null){
+                            return;
+                        }
+                        switch (code){
+                            case 200://book有记录，user_book有记录，直接返回，用户已经将该书加入进来了，无须重复操作
+                                showDialog("您已经添加过该书了,无须重复添加！");
+                                break;
+                            case 300://book有记录，user_book无记录，自动关联该书籍成功
+                                mBook.setB_id(bookId);
+                                mBook.setImage(bookImageUrl);
+                                mBook.setImage_medium(bookImageUrl);
+                                showAskIfShareOnMapDialog("系统搜索到该书籍信息,已自动关联并添加！是否在地图中分享此书?");
+                                break;
+                            case 500://book有记录，user_book无记录，自动关联该书籍失败
+                                showDialog("未能成功添加,code="+code);
+                                break;
+                            case 600://book无记录，user_book无记录，插入book数据失败
+                                showDialog("未能成功添加书籍,code="+code);
+                                break;
+                            case 700://book无记录，user_book无记录，插入book数据成功，插入user_book成功
+//                                showDialog("添加成功！");
+                                mBook.setB_id(bookId);
+                                mBook.setImage(bookImageUrl);
+                                mBook.setImage_medium(bookImageUrl);
+                                showAskIfShareOnMapDialog("添加成功,是否在地图分享此书?");
+                                break;
+                            case 800://book无记录，user_book无记录，插入book数据成功，插入user_book失败
+                                showDialog("未能成功添加书籍,code="+code);
+                                break;
+                        }
+                    }
+                });
+
             }
 
             @Override
@@ -254,4 +292,69 @@ public class ManualInputAct extends BaseActivity {
             }
         });
     }
+    private Dialog promtDialog;
+    public void showDialog(String msg){
+        if(promtDialog!=null){
+            CustomProgressDialog.dismissDialog(promtDialog);
+        }
+        promtDialog = CustomProgressDialog.getPromptDialog(mContext,msg,new PromptDialogClicklistener());
+        promtDialog.show();
+    }
+    class PromptDialogClicklistener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            CustomProgressDialog.dismissDialog(promtDialog);
+        }
+    }
+
+    View.OnClickListener myOk;
+    View.OnClickListener myCancel;
+    Dialog askDialog = null;
+    private void showAskIfShareOnMapDialog(String msg) {
+        myOk =new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(askDialog!=null)
+                    askDialog.dismiss();
+                Bundle bundle = new Bundle();
+//                bundle.putParcelable("book",mBook);
+                bundle.putSerializable(BundleFlag.BOOK,mBook);
+
+                gotoActivity(BookShareOnMapAct.class,true,bundle);
+            }
+        };
+        myCancel = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(askDialog!=null && askDialog.isShowing())
+                    askDialog.dismiss();
+                finish();
+            }
+        };
+
+        askDialog =  CustomProgressDialog.getPromptDialog2Btn(this, msg, "分享", "不需要", myOk,myCancel);
+
+
+        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("添加成功,是否在地图分享此书?");
+        dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("book",mBook);
+                gotoActivity(BookShareOnMapAct.class,true,bundle);
+            }
+        });
+        dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });*/
+        askDialog.show();
+    }
+
 }

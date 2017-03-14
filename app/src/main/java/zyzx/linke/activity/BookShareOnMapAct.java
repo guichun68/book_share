@@ -68,7 +68,7 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 地图选点分享图书
  */
 
-public class BookShareOnMapAct extends BaseActivity implements Inputtips.InputtipsListener,AMapLocationListener, AMap.OnMapClickListener, LocationSource,PoiSearch.OnPoiSearchListener, GeocodeSearch.OnGeocodeSearchListener {
+public class BookShareOnMapAct extends BaseActivity implements Inputtips.InputtipsListener,AMapLocationListener, AMap.OnMapClickListener, LocationSource,PoiSearch.OnPoiSearchListener, GeocodeSearch.OnGeocodeSearchListener, AMap.OnMarkerClickListener {
     ArrayList<Tip> suggest = new ArrayList<>();
     private String keyWord;
     private MapView mMapView;
@@ -133,6 +133,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         markerOption = new MarkerOptions().draggable(true);
         mAMap.setOnMapClickListener(this);
         mAMap.setLocationSource(this);// 设置定位监听
+        mAMap.setOnMarkerClickListener(this);// 设置点击marker事件监听器
 
         mAMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
             @Override
@@ -351,6 +352,15 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     @Override
     public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {}
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+//        addressName
+        mClickPoint = new LatLonPoint(marker.getPosition().latitude,marker.getPosition().longitude);
+        addressName = marker.getTitle();
+        actv.setText(addressName);
+        return false;
+    }
+
     class MyTextWatcher implements TextWatcher{
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -458,6 +468,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                         @Override
                         public void onFailure(Object obj) {
                             CustomProgressDialog.dismissDialog(mProgressDialog);
+                            if(obj!=null)
                             UIUtil.showToastSafe(obj.toString());
                         }
                     });

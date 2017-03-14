@@ -159,9 +159,9 @@ public class ModelImpl implements IModel {
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String string = response.body().string();
-                    Log.e("zyzx", "response ----->" + string);
+                    UIUtil.showTestLog("zyzx", "response ----->" + string);
                     if(callBack!=null){
-                        callBack.onSuccess("success");
+                        callBack.onSuccess(string);
                     }
                 } else {
                     if(callBack!=null){
