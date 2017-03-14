@@ -14,9 +14,11 @@ import zxing.CaptureActivity;
 import zyzx.linke.R;
 import zyzx.linke.adapter.GalleryAdapter;
 import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.views.CircleImageView;
 
 /**
  * Created by austin on 2017/2/22.
+ * Desc: 个人中心
  */
 
 public class PersonalCenter extends BaseActivity {
@@ -24,6 +26,7 @@ public class PersonalCenter extends BaseActivity {
     private GalleryAdapter mAdapter;
     private List<Integer> mDatas;
     private Button btnScan,btnManual;//ISBN扫描、手动录入
+    private CircleImageView mCiv;
 
     @Override
     protected int getLayoutId() {
@@ -36,6 +39,8 @@ public class PersonalCenter extends BaseActivity {
         btnScan = (Button) findViewById(R.id.btn_scan);
         btnManual = (Button) findViewById(R.id.btn_manual);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_galary);
+        mCiv = (CircleImageView) findViewById(R.id.civ);
+        mCiv.setOnClickListener(this);
         btnScan.setOnClickListener(this);
         btnManual.setOnClickListener(this);
     }
@@ -74,6 +79,9 @@ public class PersonalCenter extends BaseActivity {
                 break;
             case R.id.btn_manual:
                 gotoActivity(ManualInputAct.class,false);
+                break;
+            case R.id.civ:
+
                 break;
         }
     }

@@ -397,13 +397,17 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         adapter.setList(suggest);
         adapter.notifyDataSetChanged();
     }
-
+    private String mCurrAddrStr=null;//当前地址（定位获得）
+    private Double mCurrLati,mCurrLongti;//当前位置信息(通过定位获得)
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
             if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
                 GlobalParams.gCurrCity=aMapLocation.getCity();
+                mCurrAddrStr = aMapLocation.getAddress();
+                mCurrLati = aMapLocation.getLatitude();
+                mCurrLongti = aMapLocation.getLongitude();
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode() + ": "
                         + aMapLocation.getErrorInfo();
@@ -425,7 +429,12 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                 }
                 break;
             case R.id.btn_curr_position:
-
+                if(mCurrLati==null || mCurrLongti==null){
+                    UIUtil.showToastSafe("未能获取当前位置信息");
+                    return;
+                }
+                mClickPoint = new LatLonPoint(mCurrLati,mCurrLongti);
+                actv.setText(mCurrAddrStr);
                 break;
             case R.id.btn_ok:
                 if(mClickPoint==null){
