@@ -17,6 +17,9 @@ import com.amap.api.services.cloud.CloudItem;
 import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+
 import zyzx.linke.R;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.CallBack;
@@ -44,6 +47,8 @@ public class CommonBookDetailAct extends BaseActivity {
     private RelativeLayout rlLocation;
     private Integer friendUserId;//好友id
     private Double longi,lati;//书籍位置
+    private CloudItem item;
+    private boolean showExtraInfo;//是否显示分享者和地址信息（如果从好友页面过来则不显示这些信息，从首页过来则显示）
 
     @Override
     protected int getLayoutId() {
@@ -71,6 +76,7 @@ public class CommonBookDetailAct extends BaseActivity {
         }
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
+        tvSharer.setOnClickListener(this);
         rlLocation.setOnClickListener(this);
         progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
     }
@@ -121,10 +127,20 @@ public class CommonBookDetailAct extends BaseActivity {
                 break;
             case R.id.rl_location://用户点击了"到这去",导航用户所处位置
                 Intent intent = new Intent(this, RouteMapActivity.class);
-                LatLonPoint point = new LatLonPoint(lati,longi);
-                CloudItem item = new CloudItem(tvLocation.getText().toString(),point,tvLocation.getText().toString(),"");
+
                 intent.putExtra(BundleFlag.CLOUD_ITEM, item);
                 this.startActivity(intent);
+                break;
+            case R.id.tvSharer:
+                //进入好友详情页
+                Intent in = new Intent(this, FriendHomePageAct.class);
+                HashMap<String,String> uidMap = new HashMap<>();
+                uidMap.put("uid",friendUserId.toString());
+                item.setCustomfield(uidMap);
+                in.putExtra(BundleFlag.CLOUD_ITEM,item);
+                in.putExtra(BundleFlag.ADDRESS,tvLocation.getText().toString());
+                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(in);
                 break;
         }
     }
@@ -181,12 +197,16 @@ public class CommonBookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         mBook = (BookDetail2)in.getSerializableExtra("book");
+        showExtraInfo = in.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
         tvLocation.setText(in.getStringExtra(BundleFlag.ADDRESS));
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
 
         tvSharer.setText(in.getStringExtra(BundleFlag.SHARER));
         longi = in.getDoubleExtra(BundleFlag.LONGITUDE,0);
         lati = in.getDoubleExtra(BundleFlag.LATITUDE,0);
+
+        LatLonPoint point = new LatLonPoint(lati,longi);
+        item = new CloudItem(in.getStringExtra(BundleFlag.ADDRESS),point,in.getStringExtra(BundleFlag.ADDRESS),"");
 
         if(friendUserId==0){
             friendUserId=null;
@@ -199,6 +219,11 @@ public class CommonBookDetailAct extends BaseActivity {
         }
 
         tvAdd2MyLib.setVisibility(View.INVISIBLE);
+        if(!showExtraInfo){
+            //不需要显示地址信息
+            findViewById(R.id.ll_sharer).setVisibility(View.GONE);
+            findViewById(R.id.rl_location).setVisibility(View.GONE);
+        }
         refreshBookInfo();
     }
 
@@ -207,28 +232,55 @@ public class CommonBookDetailAct extends BaseActivity {
             Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
         }
         tvTitle.setText(mBook.getTitle());
-        StringBuilder sb = new StringBuilder();
-        for (String author : mBook.getAuthor()) {
-            sb.append(author).append(";");
+        //作者------------------------------
+        if(mBook.getAuthor()!=null && !mBook.getAuthor().isEmpty()){
+            StringBuilder sb = new StringBuilder();
+            for (String author : mBook.getAuthor()) {
+                sb.append(author).append(";");
+            }
+            if (sb.length() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            if(StringUtil.isEmpty(sb.toString())){
+                tvAuthor.setVisibility(View.GONE);
+            }else{
+                tvAuthor.setText(sb);
+            }
+        }else{
+            tvAuthor.setVisibility(View.GONE);
         }
-        if (sb.length() > 0) {
-            sb.deleteCharAt(sb.length() - 1);
+        //出版社-----------------------------
+        if(StringUtil.isEmpty(mBook.getPublisher())){
+            tvPublisher.setVisibility(View.GONE);
+        }else{
+            tvPublisher.setText(mBook.getPublisher());
         }
-        tvAuthor.setText(sb);
-        tvPublisher.setText(mBook.getPublisher());
-        tvPublishDate.setText(mBook.getPubdate());
-        if (mBook.getTags() != null) {
+        //设置出版日期------start---------
+        String pubDate = mBook.getPubdate();
+        if(!StringUtil.isEmpty(pubDate)){
+            if(pubDate.contains(" ")){//去掉日期后的时分秒信息
+                pubDate = mBook.getPubdate().substring(0,mBook.getPubdate().indexOf(" "));
+            }
+            tvPublishDate.setText(pubDate);
+        }else{
+            tvPublishDate.setVisibility(View.GONE);
+        }
+        //------标签---------------------
+        if (mBook.getTags() != null && !mBook.getTags().isEmpty()) {
             for (Tags tag : mBook.getTags()) {
                 tvTags.append(tag.getName() + ";");
             }
+        }else{
+            tvTags.setVisibility(View.GONE);
         }
+        //-----简介-----------------------
         if (StringUtil.isEmpty(mBook.getSummary())) {
-            tvSummary.setText("无");
+            tvSummary.setText("暂无简介");
         } else {
             tvSummary.setText(mBook.getSummary());
         }
         if (StringUtil.isEmpty(mBook.getCatalog())) {
-            tvCatalog.setText("无");
+            tvCatalog.setText("暂无目录");
         } else {
             tvCatalog.setText(mBook.getCatalog());
         }

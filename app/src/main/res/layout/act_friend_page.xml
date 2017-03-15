@@ -10,13 +10,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="120dp"
        >
     <zyzx.linke.views.CircleImageView
         android:id="@+id/iv_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="20dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         app:border_color="@color/watermark_hint"
         android:src="@mipmap/person"/>
 
@@ -27,7 +29,6 @@
             tool:text="铭蔚之乐"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="2dp"
             android:layout_alignTop="@id/iv_icon"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_icon"/>
@@ -69,7 +70,7 @@
     <RelativeLayout
         android:id="@+id/rl_location"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
         >
 
         <TextView
@@ -131,6 +132,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/item_press"
+        android:text="他/她的分享："/>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"

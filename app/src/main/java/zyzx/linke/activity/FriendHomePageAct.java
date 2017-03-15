@@ -52,6 +52,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private String headIconUrl;
     private String nickName,signature;
     private int pageNum = 0;
+    private String mAddress;//中文地址描述
     private User mUser;
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
 
@@ -90,13 +91,17 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             return;
         }
         mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
+        mAddress = mCloudItem.getSnippet();
+        if(StringUtil.isEmpty(mAddress)){
+            mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
+        }
     }
 
     @Override
     protected void initData() {
         getIntentData();
         if(mCloudItem!=null){
-            tvLocation.setText(mCloudItem.getSnippet());
+            tvLocation.setText(mAddress);
         }
         GlobalParams.getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
             @Override

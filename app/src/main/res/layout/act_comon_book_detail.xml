@@ -66,6 +66,7 @@
                         tool:text="标签/模式/程序设dafdfdfddafdsafdsafdsafdsfdsafaf" />
 
                     <LinearLayout
+                        android:id="@+id/ll_sharer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -87,11 +88,13 @@
                             android:id="@+id/tvSharer"
                             android:background="@drawable/tangle_shape"
                             android:layout_width="127dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:ellipsize="end"
+                            android:clickable="true"
                             android:maxLines="1"
-                            android:layout_marginTop="1dp"
-                            android:paddingBottom="3dp"
+                            android:layout_marginTop="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
                             android:textSize="@dimen/sp_16"
                             android:gravity="bottom|center_horizontal"
                             tool:text="蓝鲸一号" />
@@ -195,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:ellipsize="end"
-                android:maxLines="100"
+                android:maxLines="1000"
                 tool:text="1致读者\n2数据分析方法\n3数据算法\n4算法中的奇思妙想" />
 
         </LinearLayout>

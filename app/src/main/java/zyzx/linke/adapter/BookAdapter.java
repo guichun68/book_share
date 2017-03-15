@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.CommonBookDetailAct;
+import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.bean.BookDetail2;
 
 /**
@@ -64,6 +65,7 @@ public class BookAdapter extends BaseAdapter{
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",getItem(position));
                 bundle.putSerializable("book",getItem(position));
+                intent.putExtra(BundleFlag.SHOWADDRESS,false);
 //                intent.putExtra("book",bundle);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
