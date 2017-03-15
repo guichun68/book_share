@@ -25,7 +25,7 @@ public class User implements Serializable{
 	
 	private String lastLoginTime;
 	private String signature;
-	private String bak3;
+	private String head_icon;
 	private String bak4;
 	private String bak5;
 	private String bak6;
@@ -193,17 +193,13 @@ public class User implements Serializable{
 	}
 
 
-
-
-	public String getBak3() {
-		return bak3;
+	public String getHead_icon() {
+		return head_icon;
 	}
 
-
-	public void setBak3(String bak3) {
-		this.bak3 = bak3;
+	public void setHead_icon(String head_icon) {
+		this.head_icon = head_icon;
 	}
-
 
 	public String getBak4() {
 		return bak4;

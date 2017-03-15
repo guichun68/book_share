@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.activity.BookDetailAct;
+import zyzx.linke.activity.CommonBookDetailAct;
 import zyzx.linke.model.bean.BookDetail2;
 
 /**
@@ -60,7 +60,7 @@ public class BookAdapter extends BaseAdapter{
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,BookDetailAct.class);
+                Intent intent = new Intent(context,CommonBookDetailAct.class);
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",getItem(position));
                 bundle.putSerializable("book",getItem(position));

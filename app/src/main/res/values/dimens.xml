@@ -13,9 +13,11 @@
     <dimen name="dp_22">22dp</dimen>
     <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_60">60dp</dimen>
     <dimen name="dp_72">72dp</dimen>
+    <dimen name="sp_19">19sp</dimen>
 
     <!--高德导航start-->
     <dimen name="title_text_size">15sp</dimen>
@@ -68,4 +70,5 @@
     <dimen name="busroute_line_des_height">35dp</dimen>
     <dimen name="busroute_text_size_big">16sp</dimen>
     <dimen name="busroute_text_size_small">13sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
 </resources>

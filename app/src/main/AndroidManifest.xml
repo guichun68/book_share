@@ -186,7 +186,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity android:name="zxing.CaptureActivity"/>
-        <activity android:name=".activity.BookDetailAct" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CommonBookDetailAct" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ScanBookDetailAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.PersonalCenter" android:screenOrientation="portrait"/>
         <activity android:name=".activity.BookShareOnMapAct" android:screenOrientation="portrait"/>
         <!-- 友盟统计 -->

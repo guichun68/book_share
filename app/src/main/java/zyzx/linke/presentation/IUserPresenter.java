@@ -33,4 +33,16 @@ public interface IUserPresenter {
      * @param callBack
      */
     void getUserInfo(String uid, CallBack callBack);
+    /**
+     * 上传头像
+     */
+    void uploadHeadIcon(Integer userId,String imagePath,CallBack viewCallBack);
+
+    /**
+     * 修改用户签名
+     * @param userid
+     * @param sig
+     * @param callBack
+     */
+    void mofiySignature(Integer userid, String sig, CallBack callBack);
 }

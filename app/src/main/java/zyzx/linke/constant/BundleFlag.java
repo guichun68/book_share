@@ -7,6 +7,13 @@ public class BundleFlag {
 	// 传递cloud_item
 	public final static String CLOUD_ITEM = "cloud_item";
 	public final static String BOOK = "book";
+	public final static String ADDRESS = "address";
+	public final static String UID = "user_id";
+	public final static String SHARER = "sharer";
+	public final static String LONGITUDE = "longitude";
+	public final static String LATITUDE = "latitude";
+
+
 	public final static String BUS_PATH = "bus_path";
 	public final static String BUS_RESULT = "bus_result";
 	public final static String BUS_TARGET_NAME = "bus_target_name";

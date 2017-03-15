@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_book_image"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_margin="12dp"
+                    android:layout_weight="2"
+                    android:src="@mipmap/defaultcover" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_book_title"
+                        style="@style/bookDetailStyle"
+                        tool:text="大话设计模式" />
+
+                    <TextView
+                        android:id="@+id/tv_book_author"
+                        style="@style/bookDetailStyle"
+                        tool:text="程杰" />
+
+                    <TextView
+                        android:id="@+id/tv_book_publisher"
+                        style="@style/bookDetailStyle"
+                        tool:text="清华大学出版社北京分" />
+
+                    <TextView
+                        android:id="@+id/tv_book_publish_date"
+                        style="@style/bookDetailStyle"
+                        tool:text="2014-02-25" />
+
+                    <TextView
+                        android:id="@+id/tv_book_tags"
+                        style="@style/bookDetailStyle"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        tool:text="标签/模式/程序设dafdfdfddafdsafdsafdsafdsfdsafaf" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvSharerTip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:drawablePadding="10dp"
+                            android:layout_marginTop="10dp"
+                            android:drawableLeft="@drawable/shape_oval"
+                            android:maxLines="1"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold"
+                            android:text="分享者:" />
+
+                        <TextView
+                            android:id="@+id/tvSharer"
+                            android:background="@drawable/tangle_shape"
+                            android:layout_width="127dp"
+                            android:layout_height="match_parent"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:layout_marginTop="1dp"
+                            android:paddingBottom="3dp"
+                            android:textSize="@dimen/sp_16"
+                            android:gravity="bottom|center_horizontal"
+                            tool:text="蓝鲸一号" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line1"
+                style="@style/line"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+            <RelativeLayout
+                android:id="@+id/rl_location"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                >
+
+                <TextView
+                    android:id="@+id/detail_locaiotn_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/detail_offset_right"
+                    android:layout_marginRight="@dimen/detail_offset_right"
+                    android:text="@string/go_here"
+                    android:textColor="@color/blue_cloud_scheme"
+                    android:textSize="@dimen/identify_text_size" />
+
+                <View
+                    android:id="@+id/divider_line"
+                    android:layout_width="@dimen/divider_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/busroute_offset"
+                    android:layout_marginRight="@dimen/busroute_offset"
+                    android:layout_toLeftOf="@id/detail_locaiotn_go"
+                    android:layout_toStartOf="@id/detail_locaiotn_go"
+                    android:contentDescription="@string/app_name"
+                    android:src="@color/black" />
+
+                <ImageView
+                    android:id="@+id/detail_location_icon"
+                    android:layout_width="@dimen/detail_phone_icon_size"
+                    android:layout_height="@dimen/detail_phone_icon_size"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/location_icon" />
+
+                <TextView
+                    android:id="@+id/detail_locaiotn_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/busroute_offset"
+                    android:layout_marginEnd="@dimen/busroute_offset"
+                    android:layout_marginLeft="@dimen/busroute_offset"
+                    android:layout_marginRight="@dimen/busroute_offset"
+                    android:layout_marginTop="@dimen/busroute_offset"
+                    android:layout_toEndOf="@id/detail_location_icon"
+                    android:layout_toLeftOf="@id/divider_line"
+                    android:layout_toRightOf="@id/detail_location_icon"
+                    android:layout_toStartOf="@id/divider_line"
+                    android:textColor="@color/cloud_item_title"
+                    android:textSize="@dimen/identify_text_size" />
+            </RelativeLayout>
+            <View
+                style="@style/line"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+
+
+
+            <TextView
+                style="@style/bookDetailStyle"
+                android:layout_marginLeft="12dp"
+                android:text="简介：" />
+
+            <TextView
+                android:id="@+id/tv_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                tool:text="本书可以绘制矩形环形以及椭圆，所以只需要用椭圆即可，在使用的时候将控件比如imageview或textview的高宽设置成一样就是正圆，solid表示远的填充色，stroke则代表远的边框线，所以两者结合可以实现带边缘的圆，当然也可以直接加上size控制高宽，下面的代码实现效果是一个带白边的红圆。" />
+
+            <TextView
+                style="@style/bookDetailStyle"
+                android:layout_marginLeft="12dp"
+                android:text="目录：" />
+
+            <TextView
+                android:id="@+id/tv_catalog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:ellipsize="end"
+                android:maxLines="100"
+                tool:text="1致读者\n2数据分析方法\n3数据算法\n4算法中的奇思妙想" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

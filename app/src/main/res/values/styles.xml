@@ -145,4 +145,22 @@
         <item name="android:windowEnterAnimation">@anim/fl_push_bottom_out</item>
         <item name="android:windowExitAnimation">@anim/fl_push_bottom_in</item>
     </style>
+    <style name="rightArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@mipmap/arrow_right_blue</item>
+        <item name="android:contentDescription">@string/_jiantou</item>
+    </style>
+
+
+
+    <style name="fengexian">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/bg_gray_line</item>
+        <item name="android:layout_marginLeft">5dip</item>
+        <item name="android:layout_marginRight">5dip</item>
+    </style>
 </resources>

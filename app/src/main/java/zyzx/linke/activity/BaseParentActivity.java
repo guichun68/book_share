@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 
+import zyzx.linke.utils.NetworkUtil;
+import zyzx.linke.utils.UIUtil;
+
 
 public abstract class BaseParentActivity extends CheckPermissionsActivity{
     private static BaseParentActivity mForegroundActivity;
@@ -25,6 +28,19 @@ public abstract class BaseParentActivity extends CheckPermissionsActivity{
         initTitleBar();
         initView(savedInstanceState);
         initData();
+        checkNetwork();
+    }
+
+    private void checkNetwork() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            if(!NetworkUtil.checkState_21orNew(mContext)){
+                UIUtil.showToastSafe("网络异常");
+            }
+        }else{
+            if(!NetworkUtil.checkNetwork(mContext)){
+                UIUtil.showToastSafe("网络异常");
+            }
+        }
     }
 
     protected abstract void initView(Bundle saveInstanceState);

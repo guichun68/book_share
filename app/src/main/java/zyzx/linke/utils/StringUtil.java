@@ -262,7 +262,7 @@ public class StringUtil {
         return result;
     }
 
-/*	*//**
+	/**
      * 根据请求网址获取资源名称 如请求“http://mp3.tingbuwan.com/f2p.mp3 返回：f2p
      *
      * @param response

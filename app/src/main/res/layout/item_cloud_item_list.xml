@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
     android:background="@drawable/bg_selector"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:id="@+id/llayout_map"
@@ -50,7 +51,9 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:ellipsize="end"
-                    android:singleLine="true"
+                    android:maxLines="1"
+                    tool:text="基于GAP统计的图像分割理论与算法与研究"
+                    android:layout_marginRight="25dp"
                     android:textColor="@color/cloud_item_title"
                     android:textSize="16sp" />
 
@@ -62,6 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="12dp"
                     android:textColor="@color/cloud_item_gray"
+                    tool:text="1.8km"
                     android:textSize="11sp" />
             </RelativeLayout>
 

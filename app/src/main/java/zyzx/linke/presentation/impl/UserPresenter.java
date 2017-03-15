@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -182,6 +183,36 @@ public class UserPresenter implements IUserPresenter {
             });
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void uploadHeadIcon(Integer userId,String imagePath, CallBack viewCallBack) {
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("head_icon",new File(imagePath));
+        params.put("user_id",userId);
+        try {
+            GlobalParams.getgModel().post2(GlobalParams.urlUploadHeadIcon,params,viewCallBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null) {
+                viewCallBack.onFailure("上传失败");
+            }
+        }
+    }
+
+    @Override
+    public void mofiySignature(Integer userid, String sig, CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",userid+"");
+        param.put("sig",sig);//个性签名
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlSetUserSig,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("设置失败");
+            }
         }
     }
 }

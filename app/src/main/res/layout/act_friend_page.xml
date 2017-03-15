@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="130dp"
        >
-    <ImageView
+    <zyzx.linke.views.CircleImageView
         android:id="@+id/iv_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="20dp"
-        android:src="@mipmap/me"/>
+        app:border_color="@color/watermark_hint"
+        android:src="@mipmap/person"/>
 
         <TextView
             android:id="@+id/tv_loginname"
@@ -25,7 +27,7 @@
             tool:text="铭蔚之乐"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             android:layout_alignTop="@id/iv_icon"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_icon"/>
@@ -37,7 +39,7 @@
             android:text="签名:"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:layout_alignLeft="@id/tv_loginname"
             android:layout_below="@id/tv_loginname"
             />
@@ -49,7 +51,7 @@
             android:maxLines="3"
             android:textSize="16sp"
             android:layout_alignLeft="@id/tv_loginname"
-            android:text="先天下之忧而忧，后天下之乐而乐！"
+            android:text="先天下之忧而忧，后天下之乐而乐,道，非常道，盗亦有道！"
             android:layout_marginRight="5dp"
             android:ellipsize="end"
             android:layout_below="@id/tv_sign_tip"/>

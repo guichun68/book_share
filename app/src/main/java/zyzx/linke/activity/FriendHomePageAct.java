@@ -28,6 +28,7 @@ import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
+import zyzx.linke.views.CircleImageView;
 
 /**
  * Created by austin on 2017/3/4.
@@ -37,7 +38,7 @@ import zyzx.linke.utils.UIUtil;
 public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener<ListView>,PullToRefreshBase.OnLastItemVisibleListener, AbsListView.OnScrollListener {
 
     private RelativeLayout rlLocation;
-    private ImageView ivHeadIcon;
+    private CircleImageView ivHeadIcon;
     private TextView tvLoginname;
     private TextView tvLocation;
     private TextView tvSignature;
@@ -48,7 +49,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
 
     private BookAdapter mAdapter;
     private CloudItem mCloudItem;
-    private String coverUrl;
+    private String headIconUrl;
     private String nickName,signature;
     private int pageNum = 0;
     private User mUser;
@@ -63,7 +64,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     protected void initView(Bundle saveInstanceState) {
         mTitleText.setText("好友主页");
         rlLocation = (RelativeLayout) findViewById(R.id.rl_location);
-        ivHeadIcon = (ImageView) findViewById(R.id.iv_icon);
+        ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);
         tvLoginname = (TextView) findViewById(R.id.tv_loginname);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         tvLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
@@ -95,10 +96,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     protected void initData() {
         getIntentData();
         if(mCloudItem!=null){
-            coverUrl  = mCloudItem.getCustomfield().get("book_image_url");
-            if(!StringUtil.isEmpty(coverUrl)){
-                Glide.with(mContext).load(coverUrl).into(ivHeadIcon);
-            }
             tvLocation.setText(mCloudItem.getSnippet());
         }
         GlobalParams.getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
@@ -110,7 +107,18 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                     @Override
                     public void run() {
                         tvLoginname.setText(mUser!=null?mUser.getLogin_name():"用户不存在");
-                        tvSignature.setText(mUser!=null?mUser.getSignature():"用户不存在");
+                        if(mUser!=null){
+                            if(!StringUtil.isEmpty(mUser.getSignature())){
+                                tvSignature.setText(mUser.getSignature());
+                            }else{
+                                tvSignature.setText(UIUtil.getString(R.string.nowordsig));
+                            }
+                        }
+                        if(!StringUtil.isEmpty(mUser.getHead_icon())){
+                            Glide.with(mContext).load(mUser.getHead_icon()).into(ivHeadIcon);
+                        }else{
+                            Glide.with(mContext).load(R.mipmap.person).asBitmap().into(ivHeadIcon) ;
+                        }
                     }
                 });
             }

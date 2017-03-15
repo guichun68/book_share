@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,26 +17,26 @@ import com.bumptech.glide.Glide;
 
 import zyzx.linke.R;
 import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/2/21.
- * Desc: 图书详情页面
+ * Desc: 扫码识别图书详情页
  */
 
-public class BookDetailAct extends BaseActivity {
-    private static final int BOOKWHAT = 200,BOOKNOTGET=400;
+public class ScanBookDetailAct extends BaseActivity {
+    private static final int BOOKWHAT = 200, BOOKNOTGET = 400;
     private Dialog progressDialog;
     private BookHandler handler = new BookHandler();
 
     private ImageView ivBookImage;
-    private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
+    private TextView tvTitle, tvAuthor, tvPublisher, tvPublishDate, tvTags, tvSummary, tvCatalog, tvAdd2MyLib;
     private BookDetail2 mBook;
 //    private boolean isFromIndexAct;//是否是从首页进入的图书详情页（如果是，则不显示添加按钮）
 
@@ -57,7 +58,7 @@ public class BookDetailAct extends BaseActivity {
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
         tvAdd2MyLib.setClickable(true);
         mTitleText.setText("图书详情");
-        if(!GlobalParams.gIsPersonCenterScan){
+        if (!GlobalParams.gIsPersonCenterScan) {
             tvAdd2MyLib.setVisibility(View.INVISIBLE);
         }
         tvAdd2MyLib.setText("添加");
@@ -71,25 +72,25 @@ public class BookDetailAct extends BaseActivity {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.tv_add_mylib:
-                if(mBook == null){
+                if (mBook == null) {
                     Toast.makeText(mContext, "没有要添加的书籍", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(progressDialog == null){
+                if (progressDialog == null) {
                     progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
                 }
                 progressDialog.show();
                 mBook.setFromDouban(true);
-                GlobalParams.getBookPresenter().addBook2MyLib(mBook,GlobalParams.gUser.getUserid(), new CallBack() {
+                GlobalParams.getBookPresenter().addBook2MyLib(mBook, GlobalParams.gUser.getUserid(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         CustomProgressDialog.dismissDialog(progressDialog);
-                        String responseJson = (String)obj;
+                        String responseJson = (String) obj;
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code = jsonObject.getInteger("code");
-                        if(code == 200){
+                        if (code == 200) {
                             bookId = jsonObject.getString("bookId");
                             mBook.setB_id(bookId);
                             UIUtil.showToastSafe("添加成功");
@@ -99,7 +100,7 @@ public class BookDetailAct extends BaseActivity {
                                     showAskIfShareOnMapDialog();
                                 }
                             });
-                        }else if(code == 500){
+                        } else if (code == 500) {
                             UIUtil.showToastSafe("未能成功添加书籍信息");
                         }
                     }
@@ -110,34 +111,38 @@ public class BookDetailAct extends BaseActivity {
                     }
                 });
                 break;
+            case R.id.rl_location://用户点击了"到这去"
+
+                break;
         }
     }
 
     View.OnClickListener myOk;
     View.OnClickListener myCancel;
     Dialog askDialog = null;
+
     private void showAskIfShareOnMapDialog() {
-       myOk =new View.OnClickListener() {
+        myOk = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(askDialog!=null)
+                if (askDialog != null)
                     askDialog.dismiss();
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",mBook);
-                bundle.putSerializable(BundleFlag.BOOK,mBook);
+                bundle.putSerializable(BundleFlag.BOOK, mBook);
 
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
+                gotoActivity(BookShareOnMapAct.class, true, bundle);
             }
         };
         myCancel = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(askDialog!=null && askDialog.isShowing())
+                if (askDialog != null && askDialog.isShowing())
                     askDialog.dismiss();
                 finish();
             }
         };
-        askDialog =  CustomProgressDialog.getPromptDialog2Btn(this, "添加成功,是否在地图分享此书?", "分享", "不需要", myOk,myCancel);
+        askDialog = CustomProgressDialog.getPromptDialog2Btn(this, "添加成功,是否在地图分享此书?", "分享", "不需要", myOk, myCancel);
 
 
         /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -165,52 +170,42 @@ public class BookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         String isbn = in.getStringExtra("isbn");
-        if(StringUtil.isEmpty(isbn)){
-//            mBook = (BookDetail) in.getParcelableExtra("book");
-            mBook = (BookDetail2)in.getSerializableExtra("book");
-            tvAdd2MyLib.setVisibility(View.INVISIBLE);
-//            Bundle bookbundle = in.getBundleExtra("book");
-            Message msg = handler.obtainMessage();
-            msg.obj = mBook;
-            msg.what = BOOKWHAT;
-            handler.sendMessage(msg);
-        }else {
-            UIUtil.showTestLog("isbn", isbn);
-            GlobalParams.getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
-                @Override
-                public void onSuccess(Object obj) {
-                    CustomProgressDialog.dismissDialog(progressDialog);
-                    if (obj == null) {
-                        Toast.makeText(mContext, "未能获取书籍信息", Toast.LENGTH_SHORT).show();
-                        handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
-                        return;
-                    }
-                    BookDetail2 book = (BookDetail2) obj;
-                    Message msg = handler.obtainMessage();
-                    msg.obj = book;
-                    msg.what = BOOKWHAT;
-                    handler.sendMessage(msg);
-                }
-
-                @Override
-                public void onFailure(Object obj) {
-                    CustomProgressDialog.dismissDialog(progressDialog);
-                    UIUtil.showTestLog("zyzx failure", (String) obj);
+        UIUtil.showTestLog("isbn", isbn);
+        GlobalParams.getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
+            @Override
+            public void onSuccess(Object obj) {
+                CustomProgressDialog.dismissDialog(progressDialog);
+                if (obj == null) {
+                    Toast.makeText(mContext, "未能获取书籍信息", Toast.LENGTH_SHORT).show();
                     handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                    return;
                 }
-            });
-        }
+                BookDetail2 book = (BookDetail2) obj;
+                Message msg = handler.obtainMessage();
+                msg.obj = book;
+                msg.what = BOOKWHAT;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(Object obj) {
+                CustomProgressDialog.dismissDialog(progressDialog);
+                UIUtil.showTestLog("zyzx failure", (String) obj);
+                handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+            }
+        });
     }
 
-    class BookHandler extends Handler{
-        private Dialog promt ;
+    class BookHandler extends Handler {
+        private Dialog promt;
+
         @Override
         public void handleMessage(Message msg) {
             CustomProgressDialog.dismissDialog(progressDialog);
-            switch (msg.what){
+            switch (msg.what) {
                 case BOOKNOTGET:
-                    if(promt == null){
-                        promt = CustomProgressDialog.getPromptDialog(mContext,"未能获取书籍信息",new PromptDialogClickListener());
+                    if (promt == null) {
+                        promt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
                     }
                     promt.show();
                     break;
@@ -218,32 +213,33 @@ public class BookDetailAct extends BaseActivity {
                 case BOOKWHAT://成功获取图书信息
                     mBook = (BookDetail2) msg.obj;
                     //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
-                    Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
+                    if (mBook.getImage() != null) {
+                        Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
+                    }
                     tvTitle.setText(mBook.getTitle());
                     StringBuilder sb = new StringBuilder();
-                    for (String author: mBook.getAuthor()) {
+                    for (String author : mBook.getAuthor()) {
                         sb.append(author).append(";");
                     }
-                    if(sb.length()>0)
-                    {
-                        sb.deleteCharAt(sb.length()-1);
+                    if (sb.length() > 0) {
+                        sb.deleteCharAt(sb.length() - 1);
                     }
                     tvAuthor.setText(sb);
                     tvPublisher.setText(mBook.getPublisher());
                     tvPublishDate.setText(mBook.getPubdate());
-                    if(mBook.getTags()!=null) {
+                    if (mBook.getTags() != null) {
                         for (Tags tag : mBook.getTags()) {
                             tvTags.append(tag.getName() + ";");
                         }
                     }
-                    if(StringUtil.isEmpty(mBook.getSummary())){
+                    if (StringUtil.isEmpty(mBook.getSummary())) {
                         tvSummary.setText("无");
-                    }else{
+                    } else {
                         tvSummary.setText(mBook.getSummary());
                     }
-                    if(StringUtil.isEmpty(mBook.getCatalog())){
+                    if (StringUtil.isEmpty(mBook.getCatalog())) {
                         tvCatalog.setText("无");
-                    }else{
+                    } else {
                         tvCatalog.setText(mBook.getCatalog());
                     }
                     break;
@@ -251,7 +247,8 @@ public class BookDetailAct extends BaseActivity {
             }
 
         }
-        class PromptDialogClickListener implements View.OnClickListener{
+
+        class PromptDialogClickListener implements View.OnClickListener {
 
             @Override
             public void onClick(View v) {

@@ -39,7 +39,7 @@ import zxing.decoding.CaptureActivityHandler;
 import zxing.decoding.InactivityTimer;
 import zxing.view.ViewfinderView;
 import zyzx.linke.R;
-import zyzx.linke.activity.BookDetailAct;
+import zyzx.linke.activity.ScanBookDetailAct;
 //import com.zxing.android.camera.CameraManager;
 //import com.zxing.android.decoding.CaptureActivityHandler;
 //import com.zxing.android.decoding.InactivityTimer;
@@ -309,7 +309,7 @@ public class CaptureActivity extends Activity implements Callback {
 		// finish();
 	}
 	public void gotoBookDetailAct(String isbn){
-		Intent in = new Intent(this, BookDetailAct.class);
+		Intent in = new Intent(this, ScanBookDetailAct.class);
 		in.putExtra("isbn",isbn);
 		startActivity(in);
 		finish();

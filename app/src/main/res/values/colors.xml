@@ -28,6 +28,7 @@
     <color name="title_color">#545454</color>
     <color name="white">#ffffff</color>
     <color name="watermark_hint">#ccffffff</color>
+    <color name="cicleHead">#3CB2CC</color>
     <color name="map_topTip_text">#a5a5a5</color>
     <color name="transparent">#00000000</color>
     <color name="bg_divider_line">#993c3c3c</color>
@@ -54,5 +55,8 @@
     <color name="line">#dddddd</color>
     <color name="blueStatus">#1680E2</color>
     <color name="shen_grey">#969696</color>
+
+    <!-- 分割线颜色-->
+    <color name="bg_gray_line">#dcd7d7</color>
 
 </resources>

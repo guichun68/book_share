@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.services.cloud.CloudItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -19,11 +18,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.activity.BookDetailAct;
-import zyzx.linke.activity.DetailActivity;
+import zyzx.linke.activity.CommonBookDetailAct;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.bean.IndexItem;
-import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.utils.AMApCloudImageCache;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.Utils;
@@ -91,9 +88,16 @@ public class AllUserBooksListAdapter extends BaseAdapter {
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext.getApplicationContext(),
-                        BookDetailAct.class);
+                        CommonBookDetailAct.class);
 //                intent.putExtra(BundleFlag.CLOUD_ITEM, getItem(position).getBookDetail());
                 intent.putExtra(BundleFlag.BOOK, getItem(position).getBookDetail());
+
+                intent.putExtra(BundleFlag.ADDRESS,getItem(position).getAddress());
+                intent.putExtra(BundleFlag.UID,getItem(position).getUid());
+                intent.putExtra(BundleFlag.SHARER,getItem(position).getmTitle());
+                intent.putExtra(BundleFlag.LONGITUDE,getItem(position).getLongi());
+                intent.putExtra(BundleFlag.LATITUDE,getItem(position).getLat());
+
 //                intent.putExtra(BundleFlag.isFromIndexAct,true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
@@ -111,7 +115,11 @@ public class AllUserBooksListAdapter extends BaseAdapter {
             holder.imageCorner.setVisibility(View.GONE);
         }
 
-        holder.title.setText(getItem(position).getmTitle());
+        if(getItem(position).getBookDetail().getTitle()!=null){
+            holder.title.setText(getItem(position).getBookDetail().getTitle());
+        }else{
+            holder.title.setText("书籍");
+        }
         holder.address.setText(getItem(position).getAddress());
         float dis = getItem(position).getDistance();
         dis = Math.round(dis * 10) / 10;
