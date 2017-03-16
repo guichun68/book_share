@@ -69,6 +69,8 @@ public class PersonalCenter extends BaseActivity {
         mCiv = (CircleImageView) findViewById(R.id.civ);
         tvUserName = (TextView) findViewById(R.id.tv_user_login_name);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
+        findViewById(R.id.rl_all_checkin).setOnClickListener(this);
+        findViewById(R.id.rl_borrow_in).setOnClickListener(this);
         mCiv.setOnClickListener(this);
         mRlManualTypeIn.setOnClickListener(this);
         mRlScanTypeIn.setOnClickListener(this);
@@ -117,6 +119,11 @@ public class PersonalCenter extends BaseActivity {
             case R.id.tv_signature:
                 //弹出修改签名的dialog
                 showModifySignatureDialog();
+                break;
+            case R.id.rl_all_checkin://我的所有书
+                gotoActivity(MyBooksAct.class,false);
+                break;
+            case R.id.rl_borrow_in://已借入的书
                 break;
         }
     }

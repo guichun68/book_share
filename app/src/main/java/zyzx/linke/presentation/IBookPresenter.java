@@ -61,4 +61,6 @@ public interface IBookPresenter {
      * @param
      */
     void uploadBook(HashMap<String,Object> params, CallBack viewCallBack);
+
+    void getMyBooks(Integer userid, int pageNum, CallBack viewCallBack);
 }

@@ -52,6 +52,10 @@ public class GlobalParams {
 	 */
 	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 	/**
+	 * 获取我登录的所有书籍(借入的除外)
+	 */
+	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
+	/**
 	 * 获取用户签名
 	 */
 	public static String urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
@@ -102,6 +106,7 @@ public class GlobalParams {
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/zyzx/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
+		urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
 	}
 
 	public static IBookPresenter getBookPresenter(){

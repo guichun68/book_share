@@ -241,7 +241,8 @@
                 android:background="@drawable/btn_aboutmore_selector"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv4"

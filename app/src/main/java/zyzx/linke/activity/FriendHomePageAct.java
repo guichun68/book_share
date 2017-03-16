@@ -32,10 +32,10 @@ import zyzx.linke.views.CircleImageView;
 
 /**
  * Created by austin on 2017/3/4.
- * Desc: 好友主页
+ * Desc: 好友主页（显示好友信息并展示其在地图中分享的书籍,即其在zyzx_user_books表中book_status=2的所有书籍）
  */
 
-public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener<ListView>,PullToRefreshBase.OnLastItemVisibleListener, AbsListView.OnScrollListener {
+public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener<ListView> {
 
     private RelativeLayout rlLocation;
     private CircleImageView ivHeadIcon;
@@ -44,8 +44,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private TextView tvSignature;
 
     private PullToRefreshListView mPullRefreshListView;
-    private int mFirstVisibleItem;
-    private int mVisibleItemCount;
 
     private BookAdapter mAdapter;
     private CloudItem mCloudItem;
@@ -74,7 +72,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         // Add an end-of-list listener
-        mPullRefreshListView.setOnLastItemVisibleListener(this);
         ListView actualListView = mPullRefreshListView.getRefreshableView();
         // Need to use the Actual ListView when registering for Context Menu
         registerForContextMenu(actualListView);
@@ -82,7 +79,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         // You can also just use setListAdapter(mAdapter) or
         // mPullRefreshListView.setAdapter(mAdapter)
         actualListView.setAdapter(mAdapter);
-        mPullRefreshListView.setOnScrollListener(this);
+//        mPullRefreshListView.setOnScrollListener(this);
     }
 
     private void getIntentData() {
@@ -177,22 +174,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             break;
 
         }
-    }
-
-    @Override
-    public void onLastItemVisible() {
-
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        mFirstVisibleItem = firstVisibleItem;
-        mVisibleItemCount = visibleItemCount;
     }
 
     @Override

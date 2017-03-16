@@ -1,5 +1,7 @@
 package zyzx.linke.presentation.impl;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -12,10 +14,12 @@ import zyzx.linke.constant.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.AMapQueryResult;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -325,6 +329,37 @@ public class BookPresenter implements IBookPresenter {
             if(viewCallBack!=null) {
                 viewCallBack.onFailure("上传失败");
             }
+        }
+    }
+
+    @Override
+    public void getMyBooks(Integer userid, int pageNum, final CallBack viewCallBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",String.valueOf(userid));
+        param.put("page_num",String.valueOf(pageNum));
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlGetMyBooks, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    String json = (String) obj;
+                    if(StringUtil.isEmpty(json)){
+                        if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                        return;
+                    }
+                    List<MyBookDetailVO> myBookDetailVOs = JSON.parseArray(json, MyBookDetailVO.class);
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(myBookDetailVOs);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                    if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
         }
     }
 }

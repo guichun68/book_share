@@ -66,12 +66,14 @@
 
         <activity
             android:name=".activity.IndexActivity"
-            android:screenOrientation="portrait"
-             >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.IndexActivity2"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.MyBooksAct"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.ManualInputAct"
             android:screenOrientation="portrait" />
