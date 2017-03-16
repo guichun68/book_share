@@ -362,4 +362,28 @@ public class BookPresenter implements IBookPresenter {
             if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
         }
     }
+
+    @Override
+    public void deleteUserBook(Integer userid, String b_id, CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",String.valueOf(userid));
+        param.put("book_id",b_id);
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlDeleteUserBooks, param,new CallBack(){
+
+                @Override
+                public void onSuccess(Object obj) {
+                    String json = (String) obj;
+                    UIUtil.showToastSafe("返回成功");
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                    UIUtil.showToastSafe("返回失败");
+                }
+        });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

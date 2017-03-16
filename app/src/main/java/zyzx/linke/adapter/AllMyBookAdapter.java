@@ -2,11 +2,17 @@ package zyzx.linke.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,8 +22,13 @@ import java.util.ArrayList;
 import zyzx.linke.R;
 import zyzx.linke.activity.CommonBookDetailAct;
 import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
+
+import static zyzx.linke.utils.UIUtil.getResources;
 
 /**
  * Created by austin on 2017/3/16.
@@ -51,7 +62,7 @@ public class AllMyBookAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-      MyBookViewHolder holder;
+      final MyBookViewHolder holder;
         if(convertView == null){
             convertView = View.inflate(context,R.layout.item_my_books,null);
             holder = new MyBookViewHolder(convertView);
@@ -59,19 +70,7 @@ public class AllMyBookAdapter extends BaseAdapter {
         }else{
             holder = (MyBookViewHolder) convertView.getTag();
         }
-        holder.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,CommonBookDetailAct.class);
-                Bundle bundle = new Bundle();
-//                bundle.putParcelable("book",getItem(position));
-                bundle.putSerializable("book",getItem(position).getBook());
-                intent.putExtra(BundleFlag.SHOWADDRESS,false);
-//                intent.putExtra("book",bundle);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
-        });
+
         if(!StringUtil.isEmpty(getItem(position).getBook().getImage_medium())){
             Glide.with(context).load(getItem(position).getBook().getImage_medium()).into(holder.ivCover);
         }else{

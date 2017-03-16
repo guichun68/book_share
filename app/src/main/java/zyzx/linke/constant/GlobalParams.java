@@ -20,6 +20,8 @@ public class GlobalParams {
 	public static boolean isDrawerOpened;
 
 	public static String image_file_location;//图片本地存储地址
+
+
 	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
@@ -47,6 +49,10 @@ public class GlobalParams {
 	 * 通过用户id获取其下所有书籍和其用户基本信息
 	 */
 	public static String urlGetUserInfo= GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
+	/**
+	 * 用户删除指定书籍
+	 */
+	public static String urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
 	/**
 	 * 获取用户的所有书籍
 	 */
@@ -107,6 +113,7 @@ public class GlobalParams {
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/zyzx/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
+		urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
 	}
 
 	public static IBookPresenter getBookPresenter(){

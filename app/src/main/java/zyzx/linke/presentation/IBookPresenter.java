@@ -63,4 +63,12 @@ public interface IBookPresenter {
     void uploadBook(HashMap<String,Object> params, CallBack viewCallBack);
 
     void getMyBooks(Integer userid, int pageNum, CallBack viewCallBack);
+
+    /**
+     * 用户删除图书
+     * @param userid
+     * @param b_id
+     * @param callBack
+     */
+    void deleteUserBook(Integer userid, String b_id, CallBack callBack);
 }
