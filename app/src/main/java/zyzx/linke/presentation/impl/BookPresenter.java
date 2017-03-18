@@ -38,7 +38,7 @@ public class BookPresenter implements IBookPresenter {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
-                    if(response.contains("<html>")){
+                    if(response.toLowerCase().contains("</html>")){
                         if(viewCallBack!=null){
                             viewCallBack.onFailure("服务器错误，请检查URL");
                         }

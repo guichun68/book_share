@@ -1,6 +1,6 @@
 package zyzx.linke.activity;
 
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -9,13 +9,10 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,9 +31,8 @@ import zyzx.linke.adapter.AllMyBookAdapter;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.MyBookDetailVO;
-import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -45,13 +41,15 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 我的所有书籍列表页(除借入书籍外)
  */
 
-public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener, AbsListView.OnScrollListener {
+public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener {
     private PullToRefreshListView mPullRefreshListView;
     private AllMyBookAdapter myBookAdapter;
     private ArrayList<MyBookDetailVO> mBooks;
-    private int pageNum;
+    private int mPageNum;
     private PopupWindow pop;
     private int mWindowHeight, mWindownWidth;
+    private Dialog progress;
+    private boolean isLoadingMore;//是否是加载更多的动作
 
     @Override
     protected int getLayoutId() {
@@ -146,6 +144,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         //从书架删除
+                        showProgress();
                         GlobalParams.getBookPresenter().deleteUserBook(GlobalParams.gUser.getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
 
                             @Override
@@ -153,6 +152,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        dismissProgress();
                                         if (pop != null && pop.isShowing()) {
                                             pop.dismiss();
                                         }
@@ -171,7 +171,13 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
                             @Override
                             public void onFailure(Object obj) {
-                                UIUtil.showToastSafe("删除失败");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismissProgress();
+                                        UIUtil.showToastSafe("删除失败");
+                                    }
+                                });
                             }
                         });
                     }
@@ -196,6 +202,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         //取消分享
+                        showProgress();
                         GlobalParams.getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                             @Override
                             public void onSuccess(final Object obj) {
@@ -203,6 +210,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                     @Override
                                     public void run() {
                                         pop.dismiss();
+                                        dismissProgress();
                                         final String json = (String) obj;
                                         if (StringUtil.isEmpty(json)) {
                                             UIUtil.showToastSafe("未能成功取消");
@@ -225,6 +233,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                     @Override
                                     public void run() {
                                         pop.dismiss();
+                                        dismissProgress();
                                         UIUtil.showToastSafe("取消失败");
                                     }
                                 });
@@ -236,6 +245,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 item2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //TODO 取消分享并从书架删除
 
                     }
                 });
@@ -245,7 +255,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if(1001==RESULT_OK){
+            if(1001==resultCode){
                 if(requestCode==tempPosition){
                     mBooks.get(tempPosition-1).setStatus(2);
                     mBooks.get(tempPosition-1).setMapId(Integer.valueOf(data.getStringExtra("map_id")));
@@ -261,6 +271,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     @Override
     protected void initData() {
         mBooks.clear();
+        showProgress();
         getBooks(GlobalParams.gUser.getUserid(), 0);
     }
 
@@ -275,8 +286,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 R.string.release_label));
         endLabels.setLoadingDrawable(getResources().getDrawable(
                 R.mipmap.publicloading));
-        pageNum++;
-        getBooks(GlobalParams.gUser.getUserid(), pageNum);
+        mPageNum++;
+        isLoadingMore = true;
+        getBooks(GlobalParams.gUser.getUserid(), mPageNum);
     }
 
     /**
@@ -292,11 +304,17 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        dismissProgress();
                         mPullRefreshListView.onRefreshComplete();
                         mPullRefreshListView.clearAnimation();
                         ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
                         if (books == null || books.isEmpty()) {
                             UIUtil.showToastSafe("没有更多书籍了!");
+                            if(isLoadingMore){
+                                mPageNum--;
+                                if(mPageNum<0)mPageNum=0;
+                                isLoadingMore=false;
+                            }
                         } else {
                             mBooks.addAll(books);
                             myBookAdapter.notifyDataSetChanged();
@@ -307,20 +325,27 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
             @Override
             public void onFailure(Object obj) {
+                dismissProgress();
                 mPullRefreshListView.onRefreshComplete();
                 mPullRefreshListView.clearAnimation();
+                if(isLoadingMore){
+                    mPageNum--;
+                    if(mPageNum<0)mPageNum=0;
+                    isLoadingMore = false;
+                }
                 UIUtil.showToastSafe("未能获取书籍信息!");
             }
         });
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    private void showProgress(){
+        if(progress == null){
+            progress = CustomProgressDialog.getNewProgressBar(mContext);
+        }
+        progress.show();
     }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    private void dismissProgress(){
+        CustomProgressDialog.dismissDialog(progress);
     }
-
 
 }

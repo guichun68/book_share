@@ -62,7 +62,7 @@ public class ModelImpl implements IModel {
             @Override
             public void onResponse(Response response) throws IOException {
                 String res = new String(response.body().string());
-                if(res.toLowerCase().contains("<html>")){
+                if(res.toLowerCase().contains("</html>")){
                     callBack.onFailure(res);
                     UIUtil.showToastSafe("网络或服务器故障，请检查");
                     return;
