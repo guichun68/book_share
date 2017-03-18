@@ -1,10 +1,11 @@
 package zyzx.linke.model.bean;
 
+
 import java.util.List;
 
 /**
  * Created by austin on 2017/3/1.
- * Desc: 高德地图周边检索
+ * Desc: 高德地图周边检索结果JSON
  * 在指定tableid的数据表内，搜索指定中心点和半径范围内，符合筛选条件的位置数据。
  * 具体字段含义参照@see <a href="http://google.com">http://lbs.amap.com/yuntu/reference/cloudsearch</a>中"周边检索部分内容
  */
@@ -74,6 +75,7 @@ public class AMapQueryResult {
          * uid : 1016
          * bookIds :
          * book_image_url : http://www.wbaidu.com
+         * head_icon_url:http://www.baid.cn/dsja92039091212.jpg
          * _createtime : 2017-03-01 18:14:17
          * _updatetime : 2017-03-01 18:14:17
          * _province : 北京市
@@ -90,6 +92,7 @@ public class AMapQueryResult {
         private int uid;
         private String bookIds;
         private String book_image_url;
+        private String head_icon_url;
         private String _createtime;
         private String _updatetime;
         private String _province;
@@ -152,6 +155,15 @@ public class AMapQueryResult {
 
         public void setBook_image_url(String book_image_url) {
             this.book_image_url = book_image_url;
+        }
+
+
+        public String getHead_icon_url() {
+            return head_icon_url;
+        }
+
+        public void setHead_icon_url(String head_icon_url) {
+            this.head_icon_url = head_icon_url;
         }
 
         public String get_createtime() {

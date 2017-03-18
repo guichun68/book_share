@@ -183,9 +183,9 @@ public class LoginAct extends BaseActivity{
             }
         });
 
-        Button btn2_2,btn_3_3,btnFj,btnChan,btnAddSakura;
-        btn2_2 = (Button) view.findViewById(R.id.btn_2_2);
-        btn_3_3 = (Button) view.findViewById(R.id.btn_3_3);
+        Button btn25,btn_8080,btnFj,btnChan,btnAddSakura;
+        btn25 = (Button) view.findViewById(R.id.btn_25);
+        btn_8080 = (Button) view.findViewById(R.id.btn_8080);
         btnChan = (Button) view.findViewById(R.id.btn_chan);
         btnFj = (Button) view.findViewById(R.id.btn_hbx_server);
         btnAddSakura = (Button) view.findViewById(R.id.btn_addSakura);
@@ -197,7 +197,7 @@ public class LoginAct extends BaseActivity{
                 UIUtil.showToastSafe("已设置为:"+GlobalParams.BASE_URL);
             }
         });
-        btn2_2.setOnClickListener(new View.OnClickListener() {
+        btn25.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -209,16 +209,17 @@ public class LoginAct extends BaseActivity{
         btnAddSakura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GlobalParams.BASE_URL = GlobalParams.BASE_URL+"/SakuraGoServer";
+                GlobalParams.BASE_URL = GlobalParams.BASE_URL+"/lk";
                 GlobalParams.refreshIP();
                 UIUtil.showToastSafe("已设置为:"+GlobalParams.BASE_URL);
             }
         });
-        btn_3_3.setOnClickListener(new View.OnClickListener() {
+        btn_8080.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
+//                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_genymotion");
+                GlobalParams.BASE_URL= GlobalParams.BASE_URL+":8080";
                 GlobalParams.refreshIP();
                 UIUtil.showToastSafe("已设置为:"+GlobalParams.BASE_URL);
             }

@@ -70,5 +70,11 @@ public interface IBookPresenter {
      * @param b_id
      * @param callBack
      */
-    void deleteUserBook(Integer userid, String b_id, CallBack callBack);
+    void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack);
+
+    /**
+     * 取消书籍分享
+     * @param userBookId 用户书籍关系表（zyzx_user_books）id
+     */
+    void cancelShare(Integer userBookId,Integer mapId,CallBack callBack);
 }

@@ -2,6 +2,7 @@ package zyzx.linke.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -55,6 +58,7 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.constant.BundleFlag;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.AMapCreateItemResultVO;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.overlay.PoiOverlay;
 import zyzx.linke.utils.AMapUtil;
@@ -450,28 +454,17 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                         @Override
                         public void onSuccess(Object obj) {
                             CustomProgressDialog.dismissDialog(mProgressDialog);
-                            int code = Integer.parseInt(obj.toString());
-                            int d = 90;
-                            switch (code) {
-                                case 200://初次在该坐标分享
-                                    UIUtil.showToastSafe("分享成功");
-
-                                    finish();
-                                    break;
-                                case 400://分享成功，已经在该点分享过该书籍了
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showSameBookShareDialog();
-                                        }
-                                    });
-                                    break;
-                                case 500:
-                                    UIUtil.showToastSafe("未能成功分享");
-                                    break;
-                                default:
-                                    UIUtil.showToastSafe("服务器错误");
+                            String json = (String)obj;
+                            if(StringUtil.isEmpty(json)){
+                                UIUtil.showToastSafe("分享失败");
+                                return;
                             }
+                            AMapCreateItemResultVO aCreateResultVo = JSON.parseObject(json, AMapCreateItemResultVO.class);
+                            Intent intent = new Intent();
+                            intent.putExtra("map_id",aCreateResultVo.get_id());
+                            setResult(1001,intent);
+                            finish();
+                            UIUtil.showToastSafe("分享成功");
                         }
 
                         @Override

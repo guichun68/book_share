@@ -85,156 +85,26 @@ public class BookPresenter implements IBookPresenter {
     @Override
     public void addBook2Map(final BookDetail2 bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
         // 首先查询该点用户是否已经分享过图书了
-        final HashMap<String,String> param = new HashMap<>();
+        final HashMap<String,Object> param = new HashMap<>();
         param.put("key", Const.key);
-        param.put("tableid",Const.mTableID);
-        param.put("keywords","");
+//        param.put("tableid",Const.mTableID);
+//        param.put("keywords","");
         param.put("center",longitude+","+latitude);
-        param.put("radius","0");
-        param.put("filter","uid:"+userid+"");
-        GlobalParams.getgModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
-            @Override
-            public void onSuccess(Object obj) {
-                String json = (String) obj;
-                AMapQueryResult resultBean = JSON.parseObject(json, AMapQueryResult.class);
-                if(resultBean.getStatus()==0){
-                        if(viewCallBack!=null){
-                            viewCallBack.onFailure("地图访问出错");
-                        }
-                } else if(Integer.parseInt(resultBean.getCount())>0){
-                    //该用户在该点分享过图书，进一步核实是否包含此书
-                    List<AMapQueryResult.DatasEntity> datas = resultBean.getDatas();
-                    for (AMapQueryResult.DatasEntity book:datas) {
-                        if(book.getBookIds().contains(bookDetail.getB_id())){
-                            //包含此书
-                            if(viewCallBack!=null){
-                                viewCallBack.onSuccess(400);
-                            }
-                        }else{
-                            //不包含此书，可以继续在该坐标添加本次书籍
-                            //1 首先得到之前的所有书籍的id
-                            String newBookIds = resultBean.getDatas().get(0).getBookIds()+"#"+bookDetail.getB_id();
-                            //2得到此次要更新的记录的id
-                            String id = resultBean.getDatas().get(0).get_id();
+//        param.put("radius","0");
+//        param.put("filter","uid:"+userid+"");
+        param.put("user_id",String.valueOf(userid));
+        param.put("book_id",bookDetail.getB_id());
+        param.put("user_name",GlobalParams.gUser.getLogin_name());
+        param.put("head_url",GlobalParams.gUser.getHead_icon());
 
-
-                            HashMap<String,Object> param2 = new HashMap<>();
-                            param2.put("key",Const.key);
-                            param2.put("tableid",Const.mTableID);
-                            param2.put("data","{     \"_id\": \""+id+"\",   \"bookIds\":\""+newBookIds+"\" }");
-                            try {
-                                GlobalParams.getgModel().post(GlobalParams.urlGaodeBookUpdate, param2, new CallBack() {
-                                    @Override
-                                    public void onSuccess(Object obj) {
-                                        String json = (String) obj;
-                                        final JSONObject jsonObject = JSON.parseObject(json);
-                                        int status = jsonObject.getInteger("status");
-                                        if(status==1){
-                                            if(viewCallBack!=null){
-//                                                viewCallBack.onSuccess(200);
-                                                modifyBookStauts(bookDetail,userid);
-                                            }
-                                        }else{
-                                            if(viewCallBack!=null){
-                                                viewCallBack.onSuccess(500);
-                                                UIUtil.showTestLog("zyzx","分享失败，插入高德云存储表单条数据失败，错误码:"+status);
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Object obj) {
-                                        if(viewCallBack!=null){
-                                            viewCallBack.onFailure(obj);
-                                        }
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    /*if(viewCallBack!=null){
-                        viewCallBack.onSuccess(400);
-                    }*/
-                }else {
-                    //该点该用户未曾放置过任何书籍，可以插入数据，调用高德api插入数据
-                    HashMap<String,Object> param2 = new HashMap<>();
-                    param2.put("key",Const.key);
-                    param2.put("tableid",Const.mTableID);
-                    param2.put("data","{     \"_location\": \""+longitude+","+latitude+"\",     \"_name\": \""+GlobalParams.gUser.getLogin_name()+"\",     \"book_image_url\": \""+ bookDetail.getImage()+"\",  \"bookIds\":\""+bookDetail.getB_id()+"\",   \"uid\": \""+GlobalParams.gUser.getUserid()+"\" }");
-                    try {
-                        GlobalParams.getgModel().post(GlobalParams.urlAddbook2Gaode, param2, new CallBack() {
-                            @Override
-                            public void onSuccess(Object obj) {
-                                String json = (String) obj;
-                                JSONObject jsonObject = JSON.parseObject(json);
-                                int status = jsonObject.getInteger("status");
-                                if(status==1){
-                                    modifyBookStauts(bookDetail,userid);
-                                }else{
-                                    if(viewCallBack!=null){
-                                        viewCallBack.onSuccess(500);
-                                        UIUtil.showTestLog("zyzx","分享失败，插入高德云存储表单条数据失败，错误码:"+status);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Object obj) {
-                                if(viewCallBack!=null){
-                                    viewCallBack.onFailure(obj);
-                                }
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlShareBook,param,viewCallBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("访问服务器出错");
             }
-            // 分享成功，修改zyzx_user_book表中我的图书中该书的状态为“已分享”
-            private void modifyBookStauts(BookDetail2 bookDetail2,Integer userId2) {
-                HashMap<String,Object> param2 = new HashMap<>();
-                param2.put("book_id",bookDetail2.getB_id());
-                param2.put("uid",userId2+"");
-                try {
-                    GlobalParams.getgModel().post(GlobalParams.urlSetBookStatus, param2, new CallBack() {
-                        @Override
-                        public void onSuccess(Object obj) {
-                            String jsonResult = (String) obj;
-                            JSONObject jsonObject1 = JSON.parseObject(jsonResult);
-                            int code = jsonObject1.getInteger("code");
-                            if(code==200) {
-                                if (viewCallBack != null) {
-                                    viewCallBack.onSuccess(200);
-                                }
-                            }else{
-                                if(viewCallBack !=null){
-                                    viewCallBack.onFailure(obj);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Object obj) {
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Object obj) {
-                UIUtil.showTestLog("zyzx","添加书籍失败");
-                    if(viewCallBack!=null){
-                        viewCallBack.onFailure(obj);
-                    }
-            }
-        });
+        }
     }
 
     @Override
@@ -364,26 +234,30 @@ public class BookPresenter implements IBookPresenter {
     }
 
     @Override
-    public void deleteUserBook(Integer userid, String b_id, CallBack callBack) {
+    public void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("user_id",String.valueOf(userid));
         param.put("book_id",b_id);
+        param.put("map_id",String.valueOf(mapItemId));
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlDeleteUserBooks, param,new CallBack(){
-
-                @Override
-                public void onSuccess(Object obj) {
-                    String json = (String) obj;
-                    UIUtil.showToastSafe("返回成功");
-                }
-
-                @Override
-                public void onFailure(Object obj) {
-                    UIUtil.showToastSafe("返回失败");
-                }
-        });
+            GlobalParams.getgModel().post(GlobalParams.urlDeleteUserBooks, param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void cancelShare(Integer userBookId,Integer mapId,CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_book_id",String.valueOf(userBookId));
+        param.put("map_id",String.valueOf(mapId));
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlCancelShare,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("未能成功取消");
+            }
         }
     }
 }

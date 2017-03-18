@@ -70,7 +70,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="192.168.1.25:8080"/>
+            android:text="192.168.1.25:80"/>
         
         <View
             android:layout_width="1.0px"
@@ -100,14 +100,14 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/btn_2_2"
+            android:id="@+id/btn_25"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="40dp"
             android:layout_marginRight="5dip"
             android:background="@drawable/button_update_selector"
             android:gravity="center_horizontal|center_vertical"
-            android:text="2.2"
+            android:text="25"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
@@ -117,7 +117,7 @@
             android:background="#ffd2d2d2" />
 
         <Button
-            android:id="@+id/btn_3_3"
+            android:id="@+id/btn_8080"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="40dp"
@@ -125,7 +125,7 @@
             android:layout_marginRight="5dip"
             android:background="@drawable/button_update_selector"
             android:gravity="center_horizontal|center_vertical"
-            android:text="3.3"
+            android:text="8080Port"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
@@ -178,5 +178,5 @@
     android:layout_below="@id/ll_btn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="添加SakuraGoServer后缀"/>
+    android:text="添加lk后缀"/>
 </RelativeLayout>

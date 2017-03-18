@@ -10,13 +10,11 @@
 
     <View style="@style/line" />
     <TextView
-        android:id="@+id/tv_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:paddingLeft="@dimen/dp_40"
-        android:paddingRight="@dimen/dp_40"
-        android:paddingTop="@dimen/dp_10"
-        android:paddingBottom="@dimen/dp_10"
+        android:id="@+id/tv_item1"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:background="@drawable/slide_item_sel"
         android:gravity="center"
         android:text="删除"
@@ -32,13 +30,13 @@
         android:layout_marginRight="5dp"/>
 
     <TextView
-        android:id="@+id/tv_modify_state"
+        android:id="@+id/tv_item2"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:paddingLeft="@dimen/dp_40"
-        android:paddingRight="@dimen/dp_40"
-        android:paddingTop="@dimen/dp_10"
-        android:paddingBottom="@dimen/dp_10"
+        android:layout_height="43dp"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:background="@drawable/slide_item_sel"
         android:gravity="center"
         android:clickable="true"

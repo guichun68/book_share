@@ -71,4 +71,5 @@
     <dimen name="busroute_text_size_big">16sp</dimen>
     <dimen name="busroute_text_size_small">13sp</dimen>
     <dimen name="sp_16">16sp</dimen>
+    <dimen name="dp_5">5dp</dimen>
 </resources>
