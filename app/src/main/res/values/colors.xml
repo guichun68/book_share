@@ -3,8 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="btn_bg_press_color">#99550000</color>
-    <color name="btn_bg_color">#550000</color>
+    <color name="btn_bg_press_color">#1EB9F2</color>
+    <color name="btn_bg_color">#0E98CB</color>
     <color name="btn_text_color">#FFFFFF</color>
     <color name="red">#E51A18</color>
     <color name="update_press">#CCC8CC</color>

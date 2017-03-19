@@ -6,7 +6,10 @@
         android:width="0dp"
         android:color="#00ff00"
     />
-    <corners android:radius="1dp"/>
+    <size android:width="@dimen/abc_progress_bar_height_material"
+        android:height="@dimen/abc_progress_bar_height_material"/>
+    <corners android:radius="7dp"/>
+
 
 
 </shape>

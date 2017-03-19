@@ -260,4 +260,20 @@ public class BookPresenter implements IBookPresenter {
             }
         }
     }
+
+    @Override
+    public void cancelShareAndDelBook(Integer userBookId, Integer mapId, CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_book_id",String.valueOf(userBookId));
+        param.put("map_id",String.valueOf(mapId));
+        try {
+            GlobalParams.getgModel().post(GlobalParams.urlCancelShareAndDelBook,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("操作失败");
+            }
+        }
+
+    }
 }

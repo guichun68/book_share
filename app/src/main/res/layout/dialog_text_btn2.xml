@@ -14,9 +14,11 @@
         android:id="@+id/dialog_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dip"
+        android:layout_marginTop="25dip"
         android:gravity="center"
-        tool:text="确定要添加么"
+        android:maxLines="3"
+        android:ellipsize="end"
+        tool:text="确定要添加《你好的我的dadadafd士大夫撒都是垃圾范德萨对了撒就范德萨范德萨疯掉了卡萨解放东路撒酒疯大是咖啡的三的》这本书么？"
         android:textSize="19sp" />
 
     <LinearLayout
@@ -32,9 +34,9 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"
-        android:layout_marginTop="60dip"
+        android:layout_marginTop="30dip"
         android:layout_marginRight="20dp"
-        android:background="@drawable/sel_click_btn_login"
+        android:background="@drawable/btn_sel"
         android:text="@string/confirm"
         android:visibility="visible"
         android:textColor="@android:color/white"
@@ -47,8 +49,8 @@
         android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"
-        android:layout_marginTop="60dip"
-        android:background="@drawable/sel_click_btn_login"
+        android:layout_marginTop="30dip"
+        android:background="@drawable/btn_sel"
         android:text="@string/cancel"
         android:textColor="@android:color/white"
         android:textSize="20sp" />

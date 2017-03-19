@@ -77,4 +77,13 @@ public interface IBookPresenter {
      * @param userBookId 用户书籍关系表（zyzx_user_books）id
      */
     void cancelShare(Integer userBookId,Integer mapId,CallBack callBack);
+
+    /**
+     * 取消分享并从书架删除
+     * @param userBookId
+     * @param mapId
+     * @param callBack
+     */
+    void cancelShareAndDelBook(Integer userBookId,Integer mapId,CallBack callBack);
+
 }
