@@ -1,9 +1,11 @@
-package zyzx.linke.presentation;
+package zyzx.linke.global;
 
 import java.util.HashMap;
 import java.util.List;
 
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 
@@ -12,15 +14,15 @@ import zyzx.linke.model.bean.RequestParamGetBookInfos;
  * Desc: 图书操作相关逻辑
  */
 
-public interface IBookPresenter {
+public abstract class IBookPresenter extends IPresenter{
 
     //通过ISBN获取图书详情
-    void getBookDetailByISBN(String isbn,CallBack viewCallBack);
+    public abstract void getBookDetailByISBN(String isbn, CallBack viewCallBack);
 
     /*
     *将图书添加到我的书库（仅仅添加，不在地图中展示）
      */
-    void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack);
+    public abstract void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack);
 
     /**
      * 向高德地图中添加图书坐标
@@ -31,7 +33,7 @@ public interface IBookPresenter {
      * @param longitude 经度
      * @param viewCallBack 回调
      */
-    void addBook2Map(BookDetail2 bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
+    public abstract void addBook2Map(BookDetail2 bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
 
     /**
      * 查询指定位置为中心，方圆around范围内的所有的图书信息
@@ -40,7 +42,7 @@ public interface IBookPresenter {
      * @param around
      * @param callBack
      */
-    void getMapBookAllAround(double mLongti, double mLati, Integer around, CallBack callBack);
+    public abstract void getMapBookAllAround(double mLongti, double mLati, Integer around, CallBack callBack);
 
     /**
      * 获取用户信息和其下所有书籍
@@ -48,21 +50,21 @@ public interface IBookPresenter {
      * @param pageNum 页数
      * @param viewCallBack 回调
      */
-    void getUserBooks(String uid,final int pageNum,final CallBack viewCallBack);
+    public abstract void getUserBooks(String uid,final int pageNum,final CallBack viewCallBack);
 
     /**
      * 通过给定的bookId集合来批量获取这些书籍的详细信息
      */
-    void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson,CallBack viewCallBack);
+    public abstract void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson, CallBack viewCallBack);
 
     /**
      * 上传图片
      * @param
      * @param
      */
-    void uploadBook(HashMap<String,Object> params, CallBack viewCallBack);
+    public abstract void uploadBook(HashMap<String, Object> params, CallBack viewCallBack);
 
-    void getMyBooks(Integer userid, int pageNum, CallBack viewCallBack);
+    public abstract void getMyBooks(Integer userid, int pageNum, CallBack viewCallBack);
 
     /**
      * 用户删除图书
@@ -70,13 +72,13 @@ public interface IBookPresenter {
      * @param b_id
      * @param callBack
      */
-    void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack);
+    public abstract void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack);
 
     /**
      * 取消书籍分享
      * @param userBookId 用户书籍关系表（zyzx_user_books）id
      */
-    void cancelShare(Integer userBookId,Integer mapId,CallBack callBack);
+    public abstract void cancelShare(Integer userBookId,Integer mapId,CallBack callBack);
 
     /**
      * 取消分享并从书架删除
@@ -84,6 +86,7 @@ public interface IBookPresenter {
      * @param mapId
      * @param callBack
      */
-    void cancelShareAndDelBook(Integer userBookId,Integer mapId,CallBack callBack);
+    public abstract void cancelShareAndDelBook(Integer userBookId,Integer mapId,CallBack callBack);
+
 
 }

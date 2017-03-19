@@ -1,7 +1,5 @@
 package zyzx.linke.activity;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -40,15 +38,14 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.cloud.CloudItem;
 import com.amap.api.services.core.LatLonPoint;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.bean.MarkerStatus;
-import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -57,11 +54,10 @@ import zyzx.linke.utils.UIUtil;
  * @author ligen
  * 
  */
-public class MapActivity extends Activity implements OnMarkerClickListener,
+public class MapActivity extends BaseActivity implements OnMarkerClickListener,
 		OnInfoWindowClickListener, OnMarkerDragListener, OnMapLoadedListener,
 		OnClickListener, InfoWindowAdapter, LocationSource, AMapLocationListener {
 
-	private Dialog mProgressDialog = null;
 	private MapView mMapView;
 	private AMap mAMap;
 	ArrayList<CloudItem> mCloudItems;
@@ -73,8 +69,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 	private MarkerStatus mLastMarkerStatus;
 	private Button mRoadCondition;
 	private boolean mIsShowRoadCondition = false;
-	private RelativeLayout mAddLayout;
-	private RelativeLayout mMinusLayout;
+//	private RelativeLayout mAddLayout;
 	private TextView mTitleDesTv;
 	private ImageView mTitleMap;
 	private RelativeLayout mBottomRlayout;
@@ -93,9 +88,13 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 	private int mPageNum;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map_display);
+	protected int getLayoutId() {
+		return R.layout.activity_map_display;
+	}
+
+
+	@Override
+	protected void initView(Bundle saveInstanceState) {
 		// R 需要引用包import com.amapv2.apis.R;
 
 		// 获取列表页中的云图数据
@@ -111,9 +110,14 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		setUpInteractiveControls();
 
 		mMapView = (MapView) findViewById(R.id.map);
-		mMapView.onCreate(savedInstanceState);// 必须要写
-		showProgressDialog("正在定位...");
+		mMapView.onCreate(saveInstanceState);// 必须要写
+		showProgress("正在定位...");
 		init();
+	}
+
+	@Override
+	protected void initData() {
+
 	}
 
 	/**
@@ -139,13 +143,10 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		mTextViewName = (TextView) findViewById(R.id.poi_name);
 		mTextViewAddress = (TextView) findViewById(R.id.poi_address);
 		mRoadCondition = (Button) findViewById(R.id.road_condition);
-		mAddLayout = (RelativeLayout) findViewById(R.id.add_layout);
-		mMinusLayout = (RelativeLayout) findViewById(R.id.minus_layout);
-
+		findViewById(R.id.add_layout).setOnClickListener(this);
+		findViewById(R.id.minus_layout).setOnClickListener(this);
 		mBtnDetail.setOnClickListener(this);
 		mRoadCondition.setOnClickListener(this);
-		mAddLayout.setOnClickListener(this);
-		mMinusLayout.setOnClickListener(this);
 	}
 
 	/**
@@ -332,7 +333,6 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 			ZoomOut();
 			break;
 		case R.id.btn_next_page:
-			//TODO
 			mCurrPage ++;
 			addMarker();
 			break;
@@ -484,7 +484,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 	/**
 	 * marker被选中之后，需要更改marker的样式，以及在底部bar显示信息
 	 * 
-	 * @param markerStatus
+	 * @param markerStatus markerStatus
 	 */
 	private void markerChosen(MarkerStatus markerStatus) {
 		markerStatus.pressStatusToggle();
@@ -496,7 +496,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 
 	@Override
 	public void onLocationChanged(AMapLocation amapLocation) {
-		dissmissProgressDialog();
+		dismissProgress();
 		if (mListener != null && amapLocation != null) {
 			if (amapLocation != null && amapLocation.getErrorCode() == 0) {/*amapLocation.getCity();*/
 				mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
@@ -545,15 +545,7 @@ public class MapActivity extends Activity implements OnMarkerClickListener,
 		mlocationClient = null;
 	}
 
-	private void showProgressDialog(String message) {
-		mProgressDialog = CustomProgressDialog.createLoadingDialog(this, message);
-		mProgressDialog.setCancelable(true);
-		mProgressDialog.show();
-	}
 
-	private void dissmissProgressDialog() {
-		if (mProgressDialog != null && mProgressDialog.isShowing()) {
-			mProgressDialog.dismiss();
-		}
-	}
+
+
 }

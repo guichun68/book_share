@@ -27,8 +27,8 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.KeywordSearchListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.BundleResult;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.BundleResult;
 
 public class KeywordListActivity extends Activity implements OnClickListener,
 		TextWatcher {

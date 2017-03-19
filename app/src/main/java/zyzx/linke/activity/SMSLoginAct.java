@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 import zyzx.linke.R;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CheckPhone;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.TimeUtils;
 import zyzx.linke.utils.UIUtil;
@@ -18,7 +19,7 @@ import zyzx.linke.utils.UIUtil;
  * Created by austin on 2017/2/18.
  * Desc: 短信登录页面
  */
-public class SMSLoginAct extends BaseActivity{
+public class SMSLoginAct extends BaseActivity {
 
     private AppCompatEditText aetPhone,aetVerifyCode;
     private Button btnSendVerifyCode,btnLogin;
@@ -52,7 +53,7 @@ public class SMSLoginAct extends BaseActivity{
                     return;
                 }
                 final TimeUtils tu = new TimeUtils(btnSendVerifyCode,"发送验证码");
-                GlobalParams.getUserPresenter().sendLoginSMSVerifyCode(aetPhone.getText().toString().trim(), new CallBack() {
+                getUserPresenter().sendLoginSMSVerifyCode(aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         Integer code = (Integer) obj;

@@ -26,8 +26,8 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.utils.AMApCloudImageCache;
 
 /***

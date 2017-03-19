@@ -3,8 +3,6 @@ package zyzx.linke.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,16 +15,16 @@ import com.amap.api.services.cloud.CloudItem;
 import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -36,8 +34,6 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class CommonBookDetailAct extends BaseActivity {
-    private static final int BOOKWHAT = 200,BOOKNOTGET=400;
-    private Dialog progressDialog;
 
     private ImageView ivBookImage;
     private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
@@ -71,14 +67,11 @@ public class CommonBookDetailAct extends BaseActivity {
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
         tvAdd2MyLib.setClickable(true);
         mTitleText.setText("图书详情");
-        if(!GlobalParams.gIsPersonCenterScan){
-            tvAdd2MyLib.setVisibility(View.INVISIBLE);
-        }
+        tvAdd2MyLib.setVisibility(View.INVISIBLE);
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
         tvSharer.setOnClickListener(this);
         rlLocation.setOnClickListener(this);
-        progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
     }
 
     String bookId;//添加地图成功后返回的bookId
@@ -92,15 +85,12 @@ public class CommonBookDetailAct extends BaseActivity {
                     Toast.makeText(mContext, "没有要添加的书籍", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(progressDialog == null){
-                    progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
-                }
-                progressDialog.show();
+                showDefProgress();
                 mBook.setFromDouban(true);
-                GlobalParams.getBookPresenter().addBook2MyLib(mBook,GlobalParams.gUser.getUserid(), new CallBack() {
+                getBookPresenter().addBook2MyLib(mBook,GlobalParams.gUser.getUserid(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressDialog);
+                        dismissProgress();
                         String responseJson = (String)obj;
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code = jsonObject.getInteger("code");
@@ -121,7 +111,7 @@ public class CommonBookDetailAct extends BaseActivity {
 
                     @Override
                     public void onFailure(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressDialog);
+                        dismissProgress();
                     }
                 });
                 break;

@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +15,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
@@ -32,7 +32,6 @@ import zyzx.linke.utils.UIUtil;
 
 public class ScanBookDetailAct extends BaseActivity {
     private static final int BOOKWHAT = 200, BOOKNOTGET = 400;
-    private Dialog progressDialog;
     private BookHandler handler = new BookHandler();
 
     private ImageView ivBookImage;
@@ -57,14 +56,10 @@ public class ScanBookDetailAct extends BaseActivity {
         tvCatalog = (TextView) findViewById(R.id.tv_catalog);
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
         tvAdd2MyLib.setClickable(true);
-        mTitleText.setText("图书详情");
-        if (!GlobalParams.gIsPersonCenterScan) {
-            tvAdd2MyLib.setVisibility(View.INVISIBLE);
-        }
-        tvAdd2MyLib.setText("添加");
+        mTitleText.setText("详情");
+        tvAdd2MyLib.setText("加入我的书架");
         tvAdd2MyLib.setOnClickListener(this);
-        progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
-        progressDialog.show();
+        showDefProgress();
     }
 
     String bookId;//添加地图成功后返回的bookId
@@ -78,15 +73,12 @@ public class ScanBookDetailAct extends BaseActivity {
                     Toast.makeText(mContext, "没有要添加的书籍", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (progressDialog == null) {
-                    progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
-                }
-                progressDialog.show();
+                showDefProgress();
                 mBook.setFromDouban(true);
-                GlobalParams.getBookPresenter().addBook2MyLib(mBook, GlobalParams.gUser.getUserid(), new CallBack() {
+                getBookPresenter().addBook2MyLib(mBook, GlobalParams.gUser.getUserid(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressDialog);
+                        dismissProgress();
                         String responseJson = (String) obj;
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code = jsonObject.getInteger("code");
@@ -107,7 +99,7 @@ public class ScanBookDetailAct extends BaseActivity {
 
                     @Override
                     public void onFailure(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressDialog);
+                        dismissProgress();
                     }
                 });
                 break;
@@ -169,12 +161,20 @@ public class ScanBookDetailAct extends BaseActivity {
     @Override
     protected void initData() {
         Intent in = getIntent();
+        mBook = (BookDetail2)in.getSerializableExtra("book");
+        if(mBook!=null){
+            Message msg = handler.obtainMessage();
+            msg.obj = mBook;
+            msg.what = BOOKWHAT;
+            handler.sendMessage(msg);
+            return;
+        }
         String isbn = in.getStringExtra("isbn");
         UIUtil.showTestLog("isbn", isbn);
-        GlobalParams.getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
+        getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
             @Override
             public void onSuccess(Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
+                dismissProgress();
                 if (obj == null) {
                     Toast.makeText(mContext, "未能获取书籍信息", Toast.LENGTH_SHORT).show();
                     handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
@@ -189,7 +189,7 @@ public class ScanBookDetailAct extends BaseActivity {
 
             @Override
             public void onFailure(Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
+                dismissProgress();
                 UIUtil.showTestLog("zyzx failure", (String) obj);
                 handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
             }
@@ -197,17 +197,17 @@ public class ScanBookDetailAct extends BaseActivity {
     }
 
     class BookHandler extends Handler {
-        private Dialog promt;
+        private Dialog prompt;
 
         @Override
         public void handleMessage(Message msg) {
-            CustomProgressDialog.dismissDialog(progressDialog);
+            dismissProgress();
             switch (msg.what) {
                 case BOOKNOTGET:
-                    if (promt == null) {
-                        promt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
+                    if (prompt == null) {
+                        prompt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
                     }
-                    promt.show();
+                    prompt.show();
                     break;
 
                 case BOOKWHAT://成功获取图书信息
@@ -252,7 +252,7 @@ public class ScanBookDetailAct extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                CustomProgressDialog.dismissDialog(promt);
+                CustomProgressDialog.dismissDialog(prompt);
                 finish();
             }
         }

@@ -1,7 +1,6 @@
 package zyzx.linke.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -20,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import zyzx.linke.R;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BeanFactoryUtil;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.constant.BeanFactoryUtil;
-import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -32,11 +31,8 @@ import zyzx.linke.utils.UIUtil;
  * Created by austin on 2017/2/17.
  * Desc: 登录页面
  */
-public class LoginAct extends BaseActivity{
+public class LoginAct extends BaseActivity {
     private AppCompatEditText aetLoginName,aetPsw;
-    private Button btnLogin;
-    private TextView tvSmsLogin,tvForgetPsw,tvRegist,tvAboutus;
-    private Dialog progressBar;
 
     @Override
     protected int getLayoutId() {
@@ -45,24 +41,17 @@ public class LoginAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        progressBar = CustomProgressDialog.getNewProgressBar(this);
         mTitleText.setText("用户登录");
         mBackBtn.setVisibility(View.INVISIBLE);
 
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        tvSmsLogin = (TextView) findViewById(R.id.tv_sms_login);
-        tvForgetPsw = (TextView) findViewById(R.id.tv_forget_psw);
-        tvAboutus = (TextView) findViewById(R.id.tv_about_us);
-        tvRegist = (TextView) findViewById(R.id.tv_regist);
+        findViewById(R.id.btn_login).setOnClickListener(this);
+        findViewById(R.id.tv_sms_login).setOnClickListener(this);
+        findViewById(R.id.tv_forget_psw).setOnClickListener(this);
+        findViewById(R.id.tv_about_us).setOnClickListener(this);
+        findViewById(R.id.tv_regist).setOnClickListener(this);
 
         mTitleText.setClickable(true);
-        tvAboutus.setClickable(true);
         mTitleText.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
-        tvSmsLogin.setOnClickListener(this);
-        tvForgetPsw.setOnClickListener(this);
-        tvRegist.setOnClickListener(this);
-        tvAboutus.setOnClickListener(this);
 
         aetLoginName = (AppCompatEditText) findViewById(R.id.aet_login_name);
         aetPsw = (AppCompatEditText) findViewById(R.id.aet_psw);
@@ -90,21 +79,19 @@ public class LoginAct extends BaseActivity{
                 if(!checkInput()){
                     return;
                 }
-                progressBar.show();
-                GlobalParams.getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
+                showProgress("请稍后……");
+                getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressBar);
+                        dismissProgress();
                         gotoActivity(IndexActivity2.class,true);
                     }
 
                     @Override
                     public void onFailure(Object obj) {
-                        CustomProgressDialog.dismissDialog(progressBar);
+                        dismissProgress();
 //                        UIUtil.showToastSafe("用户名或密码错误.");
                         UIUtil.showToastSafe((String)obj);
-//                        Snackbar.make(view, obj.toString(), Snackbar.LENGTH_SHORT).show();
-//                        Snackbar.make(view, (String)obj, Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -117,7 +104,7 @@ public class LoginAct extends BaseActivity{
             case R.id.tv_forget_psw:
                 break;
             case R.id.tv_regist://用户注册
-                Intent intent2 = new Intent(LoginAct.this,RegisteAct.class);
+                Intent intent2 = new Intent(LoginAct.this,RegisterAct.class);
                 startActivityForResult(intent2,300);
 //                gotoActivity(RegisteAct.class,false);
                 break;

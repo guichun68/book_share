@@ -15,8 +15,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.DriveSegmentListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.utils.SchemeUtil;
 
 

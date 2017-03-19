@@ -31,8 +31,8 @@ import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.CityListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.BundleResult;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.BundleResult;
 import zyzx.linke.model.bean.City;
 import zyzx.linke.utils.UIUtil;
 

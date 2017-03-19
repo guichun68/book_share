@@ -1,7 +1,5 @@
 package zyzx.linke.presentation.impl;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -10,15 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.AMapQueryResult;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
-import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.IBookPresenter;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -27,14 +24,13 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 用户逻辑实现类
  */
 
-public class BookPresenter implements IBookPresenter {
+public class BookPresenter extends IBookPresenter {
 
-
-    @Override
+    
     public void getBookDetailByISBN(String isbn, final CallBack viewCallBack) {
 
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlISBNAPI+isbn,null, new CallBack() {
+            getModel().post(GlobalParams.urlISBNAPI+isbn,null, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
@@ -73,7 +69,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("book",JSON.toJSONString(mBook));
         param.put("userId",userId+"");
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlAddBook2MyLib, param, viewCallBack);
+            getModel().post(GlobalParams.urlAddBook2MyLib, param, viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null){
@@ -98,7 +94,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("head_url",GlobalParams.gUser.getHead_icon());
 
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlShareBook,param,viewCallBack);
+            getModel().post(GlobalParams.urlShareBook,param,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null){
@@ -115,7 +111,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("center",mLongti+","+mLati);
         param.put("radius",GlobalParams.AROUND+"");
 
-        GlobalParams.getgModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
+        getModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
             @Override
             public void onSuccess(Object obj) {
                 String json = (String) obj;
@@ -140,7 +136,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("pageNum",pageNum+"");
 
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlGetUserBooks, param, new CallBack() {
+            getModel().post(GlobalParams.urlGetUserBooks, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String jsonResult = (String) obj;
@@ -168,7 +164,7 @@ public class BookPresenter implements IBookPresenter {
         HashMap<String,Object> param = new HashMap<>();
         param.put("ids",json);
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
+            getModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     if(obj.toString().toLowerCase().contains("</html>")){
@@ -193,7 +189,7 @@ public class BookPresenter implements IBookPresenter {
     @Override
     public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {
         try {
-            GlobalParams.getgModel().post2(GlobalParams.urlUploadBook,params,viewCallBack);
+            getModel().post2(GlobalParams.urlUploadBook,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {
@@ -208,7 +204,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("user_id",String.valueOf(userid));
         param.put("page_num",String.valueOf(pageNum));
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlGetMyBooks, param, new CallBack() {
+            getModel().post(GlobalParams.urlGetMyBooks, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String json = (String) obj;
@@ -240,7 +236,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("book_id",b_id);
         param.put("map_id",String.valueOf(mapItemId));
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlDeleteUserBooks, param,callBack);
+            getModel().post(GlobalParams.urlDeleteUserBooks, param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -252,7 +248,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("user_book_id",String.valueOf(userBookId));
         param.put("map_id",String.valueOf(mapId));
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlCancelShare,param,callBack);
+            getModel().post(GlobalParams.urlCancelShare,param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){
@@ -267,7 +263,7 @@ public class BookPresenter implements IBookPresenter {
         param.put("user_book_id",String.valueOf(userBookId));
         param.put("map_id",String.valueOf(mapId));
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlCancelShareAndDelBook,param,callBack);
+            getModel().post(GlobalParams.urlCancelShareAndDelBook,param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){

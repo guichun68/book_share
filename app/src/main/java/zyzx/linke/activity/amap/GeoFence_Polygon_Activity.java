@@ -52,7 +52,7 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.CheckPermissionsActivity;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.Const;
 
 /**
  * 多边形地理围栏

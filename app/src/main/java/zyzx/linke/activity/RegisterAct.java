@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
@@ -8,10 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import zyzx.linke.R;
+import zyzx.linke.global.BaseActivity;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CheckPhone;
-import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -19,11 +17,10 @@ import zyzx.linke.utils.UIUtil;
  * Created by austin on 2017/2/19.
  * Desc: 注册页面
  */
-public class RegisteAct extends BaseActivity{
+public class RegisterAct extends BaseActivity {
 
     private AppCompatEditText aetLoginName,aetPhone,aetPsw,aetRePsw;
-    private Button btnRegist;
-    private Dialog progressDialog;
+    private Button btnRegister;
 
     @Override
     protected int getLayoutId() {
@@ -39,9 +36,9 @@ public class RegisteAct extends BaseActivity{
         aetPsw = (AppCompatEditText) findViewById(R.id.aet_psw);
         aetRePsw = (AppCompatEditText) findViewById(R.id.aet_re_psw);
 
-        btnRegist = (Button) findViewById(R.id.btn_regist);
-        btnRegist.setOnClickListener(this);
-        progressDialog = CustomProgressDialog.getNewProgressBar(this);
+        btnRegister = (Button) findViewById(R.id.btn_regist);
+        btnRegister.setOnClickListener(this);
+
     }
 
     @Override
@@ -56,14 +53,14 @@ public class RegisteAct extends BaseActivity{
                 if(!checkInput()){
                     return;
                 }
-                progressDialog.show();
-                GlobalParams.getUserPresenter().regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
+                showProgress("请稍后……");
+                getUserPresenter().regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess(final Object obj) {
-                        RegisteAct.this.runOnUiThread(new Runnable() {
+                        RegisterAct.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                CustomProgressDialog.dismissDialog(progressDialog);
+                                dismissProgress();
                                 Integer code = (Integer) obj;
                                 switch (code){
                                     case 200:
@@ -80,7 +77,7 @@ public class RegisteAct extends BaseActivity{
                                         Snackbar.make(aetLoginName,R.string.usernameOccupation,Snackbar.LENGTH_SHORT).show();
                                         break;
                                     case 500:
-                                        Snackbar.make(btnRegist,R.string.server_err,Snackbar.LENGTH_SHORT).show();
+                                        Snackbar.make(btnRegister,R.string.server_err,Snackbar.LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -94,7 +91,7 @@ public class RegisteAct extends BaseActivity{
                             @Override
                             public void run() {
                                 UIUtil.showToastSafe("访问出错，请稍后再试");
-                                CustomProgressDialog.dismissDialog(progressDialog);
+                                dismissProgress();
                             }
                         });
                     }

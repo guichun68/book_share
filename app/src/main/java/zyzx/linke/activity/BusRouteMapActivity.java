@@ -13,7 +13,7 @@ import com.amap.api.services.route.BusPath;
 import com.amap.api.services.route.BusRouteResult;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.overlay.SchemeBusOverlay;
 
 /***

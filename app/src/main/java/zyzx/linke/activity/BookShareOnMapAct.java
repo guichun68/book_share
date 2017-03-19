@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +20,6 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -56,14 +54,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.AMapCreateItemResultVO;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.overlay.PoiOverlay;
 import zyzx.linke.utils.AMapUtil;
-import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.constant.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -93,7 +91,6 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     private LatLng centerLatLng = null;
     // 中心点marker
     private Marker centerMarker;
-    private Dialog mProgressDialog;//搜索时的不确定进度条
 
     private int currentPage = 0;// 当前页面，从0开始计数
     private PoiSearch.Query query;// Poi查询条件类
@@ -210,7 +207,6 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
         btnOK.setOnClickListener(this);
         btnNextPage.setOnClickListener(this);
 
-        mProgressDialog = CustomProgressDialog.getNewProgressBar(this);
         mTitleText.setText("在地图中分享");
         actv = (AppCompatAutoCompleteTextView)findViewById(R.id.auto_tv);
 
@@ -243,7 +239,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     if(poiItems!=null){
                         poiItems.clear();
                     }else{
-                        poiItems = new ArrayList<PoiItem>();
+                        poiItems = new ArrayList<>();
                     }
                     poiItems.add(item);
                     PoiOverlay poiOverlay = new PoiOverlay(mAMap, poiItems);
@@ -260,7 +256,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     //搜索POI（兴趣点）的回调
     @Override
     public void onPoiSearched(PoiResult result, int rCode) {
-        CustomProgressDialog.dismissDialog(mProgressDialog);// 隐藏对话框
+        dismissProgress();// 隐藏对话框
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             if (result != null && result.getQuery() != null) {// 搜索poi的结果
                 if (result.getQuery().equals(query)) {// 是否是同一条
@@ -312,7 +308,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
     //逆地理编码回调
     @Override
     public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
-        CustomProgressDialog.dismissDialog(mProgressDialog);
+        dismissProgress();
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             if (result != null && result.getRegeocodeAddress() != null
                     && result.getRegeocodeAddress().getFormatAddress() != null) {
@@ -445,15 +441,13 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                     UIUtil.showToastSafe("请选择具体的点");
                     return;
                 }
-                if(mProgressDialog==null){
-                    mProgressDialog= CustomProgressDialog.getNewProgressBar(mContext);
-                }
-                mProgressDialog.show();
+
+                showDefProgress();
 //                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
-                    GlobalParams.getBookPresenter().addBook2Map(mBook, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+                    getBookPresenter().addBook2Map(mBook, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                         @Override
                         public void onSuccess(Object obj) {
-                            CustomProgressDialog.dismissDialog(mProgressDialog);
+                            dismissProgress();
                             String json = (String)obj;
                             if(StringUtil.isEmpty(json)){
                                 UIUtil.showToastSafe("分享失败");
@@ -469,7 +463,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 
                         @Override
                         public void onFailure(Object obj) {
-                            CustomProgressDialog.dismissDialog(mProgressDialog);
+                            dismissProgress();
                             if(obj!=null)
                             UIUtil.showToastSafe(obj.toString());
                         }
@@ -545,7 +539,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
      * 开始进行poi搜索
      */
     protected void doSearchQuery() {
-        mProgressDialog.show();// 显示进度框
+        showDefProgress();// 显示进度框
         currentPage = 0;
         query = new PoiSearch.Query(keyWord, "", GlobalParams.gCurrCity);// 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
         query.setPageSize(10);// 设置每页最多返回多少条poiitem
@@ -561,10 +555,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(mProgressDialog==null){
-            mProgressDialog = CustomProgressDialog.getNewProgressBar(this);
-        }
-        mProgressDialog.show();
+        showDefProgress();
         //通过逆地理编码来获得用户选择点的中文地址信息
         mClickPoint = new LatLonPoint(latLng.latitude,latLng.longitude);
         RegeocodeQuery query = new RegeocodeQuery(mClickPoint, 200,

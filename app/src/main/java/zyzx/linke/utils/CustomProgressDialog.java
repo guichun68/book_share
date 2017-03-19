@@ -3,7 +3,6 @@ package zyzx.linke.utils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -100,7 +99,12 @@ public class CustomProgressDialog {
 		return dialog;
 	}
 
-	public static Dialog getNewProgressBar(Context context){
+	/**
+	 * 没有文字提示的不确定进度条
+	 * @param context
+	 * @return
+	 */
+	public static Dialog getNewProgressBarNoTip(Context context){
 		Dialog dialog = new Dialog(context, R.style.progress_dialog);
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -169,7 +173,7 @@ public class CustomProgressDialog {
 	 * @param msg
      * @return
      */
-	public static Dialog createLoadingDialog(Context context, String msg) {
+	public static Dialog getNewProgressBar(Context context, String msg) {
 
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View v = inflater.inflate(R.layout.loading_dialog, null);// 得到加载view

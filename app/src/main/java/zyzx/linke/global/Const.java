@@ -1,4 +1,4 @@
-package zyzx.linke.constant;
+package zyzx.linke.global;
 
 import android.graphics.Color;
 

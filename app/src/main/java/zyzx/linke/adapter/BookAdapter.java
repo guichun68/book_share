@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.CommonBookDetailAct;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.bean.BookDetail2;
 
 /**

@@ -267,20 +267,6 @@
                     style="@style/rightArrow"/>
             </RelativeLayout>
 
-
-
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_galary"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scrollbars="none">
-
-
-            </android.support.v7.widget.RecyclerView>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

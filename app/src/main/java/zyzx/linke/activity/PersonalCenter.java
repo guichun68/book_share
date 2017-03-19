@@ -7,31 +7,21 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import zxing.CaptureActivity;
 import zyzx.linke.R;
-import zyzx.linke.adapter.GalleryAdapter;
-import zyzx.linke.constant.Const;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.Const;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
-import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -44,14 +34,9 @@ import zyzx.linke.views.UserInfoImagePOP;
  */
 
 public class PersonalCenter extends BaseActivity {
-    private RecyclerView mRecyclerView;//显示我的所有书籍
-    private GalleryAdapter mAdapter;
-    private List<Integer> mDatas;
-    private RelativeLayout mRlScanTypeIn,mRlManualTypeIn;//ISBN扫描、手动录入
     private CircleImageView mCiv;
-    private static UserInfoImagePOP uimp;
+    private UserInfoImagePOP uimp;
     private CapturePhoto capture;
-    private Dialog mProgress;
     private TextView tvUserName;//用户昵称（login_name）
     private TextView tvSignature;
 
@@ -62,18 +47,14 @@ public class PersonalCenter extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        //得到控件
-        mRlScanTypeIn = (RelativeLayout) findViewById(R.id.rl_scan_input);
-        mRlManualTypeIn = (RelativeLayout) findViewById(R.id.rl_manual_input);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_galary);
         mCiv = (CircleImageView) findViewById(R.id.civ);
         tvUserName = (TextView) findViewById(R.id.tv_user_login_name);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         findViewById(R.id.rl_all_checkin).setOnClickListener(this);
         findViewById(R.id.rl_borrow_in).setOnClickListener(this);
+        findViewById(R.id.rl_scan_input).setOnClickListener(this);//扫描
+        findViewById(R.id.rl_manual_input).setOnClickListener(this);//手动录入
         mCiv.setOnClickListener(this);
-        mRlManualTypeIn.setOnClickListener(this);
-        mRlScanTypeIn.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
     }
 
@@ -86,19 +67,6 @@ public class PersonalCenter extends BaseActivity {
             Glide.with(mContext).load(GlobalParams.gUser.getHead_icon()).into(mCiv);
         }
         mTitleText.setText("个人中心");
-        //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        //设置适配器
-        mAdapter = new GalleryAdapter(this, mDatas);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickLitener(new GalleryAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-            }
-        });
     }
 
     @Override
@@ -106,7 +74,6 @@ public class PersonalCenter extends BaseActivity {
         super.onClick(view);
         switch (view.getId()){
             case R.id.rl_scan_input:
-                GlobalParams.gIsPersonCenterScan = true;
                 gotoActivity(CaptureActivity.class,false);
                 break;
             case R.id.rl_manual_input:
@@ -142,7 +109,7 @@ public class PersonalCenter extends BaseActivity {
                     ((TextView) dialogView.findViewById(R.id.acet_signature)).setError("请输入签名");
                     return;
                 }
-                GlobalParams.getUserPresenter().mofiySignature(GlobalParams.gUser.getUserid(),sig,new CallBack(){
+                getUserPresenter().mofiySignature(GlobalParams.gUser.getUserid(),sig,new CallBack(){
 
                     @Override
                     public void onSuccess(Object obj) {
@@ -194,7 +161,7 @@ public class PersonalCenter extends BaseActivity {
      * 弹出窗口监听类
      * @author Austin
      */
-    class itemsOnClick implements View.OnClickListener {
+    private class itemsOnClick implements View.OnClickListener {
 
         private int requestCode;
 
@@ -232,7 +199,6 @@ public class PersonalCenter extends BaseActivity {
     }
 
     private String mHeadeIconImagePath;
-    private File file;// 图片上传 所保存图片file
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -241,14 +207,9 @@ public class PersonalCenter extends BaseActivity {
             if (capture.getActionCode() == CapturePhoto.PICK_IMAGE) {
                 Uri targetUri = data.getData();
                 if (targetUri != null) {
-                    String img_path = FileUtil.uriToFilePath(targetUri,this);
                     if (requestCode == Const.CAMERA_REQUEST_CODE) {
-                        mHeadeIconImagePath = img_path;
-                        img_path = null;
-                        file = new File(mHeadeIconImagePath);
+                        mHeadeIconImagePath = FileUtil.uriToFilePath(targetUri,this);
                         Glide.with(this).load(targetUri).into(mCiv);
-//                        Bitmap bbb = PicConvertUtil.convertToBitmap(mHeadeIconImagePath, 90, 90);
-//                        acivCover.setImageBitmap(bbb);
                     }
                 }
             } else {
@@ -267,8 +228,8 @@ public class PersonalCenter extends BaseActivity {
     }
 
     private void uploadHeadIcon() {
-        showProgress();
-        GlobalParams.getUserPresenter().uploadHeadIcon(GlobalParams.gUser.getUserid(), mHeadeIconImagePath, new CallBack() {
+        showDefProgress();
+        getUserPresenter().uploadHeadIcon(GlobalParams.gUser.getUserid(), mHeadeIconImagePath, new CallBack() {
             @Override
             public void onSuccess(Object obj) {
                 dismissProgress();
@@ -306,13 +267,4 @@ public class PersonalCenter extends BaseActivity {
         });
     }
 
-    private void showProgress(){
-        if(mProgress==null){
-            mProgress = CustomProgressDialog.getNewProgressBar(mContext);
-        }
-        mProgress.show();
-    }
-    private void dismissProgress(){
-        CustomProgressDialog.dismissDialog(mProgress);
-    }
 }

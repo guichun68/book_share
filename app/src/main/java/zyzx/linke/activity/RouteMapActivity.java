@@ -47,8 +47,8 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BusResultListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.overlay.SchemeDriveOverlay;
 import zyzx.linke.overlay.SchemeWalkOverlay;
 import zyzx.linke.utils.CustomProgressDialog;

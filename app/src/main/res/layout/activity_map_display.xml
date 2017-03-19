@@ -5,6 +5,9 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <include layout="@layout/title_bar"
+        android:visibility="gone"/>
+
     <include
         android:id="@+id/routemap_title"
         android:layout_width="match_parent"

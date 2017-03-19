@@ -54,10 +54,11 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllUserBooksListAdapter;
 import zyzx.linke.adapter.DistrictListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.BundleResult;
-import zyzx.linke.constant.Const;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.BundleResult;
+import zyzx.linke.global.Const;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.City;
@@ -65,7 +66,6 @@ import zyzx.linke.model.bean.IndexItem;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.utils.CityUtil;
-import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.utils.Utils;
 import zyzx.linke.views.CityChoosePopupWindow;
@@ -87,12 +87,10 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     private List<TextView> mSidebarMenus = new ArrayList<>();
     private MyActionBarDrawerToggle mActionBarDrawerToggle;
 
-
     private static final String WHOLE_CITY = "全城";
     private final int CITY_CHOOSE_REQUEST_CODE = 10;
     private final int POI_CHOOSE_REQUEST_CODE = 20;
 
-    private LinearLayout mBtnAreaChoose;
     private ImageView mBtnMap;
     private ArrayList<City> mCityList;
     private ArrayList<String> mCityLetterList;
@@ -115,8 +113,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     private LatLonPoint mCenterPoint = new LatLonPoint(39.911823, 116.394829);
     private String mKeywords = "";
     //,跳转到地图页面时携带的兴趣点集合--地图中的点（基本上等同于用户的集合，但不是图书的集合）
-    private ArrayList<CloudItem> mCoudItemList = new ArrayList<CloudItem>();
-    private Dialog mProgressDialog = null;
+    private ArrayList<CloudItem> mCoudItemList = new ArrayList<>();
     private Context mApplicationContext;
     private CityChoosePopupWindow mPopupWindow;
     private ImageView mUpDownArrow;
@@ -207,7 +204,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         // 注册云图搜索监听
         mCloudSearch = new CloudSearch(this);
         mCloudSearch.setOnCloudSearchListener(this);
-        showProgressDialog(Const.LODING_LOCATION);
+        showToastDialog(Const.LODING_LOCATION);
 
         // 注册地理位置回调监听
         mAMapLocationClientOption = new AMapLocationClientOption();
@@ -245,6 +242,12 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            if(GlobalParams.isDrawerOpened){
+                mActionBarDrawerToggle.toggle();
+                return true;
+            }
+
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(
                         this,
@@ -293,7 +296,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         } else {
             mCurrentPageNum = pagenum;
         }
-        showProgressDialog(Const.LODING_GET_DATA);
+        showToastDialog(Const.LODING_GET_DATA);
         SearchBound bound = new SearchBound(new LatLonPoint(
                 mCenterPoint.getLatitude(), mCenterPoint.getLongitude()),
                 Const.SEARCH_AROUND);
@@ -311,7 +314,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     /**
      * 根据选择的城市和行政区进行搜索
      *
-     * @param pagenum
+     * @param pagenum pageNO
      */
     private void searchByLocal(int pagenum) {
         mCurrentSearchType = LOCAL_SEARCH_TYPE;
@@ -320,7 +323,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         } else {
             mCurrentPageNum = pagenum;
         }
-        showProgressDialog(Const.LODING_GET_DATA);
+        showToastDialog(Const.LODING_GET_DATA);
         String localName = "";
         if (mCurrentDistrict != null && !mCurrentDistrict.equals("")
                 && !mCurrentDistrict.equals(WHOLE_CITY)) {
@@ -346,8 +349,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         mCurrentCityDistrictTextview = (TextView) findViewById(R.id.current_city_district_textview);
         mUpDownArrow = (ImageView) findViewById(R.id.up_down_arrow);
 
-        mBtnAreaChoose = (LinearLayout) findViewById(R.id.btn_area_choose);
-        mBtnAreaChoose.setOnClickListener(this);
+        findViewById(R.id.btn_area_choose).setOnClickListener(this);
 
         mBtnMap = (ImageView) findViewById(R.id.btn_map);
         mBtnMap.setOnClickListener(this);
@@ -479,9 +481,9 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 JSONObject result = json.getJSONObject("result");
                 int cityVersion = result.optInt("version");
                 JSONObject data = result.getJSONObject("city");
-                HashMap<String, Integer> tempCityHashMap = new HashMap<String, Integer>();
-                ArrayList<String> temp_city_letter_list = new ArrayList<String>();
-                ArrayList<City> tempCityList = new ArrayList<City>();
+                HashMap<String, Integer> tempCityHashMap = new HashMap<>();
+                ArrayList<String> temp_city_letter_list = new ArrayList<>();
+                ArrayList<City> tempCityList = new ArrayList<>();
                 for (int m = 0; m < mLetterStrs.length; m++) {
                     String key = mLetterStrs[m];
                     JSONArray array = data.optJSONArray(key);
@@ -588,7 +590,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
     /**
      * 根据城市名字，得到该城市下对应的所有行政区的字符串数组
      *
-     * @param city
+     * @param city city
      * @return
      */
     private String[] getDistrictsBasedonCityName(String city) {
@@ -603,18 +605,6 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         mDistrictsOfcityMap.put(city, districtsOfThisCity);
 
         return districtsOfThisCity;
-    }
-
-    private void showProgressDialog(String message) {
-        mProgressDialog = CustomProgressDialog.getToastDialog(this,message);
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.show();
-    }
-
-    private void dissmissProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
     }
 
     @Override
@@ -639,28 +629,28 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 mCoudItemList.addAll(cloudResult);
                parseData(cloudResult);
             } else {
-                dissmissProgressDialog();
+                dismissProgress();
                 Toast.makeText(mApplicationContext,
                         R.string.error_no_more_item, Toast.LENGTH_SHORT).show();
             }
         } else if (errorCode == Const.ERROR_CODE_SOCKE_TIME_OUT) {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_socket_timeout);
 
         } else if (errorCode == Const.ERROR_CODE_UNKNOW_HOST) {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_network);
         } else if (errorCode == Const.ERROR_CODE_FAILURE_AUTH) {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_key);
         } else if (errorCode == Const.ERROR_CODE_SCODE) {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_scode);
         } else if (errorCode == Const.ERROR_CODE_TABLEID) {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),R.string.error_table_id);
         } else {
-            dissmissProgressDialog();
+            dismissProgress();
             UIUtil.showToastSafe(this.getApplicationContext(),UIUtil.getString(R.string.error_other)+errorCode);
         }
 
@@ -685,7 +675,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
             params.add(param);
         }
 
-        GlobalParams.getBookPresenter().getBookInfosByBookIds(params, new CallBack() {
+        getBookPresenter().getBookInfosByBookIds(params, new CallBack() {
             @Override
             public void onSuccess(Object obj) {
                 final List<ResponseBooks> responseBookses = JSON.parseArray((String) obj, ResponseBooks.class);
@@ -693,7 +683,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            dissmissProgressDialog();
+                            dismissProgress();
                             if(isRefresh){
                                 mListViewItems.clear();
                             }
@@ -713,11 +703,11 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                                 }
                             }
                             if (mListViewItems == null || mListViewItems.size() == 0) {
-                                dissmissProgressDialog();
+                                dismissProgress();
                                 // mPullRefreshListView.setMode(Mode.DISABLED);
                                 mLLYNoData.setVisibility(View.VISIBLE);
                             } else {
-                                dissmissProgressDialog();
+                                dismissProgress();
                                 mLLYNoData.setVisibility(View.GONE);
                                 // mPullRefreshListView.setMode(Mode.PULL_FROM_END);
                             }
@@ -767,8 +757,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
      */
     @Override
     public void onLocationChanged(AMapLocation location) {
-        // TODO Auto-generated method stub
-        dissmissProgressDialog();
+        dismissProgress();
         stopLocation();
         if (location == null) {
             // 如果没有地理位置数据返回，则进行默认的搜索
@@ -793,7 +782,6 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
     @Override
     public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-        // TODO Auto-generated method stub
         ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(
                 false, true);
         endLabels.setPullLabel(getResources().getString(R.string.pull_label));

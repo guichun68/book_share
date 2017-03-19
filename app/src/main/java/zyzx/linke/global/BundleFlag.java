@@ -1,4 +1,4 @@
-package zyzx.linke.constant;
+package zyzx.linke.global;
 
 public class BundleFlag {
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.BusRouteDetailActivity;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.utils.SchemeUtil;
 
 /**

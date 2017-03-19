@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
-import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.IUserPresenter;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -19,7 +19,7 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 用户逻辑实现类
  */
 
-public class UserPresenter implements IUserPresenter {
+public class UserPresenter extends IUserPresenter {
 
 
     @Override
@@ -29,7 +29,8 @@ public class UserPresenter implements IUserPresenter {
         param.put("password",password);
 
         try {
-           GlobalParams.getgModel().post(GlobalParams.urlLogin, param, new CallBack() {
+
+           getModel().post(GlobalParams.urlLogin, param, new CallBack() {
                @Override
                public void onSuccess(Object obj) {
                    String response = (String)obj;
@@ -87,7 +88,7 @@ public class UserPresenter implements IUserPresenter {
         HashMap<String,Object> param = new HashMap<>();
         param.put("phone",phone);
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
+            getModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
@@ -127,7 +128,7 @@ public class UserPresenter implements IUserPresenter {
         param.put("password",psw);
         param.put("phone",phone);
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlRegist, param, new CallBack() {
+            getModel().post(GlobalParams.urlRegist, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     String response = (String)obj;
@@ -165,7 +166,7 @@ public class UserPresenter implements IUserPresenter {
             HashMap<String,Object> param = new HashMap<>();
         param.put("uid",uid);
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
+            getModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     if(obj != null){
@@ -192,7 +193,7 @@ public class UserPresenter implements IUserPresenter {
         params.put("head_icon",new File(imagePath));
         params.put("user_id",userId);
         try {
-            GlobalParams.getgModel().post2(GlobalParams.urlUploadHeadIcon,params,viewCallBack);
+            getModel().post2(GlobalParams.urlUploadHeadIcon,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {
@@ -207,7 +208,7 @@ public class UserPresenter implements IUserPresenter {
         param.put("user_id",userid+"");
         param.put("sig",sig);//个性签名
         try {
-            GlobalParams.getgModel().post(GlobalParams.urlSetUserSig,param,callBack);
+            getModel().post(GlobalParams.urlSetUserSig,param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){

@@ -1,11 +1,9 @@
-package zyzx.linke.constant;
+package zyzx.linke.global;
 
 import java.io.IOException;
 import java.util.Properties;
 
 import zyzx.linke.model.IModel;
-import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.presentation.IUserPresenter;
 
 /**
  * 工厂

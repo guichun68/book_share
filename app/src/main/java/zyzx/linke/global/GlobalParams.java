@@ -1,12 +1,10 @@
-package zyzx.linke.constant;
+package zyzx.linke.global;
 
 
 import android.app.Activity;
 
 import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
-import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.presentation.IUserPresenter;
 
 public class GlobalParams {
 
@@ -131,7 +129,7 @@ public class GlobalParams {
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 	}
 
-	public static IBookPresenter getBookPresenter(){
+	static IBookPresenter getBookPresenter(){
 		if(GlobalParams.gBookPresenter!=null){
 			return  gBookPresenter;
 		}
@@ -143,7 +141,7 @@ public class GlobalParams {
 			return null;
 		}
 	}
-	public static IModel getgModel(){
+	static IModel getgModel(){
 		if(GlobalParams.gModel!=null){
 			return  gModel;
 		}
@@ -156,7 +154,7 @@ public class GlobalParams {
 		}
 	}
 
-	public static IUserPresenter getUserPresenter(){
+	static IUserPresenter getUserPresenter(){
 		if(GlobalParams.gUserPresenter!=null){
 			return  gUserPresenter;
 		}

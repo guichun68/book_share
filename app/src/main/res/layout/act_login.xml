@@ -142,6 +142,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:contextClickable="true"
             android:text="@string/about_us"
             android:textSize="18sp" />
 

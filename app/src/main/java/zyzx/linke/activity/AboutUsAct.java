@@ -9,14 +9,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import zyzx.linke.R;
+import zyzx.linke.global.BaseActivity;
 import zyzx.linke.utils.AppUtil;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.GlobalParams;
 
 /**
  * Created by austin on 2017/2/19.
  * Desc: 关于临客
  */
-public class AboutUsAct extends BaseActivity{
+public class AboutUsAct extends BaseActivity {
     private WebView mWebView;
     private FrameLayout loading_view;
 

@@ -1,10 +1,8 @@
 package zyzx.linke.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.utils.AMApCloudImageCache;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CallPhonePopupWindow;
@@ -50,7 +48,6 @@ public class DetailActivity extends CheckPermissionsActivity {
 	private CloudItem mCloudItem;
 	private TextView mCloudName;
 	private TextView mCloudLocation;
-	private TextView mTitletv;
 	private NetworkImageView mDetailImagePre;
 	private TextView mImageSize;
 	private LinearLayout mLLYDetailProps;
@@ -71,8 +68,6 @@ public class DetailActivity extends CheckPermissionsActivity {
 	}
 
 	private void setUpInteractiveControls() {
-
-		configureTitle();
 
 		mCloudName = (TextView) findViewById(R.id.detail_poi_name);
 		mCloudLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
@@ -113,9 +108,6 @@ public class DetailActivity extends CheckPermissionsActivity {
 		}
 	}
 
-	private void configureTitle() {
-		mTitletv = (TextView) findViewById(R.id.title_des_text);
-	}
 
 	private void getIntentData() {
 		Intent intent = getIntent();
@@ -132,7 +124,7 @@ public class DetailActivity extends CheckPermissionsActivity {
 	/**
 	 * 点击图片 进入到gallery页面 传输这个云图数据对象
 	 * 
-	 * @param view
+	 * @param view view
 	 */
 	public void OnImageLayoutClick(View view) {
 		if (mCloudItem.getCloudImage() == null
@@ -227,10 +219,13 @@ public class DetailActivity extends CheckPermissionsActivity {
 
 		tvData.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources()
 				.getDimension(R.dimen.identify_text_size));
-		tvTitle.setTextColor(getResources().getColor(
-				R.color.identify_title_text));
+		/*tvTitle.setTextColor(getResources().getColor(
+				R.color.identify_title_text));*/
+		tvTitle.setTextColor(ContextCompat.getColor(this,R.color.identify_title_text));
+		tvData.setTextColor(ContextCompat.getColor(this,R.color.identify_content_text));
+/*
 		tvData.setTextColor(getResources().getColor(
-				R.color.identify_content_text));
+				R.color.identify_content_text));*/
 
 		tvTitle.setText(key);
 		tvData.setText(value);

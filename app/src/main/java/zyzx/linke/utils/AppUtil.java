@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.GlobalParams;
 
 public class AppUtil {
 //	public static DbUtils db = DbUtils.create(GlobalParams.MAIN,

@@ -18,7 +18,6 @@
         android:gravity="center"
         android:text="删除"
         android:textColor="@color/watermark_hint"
-        android:textStyle="bold"
         android:clickable="true"
         android:textSize="19sp" />
 
@@ -41,7 +40,6 @@
         android:gravity="center"
         android:clickable="true"
         android:textColor="@color/watermark_hint"
-        android:textStyle="bold"
         android:text="更改状态"
         android:textSize="19sp" />
 

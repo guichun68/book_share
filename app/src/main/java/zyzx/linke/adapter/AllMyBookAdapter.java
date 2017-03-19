@@ -1,18 +1,10 @@
 package zyzx.linke.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,15 +12,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.activity.CommonBookDetailAct;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.GlobalParams;
-import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.StringUtil;
-import zyzx.linke.utils.UIUtil;
-
-import static zyzx.linke.utils.UIUtil.getResources;
 
 /**
  * Created by austin on 2017/3/16.

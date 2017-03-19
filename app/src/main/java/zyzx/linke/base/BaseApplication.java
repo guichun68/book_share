@@ -9,7 +9,7 @@ import android.os.Looper;
 
 import com.umeng.analytics.MobclickAgent;
 
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.GlobalParams;
 
 
 /**

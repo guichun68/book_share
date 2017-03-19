@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.services.cloud.CloudImage;
 import com.amap.api.services.cloud.CloudItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -21,7 +20,7 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.DetailActivity;
-import zyzx.linke.constant.BundleFlag;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.utils.AMApCloudImageCache;
 import zyzx.linke.utils.Utils;
 

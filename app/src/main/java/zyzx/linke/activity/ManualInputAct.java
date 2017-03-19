@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
@@ -22,9 +24,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.Const;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
+import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.utils.CapturePhoto;
@@ -40,7 +43,8 @@ import zyzx.linke.views.UserInfoImagePOP;
  */
 
 public class ManualInputAct extends BaseActivity {
-    private Dialog progressDialog;
+    private BookHandler handler = new BookHandler();
+    private static final int BOOKWHAT = 200, BOOKNOTGET = 400;
     private TextView tvSave;
     private AppCompatEditText acetBookName,acetISBN,acetAuthor,acetPublisher,acetIntro;
     private AppCompatImageView acivCover;
@@ -56,7 +60,6 @@ public class ManualInputAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        progressDialog = CustomProgressDialog.getNewProgressBar(mContext);
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);
         acetBookName = (AppCompatEditText) findViewById(R.id.acet_book_name);
         acetISBN = (AppCompatEditText) findViewById(R.id.acet_isbn);
@@ -86,13 +89,76 @@ public class ManualInputAct extends BaseActivity {
                 if(!checkInput()){
                     return;
                 }
-                saveBook();
+                showDefProgress();
+                if(!StringUtil.isEmpty(acetISBN.getText().toString())){
+                    getBookFromDouban(acetISBN.getText().toString());
+                }else{
+                    saveBook();
+                }
                 break;
             case R.id.aciv_cover:
                 uimp = new UserInfoImagePOP(this, new itemsOnClick(Const.CAMERA_REQUEST_CODE));
                 uimp.showAtLocation(findViewById(R.id.ll_munual), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
                         0);
                 break;
+        }
+    }
+
+    /**
+     * 根据isbn尝试从豆瓣获取书籍
+     * @param isbn
+     */
+    private void getBookFromDouban(String isbn) {
+        getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
+            @Override
+            public void onSuccess(Object obj) {
+                dismissProgress();
+                if (obj == null) {
+                    //"未能在豆瓣获取书籍信息"
+                    handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                    return;
+                }
+                BookDetail2 book = (BookDetail2) obj;
+                Message msg = handler.obtainMessage();
+                msg.obj = book;
+                msg.what = BOOKWHAT;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(Object obj) {
+                dismissProgress();
+                UIUtil.showTestLog("zyzx failure", (String) obj);
+                handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+            }
+        });
+
+    }
+
+    class BookHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            dismissProgress();
+            switch (msg.what) {
+                case BOOKNOTGET:
+                    //未能在豆瓣获取该图书，决定将书籍添加到本地数据库
+                    saveBook();
+                    break;
+
+                case BOOKWHAT://成功获取图书信息
+                    mBook = (BookDetail2) msg.obj;
+                    CustomProgressDialog.getPromptDialog(mContext, "系统已自动匹配到该书籍详情,点击确定为您跳转到详情页,直接添加到我的书架即可。", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(BundleFlag.BOOK, mBook);
+                            gotoActivity(ScanBookDetailAct.class, true, bundle);
+                        }
+                    }).show();
+                    break;
+
+            }
         }
     }
 
@@ -207,7 +273,6 @@ public class ManualInputAct extends BaseActivity {
     }
 
     public void saveBook() {
-
         mBook = new BookDetail2();
         HashMap<String,Object> params = new HashMap<>();
         mBook.setTitle(acetBookName.getText().toString().trim());
@@ -236,11 +301,12 @@ public class ManualInputAct extends BaseActivity {
         params.put("user_id",GlobalParams.gUser.getUserid());
         params.put("book", JSON.toJSONString(mBook));
         mBook.setFromDouban(false);
-        progressDialog.show();
-        GlobalParams.getBookPresenter().uploadBook(params, new CallBack() {
+        showDefProgress();
+
+        getBookPresenter().uploadBook(params, new CallBack() {
             @Override
             public void onSuccess(final Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
+                dismissProgress();
                 UIUtil.showToastSafe("保存成功");
                 final String json = (String)obj;
                 runOnUiThread(new Runnable() {
@@ -287,11 +353,12 @@ public class ManualInputAct extends BaseActivity {
 
             @Override
             public void onFailure(Object obj) {
-                CustomProgressDialog.dismissDialog(progressDialog);
+                dismissProgress();
                 UIUtil.showToastSafe("上传失败");
             }
         });
     }
+
     private Dialog promtDialog;
     public void showDialog(String msg){
         if(promtDialog!=null){
@@ -318,7 +385,6 @@ public class ManualInputAct extends BaseActivity {
                 if(askDialog!=null)
                     askDialog.dismiss();
                 Bundle bundle = new Bundle();
-//                bundle.putParcelable("book",mBook);
                 bundle.putSerializable(BundleFlag.BOOK,mBook);
 
                 gotoActivity(BookShareOnMapAct.class,true,bundle);
@@ -334,26 +400,6 @@ public class ManualInputAct extends BaseActivity {
         };
 
         askDialog =  CustomProgressDialog.getPromptDialog2Btn(this, msg, "分享", "不需要", myOk,myCancel);
-
-
-        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("添加成功,是否在地图分享此书?");
-        dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("book",mBook);
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
-            }
-        });
-        dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });*/
         askDialog.show();
     }
 

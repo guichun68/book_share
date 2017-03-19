@@ -32,7 +32,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.GlobalParams;
 
 
 /**

@@ -51,9 +51,9 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.DistrictListAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.BundleResult;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.BundleResult;
+import zyzx.linke.global.Const;
 import zyzx.linke.adapter.CloudItemListAdapter;
 import zyzx.linke.model.bean.City;
 import zyzx.linke.utils.CityUtil;

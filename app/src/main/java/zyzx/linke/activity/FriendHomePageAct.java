@@ -3,10 +3,7 @@ package zyzx.linke.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -21,8 +18,8 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BookAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.User;
@@ -37,7 +34,6 @@ import zyzx.linke.views.CircleImageView;
 
 public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener<ListView> {
 
-    private RelativeLayout rlLocation;
     private CircleImageView ivHeadIcon;
     private TextView tvLoginname;
     private TextView tvLocation;
@@ -47,8 +43,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
 
     private BookAdapter mAdapter;
     private CloudItem mCloudItem;
-    private String headIconUrl;
-    private String nickName,signature;
     private int pageNum = 0;
     private String mAddress;//中文地址描述
     private User mUser;
@@ -62,13 +56,12 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     @Override
     protected void initView(Bundle saveInstanceState) {
         mTitleText.setText("好友主页");
-        rlLocation = (RelativeLayout) findViewById(R.id.rl_location);
         ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);
         tvLoginname = (TextView) findViewById(R.id.tv_loginname);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         tvLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
-        rlLocation.setOnClickListener(this);
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+        findViewById(R.id.rl_location).setOnClickListener(this);
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         // Add an end-of-list listener
@@ -100,7 +93,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         if(mCloudItem!=null){
             tvLocation.setText(mAddress);
         }
-        GlobalParams.getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
+        getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
             @Override
             public void onSuccess(Object obj) {
                 String userJson = (String) obj;
@@ -134,7 +127,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     }
 
     public void getBooks(String uid,int pageNum){
-        GlobalParams.getBookPresenter().getUserBooks(uid, pageNum, new CallBack() {
+        getBookPresenter().getUserBooks(uid, pageNum, new CallBack() {
             @Override
             public void onSuccess(final Object obj) {
                 runOnUiThread(new Runnable() {

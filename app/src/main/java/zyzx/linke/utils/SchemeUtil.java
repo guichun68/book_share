@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.constant.Const;
+import zyzx.linke.global.Const;
 
 public class SchemeUtil {
 	public static String getBusPathTitle(BusPath busPath) {

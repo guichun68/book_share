@@ -30,11 +30,12 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllMyBookAdapter;
-import zyzx.linke.constant.BundleFlag;
-import zyzx.linke.constant.GlobalParams;
+import zyzx.linke.global.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.GlobalParams;
+import zyzx.linke.global.IBookPresenter;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
-import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -52,16 +53,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private int mPageNum;
     private PopupWindow pop;
     private int mWindownWidth;
-    private Dialog progress;
     private boolean isLoadingMore;//是否是加载更多的动作
     private IBookPresenter mPresenter;
-
-    private IBookPresenter getPresenter(){
-        if(mPresenter==null){
-            mPresenter=(GlobalParams.getBookPresenter());
-        }
-        return mPresenter;
-    }
 
     @Override
     protected int getLayoutId() {
@@ -205,8 +198,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
             CustomProgressDialog.dismissDialog(mPromptDialog);
             switch (operId){
                 case REMOVE_FROM_BOOKRACK://从书架删除
-                    showProgress();
-                    getPresenter().deleteUserBook(GlobalParams.gUser.getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
+                    showDefProgress();
+                    getBookPresenter().deleteUserBook(GlobalParams.gUser.getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
 
                         @Override
                         public void onSuccess(final Object obj) {
@@ -251,9 +244,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     startActivityForResult(in,tempPosition);
                     break;
                 case CANCEL_SHARE://取消分享
-                    showProgress();
+                    showDefProgress();
                     pop.dismiss();
-                    getPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
+                    getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
                         public void onSuccess(final Object obj) {
                             runOnUiThread(new Runnable() {
@@ -291,8 +284,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     });
                     break;
                 case CANCEL_AND_REMOVE://取消分享并从书架移除
-                    showProgress();
-                    getPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
+                    showDefProgress();
+                    getBookPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
                         public void onSuccess(final Object obj) {
                             runOnUiThread(new Runnable() {
@@ -355,7 +348,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     @Override
     protected void initData() {
         mBooks.clear();
-        showProgress();
+        showDefProgress();
         getBooks(GlobalParams.gUser.getUserid(), 0);
     }
 
@@ -382,7 +375,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
      * @param pageNum pageNo
      */
     private void getBooks(Integer userid, int pageNum) {
-        getPresenter().getMyBooks(userid, pageNum, new CallBack() {
+        getBookPresenter().getMyBooks(userid, pageNum, new CallBack() {
             @Override
             public void onSuccess(final Object obj) {
                 runOnUiThread(new Runnable() {
@@ -420,16 +413,6 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 UIUtil.showToastSafe("未能获取书籍信息!");
             }
         });
-    }
-
-    private void showProgress(){
-        if(progress == null){
-            progress = CustomProgressDialog.getNewProgressBar(mContext);
-        }
-        progress.show();
-    }
-    private void dismissProgress(){
-        CustomProgressDialog.dismissDialog(progress);
     }
 
     @Override
