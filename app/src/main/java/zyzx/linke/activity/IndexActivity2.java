@@ -55,11 +55,11 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllUserBooksListAdapter;
 import zyzx.linke.adapter.DistrictListAdapter;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.BundleResult;
 import zyzx.linke.global.Const;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.City;
@@ -258,9 +258,9 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                         Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
-                MobclickAgent.onKillProcess(mContext);
+//                MobclickAgent.onKillProcess(mContext);
                 finish();
-                System.exit(0);
+//                System.exit(0);
             }
             return true;
         }

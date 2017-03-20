@@ -3,9 +3,7 @@ package zyzx.linke.global;
 import java.util.HashMap;
 import java.util.List;
 
-import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 

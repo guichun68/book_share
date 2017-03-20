@@ -17,9 +17,9 @@ import com.bumptech.glide.Glide;
 
 import zxing.CaptureActivity;
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.Const;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;

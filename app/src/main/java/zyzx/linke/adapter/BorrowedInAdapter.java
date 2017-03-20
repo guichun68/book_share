@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
 
 /**
@@ -55,9 +56,9 @@ public class BorrowedInAdapter extends BaseAdapter {
         }else{
             holder = (MyBookViewHolder) convertView.getTag();
         }
-
-        if(!StringUtil.isEmpty(getItem(position).getBook().getImage_medium())){
-            Glide.with(context).load(getItem(position).getBook().getImage_medium()).into(holder.ivCover);
+        String imageUrl = AppUtil.getMostDistinctPicUrl(getItem(position).getBook());
+        if(imageUrl!=null){
+            Glide.with(context).load(imageUrl).into(holder.ivCover);
         }else{
             Glide.with(context).load(R.mipmap.defaultcover).asBitmap().into(holder.ivCover) ;
         }

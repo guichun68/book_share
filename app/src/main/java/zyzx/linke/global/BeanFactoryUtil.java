@@ -3,6 +3,7 @@ package zyzx.linke.global;
 import java.io.IOException;
 import java.util.Properties;
 
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.IModel;
 
 /**

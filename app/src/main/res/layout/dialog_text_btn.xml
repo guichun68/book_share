@@ -2,10 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:background="@drawable/bg_allyuanjiao"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温馨提示"
+        android:layout_gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"/>
 
     <!-- 只有文字和一个按钮 -->
 
@@ -13,20 +24,26 @@
         android:id="@+id/dialog_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dip"
-        android:gravity="center"
-        android:text=""
-        android:textSize="19sp" />
+        android:layout_marginTop="20dip"
+        android:gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        tools:text="系统已自动检测到书籍《光荣的岁月》，已经为您自动添加成功，您可以直接在详情页添加到书库。"
+        />
+
+    <View
+        style="@style/line"/>
 
     <Button
         android:id="@+id/dialog_btn"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip"
-        android:layout_marginTop="60dip"
-        android:background="@drawable/btn_sel"
+        android:background="@drawable/btn_sel2"
         android:text="@string/confirm"
-        android:textColor="@android:color/white"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@android:color/holo_blue_light"
         android:textSize="20sp" />
 
 </LinearLayout>

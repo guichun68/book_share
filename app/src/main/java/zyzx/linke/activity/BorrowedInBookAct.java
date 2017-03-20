@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BorrowedInAdapter;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.UIUtil;
@@ -41,7 +41,7 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        mTitleText.setText("我的书架");
+        mTitleText.setText("我借入的书");
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);//上拉加载更多

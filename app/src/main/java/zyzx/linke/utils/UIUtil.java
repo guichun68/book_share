@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 import zyzx.linke.base.BaseApplication;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 
 
 public class UIUtil {

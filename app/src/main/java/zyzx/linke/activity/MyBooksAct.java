@@ -30,9 +30,9 @@ import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllMyBookAdapter;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.CustomProgressDialog;

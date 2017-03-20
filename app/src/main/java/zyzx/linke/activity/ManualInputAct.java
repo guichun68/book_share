@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.utils.CapturePhoto;

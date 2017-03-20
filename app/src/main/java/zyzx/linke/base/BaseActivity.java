@@ -1,4 +1,4 @@
-package zyzx.linke.global;
+package zyzx.linke.base;
 
 import android.app.Dialog;
 import android.view.View;
@@ -9,7 +9,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.BaseParentActivity;
-import zyzx.linke.model.IModel;
+import zyzx.linke.global.IBookPresenter;
+import zyzx.linke.global.IUserPresenter;
 import zyzx.linke.utils.CustomProgressDialog;
 
 

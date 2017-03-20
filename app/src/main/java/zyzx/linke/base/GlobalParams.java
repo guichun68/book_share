@@ -1,8 +1,11 @@
-package zyzx.linke.global;
+package zyzx.linke.base;
 
 
 import android.app.Activity;
 
+import zyzx.linke.global.BeanFactoryUtil;
+import zyzx.linke.global.IBookPresenter;
+import zyzx.linke.global.IUserPresenter;
 import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
 

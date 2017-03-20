@@ -20,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BeanFactoryUtil;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
@@ -250,7 +250,7 @@ public class LoginAct extends BaseActivity {
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
-                System.exit(0);
+//                System.exit(0);
             }
             return true;
         }

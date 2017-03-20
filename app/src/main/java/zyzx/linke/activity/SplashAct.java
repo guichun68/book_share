@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.utils.UIUtil;
 
 /**

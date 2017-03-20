@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CheckPhone;
 import zyzx.linke.utils.StringUtil;

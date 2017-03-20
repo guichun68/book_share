@@ -42,9 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.bean.MarkerStatus;
 import zyzx.linke.utils.UIUtil;
 

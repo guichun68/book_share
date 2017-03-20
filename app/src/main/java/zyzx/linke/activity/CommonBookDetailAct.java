@@ -18,12 +18,13 @@ import com.bumptech.glide.Glide;
 import java.util.HashMap;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -218,8 +219,9 @@ public class CommonBookDetailAct extends BaseActivity {
     }
 
     private void refreshBookInfo() {
-        if (mBook.getImage() != null) {
-            Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
+        String imageUrl = AppUtil.getMostDistinctPicUrl(mBook);
+        if(imageUrl != null){
+            Glide.with(mContext).load(imageUrl).into(ivBookImage);
         }
         tvTitle.setText(mBook.getTitle());
         //作者------------------------------

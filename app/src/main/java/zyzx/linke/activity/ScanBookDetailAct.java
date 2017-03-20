@@ -15,12 +15,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -213,8 +214,9 @@ public class ScanBookDetailAct extends BaseActivity {
                 case BOOKWHAT://成功获取图书信息
                     mBook = (BookDetail2) msg.obj;
                     //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
-                    if (mBook.getImage() != null) {
-                        Glide.with(mContext).load(mBook.getImage()).into(ivBookImage);
+                    String imageUrl = AppUtil.getMostDistinctPicUrl(mBook);
+                    if(imageUrl!=null){
+                        Glide.with(mContext).load(imageUrl).into(ivBookImage);
                     }
                     tvTitle.setText(mBook.getTitle());
                     StringBuilder sb = new StringBuilder();
@@ -257,5 +259,6 @@ public class ScanBookDetailAct extends BaseActivity {
             }
         }
     }
+
 
 }

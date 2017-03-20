@@ -11,7 +11,7 @@ import java.util.HashMap;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.global.IUserPresenter;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 /**

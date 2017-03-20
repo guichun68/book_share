@@ -18,7 +18,7 @@ import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BookAdapter;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;

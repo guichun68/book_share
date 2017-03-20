@@ -1,5 +1,6 @@
 package zyzx.linke.global;
 
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.IModel;
 
 /**

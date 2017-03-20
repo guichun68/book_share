@@ -21,7 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
+import zyzx.linke.model.bean.BookDetail2;
 
 public class AppUtil {
 //	public static DbUtils db = DbUtils.create(GlobalParams.MAIN,
@@ -382,5 +383,29 @@ public class AppUtil {
 			return true;
 		}
 	}
+
+	/**
+	 * 得到最清晰的图片的url
+	 * @return
+	 */
+	public static String getMostDistinctPicUrl(BookDetail2 book) {
+		if(!StringUtil.isEmpty(book.getImages().getLarge())){
+			return book.getImages().getLarge();
+		}
+		if(!StringUtil.isEmpty(book.getImage())){
+			return book.getImage();
+		}
+		if(!StringUtil.isEmpty(book.getImages().getMedium())){
+			return book.getImages().getMedium();
+		}
+		if(!StringUtil.isEmpty(book.getImage_medium())){
+			return book.getImage_medium();
+		}
+		if(!StringUtil.isEmpty(book.getImages().getSmall())){
+			return book.getImages().getSmall();
+		}
+		return null;
+	}
+
 
 }

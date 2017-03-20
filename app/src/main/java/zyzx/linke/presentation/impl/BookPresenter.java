@@ -15,7 +15,7 @@ import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.global.IBookPresenter;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 

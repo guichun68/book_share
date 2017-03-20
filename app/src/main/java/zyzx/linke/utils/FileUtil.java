@@ -16,7 +16,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 
 /**
  * Created by austin on 2017/3/13.

@@ -9,9 +9,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import zyzx.linke.R;
-import zyzx.linke.global.BaseActivity;
+import zyzx.linke.base.BaseActivity;
 import zyzx.linke.utils.AppUtil;
-import zyzx.linke.global.GlobalParams;
+import zyzx.linke.base.GlobalParams;
 
 /**
  * Created by austin on 2017/2/19.
