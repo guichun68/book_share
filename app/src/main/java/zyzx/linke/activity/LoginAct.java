@@ -14,6 +14,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import zyzx.linke.global.BaseActivity;
 import zyzx.linke.global.BeanFactoryUtil;
 import zyzx.linke.global.GlobalParams;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -33,6 +35,7 @@ import zyzx.linke.utils.UIUtil;
  */
 public class LoginAct extends BaseActivity {
     private AppCompatEditText aetLoginName,aetPsw;
+    private CheckBox cbAutoLogin;
 
     @Override
     protected int getLayoutId() {
@@ -44,6 +47,7 @@ public class LoginAct extends BaseActivity {
         mTitleText.setText("用户登录");
         mBackBtn.setVisibility(View.INVISIBLE);
 
+        cbAutoLogin = (CheckBox) findViewById(R.id.cb_auto_login);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_sms_login).setOnClickListener(this);
         findViewById(R.id.tv_forget_psw).setOnClickListener(this);
@@ -69,6 +73,10 @@ public class LoginAct extends BaseActivity {
 
     @Override
     protected void initData() {
+        if(SharedPreferencesUtils.getBoolean(SharedPreferencesUtils.AUTO_LOGIN)){
+            ((Button)findViewById(R.id.btn_login)).performClick();
+        }
+
     }
 
     @Override
@@ -84,6 +92,11 @@ public class LoginAct extends BaseActivity {
                     @Override
                     public void onSuccess(Object obj) {
                         dismissProgress();
+                        if(cbAutoLogin.isChecked()){
+                            SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,true);
+                            SharedPreferencesUtils.putString(SharedPreferencesUtils.LAST_LOGIN_ID, aetLoginName.getText().toString());
+                            SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW,aetPsw.getText().toString());
+                        }
                         gotoActivity(IndexActivity2.class,true);
                     }
 

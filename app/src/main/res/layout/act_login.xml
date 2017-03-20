@@ -89,6 +89,15 @@
 
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/cb_auto_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingStart="5dp"
+        android:layout_marginTop="15dp"
+        android:checked="true"
+        android:text="下次自动登陆"/>
 
     <Button
         android:id="@+id/btn_login"

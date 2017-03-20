@@ -40,6 +40,7 @@ import com.amap.api.services.core.LatLonPoint;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +67,7 @@ import zyzx.linke.model.bean.IndexItem;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.model.bean.ResponseBooks;
 import zyzx.linke.utils.CityUtil;
+import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.utils.Utils;
 import zyzx.linke.views.CityChoosePopupWindow;
@@ -172,6 +174,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        GlobalParams.isDrawerOpened = false;
         mApplicationContext = this.getApplicationContext();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawerlayout);
@@ -255,6 +258,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                         Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
+                MobclickAgent.onKillProcess(mContext);
                 finish();
                 System.exit(0);
             }
@@ -405,6 +409,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 mActionBarDrawerToggle.toggle();
                 break;
             case R.id.tv_log_out:
+                SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
                 gotoActivity(LoginAct.class,true);
                 break;
             default:
