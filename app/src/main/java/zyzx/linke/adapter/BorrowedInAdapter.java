@@ -17,15 +17,15 @@ import zyzx.linke.utils.StringUtil;
 
 /**
  * Created by austin on 2017/3/16.
- * Desc: MyBooksAct 页面中我的所有的书籍列表的Adapter
+ * Desc: BorrowedBookAct 页面中我借入的书籍Adapter
  */
 
-public class AllMyBookAdapter extends BaseAdapter {
+public class BorrowedInAdapter extends BaseAdapter {
 
     ArrayList<MyBookDetailVO> books;
     private Context context;
 
-    public AllMyBookAdapter(Context context,ArrayList<MyBookDetailVO> books){
+    public BorrowedInAdapter(Context context, ArrayList<MyBookDetailVO> books){
         this.context = context;
         this.books = books;
     }
@@ -81,7 +81,7 @@ public class AllMyBookAdapter extends BaseAdapter {
 
     class MyBookViewHolder {
         private final View root;
-        //三种不同状态：在库、已分享、已借出
+        //四种不同状态：在库、已分享、已借出、已借入
         private final ImageView ivInStock,ivSharing,ivBorrowedOut,ivBorrowedIn;
         private final ImageView ivCover;//图书封面
         private final TextView tvBookName;
@@ -102,7 +102,7 @@ public class AllMyBookAdapter extends BaseAdapter {
 
         /**
          * 更新书籍状态
-         * @param state 1:在库， 2:分享中， 3:已借出
+         * @param state 1:在库， 2:分享中， 3:已借出 ,4:已借入
          */
         public void refreshBookState(int state){
             switch (state){
@@ -131,10 +131,10 @@ public class AllMyBookAdapter extends BaseAdapter {
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     break;
                 default:
-                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
+                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
+                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
             }
         }
     }

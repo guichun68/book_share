@@ -88,5 +88,11 @@ public abstract class IBookPresenter extends IPresenter{
      */
     public abstract void cancelShareAndDelBook(Integer userBookId,Integer mapId,CallBack callBack);
 
-
+    /**
+     * 获取我所有的借入的书籍
+     * @param userid
+     * @param pageNum
+     * @param callBack
+     */
+    public abstract void getMyBorrowedInBooks(Integer userid, int pageNum, CallBack callBack);
 }

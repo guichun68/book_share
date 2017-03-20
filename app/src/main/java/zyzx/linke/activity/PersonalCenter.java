@@ -91,6 +91,7 @@ public class PersonalCenter extends BaseActivity {
                 gotoActivity(MyBooksAct.class,false);
                 break;
             case R.id.rl_borrow_in://已借入的书
+                gotoActivity(BorrowedInBookAct.class,false);
                 break;
         }
     }

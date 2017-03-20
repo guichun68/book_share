@@ -80,6 +80,9 @@
             android:name=".activity.FriendHomePageAct"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.BorrowedInBookAct"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.KeywordListActivity"
             android:screenOrientation="portrait"

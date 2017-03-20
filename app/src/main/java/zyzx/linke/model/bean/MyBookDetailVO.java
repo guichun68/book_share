@@ -19,6 +19,7 @@ public class MyBookDetailVO implements Serializable{
  	 */
 	private Integer status;//书籍当前状态,取值如上
 	private Integer userBookId;//在zyzx_usr_books表记录的id(主键)
+	private Integer relatedUserId;//关联到的用户，如图书状态为借入，则此处为从谁借入；如为借出，则表示借出给谁
 	private Integer mapId;//在云图中的id
 	
 	public BookDetail2 getBook() {
@@ -51,5 +52,13 @@ public class MyBookDetailVO implements Serializable{
 
 	public void setMapId(Integer mapId) {
 		this.mapId = mapId;
+	}
+
+	public Integer getRelatedUserId() {
+		return relatedUserId;
+	}
+
+	public void setRelatedUserId(Integer relatedUserId) {
+		this.relatedUserId = relatedUserId;
 	}
 }

@@ -20,7 +20,7 @@ public class GlobalParams {
 	public static String image_file_location;//图片本地存储地址
 
 
-	static{
+    static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
 
@@ -80,6 +80,11 @@ public class GlobalParams {
 	 */
 	public static String urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
 	/**
+	 * 得到我借入的书籍
+	 */
+	public static String urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
+
+	/**
 	 * 注册
 	 */
 	public static String urlRegist = GlobalParams.BASE_URL+"/zyzx/regist.action";
@@ -127,6 +132,7 @@ public class GlobalParams {
 		urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
+		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

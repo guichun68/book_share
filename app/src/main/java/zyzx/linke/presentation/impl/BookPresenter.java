@@ -272,4 +272,35 @@ public class BookPresenter extends IBookPresenter {
         }
 
     }
+
+    @Override
+    public void getMyBorrowedInBooks(Integer userid, int pageNum,final CallBack viewCallBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",String.valueOf(userid));
+        param.put("page_num",String.valueOf(pageNum));
+        try {
+            getModel().post(GlobalParams.urlGetMyBorrowedInBooks, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    String json = (String) obj;
+                    if(StringUtil.isEmpty(json)){
+                        if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                        return;
+                    }
+                    List<MyBookDetailVO> myBookDetailVOs = JSON.parseArray(json, MyBookDetailVO.class);
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(myBookDetailVOs);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+                    if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+        }
+    }
 }

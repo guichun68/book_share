@@ -33,7 +33,6 @@ import zyzx.linke.adapter.AllMyBookAdapter;
 import zyzx.linke.global.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.GlobalParams;
-import zyzx.linke.global.IBookPresenter;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -52,9 +51,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private ArrayList<MyBookDetailVO> mBooks;
     private int mPageNum;
     private PopupWindow pop;
-    private int mWindownWidth;
+    private int mWindowWidth;
     private boolean isLoadingMore;//是否是加载更多的动作
-    private IBookPresenter mPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -66,7 +64,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        mWindownWidth = size.x;
+        mWindowWidth = size.x;
 //        mWindowHeight = size.y;
 
         llRoot = (LinearLayout) findViewById(R.id.ll_root);
@@ -92,7 +90,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
-                pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindownWidth / 2 - pop.getWidth() / 2, location[1] + UIUtil.dip2px(10));
+                pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - pop.getWidth() / 2, location[1] + UIUtil.dip2px(10));
 
                 AlphaAnimation aa = new AlphaAnimation(0.2f, 1.0f);
                 aa.setDuration(100);
