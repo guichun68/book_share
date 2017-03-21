@@ -422,6 +422,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         startActivityForResult(intent, POI_CHOOSE_REQUEST_CODE);
     }
     private void gotoMapActivity() {
+        
         Intent intent = new Intent(this, MapActivity.class);
         intent.putParcelableArrayListExtra(BundleFlag.CLOUD_ITEM_LIST,mCoudItemList);
         startActivity(intent);
