@@ -37,3 +37,6 @@
 -keep class org.bitlet.** {*;}
 -keep class org.slf4j.** {*;}
 -keep class ch.imvs.** {*;}
+
+-keep class com.hyphenate.** {*;}
+-dontwarn  com.hyphenate.**

@@ -40,6 +40,8 @@ import com.amap.api.services.core.LatLonPoint;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -409,11 +411,35 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 break;
             case R.id.tv_log_out:
                 SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
-                gotoActivity(LoginAct.class,true);
+                logoutEaseMob();
+                
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 注销环信登录
+     */
+    private void logoutEaseMob() {
+        EMClient.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                gotoActivity(LoginAct.class,true);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                UIUtil.showToastSafe("注销失败，请稍后重试！");
+                UIUtil.showTestLog("zyzx","环信注销登录失败："+i+s);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
     }
 
     private void gotoKeywordInputActivity() {
@@ -422,7 +448,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         startActivityForResult(intent, POI_CHOOSE_REQUEST_CODE);
     }
     private void gotoMapActivity() {
-        
+
         Intent intent = new Intent(this, MapActivity.class);
         intent.putParcelableArrayListExtra(BundleFlag.CLOUD_ITEM_LIST,mCoudItemList);
         startActivity(intent);

@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.BeanFactoryUtil;
@@ -74,6 +77,8 @@ public class LoginAct extends BaseActivity {
     @Override
     protected void initData() {
         if(SharedPreferencesUtils.getBoolean(SharedPreferencesUtils.AUTO_LOGIN)){
+            aetLoginName.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.LAST_LOGIN_NAME,""));
+            aetPsw.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW,""));
             ((Button)findViewById(R.id.btn_login)).performClick();
         }
 
@@ -91,13 +96,8 @@ public class LoginAct extends BaseActivity {
                 getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        dismissProgress();
-                        if(cbAutoLogin.isChecked()){
-                            SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,true);
-                            SharedPreferencesUtils.putString(SharedPreferencesUtils.LAST_LOGIN_ID, aetLoginName.getText().toString());
-                            SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW,aetPsw.getText().toString());
-                        }
-                        gotoActivity(IndexActivity2.class,true);
+                        SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW,aetPsw.getText().toString());
+                        loginEaseMob();
                     }
 
                     @Override
@@ -128,6 +128,33 @@ public class LoginAct extends BaseActivity {
                 gotoActivity(AboutUsAct.class,false);
                 break;
         }
+    }
+
+    /**
+     * 登录环信
+     */
+    private void loginEaseMob() {
+        EMClient.getInstance().login(String.valueOf(SharedPreferencesUtils.getInt(SharedPreferencesUtils.USER_ID, 0)), SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW_Hash, ""), new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                dismissProgress();
+                if(cbAutoLogin.isChecked()){
+                    SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,true);
+                }
+                gotoActivity(IndexActivity2.class,true);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                UIUtil.showToastSafe("登录失败，请稍后重试");
+                UIUtil.showTestLog("zyzx","登录失败:"+i+s);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
     }
 
     @Override

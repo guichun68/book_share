@@ -12,6 +12,7 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -43,7 +44,13 @@ public class UserPresenter extends IUserPresenter {
                    JSONObject jsonObject = JSON.parseObject(response);
                    int code = jsonObject.getInteger("code");
                    if(code == 200){
-                       GlobalParams.gUser = jsonObject.getObject("user", User.class);
+                       //登录成功
+                       User u = jsonObject.getObject("user",User.class);
+                       GlobalParams.gUser = u;
+                       //记录用户名和uid
+                       SharedPreferencesUtils.putString(SharedPreferencesUtils.LAST_LOGIN_NAME, u.getLogin_name());
+                       SharedPreferencesUtils.putInt(SharedPreferencesUtils.USER_ID,u.getUserid());
+                       SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW_Hash,u.getPassword());
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
                        }

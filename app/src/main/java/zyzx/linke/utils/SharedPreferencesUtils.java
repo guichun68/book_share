@@ -23,10 +23,16 @@ public class SharedPreferencesUtils {
 	 */
 	public static final String AUTO_LOGIN = "autoLogin";
 	/**
+	 * 登录成功后记录用户id
+	 */
+	public static final String USER_ID ="user_id";
+	/**
 	 * 缓存用户密码用的key
 	 */
 	public static final String USER_PSW = "user_psw";
-	
+	//Hash后的psw
+	public static final String USER_PSW_Hash = "user_psw_hash";
+
 	public static void saveStringData(Context context,String key,String value){
 		if(sharedPreferences == null){
 			sharedPreferences = context.getSharedPreferences(CONFIG, Context.MODE_PRIVATE);
