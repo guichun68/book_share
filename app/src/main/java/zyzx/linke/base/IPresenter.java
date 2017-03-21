@@ -1,4 +1,4 @@
-package zyzx.linke.global;
+package zyzx.linke.base;
 
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.IModel;

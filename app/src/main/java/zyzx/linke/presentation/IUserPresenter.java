@@ -1,6 +1,6 @@
-package zyzx.linke.global;
+package zyzx.linke.presentation;
 
-import zyzx.linke.global.IPresenter;
+import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
 
 /**
@@ -11,9 +11,6 @@ import zyzx.linke.model.CallBack;
 public abstract class IUserPresenter extends IPresenter{
 
     public abstract void loginByLoginName(String login_name, String password, CallBack viewCallBack);
-    public abstract String loginBySMS();
-    public abstract String regist();
-    public abstract String forgetPsw();
 
     /**
      * 发送登录用的短信验证码

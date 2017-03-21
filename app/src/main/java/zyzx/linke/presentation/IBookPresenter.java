@@ -1,8 +1,9 @@
-package zyzx.linke.global;
+package zyzx.linke.presentation;
 
 import java.util.HashMap;
 import java.util.List;
 
+import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
@@ -12,7 +13,7 @@ import zyzx.linke.model.bean.RequestParamGetBookInfos;
  * Desc: 图书操作相关逻辑
  */
 
-public abstract class IBookPresenter extends IPresenter{
+public abstract class IBookPresenter extends IPresenter {
 
     //通过ISBN获取图书详情
     public abstract void getBookDetailByISBN(String isbn, CallBack viewCallBack);

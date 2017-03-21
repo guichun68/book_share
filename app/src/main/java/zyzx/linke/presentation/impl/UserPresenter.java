@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
-import zyzx.linke.global.IUserPresenter;
+import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
@@ -68,20 +68,6 @@ public class UserPresenter extends IUserPresenter {
         }
     }
 
-    @Override
-    public String loginBySMS() {
-        return null;
-    }
-
-    @Override
-    public String regist() {
-        return null;
-    }
-
-    @Override
-    public String forgetPsw() {
-        return null;
-    }
 
     @Override
     public void sendLoginSMSVerifyCode(String phone,final CallBack viewCallBack) {

@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BeanFactoryUtil;
+import zyzx.linke.base.BeanFactoryUtil;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.SharedPreferencesUtils;

@@ -409,4 +409,24 @@ public class StringUtil {
 
     }
 
+    /**
+     * 检测所给字符串是否包含特殊字符
+     * @param str
+     * @return
+     */
+    public static boolean checkIfHasSpecialChar(String str){
+        // 只允许字母和数字/汉字
+        // String regEx = "[^a-zA-Z0-9]";
+        // 清除掉所有特殊字符
+        String regEx = "[`~!@#$%^&*()+=|{}':;',//[//].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+
+        String newStr = m.replaceAll("").trim();
+        if(newStr.length()!=str.length()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

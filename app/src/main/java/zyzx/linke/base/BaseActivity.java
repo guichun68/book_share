@@ -9,8 +9,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.BaseParentActivity;
-import zyzx.linke.global.IBookPresenter;
-import zyzx.linke.global.IUserPresenter;
+import zyzx.linke.presentation.IBookPresenter;
+import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.CustomProgressDialog;
 
 
