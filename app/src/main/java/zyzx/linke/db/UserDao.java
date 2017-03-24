@@ -19,7 +19,7 @@ public class UserDao {
 	private static final Uri uri = Uri.parse("content://www.linke.com");
 	private DbHelper helper;
 	private Context context;
-	private final String TABLE_USER_NAME = "zyzx_user";
+	private final String TABLE_USER_NAME = "zyzx_user";//用户表
 
 	private static UserDao mUserSQLDao;
 
@@ -160,9 +160,8 @@ public class UserDao {
 		}
 		if(cursor.getCount()>1){
 			deleteAllUser();
-			UIUtil.showTestLog("zyzx","在sqlite表中查找到多个uid为"+uid+"的记录,已清空user表");
+			UIUtil.showTestLog("zyzx","在sqlite表中查找到多个uid为"+uid+"的记录!??,已清空user表");
 		}
-
 		// 为cursor设置通知提醒的uri
 		cursor.setNotificationUri(context.getContentResolver(), uri);
 		cursor.close();
