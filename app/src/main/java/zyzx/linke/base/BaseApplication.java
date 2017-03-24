@@ -120,7 +120,7 @@ public class BaseApplication extends Application {
         EMOptions options = new EMOptions();
     // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
-
+        options.setAutoLogin(false);
         int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);
         // 如果APP启用了远程的service，此application:onCreate会被调用2次

@@ -355,7 +355,7 @@ public class UIUtil {
 		print(LINE);//end
 	}
 
-	private static void print(String s) {
+	public static void print(String s) {
 		showTestLog(TAG,s);
 	}
 

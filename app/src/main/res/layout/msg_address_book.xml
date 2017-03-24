@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_add_friend"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/btn_aboutmore_selector"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <ImageView
+            android:id="@+id/iv1"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/bookadd" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_toRightOf="@+id/iv1"
+            android:text="@string/findbookFriend"
+            android:textSize="@dimen/sp_19"
+            android:textColor="#576168" />
+
+        <ImageView
+            android:id="@+id/imageview_jiantou1"
+            style="@style/rightArrow"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/fenge1"
+        style="@style/fengexian"
+        android:layout_below="@id/rl_scan_input" />
+
+
+    <ListView
+        android:id="@+id/lv_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

@@ -150,6 +150,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".activity.MsgCenterAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.FriendSearch"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
 
 
 

@@ -36,7 +36,11 @@ public class User implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-
+	public User(Integer userid,String login_name,String head_icon){
+		this.userid = userid;
+		this.login_name = login_name;
+		this.head_icon = head_icon;
+	}
 
 
 	public User(String login_name, String mobile_phone) {

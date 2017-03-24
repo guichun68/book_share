@@ -91,7 +91,8 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
      */
     protected void showProgress(String tip){
         if(mProgressDialogWithTip == null){
-            mProgressDialogWithTip = CustomProgressDialog.getNewProgressBar(mContext,tip);
+//            mProgressDialogWithTip = CustomProgressDialog.getNewProgressBar(mContext,tip);
+            mProgressDialogWithTip = CustomProgressDialog.getProgressUtil().getRequestDialog(this,null);
         }
         mProgressDialogWithTip.show();
     }

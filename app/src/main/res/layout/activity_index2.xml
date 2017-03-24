@@ -148,6 +148,14 @@
             <View
                style="@style/line"/>
             <TextView
+                android:id="@+id/tv_msg_center"
+                style="@style/item_menu_style"
+                android:text="消息中心"
+                android:drawableBottom="@color/change_city"
+                />
+            <View
+               style="@style/line"/>
+            <TextView
                 android:id="@+id/tv_setting"
                 style="@style/item_menu_style"
                 android:text="设置"/>

@@ -138,7 +138,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@color/item_press"
-        android:text="他/她分享的书籍："/>
+        android:text="TA分享的书籍："/>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"

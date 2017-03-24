@@ -21,13 +21,14 @@
     <color name="ver_line">#fff2f2f2</color>
     <color name="gary">#898989</color>
     <color name="Calendar_DayBgColor">#5566b8</color>
+    <color name="Calendar_DayBgColor2">#995566b8</color>
     <color name="poi_name">#333333</color>
     <color name="blue_cloud_scheme">#0091ff</color>
     <color name="change_city">#999999</color>
     <color name="pre_image_bg">#202020</color>
     <color name="act_background">#efefef</color>
     <color name="title_color">#545454</color>
-    <color name="white">#ffffff</color>
+    <color name="white">#FFFFFF</color>
     <color name="watermark_hint">#ccffffff</color>
     <color name="cicleHead">#3CB2CC</color>
     <color name="map_topTip_text">#a5a5a5</color>
@@ -59,5 +60,15 @@
 
     <!-- 分割线颜色-->
     <color name="bg_gray_line">#dcd7d7</color>
+    <color name="common_bg">#fcfcfc</color>
+    <color name="common_bottom_bar_selected_bg">#161718</color>
+    <color name="common_bottom_bar_normal_bg">#2d2f31</color>
+    <color name="bottom_bar_normal_bg">#2D2F31</color>
+    <color name="common_botton_bar_blue">#2ea7e0</color>
+    <color name="indicator_color">#84FFFF</color>
+    <color name="tran_white">#77FFFFFF</color>
+    <color name="main_blue_dark">#30459E</color>
+    <color name="title_color2">#03A9F4</color>
+    <color name="list_itease_secondary_color">#888888</color>
 
 </resources>

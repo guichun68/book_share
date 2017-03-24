@@ -26,7 +26,9 @@ import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.BeanFactoryUtil;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.User;
 import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -141,11 +143,23 @@ public class LoginAct extends BaseActivity {
                 if(cbAutoLogin.isChecked()){
                     SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,true);
                 }
+                //保证进入主页面后本地会话和群组都 load 完毕。
+                EMClient.getInstance().chatManager().loadAllConversations();
+                EMClient.getInstance().groupManager().loadAllGroups();
+                //一并将登录成功的user信息缓存到sqlite
+                //先查询sqlite，如果本地没有记录，再添加，如果有记录，则直接更新
+                User u = UserDao.getInstance(mContext).queryUserByUid(GlobalParams.gUser.getUserid());
+                if(u!=null){
+                    UserDao.getInstance(mContext).updateUser(GlobalParams.gUser);
+                }else{
+                    UserDao.getInstance(mContext).add(GlobalParams.gUser);
+                }
                 gotoActivity(IndexActivity2.class,true);
             }
 
             @Override
             public void onError(int i, String s) {
+                dismissProgress();
                 UIUtil.showToastSafe("登录失败，请稍后重试");
                 UIUtil.showTestLog("zyzx","登录失败:"+i+s);
             }
@@ -276,7 +290,8 @@ public class LoginAct extends BaseActivity {
                         Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
-                finish();
+//                finish();
+                AppManager.getAppManager().finishAllActivity();
 //                System.exit(0);
             }
             return true;

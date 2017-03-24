@@ -179,20 +179,22 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
         mApplicationContext = this.getApplicationContext();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawerlayout);
-        TextView item1 = (TextView) findViewById(R.id.tv_ihave);
-        TextView item3 = (TextView) findViewById(R.id.tv_setting);
-        TextView item4 = (TextView) findViewById(R.id.tv_check_update);
-        TextView item5 = (TextView) findViewById(R.id.tv_about);
-        TextView item6 = (TextView) findViewById(R.id.tv_log_out);
-        item1.setOnClickListener(this);
-        item3.setOnClickListener(this);
-        item4.setOnClickListener(this);
-        item5.setOnClickListener(this);
-        item6.setOnClickListener(this);
-        mSidebarMenus.add(item1);
-        mSidebarMenus.add(item3);
-        mSidebarMenus.add(item4);
-        mSidebarMenus.add(item5);
+        TextView itemIHave = (TextView) findViewById(R.id.tv_ihave);
+        TextView itemSetting = (TextView) findViewById(R.id.tv_setting);
+        TextView itemCheckUpdate = (TextView) findViewById(R.id.tv_check_update);
+        TextView itemAbout = (TextView) findViewById(R.id.tv_about);
+        TextView itemLogout = (TextView) findViewById(R.id.tv_log_out);
+        TextView itemMsgCenter = (TextView) findViewById(R.id.tv_msg_center);
+        itemIHave.setOnClickListener(this);
+        itemSetting.setOnClickListener(this);
+        itemCheckUpdate.setOnClickListener(this);
+        itemAbout.setOnClickListener(this);
+        itemLogout.setOnClickListener(this);
+        itemMsgCenter.setOnClickListener(this);
+        mSidebarMenus.add(itemIHave);
+        mSidebarMenus.add(itemSetting);
+        mSidebarMenus.add(itemCheckUpdate);
+        mSidebarMenus.add(itemAbout);
         mToolbar = (Toolbar) findViewById(R.id.id_toolbar);
         // 设置显示Toolbar
         setSupportActionBar(mToolbar);
@@ -226,6 +228,7 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
 
     @Override
     protected void initData() {
+
     }
 
 
@@ -260,7 +263,8 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 exitTime = System.currentTimeMillis();
             } else {
 //                MobclickAgent.onKillProcess(mContext);
-                finish();
+//                finish();
+                AppManager.getAppManager().finishAllActivity();
 //                System.exit(0);
             }
             return true;
@@ -413,6 +417,10 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
                 SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
                 logoutEaseMob();
                 
+                break;
+            case R.id.tv_msg_center:
+                mActionBarDrawerToggle.toggle();
+                gotoActivity(MsgCenterAct.class,false);
                 break;
             default:
                 break;
@@ -829,4 +837,5 @@ public class IndexActivity2 extends BaseActivity implements OnClickListener,
             searchByLocal(mCurrentPageNum);
         }
     }
+
 }

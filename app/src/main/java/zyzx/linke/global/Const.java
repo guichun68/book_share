@@ -2,6 +2,8 @@ package zyzx.linke.global;
 
 import android.graphics.Color;
 
+import com.amap.api.services.core.LatLonPoint;
+
 /**
  * @since 3.3.0
  * Created by hongming.wang on 2016/12/19.
@@ -84,4 +86,10 @@ public class Const {
 
 	//-----------------------zyzx------
 	public static final int CAMERA_REQUEST_CODE=0x37F;
+	//做扩展消息时使用的key
+	public static final String MSG_FLAG_UERID="msg_flag_uerid";
+	public static final String MSG_FLAG_LOGIN_NAME="msg_flag_login_name";
+	public static final String MSG_FLAG_HEAD_URL="msg_flag_head_url";
+
+	public static final LatLonPoint TianAnMenPoint = new LatLonPoint(39.906905, 116.397541);
 }

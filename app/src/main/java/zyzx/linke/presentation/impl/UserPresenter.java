@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import zyzx.linke.db.UserDao;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
@@ -51,6 +53,8 @@ public class UserPresenter extends IUserPresenter {
                        SharedPreferencesUtils.putString(SharedPreferencesUtils.LAST_LOGIN_NAME, u.getLogin_name());
                        SharedPreferencesUtils.putInt(SharedPreferencesUtils.USER_ID,u.getUserid());
                        SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW_Hash,u.getPassword());
+
+
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
                        }
@@ -206,6 +210,22 @@ public class UserPresenter extends IUserPresenter {
             e.printStackTrace();
             if(callBack!=null){
                 callBack.onFailure("设置失败");
+            }
+        }
+    }
+
+    @Override
+    public void searchFriend(String keyWord, int pageNum,CallBack viewCallBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("key_word",keyWord);
+        param.put("page_num",String.valueOf(pageNum));
+        try {
+            getModel().post(GlobalParams.urlSearchFriend,param,viewCallBack);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("查找失败");
             }
         }
     }

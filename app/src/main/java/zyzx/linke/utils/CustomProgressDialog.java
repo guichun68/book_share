@@ -15,9 +15,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import zyzx.linke.R;
+import zyzx.linke.views.WaitDialog;
 
 
 public class CustomProgressDialog {
+
+	private volatile static CustomProgressDialog ProgressUtil;
+
+	private CustomProgressDialog (){}
+
+	public static CustomProgressDialog getProgressUtil() {
+
+		if (ProgressUtil == null) {
+			synchronized (CustomProgressDialog.class) {
+				if (ProgressUtil == null) {
+					ProgressUtil = new CustomProgressDialog();
+				}
+			}
+		}
+		return ProgressUtil;
+	}
 
 	/**
 	 * 自定义进度Dialog 旋转效果
@@ -196,5 +213,20 @@ public class CustomProgressDialog {
 				LinearLayout.LayoutParams.MATCH_PARENT));// 设置布局
 		return loadingDialog;
 
+	}
+
+	/**
+	 * 显示不确定进度条，默认文字“请稍后”
+	 * @param ctx
+	 * @param msg
+	 * @return
+	 */
+	public Dialog getRequestDialog(Context ctx,String msg){
+		WaitDialog waitDialog = new WaitDialog(ctx);
+		if(msg!=null){
+			waitDialog.setMessage(msg);
+		}
+//		waitDialog.setCancelable(false);
+		return waitDialog;
 	}
 }

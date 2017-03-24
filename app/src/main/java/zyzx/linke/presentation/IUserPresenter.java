@@ -45,4 +45,5 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void mofiySignature(Integer userid, String sig, CallBack callBack);
 
 
+    public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
 }

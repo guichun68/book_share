@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -47,6 +48,8 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private String mAddress;//中文地址描述
     private User mUser;
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
+    private boolean showAddress;//是否显示地理位置信息
+    private RelativeLayout rlAddress;
 
     @Override
     protected int getLayoutId() {
@@ -61,7 +64,13 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         tvLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
-        findViewById(R.id.rl_location).setOnClickListener(this);
+        rlAddress = (RelativeLayout) findViewById(R.id.rl_location);
+        rlAddress.setOnClickListener(this);
+        if(showAddress){
+            rlAddress.setVisibility(View.VISIBLE);
+        }else{
+            rlAddress.setVisibility(View.GONE);
+        }
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         // Add an end-of-list listener
@@ -81,9 +90,12 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             return;
         }
         mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
-        mAddress = mCloudItem.getSnippet();
-        if(StringUtil.isEmpty(mAddress)){
-            mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
+        showAddress = intent.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
+        if(mCloudItem!=null){
+            mAddress = mCloudItem.getSnippet();
+            if(StringUtil.isEmpty(mAddress)){
+                mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
+            }
         }
     }
 

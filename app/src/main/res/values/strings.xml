@@ -195,8 +195,10 @@
     <string name="all_my_book">我的所有书籍</string>
     <string name="borrow_out">借出的书籍</string>
     <string name="manual_input">手动录入书籍信息</string>
+    <string name="findbookFriend">找书友</string>
     <string name="change_city">更换</string>
     <string name="edittext_hint">输入用户名、位置</string>
+    <string name="edittext_hint2">输入用户名</string>
     <string name="noDataDec">没有找到相关书籍信息哦</string>
     <!-- 高德导航end-->
     <!-- 城市选择页 -->
@@ -216,4 +218,7 @@
     <string name="album_name">Camera</string>
 
     <string name="_jiantou">右侧箭头</string>
+    <string name="session">消息</string>
+    <string name="address_book">通讯录</string>
+    <string name="were_mentioned">[有人@我]</string>
 </resources>
