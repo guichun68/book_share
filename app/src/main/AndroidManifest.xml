@@ -160,6 +160,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".activity.HomeAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
 
 
 

@@ -154,7 +154,8 @@ public class LoginAct extends BaseActivity {
                 }else{
                     UserDao.getInstance(mContext).add(GlobalParams.gUser);
                 }
-                gotoActivity(IndexActivity2.class,true);
+//                gotoActivity(IndexActivity2.class,true);
+                gotoActivity(HomeAct.class,true);
             }
 
             @Override
@@ -174,10 +175,10 @@ public class LoginAct extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 200 && resultCode==200){//手机号登录页登录成功返回
-            gotoActivity(IndexActivity2.class,true);
+            gotoActivity(HomeAct.class,true);
         }
         if(requestCode==300 && resultCode==300){//注册页注册成功返回
-            gotoActivity(IndexActivity2.class,true);
+            gotoActivity(HomeAct.class,true);
         }
     }
 

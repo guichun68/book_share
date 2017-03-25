@@ -70,5 +70,7 @@
     <color name="main_blue_dark">#30459E</color>
     <color name="title_color2">#03A9F4</color>
     <color name="list_itease_secondary_color">#888888</color>
+    <color name="text_blue1">#1173CB</color>
+    <color name="text_gray1">#777777</color>
 
 </resources>

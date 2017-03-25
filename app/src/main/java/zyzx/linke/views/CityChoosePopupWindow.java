@@ -3,6 +3,7 @@ package zyzx.linke.views;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import zyzx.linke.HomeFragment;
 import zyzx.linke.R;
-import zyzx.linke.activity.IndexActivity2;
 
 
 public class CityChoosePopupWindow extends PopupWindow {
@@ -22,10 +23,10 @@ public class CityChoosePopupWindow extends PopupWindow {
 	private LinearLayout mChangeCitylayout;
 	private TextView mCurrentCityTextView;
 
-	public CityChoosePopupWindow(Context context, OnClickListener clickHandler) {
+	public CityChoosePopupWindow(Fragment fragment, OnClickListener clickHandler) {
 
-		super(context);
-		LayoutInflater inflater = (LayoutInflater) context
+		super(fragment.getContext());
+		LayoutInflater inflater = (LayoutInflater) fragment.getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		View interalView = inflater.inflate(R.layout.popup_city_choose, null);
@@ -37,7 +38,7 @@ public class CityChoosePopupWindow extends PopupWindow {
 
 		setTouchable(true);
 		setOutsideTouchable(true);
-		setBackgroundDrawable(new BitmapDrawable(context.getResources(),
+		setBackgroundDrawable(new BitmapDrawable(fragment.getResources(),
 				(Bitmap) null));
 
 		mChangeCitylayout = (LinearLayout) interalView
@@ -52,7 +53,7 @@ public class CityChoosePopupWindow extends PopupWindow {
 		mChangeCitylayout.setOnClickListener(clickHandler);
 
 		getCurrentCityTextView().setText(
-				((IndexActivity2) context).getCurrentCity());
+				((HomeFragment)fragment).getCurrentCity());
 
 	}
 

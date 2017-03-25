@@ -4,7 +4,7 @@
     android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 
     <include layout="@layout/title_bar"
         android:visibility="gone"/>
@@ -17,6 +17,7 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:layout_alignParentTop="true"
         >
         <!--自定义标题栏内容-->
         <LinearLayout
@@ -73,17 +74,15 @@
                     android:background="@mipmap/search_icon_white"
                     android:contentDescription="@string/app_name" />
 
-                <EditText
-                    android:id="@+id/input_edittext"
+                <TextView
+                    android:id="@+id/tv_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/index_offset"
                     android:layout_marginStart="@dimen/index_offset"
                     android:background="@android:color/transparent"
-                    android:clickable="true"
                     android:focusable="false"
                     android:hint="@string/edittext_hint"
-                    android:onClick="onClick"
                     android:textColor="@color/white"
                     android:textColorHint="@color/watermark_hint"
                     android:textSize="14sp" />
@@ -105,81 +104,25 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <!--DrawerLayout分两部分，一部分是内容，一部分是侧边栏-->
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/id_drawerlayout"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pull_refresh_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_toolbar">
-
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/pull_refresh_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/search_bar_layout"
-            android:cacheColorHint="@color/transparent"
-            android:divider="@color/bg_divider_line"
-            android:dividerHeight="@dimen/divider_width"
-            android:fadingEdge="none"
-            android:fastScrollEnabled="false"
-            android:footerDividersEnabled="true"
-            android:headerDividersEnabled="true"
-            android:smoothScrollbar="true"
-            ptr:ptrDrawable="@mipmap/publicloading"
-            ptr:ptrHeaderTextColor="@color/blue_cloud_scheme" />
+        android:layout_below="@id/id_toolbar"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/bg_divider_line"
+        android:dividerHeight="@dimen/divider_width"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:smoothScrollbar="true"
+        ptr:ptrDrawable="@mipmap/publicloading"
+        ptr:ptrHeaderTextColor="@color/blue_cloud_scheme" />
 
 
-        <LinearLayout
-            android:id="@+id/ll_drawer"
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:clickable="true"
-            android:background="#78C4EC"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_ihave"
-                style="@style/item_menu_style"
-                android:text="个人中心"
-                android:drawableBottom="@color/change_city"
-                />
-            <View
-                style="@style/line"/>
-            <TextView
-                android:id="@+id/tv_msg_center"
-                style="@style/item_menu_style"
-                android:text="消息中心"
-                android:drawableBottom="@color/change_city"
-                />
-            <View
-                style="@style/line"/>
-            <TextView
-                android:id="@+id/tv_setting"
-                style="@style/item_menu_style"
-                android:text="设置"/>
-            <View
-                style="@style/line"/>
-
-            <TextView
-                android:id="@+id/tv_check_update"
-                style="@style/item_menu_style"
-                android:text="检查更新"/>
-            <View
-                style="@style/line"/>
-            <TextView
-                android:id="@+id/tv_log_out"
-                style="@style/item_menu_style"
-                android:text="退出登录"/>
-            <View
-                style="@style/line"/>
-            <TextView
-                android:id="@+id/tv_about"
-                style="@style/item_menu_style"
-                android:text="关于"/>
-        </LinearLayout>
-    </android.support.v4.widget.DrawerLayout>
 
 
 

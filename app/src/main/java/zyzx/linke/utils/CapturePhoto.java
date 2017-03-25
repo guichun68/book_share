@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class CapturePhoto {
 	private Activity activity;
 	private String mCurrentPhotoPath;
 	private int actionCode;
+	private Fragment fragment;
 	
 	public CapturePhoto(Activity activity) {
 		
@@ -42,7 +44,16 @@ public class CapturePhoto {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
 	}
-	
+
+	public CapturePhoto(Fragment fragment) {
+		this.fragment = fragment;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+		} else {
+			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+		}
+	}
+
 	public int getActionCode() {
 		return this.actionCode;
 	}
@@ -76,7 +87,11 @@ public class CapturePhoto {
 		} // switch
 
 		if(takePictureIntent != null) {
-			activity.startActivityForResult(takePictureIntent, requestCode);
+			if(activity==null){
+				fragment.startActivityForResult(takePictureIntent,requestCode);
+			}else{
+				activity.startActivityForResult(takePictureIntent, requestCode);
+			}
 		}
 		
 	}
