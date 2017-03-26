@@ -4,7 +4,7 @@
         <item name="android:paddingLeft">0.0dip</item>
         <item name="android:paddingRight">0.0dip</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_height">@dimen/height_top_bar</item>
     </style>
 
     <style name="title_text_style">

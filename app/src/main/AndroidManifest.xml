@@ -40,8 +40,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
 
-
-
     <!-- 环信新增权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -72,13 +70,6 @@
         <activity android:name=".activity.SMSLoginAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.AboutUsAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.RegisterAct" android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".activity.IndexActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.IndexActivity2"
-            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.MyBooksAct"
             android:screenOrientation="portrait"/>

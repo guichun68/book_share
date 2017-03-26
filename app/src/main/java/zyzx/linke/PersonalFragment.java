@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 
 import zxing.CaptureActivity;
 import zyzx.linke.activity.BorrowedInBookAct;
+import zyzx.linke.activity.HomeAct;
+import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.activity.PersonalCenter;
@@ -28,6 +30,7 @@ import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
+import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -60,6 +63,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_borrow_in).setOnClickListener(this);
         mRootView.findViewById(R.id.rl_scan_input).setOnClickListener(this);//扫描
         mRootView.findViewById(R.id.rl_manual_input).setOnClickListener(this);//手动录入
+        mRootView.findViewById(R.id.rl_log_out).setOnClickListener(this);//注销登录
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
         intiData();
@@ -97,6 +101,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.rl_borrow_in://已借入的书
                 gotoActivity(BorrowedInBookAct.class);
+                break;
+            case R.id.rl_log_out:
+                ((HomeAct)getActivity()).logoutEaseMob();
+                SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
+                getActivity().finish();
+                gotoActivity(LoginAct.class);
                 break;
         }
     }

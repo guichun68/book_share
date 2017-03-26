@@ -14,6 +14,7 @@ import android.util.Log;
 //import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.controller.EaseUI;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.Iterator;
@@ -25,7 +26,7 @@ import java.util.List;
  * @author austin
  * @date 2016-9-23 下午4:58:49
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends  android.support.multidex.MultiDexApplication {
     private final String TAG = "BaseApplication";
 
     /**
@@ -106,8 +107,7 @@ public class BaseApplication extends Application {
         // MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         MobclickAgent.setCatchUncaughtExceptions(true);
-        // 获取 NoteDao 对象
-//        getIArgDao();
+
         initEaseMob();
 
         super.onCreate();
@@ -121,7 +121,7 @@ public class BaseApplication extends Application {
     // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
         options.setAutoLogin(false);
-        int pid = android.os.Process.myPid();
+        /*int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);
         // 如果APP启用了远程的service，此application:onCreate会被调用2次
         // 为了防止环信SDK被初始化2次，加此判断会保证SDK被初始化1次
@@ -131,8 +131,7 @@ public class BaseApplication extends Application {
 
             // 则此application::onCreate 是被service 调用的，直接返回
             return;
-        }
-
+        }*/
 
         //初始化
         EMClient.getInstance().init(this, options);

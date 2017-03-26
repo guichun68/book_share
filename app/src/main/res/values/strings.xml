@@ -194,6 +194,7 @@
     <string name="borrow_in">借入的书籍</string>
     <string name="all_my_book">我的所有书籍</string>
     <string name="borrow_out">借出的书籍</string>
+    <string name="logout">注销登录</string>
     <string name="manual_input">手动录入书籍信息</string>
     <string name="findbookFriend">找书友</string>
     <string name="change_city">更换</string>
@@ -222,7 +223,7 @@
     <string name="address_book">通讯录</string>
     <string name="were_mentioned">[有人@我]</string>
     <string name="tab_homepage">主页</string>
-    <string name="tab_mesg">消息</string>
-    <string name="tab_contact_list">联系人</string>
+    <string name="tab_mesg">会话</string>
+    <string name="tab_contact_list">通讯录</string>
     <string name="tab_personal">我</string>
 </resources>

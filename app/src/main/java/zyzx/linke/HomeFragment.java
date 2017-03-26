@@ -4,6 +4,7 @@ package zyzx.linke;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -432,6 +433,14 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         mFirstVisibleItem = firstVisibleItem;
         mVisibleItemCount = visibleItemCount;
+    }
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopLocation();//停止定位，
     }
 
     @Override

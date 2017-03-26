@@ -232,9 +232,20 @@
                 style="@style/fengexian"
                 android:layout_below="@id/rl_scan_input" />
 
+            <TextView
+                android:id="@+id/tv_set_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_white"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/setting"
+                />
 
             <RelativeLayout
-                android:id="@+id/rl_borrow_out"
+                android:id="@+id/rl_log_out"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginTop="5dp"
@@ -242,14 +253,14 @@
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/iv4"
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/borrow_book_out" />
+                    android:src="@mipmap/logout" />
 
                 <TextView
                     android:id="@+id/tv4"
@@ -257,9 +268,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_toRightOf="@+id/iv4"
+                    android:layout_toRightOf="@id/iv4"
                     android:textSize="@dimen/sp_19"
-                    android:text="@string/borrow_out"
+                    android:text="@string/logout"
                     android:textColor="#576168" />
 
                 <ImageView
