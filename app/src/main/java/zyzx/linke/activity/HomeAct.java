@@ -9,21 +9,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.ui.EaseContactListFragment;
-import com.hyphenate.easeui.ui.EaseConversationListFragment;
-import com.hyphenate.easeui.widget.EaseConversationList;
 
-import zyzx.linke.ContactListFragment;
 import zyzx.linke.HomeFragment;
-import zyzx.linke.MessageFragment;
+import zyzx.linke.LKContactListFragment;
+import zyzx.linke.LKConversationListFragment;
 import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.base.GlobalParams;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -32,7 +27,7 @@ public class HomeAct extends BaseActivity {
     private static final String TAG = HomeAct.class.getSimpleName();
     private LayoutInflater layoutInflater;
     private FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {HomeFragment.class,EaseConversationListFragment.class, EaseContactListFragment.class,PersonalFragment.class};
+    private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKContactListFragment.class,PersonalFragment.class};
     private int mTitleArray[] = {R.string.tab_homepage, R.string.tab_mesg, R.string.tab_contact_list,R.string.tab_personal};
     private int mImageViewArray[] = {R.mipmap.home, R.mipmap.em_conversation_selected,R.mipmap.em_contact_list_selected,R.mipmap.personal};
     //    private String mTextviewArray[] = {"contact", "conversation", "setting"};

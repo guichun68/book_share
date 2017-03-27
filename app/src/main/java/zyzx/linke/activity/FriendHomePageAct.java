@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.easeui.EaseConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.adapter.BookAdapter;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.User;
+import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -66,6 +69,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
         rlAddress = (RelativeLayout) findViewById(R.id.rl_location);
         rlAddress.setOnClickListener(this);
+        ivHeadIcon.setOnClickListener(this);
         if(showAddress){
             rlAddress.setVisibility(View.VISIBLE);
         }else{
@@ -82,21 +86,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         // mPullRefreshListView.setAdapter(mAdapter)
         actualListView.setAdapter(mAdapter);
 //        mPullRefreshListView.setOnScrollListener(this);
-    }
-
-    private void getIntentData() {
-        Intent intent = getIntent();
-        if (intent == null) {
-            return;
-        }
-        mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
-        showAddress = intent.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
-        if(mCloudItem!=null){
-            mAddress = mCloudItem.getSnippet();
-            if(StringUtil.isEmpty(mAddress)){
-                mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
-            }
-        }
     }
 
     @Override
@@ -138,6 +127,23 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         getBooks(mCloudItem.getCustomfield().get("uid"),0);
     }
 
+
+    private void getIntentData() {
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
+        showAddress = intent.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
+        if(mCloudItem!=null){
+            mAddress = mCloudItem.getSnippet();
+            if(StringUtil.isEmpty(mAddress)){
+                mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
+            }
+        }
+    }
+
+
     public void getBooks(String uid,int pageNum){
         getBookPresenter().getUserBooks(uid, pageNum, new CallBack() {
             @Override
@@ -177,7 +183,21 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                 intent.putExtra(BundleFlag.CLOUD_ITEM, mCloudItem);
                 this.startActivity(intent);
             break;
-
+            case R.id.iv_icon:
+                if(mUser!=null&& mUser.getUserid()!=null){
+                    if(mUser.getUserid() == SharedPreferencesUtils.getInt(SharedPreferencesUtils.USER_ID,-1)){
+                        UIUtil.showToastSafe("不能跟自己聊天");
+                        return;
+                    }
+                    Intent in = new Intent(this,ChatActivity.class);
+                    Bundle args = new Bundle();
+                    in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                    in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
+                    startActivity(in);
+                }else{
+                    UIUtil.showToastSafe("未能获取用户信息");
+                }
+                break;
         }
     }
 

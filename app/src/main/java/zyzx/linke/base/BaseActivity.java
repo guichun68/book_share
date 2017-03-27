@@ -68,7 +68,7 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
     }
 
     protected IUserPresenter getUserPresenter(){
-        if(mBookPresenter==null){
+        if(mUserPresenter==null){
             mUserPresenter=(GlobalParams.getUserPresenter());
         }
         return mUserPresenter;

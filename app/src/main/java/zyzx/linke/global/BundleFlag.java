@@ -99,4 +99,5 @@ public class BundleFlag {
 	public static final String WALK_TARGET_NAME = "walk_target_name";
 	//是否是从首页进入的图书详情页（如果是，则详情页不显示添加按钮）
 	public static final String isFromIndexAct="is_from_index_act";
+	public static final String LOGIN_NAME="login_name";
 }

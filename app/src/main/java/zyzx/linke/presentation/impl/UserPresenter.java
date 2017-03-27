@@ -229,4 +229,18 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void getAllMyFriends(int anInt, CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",String.valueOf(anInt));
+        try {
+            getModel().post(GlobalParams.urlGetFriends,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("未能获取好友信息");
+            }
+        }
+    }
 }

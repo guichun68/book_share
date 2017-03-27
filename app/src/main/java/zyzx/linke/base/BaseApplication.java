@@ -2,7 +2,6 @@ package zyzx.linke.base;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,9 +11,6 @@ import android.util.Log;
 
 //import com.hyphenate.chat.EMClient;
 //import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeui.controller.EaseUI;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.Iterator;
@@ -117,10 +113,7 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
      * 初始化环信
      */
     private void initEaseMob() {
-        EMOptions options = new EMOptions();
-    // 默认添加好友时，是不需要验证的，改成需要验证
-        options.setAcceptInvitationAlways(false);
-        options.setAutoLogin(false);
+
         /*int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);
         // 如果APP启用了远程的service，此application:onCreate会被调用2次
@@ -134,9 +127,11 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
         }*/
 
         //初始化
-        EMClient.getInstance().init(this, options);
+//        EMClient.getInstance().init(this, options);
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
-        EMClient.getInstance().setDebugMode(true);
+//        EMClient.getInstance().setDebugMode(true);
+        EaseUIHelper.getInstance().init(this);
+
     }
 
     private String getAppName(int pID) {

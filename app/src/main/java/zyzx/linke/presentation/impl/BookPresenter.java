@@ -91,7 +91,11 @@ public class BookPresenter extends IBookPresenter {
         param.put("user_id",String.valueOf(userid));
         param.put("book_id",bookDetail.getB_id());
         param.put("user_name",GlobalParams.gUser.getLogin_name());
-        param.put("head_url",GlobalParams.gUser.getHead_icon());
+        if(StringUtil.isEmpty(GlobalParams.gUser.getHead_icon())){
+            param.put("head_url",GlobalParams.urlDefHeadIcon);
+        }else{
+            param.put("head_url",GlobalParams.gUser.getHead_icon());
+        }
 
         try {
             getModel().post(GlobalParams.urlShareBook,param,viewCallBack);

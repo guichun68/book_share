@@ -3,8 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <include layout="@layout/title_bar"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="contact list frag"/>
+        />
 </LinearLayout>

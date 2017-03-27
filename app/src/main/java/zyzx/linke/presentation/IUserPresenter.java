@@ -46,4 +46,11 @@ public abstract class IUserPresenter extends IPresenter{
 
 
     public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
+
+    /**
+     * 得到所有好友
+     * @param userId 要得到谁的好友列表
+     * @param callBack
+     */
+    public abstract void getAllMyFriends(int userId, CallBack callBack);
 }

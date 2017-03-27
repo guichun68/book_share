@@ -77,6 +77,8 @@ public class ModelImpl implements IModel {
         }*/
     }
 
+
+
     @Override
     public void get(String url, HashMap<String, String> param, final CallBack callBack) {
 

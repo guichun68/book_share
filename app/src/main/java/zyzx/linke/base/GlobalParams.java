@@ -45,6 +45,15 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	/**
+	 * 获取所有好友
+	 */
+	public static String urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
+	/**
+	 * 默认头像地址
+	 */
+	public static String urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
+
 	public static String urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 	/**
 	 * 通过用户id获取其下所有书籍和其用户基本信息
@@ -137,6 +146,8 @@ public class GlobalParams {
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
+		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
+		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 	}
 
 	static IBookPresenter getBookPresenter(){
