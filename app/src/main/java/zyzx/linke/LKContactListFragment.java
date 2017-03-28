@@ -23,6 +23,7 @@ import java.util.Map;
 
 import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.base.BaseFragment;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
@@ -202,5 +203,14 @@ public class LKContactListFragment extends BaseFragment {
         });
 
         dialog.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(GlobalParams.shouldRefreshContactList){
+            refreshContacts();
+            GlobalParams.shouldRefreshContactList = false;
+        }
     }
 }

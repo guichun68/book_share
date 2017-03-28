@@ -117,9 +117,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     ((HomeAct)getActivity()).checkUpdate();
                     return;
                 }
+                showProgress("请稍后……");
                 ((HomeAct)getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
                     @Override
                     public void shouldUpdate(boolean shoudUpdate) {
+                        dismissProgress();
                         if(!shoudUpdate){
                             showSnack(null,"已经是最新版本");
                         }else{

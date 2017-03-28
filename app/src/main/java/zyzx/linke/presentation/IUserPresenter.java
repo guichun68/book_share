@@ -66,4 +66,18 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void addBlackList(String userId, CallBack callBack);
+
+    /**
+     * 检查自己是否已被对方加入黑名单了
+     * @param userid 对方的userId
+     * @param callBack
+     */
+    public abstract void checkIfInBlackList(Integer userid, CallBack callBack);
+
+    /**
+     * 发起添加userid为好友的请求
+     * @param userid
+     * @param callBack
+     */
+    public abstract void addFriend(Integer userid, CallBack callBack);
 }

@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.services.cloud.CloudItem;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -189,12 +190,46 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                         UIUtil.showToastSafe("不能跟自己聊天");
                         return;
                     }
+                    showProgress("正在添加好友…");
+                    //检查该用户是否已被对方加入黑名单
+                    getUserPresenter().addFriend(mUser.getUserid(),new CallBack(){
 
-                    Intent in = new Intent(this,ChatActivity.class);
-                    Bundle args = new Bundle();
-                    in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
-                    in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
-                    startActivity(in);
+                        @Override
+                        public void onSuccess(Object obj) {
+                            dismissProgress();
+                            String json = (String) obj;
+                            if(StringUtil.isEmpty(json)){
+                                UIUtil.showToastSafe("请求出错,请稍后再试！");
+                                return;
+                            }
+                            JSONObject jsonObj = JSON.parseObject(json);
+                            int code = jsonObj.getInteger("code");
+                            if(code==500){
+                                //在对方的黑名单中
+                                GlobalParams.shouldRefreshContactList = true;
+                                UIUtil.showToastSafe("对方已限制您的聊天申请");
+                                return;
+                            }else if(code ==200){
+                                //添加成功
+                                GlobalParams.shouldRefreshContactList = true;
+                                Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
+                                Bundle args = new Bundle();
+                                in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                                in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
+                                startActivity(in);
+                            }else{
+                                UIUtil.showToastSafe("添加好友失败！");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object obj) {
+                            dismissProgress();
+                            UIUtil.showToastSafe("请求出错,请稍后再试！");
+                        }
+                    });
+
+
                 }else{
                     UIUtil.showToastSafe("未能获取用户信息");
                 }

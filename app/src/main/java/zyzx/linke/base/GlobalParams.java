@@ -50,7 +50,12 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	//添加到黑名单
 	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
+	//检查是否在对方的黑名单中
+	public static String urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
+	//发起添加好友的请求
+	public static String urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
 	/**
 	 * 获取所有好友
 	 */
@@ -131,6 +136,7 @@ public class GlobalParams {
 	 */
 	public static String urlQueryBookFromMapAround = "http://yuntuapi.amap.com/datasearch/around";
 	public static int gVerifyCode ;
+	public static boolean shouldRefreshContactList;//需要更新好友列表么？
 
 	public static User gUser;//登录成功后记录的用户
 	public static void refreshIP(){
@@ -159,6 +165,8 @@ public class GlobalParams {
 		urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
 		urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 		urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
+		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
+		urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
 	}
 
 	static IBookPresenter getBookPresenter(){
