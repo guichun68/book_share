@@ -182,4 +182,20 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
     public static Looper getMainThreadLooper() {
         return mMainLooper;
     }
+
+    /**
+     * 退出应用程序
+     */
+    public void exitApp(Context context) {
+        try {
+            EaseUIHelper.getInstance().logoutEaseMob();
+            ActivityManager activityMgr = (ActivityManager) context
+                    .getSystemService(Context.ACTIVITY_SERVICE);
+            activityMgr.killBackgroundProcesses(context.getPackageName());
+
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

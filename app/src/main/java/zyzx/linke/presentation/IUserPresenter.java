@@ -53,4 +53,17 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void getAllMyFriends(int userId, CallBack callBack);
+
+    /**
+     * 删除指定好友（联系人）
+     * @param friendUserId 好友userId
+     */
+    public abstract void delFriend(Integer friendUserId,CallBack viewCallBack);
+
+    /**
+     * 添加指定用户到黑名单
+     * @param userId 要把谁添加到我的黑名单
+     * @param callBack
+     */
+    public abstract void addBlackList(String userId, CallBack callBack);
 }

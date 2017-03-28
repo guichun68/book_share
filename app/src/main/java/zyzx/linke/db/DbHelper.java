@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper{
 
 	public static final int DB_VERSION = 1;
+	public static final String COLUM_USER_ID = "userid";
+	public static final String COLUM_LOGIN_NAME= "login_name";
+	public static final String COLUM_HEAD_ICON= "head_icon";
 
     public DbHelper(Context context) {
 		super(context, "linke.db", null, DB_VERSION);

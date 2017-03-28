@@ -3,6 +3,7 @@ package zyzx.linke.base;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import zyzx.linke.UserProfileManager;
+import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
@@ -32,7 +34,7 @@ public class EaseUIHelper {
     private UserProfileManager userProManager;
     private EaseUI easeUI;
     private IUserPresenter mUserPresenter;
-    private Map<String, EaseUser> contactList;
+    private Map<String, EaseUser> contactList = new HashMap<>();
 
 
     public synchronized static EaseUIHelper getInstance() {
@@ -78,24 +80,17 @@ public class EaseUIHelper {
     private EaseUser getUserInfo(String username){
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
-        EaseUser user = null;
+        EaseUser user = new EaseUser(username);;
         if(username.equals(EMClient.getInstance().getCurrentUser())){
             return getUserProfileManager().getCurrentUserInfo();
         }
-        getUserPresenter().getUserInfo(username, new CallBack() {
-            @Override
-            public void onSuccess(Object obj) {
+        User u = UserDao.getInstance(appContext).queryUserByUid(Integer.valueOf(username));
+        user.setLoginName(u.getLogin_name());
+        user.setNickname(u.getLogin_name());
+        user.setAvatar(u.getHead_icon());
 
-            }
-
-            @Override
-            public void onFailure(Object obj) {
-
-            }
-        });
-
-        user = getContactList().get(username);
-        /*if(user == null && getRobotList() != null){
+//        user = getContactList().get(username);
+        /*TODO if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
         }*/
 
@@ -192,4 +187,26 @@ public class EaseUIHelper {
         }
         return mUserPresenter;
     }
+
+    /**
+     * 注销环信登录
+     */
+    public void logoutEaseMob() {
+        EMClient.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                UIUtil.print("已注销EASEMob");
+//                gotoActivity(LoginAct.class,true);
+            }
+            @Override
+            public void onError(int i, String s) {
+//                UIUtil.showToastSafe("注销失败，请稍后重试！");
+                UIUtil.showTestLog("zyzx","环信注销登录失败："+i+s);
+            }
+            @Override
+            public void onProgress(int i, String s) {
+            }
+        });
+    }
+
 }

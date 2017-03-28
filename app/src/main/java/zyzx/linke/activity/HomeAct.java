@@ -1,8 +1,13 @@
 package zyzx.linke.activity;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.FragmentTabHost;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +24,8 @@ import zyzx.linke.LKConversationListFragment;
 import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.UpdateService;
+import zyzx.linke.db.UserDao;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -33,6 +40,7 @@ public class HomeAct extends BaseActivity {
     //    private String mTextviewArray[] = {"contact", "conversation", "setting"};
     private String mTextviewArray[] = {"homepage", "conversation", "contacts","me"};
     private ImageView msgUnread;
+    public UpdateService.MyBinder mBinder;
 
     @Override
     protected int getLayoutId() {
@@ -119,4 +127,51 @@ public class HomeAct extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    private ServiceConnection myServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+//            Log.e(TAG,"Update service is Connected.");
+            mBinder = (UpdateService.MyBinder) service;
+            mBinder.callCheckUpdate(null);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.e(TAG,"Update service is Disconnected.");
+        }
+    };
+    /**
+     * 启动服务检查更新
+     */
+    public void checkUpdate() {
+        Intent in = new Intent(HomeAct.this, UpdateService.class);
+        bindService(in, myServiceConn, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        UserDao.getInstance(this).closeDb();
+        if (null != myServiceConn) {
+            if(isServiceRunning()){
+                unbindService(myServiceConn);
+            }
+            myServiceConn = null;
+        }
+        super.onDestroy();
+    }
+
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        //zyzx.linke.base.UpdateService
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ("zyzx.linke.base.UpdateService".equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -17,6 +17,7 @@ public class UserDao {
 	 * 用于更新cursor的Uri
 	 */
 	private static final Uri uri = Uri.parse("content://www.linke.com");
+	SQLiteDatabase db;
 	private DbHelper helper;
 	private Context context;
 	private final String TABLE_USER_NAME = "zyzx_user";//用户表
@@ -47,7 +48,11 @@ public class UserDao {
 	 * @param user 带插入db用户
 	 */
 	public void add(User user) {
-		SQLiteDatabase db = helper.getWritableDatabase();
+		if(queryUserByUid(user.getUserid())!=null){
+			updateUser(user);
+			return;
+		}
+		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("userid", user.getUserid());
 		values.put("login_name", user.getLogin_name());
@@ -59,20 +64,22 @@ public class UserDao {
 		// Uri uri = Uri.parse("content://com.app.hbx.changedb");
 		// context.getContentResolver().notifyChange(uri, null);
 //		notifyCursor();
-		db.close();
+		UIUtil.print("zyzx-affectRows:"+affectRows);
+//		db.close();
 	}
 
 	/**
 	 * 更新用户信息（根据userId更新）
 	 */
 	public void updateUser(User user){
-		SQLiteDatabase db = helper.getWritableDatabase();
+		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put("login_name", user.getLogin_name());
-		values.put("head_icon", user.getHead_icon());
-
+		if(user.getLogin_name()!=null)
+			values.put(DbHelper.COLUM_LOGIN_NAME, user.getLogin_name());
+		if(user.getHead_icon()!=null)
+			values.put(DbHelper.COLUM_HEAD_ICON, user.getHead_icon());
 		int affectRows = db.update(TABLE_USER_NAME,values,"userid=?",new String[]{String.valueOf(user.getUserid())});
-		System.out.println("affect:"+affectRows);
+		UIUtil.print("zyzx-affectRows:"+affectRows);
 	}
 
 
@@ -82,7 +89,7 @@ public class UserDao {
 	 */
 	public void delUserByUid(Integer userId){
 		try {
-			SQLiteDatabase db = helper.getWritableDatabase();
+			db = helper.getWritableDatabase();
 			String sql = "delete from "+ TABLE_USER_NAME +" where userid='"+userId+"';";
 			db.execSQL(sql);
 //			delete = db.delete(ORD_TAB_NAME, "msgid=?", new String[]{msgId});
@@ -96,7 +103,7 @@ public class UserDao {
 	 * 删除所有用户
 	 */
 	public void deleteAllUser() {
-		SQLiteDatabase db = helper.getWritableDatabase();
+		db = helper.getWritableDatabase();
 		db.delete(TABLE_USER_NAME, null, null);
 	}
 
@@ -108,7 +115,7 @@ public class UserDao {
 	 */
 	public ArrayList<User> queryAll() {
 		ArrayList<User> allUserInfo = new ArrayList<>();
-		SQLiteDatabase db = helper.getReadableDatabase();
+		db = helper.getReadableDatabase();
 		Cursor cursor = null;
 		cursor = db.query(TABLE_USER_NAME, new String[] { "userid", "login_name", "head_icon" }, null, null, null,null,
 				"login_name desc");
@@ -119,7 +126,7 @@ public class UserDao {
 		// 为cursor设置通知提醒的uri
 		cursor.setNotificationUri(context.getContentResolver(), uri);
 		cursor.close();
-		db.close();
+//		db.close();
 		return allUserInfo;
 	}
 
@@ -130,7 +137,7 @@ public class UserDao {
 	 * @return true:删除成功(影响>=0条记录) false:删除失败
 	 */
 	public boolean delMsgOutOfDays() {
-		SQLiteDatabase db = helper.getWritableDatabase();
+		db = helper.getWritableDatabase();
 		String sql = "delete from tab_msg where _id in( select _id from tab_msg msg where julianday('now')-julianday(date(substr(msg.[date_msg],1,10)))>30);";
 		try {
 			db.execSQL(sql);
@@ -148,7 +155,7 @@ public class UserDao {
 	 * @return
 	 */
 	public User queryUserByUid(Integer uid){
-		SQLiteDatabase db = helper.getReadableDatabase();
+		db = helper.getReadableDatabase();
 //		Cursor cursor = db.query(TABLE_USER_NAME, new String[]{"userid", "login_name", "head_icon"}, "userid=?", new String[]{String.valueOf(uid)}, null, null, null);
 		Cursor cursor = db.rawQuery("select * from zyzx_user where userid=?",new String[]{String.valueOf(uid)});
 		User u=null;
@@ -165,7 +172,12 @@ public class UserDao {
 		// 为cursor设置通知提醒的uri
 		cursor.setNotificationUri(context.getContentResolver(), uri);
 		cursor.close();
-		db.close();
+//		db.close();
 		return u;
+	}
+	public void closeDb(){
+		if(db!=null){
+			db.close();
+		}
 	}
 }

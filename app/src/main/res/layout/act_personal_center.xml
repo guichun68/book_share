@@ -277,6 +277,44 @@
                     android:id="@+id/imageview_jiantou4"
                     style="@style/rightArrow"/>
             </RelativeLayout>
+            <TextView
+                android:id="@+id/fenge4"
+                style="@style/fengexian"
+                android:layout_below="@id/rl_scan_input" />
+
+            <RelativeLayout
+                android:id="@+id/rl_check_update"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv5"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/update" />
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/iv5"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/update"
+                    android:textColor="#576168" />
+
+                <ImageView
+                    android:id="@+id/imageview_jiantou5"
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

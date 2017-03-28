@@ -307,4 +307,18 @@ public class BookPresenter extends IBookPresenter {
             if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
         }
     }
+
+    @Override
+    public void checkUpdate(int currVersionCode, CallBack callBack, boolean forceUpdate) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("version_code",String.valueOf(currVersionCode));
+        try {
+            getModel().post(GlobalParams.urlCheckUpdate,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("检查更新失败");
+            }
+        }
+    }
 }

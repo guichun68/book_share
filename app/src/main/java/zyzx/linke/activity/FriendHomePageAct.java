@@ -189,6 +189,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                         UIUtil.showToastSafe("不能跟自己聊天");
                         return;
                     }
+
                     Intent in = new Intent(this,ChatActivity.class);
                     Bundle args = new Bundle();
                     in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));

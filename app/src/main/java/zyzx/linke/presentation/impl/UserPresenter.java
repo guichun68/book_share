@@ -243,4 +243,35 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void delFriend(Integer friendUserId,CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("owner_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("friend_id",String.valueOf(friendUserId));
+        try {
+            getModel().post(GlobalParams.urlDelFriend,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure("删除失败!");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addBlackList(String userId, CallBack callBack) {
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("from_user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("to_user_id",userId);
+        try {
+            getModel().post(GlobalParams.urlAddBlackList,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure("添加失败");
+            }
+            e.printStackTrace();
+        }
+
+    }
 }

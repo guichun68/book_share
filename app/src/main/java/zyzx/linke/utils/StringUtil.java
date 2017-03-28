@@ -246,7 +246,7 @@ public class StringUtil {
     }
 
     /**
-     * 得到给定字符串的后缀，如果没有后缀，返回null; 如 http://www.sina.music/f2f.mp3 则返回.mp3
+     * 得到给定字符串的后缀，如果没有后缀，返回null; 如 http://www.sina.music/f2f.mp3 则返回f2f.mp3
      *
      * @param str
      * @return
@@ -254,7 +254,7 @@ public class StringUtil {
     public static String getExtraName(String str) {
         String result = null;
         if (str.contains(".")) {
-            result = str.substring(str.lastIndexOf("."));
+            result = str.substring(str.lastIndexOf("/")+1);
         }
         if (result.contains("/")) {
             return null;

@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -203,5 +204,59 @@ public class FileUtil {
         cursor.moveToFirst();
         return cursor.getInt(0);
 
+    }
+
+    public static String getExternalStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/lk/";
+    }
+
+    public static String getDownloadDir(Context context) {
+        return getDir(context, "download");
+    }
+
+    public static String getCacheDir(Context context) {
+        return getDir(context, "cache");
+    }
+
+    public static String getIconDir(Context context) {
+        return getDir(context, "icon");
+    }
+    public static String getDir(Context context, String name) {
+        String path;
+        if (isSDCardAvailable()) {
+            path = getExternalStoragePath();
+        } else {
+            path = getCachePath(context);
+        }
+        path = path + name + "/";
+        if (createDirs(path)) {
+            return path;
+        } else {
+            return null;
+        }
+    }
+    public static String getCachePath(Context context) {
+        File f = context.getCacheDir();
+        if (null == f) {
+            return null;
+        } else {
+            return f.getAbsolutePath() + "/";
+        }
+    }
+
+    public static boolean createDirs(String dirPath) {
+        File file = new File(dirPath);
+        if (!file.exists() || !file.isDirectory()) {
+            return file.mkdirs();
+        }
+        return true;
+    }
+
+    public static boolean isSDCardAvailable() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.activity.CityListActivity;
+import zyzx.linke.activity.HomeAct;
 import zyzx.linke.activity.KeywordListActivity;
 import zyzx.linke.activity.MapActivity;
 import zyzx.linke.adapter.AllUserBooksListAdapter;
@@ -608,6 +609,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                         @Override
                         public void run() {
                             dismissProgress();
+
                             if(isRefresh){
                                 mListViewItems.clear();
                             }
@@ -636,6 +638,9 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                                 // mPullRefreshListView.setMode(Mode.PULL_FROM_END);
                             }
                             mAdapter.notifyDataSetChanged();
+                            if(!GlobalParams.isCheckedUpdate){
+                                ((HomeAct) getActivity()).checkUpdate();
+                            }
                         }
                     });
                 }

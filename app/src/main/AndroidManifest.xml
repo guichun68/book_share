@@ -161,7 +161,21 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             />
-
+        <activity
+            android:name=".base.ForceUpdateActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/Base.V7.Theme.AppCompat.Dialog"
+            />
+        <activity
+            android:name=".base.UpdateActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/Base.V7.Theme.AppCompat.Dialog"
+            />
+        <service android:name=".base.UpdateService"/>
 
 
         <activity

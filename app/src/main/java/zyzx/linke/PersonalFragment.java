@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +25,10 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
-import zyzx.linke.activity.PersonalCenter;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.base.UpdateService;
+import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
@@ -64,6 +67,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_scan_input).setOnClickListener(this);//扫描
         mRootView.findViewById(R.id.rl_manual_input).setOnClickListener(this);//手动录入
         mRootView.findViewById(R.id.rl_log_out).setOnClickListener(this);//注销登录
+        mRootView.findViewById(R.id.rl_check_update).setOnClickListener(this);//注销登录
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
         intiData();
@@ -108,10 +112,36 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 getActivity().finish();
                 gotoActivity(LoginAct.class);
                 break;
+            case R.id.rl_check_update:
+                if(((HomeAct)getActivity()).mBinder==null){
+                    ((HomeAct)getActivity()).checkUpdate();
+                    return;
+                }
+                ((HomeAct)getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
+                    @Override
+                    public void shouldUpdate(boolean shoudUpdate) {
+                        if(!shoudUpdate){
+                            showSnack(null,"已经是最新版本");
+                        }else{
+                            //do nothing, if app should update,the UpdateActivity will auto evoked.
+                            Log.i("zyzx","is already the latest version.");
+                        }
+                    }
+                });
+                break;
         }
     }
 
-
+    public void showSnack(String btnText,String msg) {
+        final Snackbar snackbar = Snackbar.make(tvSignature, msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(btnText, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
+    }
 
     private void showModifySignatureDialog() {
         AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
@@ -258,6 +288,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 switch (code){
                     case 200:
                         UIUtil.showToastSafe("修改成功");
+                        GlobalParams.gUser.setHead_icon(newHeadIconUrl);
+                        UserDao.getInstance(mContext).updateUser(GlobalParams.gUser);
                         GlobalParams.gUser.setHead_icon(newHeadIconUrl);
                         break;
                     default:

@@ -20,6 +20,8 @@ public class GlobalParams {
 	public static boolean isDrawerOpened;
 
 	public static String image_file_location;//图片本地存储地址
+	public static boolean isCheckedUpdate;//是否已经自动检查更新了
+
 
 
     static{
@@ -33,6 +35,9 @@ public class GlobalParams {
 	 * 登录URL
 	 */
 	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+
+	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
+
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -45,10 +50,13 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	/**
 	 * 获取所有好友
 	 */
 	public static String urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
+	//checkupdate
+	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
 	/**
 	 * 默认头像地址
 	 */
@@ -148,6 +156,9 @@ public class GlobalParams {
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
+		urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
+		urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
+		urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

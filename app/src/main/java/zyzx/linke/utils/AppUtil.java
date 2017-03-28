@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -406,6 +407,16 @@ public class AppUtil {
 		}
 		return null;
 	}
+	public static int getScreenWidth(Context ctx) {
+		WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+		int screenWidth = wm.getDefaultDisplay().getWidth();
+		return screenWidth;
+	}
 
+	public static int getScreenHeight(Context ctx) {
+		WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+		int screenHeight = wm.getDefaultDisplay().getHeight();
+		return screenHeight;
+	}
 
 }

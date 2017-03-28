@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.base.IPresenter;
+import zyzx.linke.base.UpdateService;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
@@ -94,4 +95,12 @@ public abstract class IBookPresenter extends IPresenter {
      * @param callBack
      */
     public abstract void getMyBorrowedInBooks(Integer userid, int pageNum, CallBack callBack);
+
+    /**
+     * 检查更新
+     * @param currVersionCode 当前版本号
+     * @param callBack 回调
+     * @param flag
+     */
+    public abstract void checkUpdate(int currVersionCode, CallBack callBack, boolean flag);
 }
