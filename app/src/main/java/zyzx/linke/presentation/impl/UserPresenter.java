@@ -304,4 +304,19 @@ public class UserPresenter extends IUserPresenter {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void getUserInfoInConversation(String userId, CallBack callBack) {
+        HashMap<String ,Object> param = new HashMap<>();
+        param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("friend_id",userId);
+        try {
+            getModel().post(GlobalParams.urlGetUserInfoInConversation,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure("未能获取用户信息");
+            }
+            e.printStackTrace();
+        }
+    }
 }

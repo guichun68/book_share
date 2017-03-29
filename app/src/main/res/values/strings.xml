@@ -85,6 +85,7 @@
     <string name="error_socket_timeout">连接超时</string>
     <string name="error_scode">安全码错误</string>
     <string name="error_table_id">tableID不存在</string>
+    <string name="error_chat">抱歉,对方已限制您的聊天请求</string>
     <string name="error_route_result_walk">抱歉，没有帮您规划出合适的步行路线</string>
     <string name="error_route_result_bus">抱歉，没有帮您规划出合适的公交路线</string>
     <string name="error_route_result_drive">抱歉，没有帮您规划出合适的驾车路线</string>

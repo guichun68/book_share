@@ -207,7 +207,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                             if(code==500){
                                 //在对方的黑名单中
                                 GlobalParams.shouldRefreshContactList = true;
-                                UIUtil.showToastSafe("对方已限制您的聊天申请");
+                                UIUtil.showToastSafe(R.string.error_chat);
                                 return;
                             }else if(code ==200){
                                 //添加成功

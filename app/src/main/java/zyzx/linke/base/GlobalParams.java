@@ -124,6 +124,8 @@ public class GlobalParams {
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
 	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
 	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
+    //会话页面点击用户聊天时获得用户信息
+    public static String urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
 
 	//向高德地图中添加一条记录
 	public static String urlAddbook2Gaode = "http://yuntuapi.amap.com/datamanage/data/create";
@@ -167,6 +169,7 @@ public class GlobalParams {
 		urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
 		urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
+        urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

@@ -26,7 +26,7 @@ public class User implements Serializable{
 	private String lastLoginTime;
 	private String signature;
 	private String head_icon;
-	private String bak4;
+	private String bak4;////勿删，目前已用作返回给会话页面的用户信息时的code使用
 	private String bak5;
 	private String bak6;
 	

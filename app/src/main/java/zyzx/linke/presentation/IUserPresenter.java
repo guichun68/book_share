@@ -80,4 +80,11 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void addFriend(Integer userid, CallBack callBack);
+
+    /**
+     * 得到用户信息（在本类getUserInfo方法基础上外加自己是否已被对方(userId)添加到黑名单等）
+     * @param userId
+     * @param callBack
+     */
+    public abstract void getUserInfoInConversation(String userId, CallBack callBack);
 }
