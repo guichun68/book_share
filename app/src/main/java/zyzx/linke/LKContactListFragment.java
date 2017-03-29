@@ -85,11 +85,43 @@ public class LKContactListFragment extends BaseFragment {
                         mContactListFrag.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
 
                             @Override
-                            public void onListItemClicked(EaseUser user) {
-                                Intent in = new Intent(getActivity(),ChatActivity.class);
-                                in.putExtra(BundleFlag.LOGIN_NAME,user.getNickname());//设置用户昵称
-                                in.putExtra(BundleFlag.UID,String.valueOf(user.getUsername()));//同userId
-                                startActivity(in);
+                            public void onListItemClicked(final EaseUser user) {
+                                getUserPresenter().getUserInfoInConversation(user.getUsername(),new CallBack(){
+                                    @Override
+                                    public void onSuccess(Object obj) {
+                                        dismissProgress();
+                                        String userJson = (String) obj;
+                                        User userTemp = JSON.parseObject(userJson,User.class);
+                                        if(userTemp==null){
+                                            UIUtil.showToastSafe("未查询到用户信息,请稍后重试。");
+                                            return;
+                                        }
+                                        if(userTemp.getBak4().equals("500")){
+                                            UIUtil.showToastSafe(R.string.error_chat);
+                                            return;
+                                        }
+                                        if(userTemp.getBak4().equals("400")){
+                                            UIUtil.showToastSafe("未查询到用户信息,请稍后重试");
+                                            return;
+                                        }
+                                        if(!userTemp.getBak4().equals("200")){
+                                            UIUtil.showToastSafe("请求出错，请稍后重试");
+                                            return;
+                                        }
+                                        Intent in = new Intent(getActivity(),ChatActivity.class);
+                                        in.putExtra(BundleFlag.LOGIN_NAME,user.getNickname());//设置用户昵称
+                                        in.putExtra(BundleFlag.UID,String.valueOf(user.getUsername()));//同userId
+                                        startActivity(in);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Object obj) {
+                                        dismissProgress();
+                                        UIUtil.showToastSafe("未能获取用户信息");
+
+                                    }
+                                });
+
                             }
 
                             @Override

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    >
+
+
+    <RelativeLayout
+        android:id="@+id/rl_home"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_height="match_parent"
+       >
+
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/tab_home"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/title1"
+            android:focusable="false"
+            android:layout_below="@id/icon1"
+            android:textSize="13sp"
+            android:text="会话"
+            android:gravity="center"
+            android:textColor="@drawable/bg_tab_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_conversation"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/tab_conversation"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/title2"
+            android:focusable="false"
+            android:layout_below="@id/icon2"
+            android:textSize="13sp"
+            android:text="消息"
+            android:gravity="center"
+            android:textColor="@drawable/bg_tab_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/unread_msg_number"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/unread_bg"
+            android:textColor="@android:color/white"
+            android:visibility="invisible"
+            android:layout_toRightOf="@id/icon2"
+             />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_contact"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/icon3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/tab_contact"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/title3"
+            android:focusable="false"
+            android:layout_below="@id/icon3"
+            android:textSize="13sp"
+            android:text="联系人"
+            android:gravity="center"
+            android:textColor="@drawable/bg_tab_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_personal"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/icon4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/tab_me"
+            android:focusable="false" />
+
+        <TextView
+            android:id="@+id/title4"
+            android:focusable="false"
+            android:layout_below="@id/icon4"
+            android:textSize="13sp"
+            android:text="我"
+            android:gravity="center"
+            android:textColor="@drawable/bg_tab_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+</LinearLayout>

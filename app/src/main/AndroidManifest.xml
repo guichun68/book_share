@@ -175,6 +175,26 @@
             android:launchMode="singleTop"
             android:theme="@style/Base.V7.Theme.AppCompat.Dialog"
             />
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+
+
+
         <service android:name=".base.UpdateService"/>
 
 
@@ -255,6 +275,10 @@
             </intent-filter>
         </receiver>
         <!-- 环信 End#############################################################-->
+        <!-- 环信中用到的百度地图 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="t39mDg6Y1V3mG2wDm3w6QSzNK22w7c9h" />
     </application>
 
 </manifest>

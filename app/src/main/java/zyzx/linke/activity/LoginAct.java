@@ -78,13 +78,14 @@ public class LoginAct extends BaseActivity {
 
     @Override
     protected void initData() {
+        aetLoginName.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.LAST_LOGIN_NAME,""));
+        aetPsw.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW,""));
         if(SharedPreferencesUtils.getBoolean(SharedPreferencesUtils.AUTO_LOGIN)){
-            aetLoginName.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.LAST_LOGIN_NAME,""));
-            aetPsw.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW,""));
             ((Button)findViewById(R.id.btn_login)).performClick();
         }
 
     }
+
 
     @Override
     public void onClick(final View view) {

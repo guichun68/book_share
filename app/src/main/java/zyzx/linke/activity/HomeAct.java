@@ -16,7 +16,12 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+
+import java.util.List;
 
 import zyzx.linke.HomeFragment;
 import zyzx.linke.LKContactListFragment;
@@ -24,6 +29,7 @@ import zyzx.linke.LKConversationListFragment;
 import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.utils.UIUtil;
@@ -63,15 +69,33 @@ public class HomeAct extends BaseActivity {
         }
     }
 
-
+    View tabView2;//底部第二个tab（消息）的布局
+    TextView unreadLabel;
     private View getTabItemView(int index) {
         View view = layoutInflater.inflate(R.layout.home_tab, null);
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        icon.setImageResource(mImageViewArray[index]);
+//        icon.setImageResource(mImageViewArray[index]);
+        switch (index){
+            case 0:
+                icon.setBackgroundResource(R.drawable.tab_home);
+                break;
+            case 1:
+                icon.setBackgroundResource(R.drawable.tab_conversation);
+                break;
+            case 2:
+                icon.setBackgroundResource(R.drawable.tab_contact);
+                break;
+            case 3:
+                icon.setBackgroundResource(R.drawable.tab_me);
+                break;
+        }
         TextView title = (TextView) view.findViewById(R.id.title);
+//        unreadLabel = (TextView) view.findViewById(R.id.tabUnread);
+        unreadLabel = (TextView) view.findViewById(R.id.unread_msg_number);
+        unreadLabel.setVisibility(View.GONE);
         title.setText(mTitleArray[index]);
-        if (index == 0){
-            msgUnread = (ImageView) view.findViewById(R.id.tabUnread);
+        if(index==1){
+            tabView2 = view;
         }
         return view;
     }
@@ -127,9 +151,93 @@ public class HomeAct extends BaseActivity {
         });
     }
 
+    EMMessageListener messageListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            // notify new message
+            for (EMMessage message : messages) {
+                EaseUIHelper.getInstance().getNotifier().onNewMsg(message);
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            //red packet code : 处理红包回执透传消息
+            /*for (EMMessage message : messages) {
+                EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                final String action = cmdMsgBody.action();//获取自定义action
+                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+                    RedPacketUtil.receiveRedPacketAckMessage(message);
+                }
+            }*/
+            //end of red packet code
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {}
+    };
+
+
+    private void refreshUIWithMessage() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // refresh unread count
+                updateUnreadLabel();
+                LKConversationListFragment conversationListFragment = (LKConversationListFragment) HomeAct.this.getSupportFragmentManager().findFragmentByTag(mTextviewArray[1]);
+                // refresh conversation list
+                if (conversationListFragment != null) {
+                    conversationListFragment.refresh();
+                }
+            }
+        });
+    }
+
+    /**
+     * get unread message count
+     *
+     * @return
+     */
+    public int getUnreadMsgCountTotal() {
+        int unreadMsgCountTotal = 0;
+        int chatroomUnreadMsgCount = 0;
+        unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
+        for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
+            if(conversation.getType() == EMConversation.EMConversationType.ChatRoom)
+                chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
+        }
+        return unreadMsgCountTotal-chatroomUnreadMsgCount;
+    }
+
+
+    /**
+     * update unread message count
+     */
+    public void updateUnreadLabel() {
+        int count = getUnreadMsgCountTotal();
+        if (count > 0) {
+//            ((TextView)tabView2.findViewById(R.id.tabUnread)).setText(String.valueOf(count));
+            tabView2.findViewById(R.id.tabUnread).setVisibility(View.VISIBLE);
+        } else {
+            tabView2.findViewById(R.id.tabUnread).setVisibility(View.INVISIBLE);
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
     private ServiceConnection myServiceConn = new ServiceConnection() {
         @Override
@@ -173,5 +281,9 @@ public class HomeAct extends BaseActivity {
             }
         }
         return false;
+    }
+
+    public void removeUnreadMsg(){
+        tabView2.findViewById(R.id.tabUnread).setVisibility(View.INVISIBLE);
     }
 }

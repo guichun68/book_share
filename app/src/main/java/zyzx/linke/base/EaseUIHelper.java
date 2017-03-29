@@ -1,13 +1,18 @@
 package zyzx.linke.base;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.HashMap;
@@ -15,7 +20,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import zyzx.linke.R;
 import zyzx.linke.UserProfileManager;
+import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
@@ -43,6 +50,15 @@ public class EaseUIHelper {
         }
         return instance;
     }
+
+    /**
+     * get instance of EaseNotifier
+     * @return
+     */
+    public EaseNotifier getNotifier(){
+        return easeUI.getNotifier();
+    }
+
     /**
      * init helper
      * @param context application context
@@ -63,7 +79,8 @@ public class EaseUIHelper {
         }
     }
 
-
+    public boolean isVoiceCalling;
+    public boolean isVideoCalling;
     protected void setEaseUIProviders() {
         // set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUI.EaseUserProfileProvider() {
@@ -73,7 +90,77 @@ public class EaseUIHelper {
                 return getUserInfo(username);
             }
         });
+//set notification options, will use default if you don't set it
+        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
 
+            @Override
+            public String getTitle(EMMessage message) {
+                //you can update title here
+                return null;
+            }
+
+            @Override
+            public int getSmallIcon(EMMessage message) {
+                //you can update icon here
+                return 0;
+            }
+
+            @Override
+            public String getDisplayedText(EMMessage message) {
+                // be used on notification bar, different text according the message type.
+                String ticker = EaseCommonUtils.getMessageDigest(message, appContext);
+                if(message.getType() == EMMessage.Type.TXT){
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                }
+                EaseUser user = getUserInfo(message.getFrom());
+                if(user != null){
+                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                        return String.format(appContext.getString(R.string.at_your_in_group), user.getNick());
+                    }
+                    return user.getNick() + ": " + ticker;
+                }else{
+                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                        return String.format(appContext.getString(R.string.at_your_in_group), message.getFrom());
+                    }
+                    return message.getFrom() + ": " + ticker;
+                }
+            }
+
+            @Override
+            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                // here you can customize the text.
+                // return fromUsersNum + "contacts send " + messageNum + "messages to you";
+                return null;
+            }
+
+            @Override
+            public Intent getLaunchIntent(EMMessage message) {
+                // you can set what activity you want display when user click the notification
+                Intent intent = new Intent(appContext, ChatActivity.class);
+                // open calling activity if there is call
+                if(isVideoCalling){
+//                    intent = new Intent(appContext, VideoCallActivity.class);
+                }else if(isVoiceCalling){
+//                    intent = new Intent(appContext, VoiceCallActivity.class);
+                }else{
+                    EMMessage.ChatType chatType = message.getChatType();
+                    if (chatType == EMMessage.ChatType.Chat) { // single chat message
+                        intent.putExtra("userId", message.getFrom());
+                        intent.putExtra("chatType", EaseConstant.CHATTYPE_SINGLE);
+                    } else { // group chat message
+                        // message.getTo() is the group id
+                        intent.putExtra("userId", message.getTo());
+                        if(chatType == EMMessage.ChatType.GroupChat){
+                            intent.putExtra("chatType", EaseConstant.CHATTYPE_GROUP);
+                        }else{
+                            intent.putExtra("chatType", EaseConstant.CHATTYPE_CHATROOM);
+                        }
+
+                    }
+                }
+                return intent;
+            }
+        });
     }
 
 

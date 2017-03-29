@@ -1,6 +1,7 @@
 package zyzx.linke;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 
 import zyzx.linke.activity.ChatActivity;
+import zyzx.linke.activity.HomeAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
@@ -121,6 +123,22 @@ public class LKConversationListFragment extends BaseFragment {
             }
         });
         dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                ((HomeAct)getActivity()).removeUnreadMsg();
+            }
+        });
     }
 
+    public void refresh(){
+        mConversationListFrag.refresh();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mConversationListFrag.refresh();
+        ((HomeAct)getActivity()).removeUnreadMsg();
+    }
 }

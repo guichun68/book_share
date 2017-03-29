@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import zxing.CaptureActivity;
+import zyzx.linke.activity.AboutUsAct;
 import zyzx.linke.activity.BorrowedInBookAct;
 import zyzx.linke.activity.HomeAct;
 import zyzx.linke.activity.LoginAct;
@@ -51,6 +52,11 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private TextView tvUserName;//用户昵称（login_name）
     private TextView tvSignature;
 
+    // 裁剪后图片的宽(X)和高(Y),600 X 600的正方形。
+    private static int output_X = 600;
+    private static final int CODE_RESULT_REQUEST = 0xa2;//最终裁剪后的结果
+    private static int output_Y = 600;
+
     @Override
     protected View getView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.act_personal_center, container, false);
@@ -68,6 +74,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_manual_input).setOnClickListener(this);//手动录入
         mRootView.findViewById(R.id.rl_log_out).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_check_update).setOnClickListener(this);//注销登录
+        mRootView.findViewById(R.id.rl_about).setOnClickListener(this);//注销登录
+
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
         intiData();
@@ -130,6 +138,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         }
                     }
                 });
+                break;
+            case R.id.rl_about:
+                gotoActivity(AboutUsAct.class);
                 break;
         }
     }
@@ -275,6 +286,27 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         if(!StringUtil.isEmpty(mHeadeIconImagePath)){
             uploadHeadIcon();
         }
+    }
+
+    /**
+     * 裁剪图片
+     * @param uri
+     */
+    public void cropRawPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        //把裁剪的数据填入里面
+        // 设置裁剪
+        intent.putExtra("crop", "true");
+        // aspectX , aspectY :宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        // outputX , outputY : 裁剪图片宽高
+        intent.putExtra("outputX", output_X);
+        intent.putExtra("outputY", output_Y);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, CODE_RESULT_REQUEST);
     }
 
     private void uploadHeadIcon() {
