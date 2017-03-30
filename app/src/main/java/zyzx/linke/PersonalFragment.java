@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -61,6 +60,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private TextView tvUserName;//用户昵称（login_name）
     private TextView tvSignature;
 
+
     // 裁剪后图片的宽(X)和高(Y),600 X 600的正方形。
     private static int output_X = 600;
     private static final int CODE_RESULT_REQUEST = 0xa2;//最终裁剪后的结果
@@ -84,6 +84,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_log_out).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_check_update).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_about).setOnClickListener(this);//注销登录
+        mRootView.findViewById(R.id.rl_modify_psw).setOnClickListener(this);//修改密码
 
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
@@ -134,7 +135,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     ((HomeAct)getActivity()).checkUpdate();
                     return;
                 }
-                showProgress("请稍后……");
+                showProgress("检查中…");
                 ((HomeAct)getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
                     @Override
                     public void shouldUpdate(boolean shoudUpdate) {
@@ -143,13 +144,16 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                             showSnack(null,"已经是最新版本");
                         }else{
                             //do nothing, if app should update,the UpdateActivity will auto evoked.
-                            Log.i("zyzx","is already the latest version.");
+                            Log.i("zyzx","should update");
                         }
                     }
                 });
                 break;
             case R.id.rl_about:
                 gotoActivity(AboutUsAct.class);
+                break;
+            case R.id.rl_modify_psw://修改密码
+                gotoActivity(ModifyPswAct.class);
                 break;
         }
     }

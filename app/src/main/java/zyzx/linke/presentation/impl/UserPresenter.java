@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import zyzx.linke.R;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
@@ -81,6 +82,9 @@ public class UserPresenter extends IUserPresenter {
            });
         } catch (IOException e) {
             e.printStackTrace();
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("请求出错，请稍后重试！");
+            }
         }
     }
 
@@ -365,6 +369,22 @@ public class UserPresenter extends IUserPresenter {
         } catch (IOException e) {
             if(callBack!=null){
                 callBack.onFailure("请求失败，请稍后重试!");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void modifyPsw(Integer userid, String oldPsw, String newPsw, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("user_id",String.valueOf(userid));
+        param.put("old_psw",oldPsw);
+        param.put("new_psw",newPsw);
+        try {
+            getModel().post(GlobalParams.urlModifyPsw,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure(UIUtil.getString(R.string.err_request));
             }
             e.printStackTrace();
         }

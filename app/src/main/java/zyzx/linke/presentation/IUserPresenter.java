@@ -109,4 +109,6 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void resetPsw(String userId,String newPsw, CallBack callBack);
+    //修改密码
+    public abstract void modifyPsw(Integer userid, String oldPsw, String newPsw, CallBack callBack);
 }

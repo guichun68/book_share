@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.hyphenate.easeui.EaseConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,7 +186,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             case R.id.iv_icon:
                 if(mUser!=null&& mUser.getUserid()!=null){
                     if(mUser.getUserid() == SharedPreferencesUtils.getInt(SharedPreferencesUtils.USER_ID,-1)){
-                        UIUtil.showToastSafe("不能跟自己聊天");
+                        UIUtil.showToastSafe(R.string.neednot_chat_myself);
                         return;
                     }
                     showProgress("正在添加好友…");
@@ -211,9 +210,9 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                                 return;
                             }else if(code ==200){
                                 //添加成功
+                                UIUtil.showToastSafe("已自动添加"+mUser.getLogin_name()+"为好友");
                                 GlobalParams.shouldRefreshContactList = true;
                                 Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
-                                Bundle args = new Bundle();
                                 in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
                                 in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
                                 startActivity(in);

@@ -95,7 +95,7 @@ public class LoginAct extends BaseActivity {
                 if(!checkInput()){
                     return;
                 }
-                showProgress("请稍后……");
+                showProgress("正在登录…");
                 getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
@@ -107,7 +107,7 @@ public class LoginAct extends BaseActivity {
                     public void onFailure(Object obj) {
                         dismissProgress();
 //                        UIUtil.showToastSafe("用户名或密码错误.");
-                        UIUtil.showToastSafe((String)obj);
+                        UIUtil.showToastSafe((String) obj);
                     }
                 });
 

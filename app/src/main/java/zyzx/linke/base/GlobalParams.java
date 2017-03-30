@@ -25,6 +25,7 @@ public class GlobalParams {
 	public static boolean isCheckedUpdate;//是否已经自动检查更新了
 
 
+
     static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
@@ -67,6 +68,7 @@ public class GlobalParams {
 	public static String urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 	//checkupdate
 	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
+	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
 	/**
 	 * 默认头像地址
 	 */
@@ -180,6 +182,7 @@ public class GlobalParams {
 		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
 		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
+		urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
 	}
 
 	static IBookPresenter getBookPresenter(){
