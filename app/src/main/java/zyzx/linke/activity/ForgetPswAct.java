@@ -98,7 +98,7 @@ public class ForgetPswAct extends BaseActivity{
                             bundle.putString(BundleFlag.UID,String.valueOf(mUserId));
                             gotoActivity(ResetPswAct.class,true,bundle);
                         }else if(code ==500){
-                            UIUtil.showToastSafe("验证码已过期");
+                            UIUtil.showToastSafe("验证码错误或已过期");
                         }else{
                             UIUtil.showToastSafe(R.string.err_request);
                         }

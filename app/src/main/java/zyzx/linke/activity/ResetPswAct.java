@@ -73,8 +73,9 @@ public class ResetPswAct extends BaseActivity{
                         if(code == 200){
                             UIUtil.showToastSafe("重置成功,请重新登录");
                             finish();
+                        }else{
+                            UIUtil.showToastSafe("重置密码错误，code="+code);
                         }
-                        UIUtil.showToastSafe("重置密码错误，code="+code);
                     }
 
                     @Override
