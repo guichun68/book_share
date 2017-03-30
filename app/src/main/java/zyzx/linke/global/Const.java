@@ -91,5 +91,6 @@ public class Const {
 	public static final String MSG_FLAG_LOGIN_NAME="msg_flag_login_name";
 	public static final String MSG_FLAG_HEAD_URL="msg_flag_head_url";
 
+	public static final int AVATAR_SELECTION=0x38F;//头像选择
 	public static final LatLonPoint TianAnMenPoint = new LatLonPoint(39.906905, 116.397541);
 }

@@ -24,7 +24,7 @@ import zyzx.linke.R;
 public class CapturePhoto {
 
 	public static final int SHOT_IMAGE = 1;//拍照
-	public static final int PICK_IMAGE = 2;//从相册选择
+	public static final int PICK_ALBUM_IMAGE = 2;//从相册选择
 	
 	private static final String JPEG_FILE_PREFIX = "LINKEIMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";	
@@ -78,7 +78,7 @@ public class CapturePhoto {
 			}
 			break;
 			
-		case PICK_IMAGE :
+		case PICK_ALBUM_IMAGE:
 			takePictureIntent = new Intent(Intent.ACTION_PICK,
 				     MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 			break;
@@ -202,7 +202,7 @@ public class CapturePhoto {
 	}
 	
 	private String getAlbumName() {
-		return activity.getString(R.string.album_name);
+		return UIUtil.getString(R.string.album_name);
 	}
 	
 	private File getAlbumDir() {

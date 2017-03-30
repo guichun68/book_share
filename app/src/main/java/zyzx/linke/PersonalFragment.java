@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -18,6 +20,12 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import zxing.CaptureActivity;
 import zyzx.linke.activity.AboutUsAct;
@@ -34,6 +42,7 @@ import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
+import zyzx.linke.utils.ImageUtils;
 import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -101,7 +110,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 gotoActivity(ManualInputAct.class);
                 break;
             case R.id.civ:
-                uimp = new UserInfoImagePOP(this.getActivity(), new PersonalFragment.itemsOnClick(Const.CAMERA_REQUEST_CODE));
+                uimp = new UserInfoImagePOP(this.getActivity(), new PersonalFragment.itemsOnClick(Const.AVATAR_SELECTION));
                 uimp.showAtLocation(mRootView.findViewById(R.id.ll_root), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.tv_signature:
@@ -251,41 +260,76 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                     }
                     break;
                 case R.id.tv_photo:
-                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_IMAGE, requestCode);
+                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_ALBUM_IMAGE, requestCode);
                     uimp.dismiss();
                     break;
             }
         }
 
     }
-
+    protected Bitmap cropBitmap;//裁剪后的图片
     private String mHeadeIconImagePath;
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (capture.getActionCode() == CapturePhoto.PICK_IMAGE) {
-                Uri targetUri = data.getData();
-                if (targetUri != null) {
-                    if (requestCode == Const.CAMERA_REQUEST_CODE) {
-                        mHeadeIconImagePath = FileUtil.uriToFilePath(targetUri,mContext);
-                        Glide.with(this).load(targetUri).into(mCiv);
-                    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if ((resultCode != RESULT_OK)){
+            UIUtil.showToastSafe("已取消选择");
+            return;
+        }
+        if(requestCode==Const.AVATAR_SELECTION){//是头像选择
+            //再判断是相册还是拍照
+            if(capture.getActionCode() == CapturePhoto.PICK_ALBUM_IMAGE){//相册
+                Uri targetUri = intent.getData();
+                if (targetUri != null) {//裁剪方法
+                    ImageUtils.doCropPhoto(this,new File(FileUtil.uriToFilePath(targetUri,mContext)));
                 }
-            } else {
-                if (requestCode == Const.CAMERA_REQUEST_CODE) {
-                    mHeadeIconImagePath = capture.getmCurrentPhotoPath();
-                    Glide.with(this).load(mHeadeIconImagePath).into(mCiv);
-                    /*file = new File(mHeadeIconImagePath);
-                    Bitmap bbb = PicConvertUtil.convertToBitmap(mHeadeIconImagePath, 90, 90);
-                    acivCover.setImageBitmap(bbb);*/
-                }
+            }else if(capture.getActionCode()==CapturePhoto.SHOT_IMAGE){//拍照
+                ImageUtils.doCropPhoto(this,new File(capture.getmCurrentPhotoPath()));
             }
+        }else if(requestCode == ImageUtils.PHOTO_PICKED_WITH_DATA){//裁剪图片完成
+            if (intent != null) {
+                cropBitmap = ImageUtils.getCroppedImage();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                cropBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] bytes=baos.toByteArray();
+                Glide.with(mContext).load(bytes).into(mCiv);
+                mHeadeIconImagePath = saveBitmap(cropBitmap);
+                uploadHeadIcon();
+            }else{
+                UIUtil.showToastSafe("未能选择图片");
+            }
+
         }
-        if(!StringUtil.isEmpty(mHeadeIconImagePath)){
-            uploadHeadIcon();
+    }
+
+    /**
+     * 将Bitmap转成file的Uri
+     *
+     * @param bitmap
+     * @return
+     */
+    private String saveBitmap(Bitmap bitmap) {
+        String cacheDir = FileUtil.getCacheDir(mContext);
+        File file = new File(cacheDir + "avatar");
+        if (!file.exists())
+            file.mkdirs();
+        File imgFile = new File(file.getAbsolutePath() + "/head.jpeg");
+        if (imgFile.exists())
+            imgFile.delete();
+        try {
+            FileOutputStream outputStream = new FileOutputStream(imgFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
+            outputStream.flush();
+            outputStream.close();
+//            Uri uri = Uri.fromFile(imgFile);
+            return imgFile.getAbsolutePath();
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**

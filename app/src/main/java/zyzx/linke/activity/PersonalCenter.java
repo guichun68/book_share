@@ -191,7 +191,7 @@ public class PersonalCenter extends BaseActivity {
                     }
                     break;
                 case R.id.tv_photo:
-                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_IMAGE, requestCode);
+                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_ALBUM_IMAGE, requestCode);
                     uimp.dismiss();
                     break;
             }
@@ -205,7 +205,7 @@ public class PersonalCenter extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (capture.getActionCode() == CapturePhoto.PICK_IMAGE) {
+            if (capture.getActionCode() == CapturePhoto.PICK_ALBUM_IMAGE) {
                 Uri targetUri = data.getData();
                 if (targetUri != null) {
                     if (requestCode == Const.CAMERA_REQUEST_CODE) {

@@ -232,7 +232,7 @@ public class ManualInputAct extends BaseActivity {
                     }
                     break;
                 case R.id.tv_photo:
-                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_IMAGE, requestCode);
+                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_ALBUM_IMAGE, requestCode);
                     uimp.dismiss();
                     break;
             }
@@ -247,7 +247,7 @@ public class ManualInputAct extends BaseActivity {
 //        isSetHeadIcon = true;
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (capture.getActionCode() == CapturePhoto.PICK_IMAGE) {
+            if (capture.getActionCode() == CapturePhoto.PICK_ALBUM_IMAGE) {
                 Uri targetUri = data.getData();
                 if (targetUri != null) {
                     String img_path = FileUtil.uriToFilePath(targetUri,this);
