@@ -3,6 +3,8 @@ package zyzx.linke.base;
 
 import android.app.Activity;
 
+import java.util.HashMap;
+
 import zyzx.linke.model.IModel;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IBookPresenter;
@@ -21,7 +23,6 @@ public class GlobalParams {
 
 	public static String image_file_location;//图片本地存储地址
 	public static boolean isCheckedUpdate;//是否已经自动检查更新了
-
 
 
     static{
@@ -50,6 +51,8 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	//验证短信验证码正确否的url
+	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	//添加到黑名单
 	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	//检查是否在对方的黑名单中
@@ -68,6 +71,8 @@ public class GlobalParams {
 	public static String urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 
 	public static String urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
+	//忘记密码页发送验证码
+	public static String urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
 	/**
 	 * 通过用户id获取其下所有书籍和其用户基本信息
 	 */
@@ -170,6 +175,8 @@ public class GlobalParams {
 		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
 		urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
         urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
+		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
+		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

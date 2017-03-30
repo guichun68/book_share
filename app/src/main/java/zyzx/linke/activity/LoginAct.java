@@ -118,6 +118,7 @@ public class LoginAct extends BaseActivity {
                 //gotoActivity(SMSLoginAct.class,false);
                 break;
             case R.id.tv_forget_psw:
+                gotoActivity(ForgetPswAct.class,false);
                 break;
             case R.id.tv_regist://用户注册
                 Intent intent2 = new Intent(LoginAct.this,RegisterAct.class);

@@ -23,16 +23,21 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class UserPresenter extends IUserPresenter {
-
+    private HashMap<String,Object> mParam;
+    private HashMap<String,Object> getParam(){
+        if(mParam==null){
+            mParam = new HashMap<>();
+        }
+        mParam.clear();
+        return mParam;
+    }
 
     @Override
     public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("loginName",login_name);
         param.put("password",password);
-
         try {
-
            getModel().post(GlobalParams.urlLogin, param, new CallBack() {
                @Override
                public void onSuccess(Object obj) {
@@ -82,7 +87,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void sendLoginSMSVerifyCode(String phone,final CallBack viewCallBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("phone",phone);
         try {
             getModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
@@ -120,7 +125,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void regist(String userName, String psw, String phone, final CallBack viewCallBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("login_name",userName);
         param.put("password",psw);
         param.put("phone",phone);
@@ -160,7 +165,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getUserInfo(String uid, final CallBack viewCallBack) {
-            HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("uid",uid);
         try {
             getModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
@@ -186,7 +191,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void uploadHeadIcon(Integer userId,String imagePath, CallBack viewCallBack) {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap<String,Object> params = getParam();
         params.put("head_icon",new File(imagePath));
         params.put("user_id",userId);
         try {
@@ -201,7 +206,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void mofiySignature(Integer userid, String sig, CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("user_id",userid+"");
         param.put("sig",sig);//个性签名
         try {
@@ -216,7 +221,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void searchFriend(String keyWord, int pageNum,CallBack viewCallBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("key_word",keyWord);
         param.put("page_num",String.valueOf(pageNum));
         try {
@@ -232,7 +237,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getAllMyFriends(int anInt, CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("user_id",String.valueOf(anInt));
         try {
             getModel().post(GlobalParams.urlGetFriends,param,callBack);
@@ -246,7 +251,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void delFriend(Integer friendUserId,CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("owner_id",String.valueOf(GlobalParams.gUser.getUserid()));
         param.put("friend_id",String.valueOf(friendUserId));
         try {
@@ -261,7 +266,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void addBlackList(String userId, CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("from_user_id",String.valueOf(GlobalParams.gUser.getUserid()));
         param.put("to_user_id",userId);
         try {
@@ -276,7 +281,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void checkIfInBlackList(Integer userid, CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
         param.put("friend_id",String.valueOf(userid));
 
@@ -292,7 +297,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void addFriend(Integer userid, CallBack callBack) {
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
         param.put("friend_id",String.valueOf(userid));
         try {
@@ -307,7 +312,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getUserInfoInConversation(String userId, CallBack callBack) {
-        HashMap<String ,Object> param = new HashMap<>();
+        HashMap<String,Object> param = getParam();
         param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
         param.put("friend_id",userId);
         try {
@@ -315,6 +320,36 @@ public class UserPresenter extends IUserPresenter {
         } catch (IOException e) {
             if(callBack!=null){
                 callBack.onFailure("未能获取用户信息");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendForgetPswSMSVerifyCode(String phone, CallBack viewCallBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("phone",phone);
+        try {
+            getModel().post(GlobalParams.urlForgetPSWSms,param,viewCallBack);
+        } catch (IOException e) {
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("验证码发送失败");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("verify_code",verifyCode);
+        param.put("verify_type",String.valueOf(type));
+        param.put("user_id",String.valueOf(userId));
+        try {
+            getModel().post(GlobalParams.urlVerifySMSCode,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure("请求失败，请稍后重试!");
             }
             e.printStackTrace();
         }
