@@ -18,14 +18,14 @@ public abstract class BaseParentActivity extends CheckPermissionsActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppManager.getAppManager().addActivity(this);
         if (getLayoutId() != 0) {
             setContentView(getLayoutId());
+            initTitleBar();
         }
+        AppManager.getAppManager().addActivity(this);
 
         mInflater = getLayoutInflater();
         mContext = this;
-        initTitleBar();
         initView(savedInstanceState);
         initData();
         checkNetwork();

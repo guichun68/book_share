@@ -3,6 +3,10 @@ package zyzx.linke.activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CheckPhone;
 import zyzx.linke.utils.StringUtil;
@@ -40,7 +45,20 @@ public class ForgetPswAct extends BaseActivity{
         etPhone = (AppCompatEditText) findViewById(R.id.aet_phone);
         btnSendVerifyCode = (Button) findViewById(R.id.btn_sendverifycode);
         etVerifycode = (AppCompatEditText) findViewById(R.id.aet_verifycode);
+
+
+        SpannableString ss = new SpannableString(getString(R.string.input_phone_forget_psw));//定义hint的值
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(16,true);//设置字体大小 true表示单位是sp
+        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etPhone.setHint(new SpannedString(ss));
+
+        SpannableString ss2 = new SpannableString(getString(R.string.input_verifycode));//定义hint的值
+        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(16,true);//设置字体大小 true表示单位是sp
+        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etVerifycode.setHint(new SpannedString(ss2));
+
         btnNextPage .setOnClickListener(this);
+        btnSendVerifyCode.setOnClickListener(this);
     }
 
     @Override
@@ -76,7 +94,9 @@ public class ForgetPswAct extends BaseActivity{
                         JSONObject jsonObj = JSON.parseObject(json);
                         int code = jsonObj.getInteger("code");
                         if(code ==200){
-                            gotoActivity(ResetPswAct.class,true);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(BundleFlag.UID,String.valueOf(mUserId));
+                            gotoActivity(ResetPswAct.class,true,bundle);
                         }else if(code ==500){
                             UIUtil.showToastSafe("验证码已过期");
                         }else{

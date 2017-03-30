@@ -1,8 +1,11 @@
 package zyzx.linke.activity;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,6 +23,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 
 import java.util.List;
 
@@ -30,6 +34,7 @@ import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.EaseUIHelper;
+import zyzx.linke.base.ErrActivity;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.utils.UIUtil;
@@ -54,7 +59,19 @@ public class HomeAct extends BaseActivity {
     }
 
     @Override
-    protected void initView(Bundle saveInstanceState) {
+    protected void initView(Bundle savedInstanceState) {
+        //make sure activity will not in background if user is logged into another device or removed
+        if (savedInstanceState != null && savedInstanceState.getBoolean(EaseConstant.ACCOUNT_REMOVED, false)) {
+            EaseUIHelper.getInstance().logout(false,null);
+            finish();
+            startActivity(new Intent(this, LoginAct.class));
+            return;
+        } else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
+            finish();
+            startActivity(new Intent(this, LoginAct.class));
+            return;
+        }
+
         layoutInflater = LayoutInflater.from(this);
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.contentPanel);
@@ -102,8 +119,15 @@ public class HomeAct extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addCategory(getPackageName());
+        filter.addAction(EaseConstant.ACCOUNT_CONFLICT);
+        filter.addAction(EaseConstant.ACCOUNT_FORBIDDEN);
+        filter.addAction(EaseConstant.ACCOUNT_REMOVED);
+        registerReceiver(mMessageReceiver, filter);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -269,6 +293,8 @@ public class HomeAct extends BaseActivity {
             }
             myServiceConn = null;
         }
+        // 注销广播接收者
+        unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
 
@@ -286,4 +312,27 @@ public class HomeAct extends BaseActivity {
     public void removeUnreadMsg(){
         tabView2.findViewById(R.id.tabUnread).setVisibility(View.INVISIBLE);
     }
+
+    private MessageReceiver mMessageReceiver;
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals(EaseConstant.ACCOUNT_CONFLICT)){
+                gotoErrAct(EaseConstant.ACCOUNT_CONFLICT);
+            }else if(action.equals(EaseConstant.ACCOUNT_FORBIDDEN)){
+                gotoErrAct(EaseConstant.ACCOUNT_FORBIDDEN);
+            }else if(action.equals(EaseConstant.ACCOUNT_REMOVED)){
+                gotoErrAct(EaseConstant.ACCOUNT_REMOVED);
+            }
+        }
+    }
+    private void gotoErrAct(String errType){
+        Intent intent = new Intent(HomeAct.this,ErrActivity.class);
+        intent.putExtra("error_type", errType);
+        startActivity(intent);
+    }
+
 }

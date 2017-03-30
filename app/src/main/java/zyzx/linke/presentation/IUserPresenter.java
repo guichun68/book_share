@@ -102,4 +102,11 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack);
+
+    /**
+     * 重置密码
+     * @param newPsw
+     * @param callBack
+     */
+    public abstract void resetPsw(String userId,String newPsw, CallBack callBack);
 }

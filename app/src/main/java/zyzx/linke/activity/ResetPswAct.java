@@ -1,13 +1,17 @@
 package zyzx.linke.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -19,6 +23,7 @@ import zyzx.linke.utils.UIUtil;
 public class ResetPswAct extends BaseActivity{
     private AppCompatEditText etPsw,etRePsw;
     private Button btnReset;
+    private String mUserId;
 
     @Override
     protected int getLayoutId() {
@@ -36,7 +41,10 @@ public class ResetPswAct extends BaseActivity{
 
     @Override
     protected void initData() {
-
+        mUserId = getIntent().getStringExtra(BundleFlag.UID);
+        if(StringUtil.isEmpty(mUserId)){
+            UIUtil.showToastSafe("未能获取用户信息,请返回重新验证");
+        }
     }
 
     @Override
@@ -47,9 +55,34 @@ public class ResetPswAct extends BaseActivity{
                 if(!checkInput()){
                     return;
                 }
-                String newPsw = etPsw.getText().toString().trim();
-                //TODO Reset psw
 
+                String newPsw = etPsw.getText().toString().trim();
+                showProgress("请稍后…");
+                getUserPresenter().resetPsw(mUserId,newPsw,new CallBack(){
+
+                    @Override
+                    public void onSuccess(Object obj) {
+                        dismissProgress();
+                        String json = (String) obj;
+                        if(StringUtil.isEmpty(json)){
+                            UIUtil.showToastSafe(R.string.err_request);
+                            return;
+                        }
+                        JSONObject jsonObj = JSON.parseObject(json);
+                        int code = jsonObj.getInteger("code");
+                        if(code == 200){
+                            UIUtil.showToastSafe("重置成功,请重新登录");
+                            finish();
+                        }
+                        UIUtil.showToastSafe("重置密码错误，code="+code);
+                    }
+
+                    @Override
+                    public void onFailure(Object obj) {
+                        dismissProgress();
+                        UIUtil.showToastSafe(R.string.err_request);
+                    }
+                });
                 break;
         }
     }

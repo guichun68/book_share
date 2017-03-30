@@ -341,12 +341,27 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack) {
+        HashMap<String, Object> param = getParam();
+        param.put("verify_code", verifyCode);
+        param.put("verify_type", String.valueOf(type));
+        param.put("user_id", String.valueOf(userId));
+        try {
+            getModel().post(GlobalParams.urlVerifySMSCode, param, callBack);
+        } catch (IOException e) {
+            if (callBack != null) {
+                callBack.onFailure("请求失败，请稍后重试!");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void resetPsw(String userId,String newPsw, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("verify_code",verifyCode);
-        param.put("verify_type",String.valueOf(type));
+        param.put("new_psw",newPsw);
         param.put("user_id",String.valueOf(userId));
         try {
-            getModel().post(GlobalParams.urlVerifySMSCode,param,callBack);
+            getModel().post(GlobalParams.urlResetPsw,param,callBack);
         } catch (IOException e) {
             if(callBack!=null){
                 callBack.onFailure("请求失败，请稍后重试!");

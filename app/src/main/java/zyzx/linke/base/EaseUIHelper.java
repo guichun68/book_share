@@ -2,9 +2,13 @@ package zyzx.linke.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
@@ -14,7 +18,9 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.util.EMLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -23,6 +29,7 @@ import java.util.Map;
 import zyzx.linke.R;
 import zyzx.linke.UserProfileManager;
 import zyzx.linke.activity.ChatActivity;
+import zyzx.linke.activity.HomeAct;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
@@ -76,8 +83,113 @@ public class EaseUIHelper {
             easeUI = EaseUI.getInstance();
             //to set user's profile and avatar
             setEaseUIProviders();
+            setGlobalListeners();
         }
     }
+
+    EMConnectionListener connectionListener;
+    /**
+     * set global listener
+     */
+    protected void setGlobalListeners(){
+        // create the global connection listener
+        connectionListener = new EMConnectionListener() {
+            @Override
+            public void onDisconnected(int error) {
+                EMLog.d("global listener", "onDisconnect" + error);
+                if (error == EMError.USER_REMOVED) {
+                    notifyHomeError(EaseConstant.ACCOUNT_REMOVED);
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                    notifyHomeError(EaseConstant.ACCOUNT_CONFLICT);
+                } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
+                    notifyHomeError(EaseConstant.ACCOUNT_FORBIDDEN);
+                }
+            }
+
+            @Override
+            public void onConnected() {
+                // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
+                UIUtil.showTestLog(TAG,"EaseUI is onConnected!");
+            }
+        };
+
+        //register connection listener
+        EMClient.getInstance().addConnectionListener(connectionListener);
+    }
+
+    /**
+     * 通知首页歌曲暂停了
+     */
+    private void notifyHomeError(String exception) {
+        Intent intent = new Intent(exception);
+        intent.addCategory(appContext.getPackageName());
+        appContext.sendBroadcast(intent);
+    }
+
+    private String TAG = "zyzx";
+    /**
+     * user met some exception: conflict, removed or forbidden
+     */
+    protected void onUserException(String exception){
+        EMLog.e(TAG, "onUserException: " + exception);
+        Intent intent = new Intent(appContext, HomeAct.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(exception, true);
+        appContext.startActivity(intent);
+    }
+
+    void endCall() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    synchronized void reset(){
+        setContactList(null);
+    }
+
+    /**
+     * logout
+     * @param unbindDeviceToken
+     *            whether you need unbind your device token
+     * @param callback
+     *            callback
+     */
+    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        endCall();
+        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onSuccess();
+                }
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
+            }
+        });
+    }
+
 
     public boolean isVoiceCalling;
     public boolean isVideoCalling;

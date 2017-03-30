@@ -53,6 +53,8 @@ public class GlobalParams {
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 	//验证短信验证码正确否的url
 	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
+	//重置密码
+	public static String urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 	//添加到黑名单
 	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	//检查是否在对方的黑名单中
@@ -177,6 +179,7 @@ public class GlobalParams {
         urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
 		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
 		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
+		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 	}
 
 	static IBookPresenter getBookPresenter(){
