@@ -11,6 +11,7 @@ import java.util.List;
 
 import zyzx.linke.base.EaseUIHelper.DataSyncListener;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.SharedPreferencesUtils;
 
 public class UserProfileManager {
@@ -55,7 +56,21 @@ public class UserProfileManager {
 			syncContactInfosListeners.add(listener);
 		}
 	}
-
+	public boolean updateCurrentUserNickName(final String nickname) {
+		boolean isSuccess = ParseManager.getInstance().updateParseNickName(nickname);
+		if (isSuccess) {
+			setCurrentUserNick(nickname);
+		}
+		return isSuccess;
+	}
+	public void setCurrentUserAvatar(String avatar) {
+		getCurrentUserInfo().setAvatar(avatar);
+		PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
+	}
+	private void setCurrentUserNick(String nickname) {
+		getCurrentUserInfo().setNick(nickname);
+		PreferenceManager.getInstance().setCurrentUserNick(nickname);
+	}
 	public void removeSyncContactInfoListener(DataSyncListener listener) {
 		if (listener == null) {
 			return;

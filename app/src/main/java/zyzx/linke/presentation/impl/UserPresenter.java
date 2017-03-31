@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import zyzx.linke.R;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
@@ -60,6 +61,9 @@ public class UserPresenter extends IUserPresenter {
                        SharedPreferencesUtils.putInt(SharedPreferencesUtils.USER_ID,u.getUserid());
                        SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW_Hash,u.getPassword());
 
+                       EaseUIHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(u.getLogin_name());
+                       EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(u.getHead_icon());
+                       EaseUIHelper.getInstance().setCurrentUserName(String.valueOf(u.getUserid())); // 环信Id
 
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);

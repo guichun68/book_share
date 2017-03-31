@@ -10,7 +10,7 @@ public class BundleFlag {
 	public final static String ADDRESS = "address";
 	//书籍详情页面是否显示地址和分享者等信息
 	public final static String SHOWADDRESS = "showAddress";
-	public final static String UID = "user_id";
+	public final static String UID = "userId";
 	public final static String SHARER = "sharer";
 	public final static String LONGITUDE = "longitude";
 	public final static String LATITUDE = "latitude";

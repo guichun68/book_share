@@ -30,6 +30,7 @@ import zyzx.linke.R;
 import zyzx.linke.UserProfileManager;
 import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.activity.HomeAct;
+import zyzx.linke.db.DemoModel;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
@@ -48,6 +49,7 @@ public class EaseUIHelper {
     private UserProfileManager userProManager;
     private EaseUI easeUI;
     private IUserPresenter mUserPresenter;
+    private String username;
     private Map<String, EaseUser> contactList = new HashMap<>();
 
 
@@ -56,6 +58,15 @@ public class EaseUIHelper {
             instance = new EaseUIHelper();
         }
         return instance;
+    }
+    private DemoModel demoModel = null;
+    /**
+     * set current username
+     * @param username
+     */
+    public void setCurrentUserName(String username){
+        this.username = username;
+        demoModel.setCurrentUserName(username);
     }
 
     /**
@@ -116,9 +127,17 @@ public class EaseUIHelper {
         //register connection listener
         EMClient.getInstance().addConnectionListener(connectionListener);
     }
-
     /**
-     * 通知首页歌曲暂停了
+     * get current user's id
+     */
+    public String getCurrentUsernName(){
+        if(username == null){
+            username = demoModel.getCurrentUsernName();
+        }
+        return username;
+    }
+    /**
+     * 通知首页登录信息出错了
      */
     private void notifyHomeError(String exception) {
         Intent intent = new Intent(exception);
