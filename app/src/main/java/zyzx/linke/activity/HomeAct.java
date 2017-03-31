@@ -35,6 +35,7 @@ import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.ErrActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.utils.UIUtil;
@@ -44,6 +45,7 @@ public class HomeAct extends BaseActivity {
 
     private static final String TAG = HomeAct.class.getSimpleName();
     private LayoutInflater layoutInflater;
+    private boolean isFirstStartApp = true;//flag,一开始启动App时不检查更新(在首页加载完图书信息后更新),只为了绑定binder，使其不为空
     private FragmentTabHost mTabHost;
     private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKContactListFragment.class,PersonalFragment.class};
     private int mTitleArray[] = {R.string.tab_homepage, R.string.tab_mesg, R.string.tab_contact_list,R.string.tab_personal};
@@ -126,6 +128,7 @@ public class HomeAct extends BaseActivity {
         filter.addAction(EaseConstant.ACCOUNT_FORBIDDEN);
         filter.addAction(EaseConstant.ACCOUNT_REMOVED);
         registerReceiver(mMessageReceiver, filter);
+        checkUpdate();
     }
 
 
@@ -268,7 +271,10 @@ public class HomeAct extends BaseActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
 //            Log.e(TAG,"Update service is Connected.");
             mBinder = (UpdateService.MyBinder) service;
-            mBinder.callCheckUpdate(null);
+            if(!isFirstStartApp){
+                mBinder.callCheckUpdate(null);
+                isFirstStartApp = false;
+            }
         }
 
         @Override

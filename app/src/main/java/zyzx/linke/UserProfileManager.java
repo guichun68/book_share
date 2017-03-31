@@ -101,9 +101,11 @@ public class UserProfileManager {
 	}
 
 
+	public EaseUser getCurrentUser() {
+		return currentUser;
+	}
 
-
-
-
-
+	public void setCurrentUser(EaseUser currentUser) {
+		this.currentUser = currentUser;
+	}
 }

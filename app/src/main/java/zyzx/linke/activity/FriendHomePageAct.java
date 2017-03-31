@@ -210,7 +210,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                                 return;
                             }else if(code ==200){
                                 //添加成功
-                                UIUtil.showToastSafe("已自动添加"+mUser.getLogin_name()+"为好友");
+                                UIUtil.showToastSafe("已添加好友"+mUser.getLogin_name());
                                 GlobalParams.shouldRefreshContactList = true;
                                 Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
                                 in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));

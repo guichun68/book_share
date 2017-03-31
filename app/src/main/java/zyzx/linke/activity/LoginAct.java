@@ -163,7 +163,7 @@ public class LoginAct extends BaseActivity {
             @Override
             public void onError(int i, String s) {
                 dismissProgress();
-                UIUtil.showToastSafe("登录失败，请稍后重试");
+                UIUtil.showToastSafe(s);
                 UIUtil.showTestLog("zyzx","登录失败:"+i+s);
             }
 

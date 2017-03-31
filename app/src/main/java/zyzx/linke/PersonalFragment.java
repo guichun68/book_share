@@ -34,6 +34,7 @@ import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.base.BaseFragment;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
@@ -131,11 +132,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 gotoActivity(LoginAct.class);
                 break;
             case R.id.rl_check_update:
-                if(((HomeAct)getActivity()).mBinder==null){
-                    ((HomeAct)getActivity()).checkUpdate();
-                    return;
-                }
-                showProgress("检查中…");
+                //showProgress("检查中…");
                 ((HomeAct)getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
                     @Override
                     public void shouldUpdate(boolean shoudUpdate) {
@@ -373,6 +370,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         GlobalParams.gUser.setHead_icon(newHeadIconUrl);
                         UserDao.getInstance(mContext).updateUser(GlobalParams.gUser);
                         GlobalParams.gUser.setHead_icon(newHeadIconUrl);
+                        EaseUIHelper.getInstance().getUserProfileManager().getCurrentUser().setAvatar(newHeadIconUrl);
                         break;
                     default:
                         UIUtil.showToastSafe("修改头像失败");
