@@ -2,13 +2,15 @@ package zyzx.linke.base;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
@@ -18,6 +20,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
@@ -27,14 +30,15 @@ import java.util.List;
 import java.util.Map;
 
 import zyzx.linke.R;
-import zyzx.linke.UserProfileManager;
 import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.activity.HomeAct;
+import zyzx.linke.db.DemoDBManager;
 import zyzx.linke.db.DemoModel;
-import zyzx.linke.db.UserDao;
+import zyzx.linke.db.HXUserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
+import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -51,6 +55,16 @@ public class EaseUIHelper {
     private IUserPresenter mUserPresenter;
     private String username;
     private Map<String, EaseUser> contactList = new HashMap<>();
+    private boolean isSyncingContactsWithServer = false;
+    private boolean isContactsSyncedWithServer = false;
+    /**
+     * EMEventListener
+     */
+    protected EMMessageListener messageListener = null;
+    /**
+     * sync contacts status listener
+     */
+    private List<DataSyncListener> syncContactsListeners;
 
 
     public synchronized static EaseUIHelper getInstance() {
@@ -60,14 +74,7 @@ public class EaseUIHelper {
         return instance;
     }
     private DemoModel demoModel = null;
-    /**
-     * set current username
-     * @param username
-     */
-    public void setCurrentUserName(String username){
-        this.username = username;
-        demoModel.setCurrentUserName(username);
-    }
+
 
     /**
      * get instance of EaseNotifier
@@ -82,6 +89,7 @@ public class EaseUIHelper {
      * @param context application context
      */
     public void init(Context context) {
+        demoModel = new DemoModel(context);
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
@@ -92,6 +100,8 @@ public class EaseUIHelper {
             EMClient.getInstance().setDebugMode(true);
             //get easeui instance
             easeUI = EaseUI.getInstance();
+            //initialize preference manager
+            PreferenceManager.init(context);
             //to set user's profile and avatar
             setEaseUIProviders();
             setGlobalListeners();
@@ -103,6 +113,8 @@ public class EaseUIHelper {
      * set global listener
      */
     protected void setGlobalListeners(){
+        syncContactsListeners = new ArrayList<>();
+        isContactsSyncedWithServer = demoModel.isContactSynced();
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
             @Override
@@ -119,6 +131,11 @@ public class EaseUIHelper {
 
             @Override
             public void onConnected() {
+                if (isContactsSyncedWithServer) {
+                    EMLog.d(TAG, "group and contact already synced with servre");
+                }else{
+                    asyncFetchContactsFromServer(null);
+                }
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
                 UIUtil.showTestLog(TAG,"EaseUI is onConnected!");
             }
@@ -126,7 +143,218 @@ public class EaseUIHelper {
 
         //register connection listener
         EMClient.getInstance().addConnectionListener(connectionListener);
+        //register message event listener
+        registerMessageListener();
     }
+
+    /**
+     * if ever logged in
+     *
+     * @return
+     */
+    public boolean isLoggedIn(){
+        return EMClient.getInstance().isLoggedInBefore();
+    }
+
+    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
+        if(isSyncingContactsWithServer){
+            return;
+        }
+
+
+        isSyncingContactsWithServer = true;
+
+        new Thread(){
+            @Override
+            public void run(){
+                List<String> usernames = null;
+                try {
+                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    // in case that logout already before server returns, we should return immediately
+                    if(!isLoggedIn()){
+                        isContactsSyncedWithServer = false;
+                        isSyncingContactsWithServer = false;
+                        notifyContactsSyncListener(false);
+                        return;
+                    }
+
+                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                    for (String username : usernames) {
+                        EaseUser user = new EaseUser(username);
+                        EaseCommonUtils.setUserInitialLetter(user);
+                        userlist.put(username, user);
+                    }
+                    // save the contact list to cache
+                    getContactList().clear();
+                    getContactList().putAll(userlist);
+                    // save the contact list to database
+                    HXUserDao dao = new HXUserDao(appContext);
+                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
+                    dao.saveContactList(users);
+
+                    demoModel.setContactSynced(true);
+                    EMLog.d(TAG, "set contact syn status to true");
+
+                    isContactsSyncedWithServer = true;
+                    isSyncingContactsWithServer = false;
+
+                    //notify sync success
+                    notifyContactsSyncListener(true);
+
+                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+
+                        @Override
+                        public void onSuccess(List<EaseUser> uList) {
+                            updateContactList(uList);
+                            getUserProfileManager().notifyContactInfosSyncListener(true);
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                        }
+                    });
+                    if(callback != null){
+                        callback.onSuccess(usernames);
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setContactSynced(false);
+                    isContactsSyncedWithServer = false;
+                    isSyncingContactsWithServer = false;
+                    notifyContactsSyncListener(false);
+                    e.printStackTrace();
+                    if(callback != null){
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    public boolean isSyncingContactsWithServer() {
+        return isSyncingContactsWithServer;
+    }
+
+    /**
+     * update user list to cache and database
+     *
+     * @param contactInfoList
+     */
+    public void updateContactList(List<EaseUser> contactInfoList) {
+        for (EaseUser u : contactInfoList) {
+            contactList.put(u.getUsername(), u);
+        }
+        ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
+        mList.addAll(contactList.values());
+        demoModel.saveContactList(mList);
+    }
+
+
+    synchronized void reset(){
+        isSyncingContactsWithServer = false;
+
+        demoModel.setGroupsSynced(false);
+        demoModel.setContactSynced(false);
+        demoModel.setBlacklistSynced(false);
+
+        isContactsSyncedWithServer = false;
+
+
+        setContactList(null);
+        getUserProfileManager().reset();
+        DemoDBManager.getInstance().closeDB();
+    }
+
+    /**
+     * Global listener
+     * If this event already handled by an activity, you don't need handle it again
+     * activityList.size() <= 0 means all activities already in background or not in Activity Stack
+     */
+    protected void registerMessageListener() {
+        messageListener = new EMMessageListener() {
+
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    //************接收并处理扩展消息***********************
+                    String userNickName = message.getStringAttribute("user_nick", "");
+                    String userAvatar = message.getStringAttribute("user_avatar", "");
+                    String hxIdFrom = message.getFrom();//发送人
+
+                    EaseUser easeUser = new EaseUser(hxIdFrom);
+                    easeUser.setAvatar(userAvatar);
+                    easeUser.setNickname(userNickName);
+                    // 存入内存
+                    contactList.put(hxIdFrom, easeUser);
+                    // 存入db
+                    HXUserDao dao = new HXUserDao(appContext);
+                    dao.saveContact(easeUser);
+                    demoModel.setContactSynced(true);
+                    // 通知listeners联系人同步完毕
+                    notifyContactsSyncListener(true);
+                    // 应用在后台，不需要刷新UI,在通知栏提示新消息
+                    if(!easeUI.hasForegroundActivies()){
+                        getNotifier().onNewMsg(message);
+                    }
+                }
+            }
+
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+
+            }
+
+            @Override
+            public void onMessageRead(List<EMMessage> messages) {
+            }
+
+            @Override
+            public void onMessageDelivered(List<EMMessage> message) {
+            }
+
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
+                EMLog.d(TAG, "change:");
+                EMLog.d(TAG, "change:" + change);
+            }
+        };
+
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
+
+    /**
+     * 保存联系人到数据库 austin
+     * @param users
+     */
+    public void saveContactList(List<EaseUser> users){
+        HXUserDao dao = new HXUserDao(appContext);
+        dao.saveContactList(users);
+    }
+
+    public void notifyContactsSyncListener(boolean success){
+        for (DataSyncListener listener : syncContactsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
+    public void addSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncContactsListeners.contains(listener)) {
+            syncContactsListeners.add(listener);
+        }
+    }
+
+    public void removeSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncContactsListeners.contains(listener)) {
+            syncContactsListeners.remove(listener);
+        }
+    }
+
     /**
      * get current user's id
      */
@@ -165,9 +393,6 @@ public class EaseUIHelper {
         }
     }
 
-    synchronized void reset(){
-        setContactList(null);
-    }
 
     /**
      * logout
@@ -295,29 +520,41 @@ public class EaseUIHelper {
     }
 
 
-    private EaseUser getUserInfo(String username){
+    private EaseUser getUserInfo(String hxUserId){
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
-        EaseUser user = new EaseUser(username);;
-        if(username.equals(EMClient.getInstance().getCurrentUser())){
+        EaseUser easeUser;
+        if(hxUserId.equals(EMClient.getInstance().getCurrentUser())){
             return getUserProfileManager().getCurrentUserInfo();
         }
-        User u = UserDao.getInstance(appContext).queryUserByUid(Integer.valueOf(username));
-        user.setLoginName(u.getLogin_name());
+        if (contactList != null && contactList.containsKey(hxUserId)) {
+        } else { // 如果内存中没有，则将本地数据库中的取出到内存中。
+            getContactList();
+        }
+      /*  User u = UserDao.getInstance(appContext).queryUserByUid(Integer.valueOf(hxUserId));
         user.setNickname(u.getLogin_name());
-        user.setAvatar(u.getHead_icon());
-
+        user.setAvatar(u.getHead_icon());*/
+        easeUser = contactList.get(hxUserId);
+        if(easeUser == null){
+            easeUser = new EaseUser(hxUserId);
+        } else {
+            if(TextUtils.isEmpty(easeUser.getNick())){ // 如果名字为空，则显示环信号码
+                easeUser.setNickname(easeUser.getUsername());
+            }
+        }
 //        user = getContactList().get(username);
         /*TODO if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
         }*/
 
         // if user is not in your contacts, set inital letter for him/her
-        if(user == null){
-            user = new EaseUser(username);
+        /*if(user == null){
+            user = new EaseUser(hxUserId);
             EaseCommonUtils.setUserInitialLetter(user);
-        }
-        return user;
+        }else{
+
+        }*/
+        return easeUser;
     }
 
     public UserProfileManager getUserProfileManager() {
@@ -354,49 +591,21 @@ public class EaseUIHelper {
         contactList = aContactList;
     }
 
-    /**
+    /**从数据库中取出好友列表到内存(变量)
      * get contact list
-     *
      * @return
      */
     public Map<String, EaseUser> getContactList() {
-        if ( contactList == null) {
-            getUserPresenter().getAllMyFriends(GlobalParams.gUser.getUserid(), new CallBack() {
-                @Override
-                public void onSuccess(Object obj) {
-                    String json = (String) obj;
-                    if (StringUtil.isEmpty(json)) {
-                        UIUtil.showTestLog("zyzx","未能获取好友信息");
-                        return;
-                    }
-                    List<User> friends = JSON.parseArray(json, User.class);
-
-                    for (int i = 0; i < friends.size(); i++) {
-                        EaseUser u2 = new EaseUser(String.valueOf(friends.get(i).getUserid()));
-                        u2.setAvatar(friends.get(i).getHead_icon());
-                        u2.setNickname(friends.get(i).getLogin_name());
-                        u2.setLoginName(friends.get(i).getLogin_name());
-                        contactList.put("easeuitest" + i, u2);
-                    }
-
-
-
-
-
-                }
-
-                @Override
-                public void onFailure(Object obj) {
-
-                }
-            });
-        }
-
         // return a empty non-null object to avoid app crash
         if(contactList == null){
-            return new Hashtable<String, EaseUser>();
+            contactList = new Hashtable<String, EaseUser>();
+            if(isLoggedIn()){
+                contactList = demoModel.getContactList();
+            }
+        }else{
+            contactList.clear();
+            contactList = demoModel.getContactList();
         }
-
         return contactList;
     }
     protected IUserPresenter getUserPresenter(){

@@ -29,7 +29,7 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
-import zyzx.linke.utils.SharedPreferencesUtils;
+import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -65,25 +65,23 @@ public class LoginAct extends BaseActivity {
         aetLoginName = (AppCompatEditText) findViewById(R.id.aet_login_name);
         aetPsw = (AppCompatEditText) findViewById(R.id.aet_psw);
 
-        SpannableString ss = new SpannableString("请输入用户名");//定义hint的值
         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(16,true);//设置字体大小 true表示单位是sp
+        SpannableString ss = new SpannableString("请输入用户名");//定义hint的值
         ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         aetLoginName.setHint(new SpannedString(ss));
 
         SpannableString ss2 = new SpannableString("请输入密码");//定义hint的值
-        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(16,true);//设置字体大小 true表示单位是sp
-        ss.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss2.setSpan(ass, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         aetPsw.setHint(new SpannedString(ss2));
     }
 
     @Override
     protected void initData() {
-        aetLoginName.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.LAST_LOGIN_NAME,""));
-        aetPsw.setText(SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW,""));
-        if(SharedPreferencesUtils.getBoolean(SharedPreferencesUtils.AUTO_LOGIN)){
-            ((Button)findViewById(R.id.btn_login)).performClick();
+        aetLoginName.setText(PreferenceManager.getInstance().getLastLoginUserNick());
+        aetPsw.setText(PreferenceManager.getInstance().getCurrentUserPsw());
+        if(PreferenceManager.getInstance().getAutoLoginFlag()){
+            (findViewById(R.id.btn_login)).performClick();
         }
-
     }
 
 
@@ -99,7 +97,7 @@ public class LoginAct extends BaseActivity {
                 getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW,aetPsw.getText().toString());
+                        PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
                         loginEaseMob();
                     }
 
@@ -138,12 +136,12 @@ public class LoginAct extends BaseActivity {
      * 登录环信
      */
     private void loginEaseMob() {
-        EMClient.getInstance().login(String.valueOf(SharedPreferencesUtils.getInt(SharedPreferencesUtils.USER_ID, 0)), SharedPreferencesUtils.getString(SharedPreferencesUtils.USER_PSW_Hash, ""), new EMCallBack() {
+        EMClient.getInstance().login(PreferenceManager.getInstance().getLastLoginUserId(), PreferenceManager.getInstance().getLastLoginUserPSWHASH(), new EMCallBack() {
             @Override
             public void onSuccess() {
                 dismissProgress();
                 if(cbAutoLogin.isChecked()){
-                    SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,true);
+                    PreferenceManager.getInstance().setAutoLoginFlag(true);
                 }
                 //保证进入主页面后本地会话和群组都 load 完毕。
                 EMClient.getInstance().chatManager().loadAllConversations();
@@ -180,7 +178,7 @@ public class LoginAct extends BaseActivity {
             gotoActivity(HomeAct.class,true);
         }
         if(requestCode==300 && resultCode==300){//注册页注册成功返回
-            gotoActivity(HomeAct.class,true);
+//            gotoActivity(HomeAct.class,true);
         }
     }
 

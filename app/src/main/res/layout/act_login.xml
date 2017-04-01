@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroud_white"
     android:orientation="vertical">
 
@@ -42,7 +43,7 @@
             android:layout_marginStart="5dp"
             android:hint="@string/input_username"
             android:background="@null"
-            android:text="浮世年华"
+            tools:text="浮世年华"
             android:maxLength="11" />
     </LinearLayout>
 
@@ -79,7 +80,7 @@
             android:hint="@string/input_username"
             android:background="@null"
             android:inputType="textPassword"
-            android:text="123456"
+            tools:text="123456"
             android:maxLength="11" />
 
         <View

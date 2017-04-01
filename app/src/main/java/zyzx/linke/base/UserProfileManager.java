@@ -1,18 +1,29 @@
-package zyzx.linke;
+package zyzx.linke.base;
 
 import android.content.Context;
+import android.content.Intent;
 
+import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.ui.EaseContactListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import zyzx.linke.R;
+import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.base.EaseUIHelper.DataSyncListener;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.db.HXUserDao;
+import zyzx.linke.db.UserDao;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.User;
 import zyzx.linke.utils.PreferenceManager;
-import zyzx.linke.utils.SharedPreferencesUtils;
+import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 
 public class UserProfileManager {
 
@@ -56,21 +67,16 @@ public class UserProfileManager {
 			syncContactInfosListeners.add(listener);
 		}
 	}
-	public boolean updateCurrentUserNickName(final String nickname) {
-		boolean isSuccess = ParseManager.getInstance().updateParseNickName(nickname);
-		if (isSuccess) {
-			setCurrentUserNick(nickname);
-		}
-		return isSuccess;
-	}
+
 	public void setCurrentUserAvatar(String avatar) {
 		getCurrentUserInfo().setAvatar(avatar);
 		PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
 	}
-	private void setCurrentUserNick(String nickname) {
-		getCurrentUserInfo().setNick(nickname);
+	public void setCurrentUserNick(String nickname) {
+		getCurrentUserInfo().setNickname(nickname);
 		PreferenceManager.getInstance().setCurrentUserNick(nickname);
 	}
+
 	public void removeSyncContactInfoListener(DataSyncListener listener) {
 		if (listener == null) {
 			return;
@@ -85,6 +91,28 @@ public class UserProfileManager {
 			return;
 		}
 		isSyncingContactInfosWithServer = true;
+		GlobalParams.getUserPresenter().getAllMyFriends(new EMValueCallBack<List<EaseUser>>() {
+			@Override
+			public void onSuccess(List<EaseUser> easeUsers) {
+				isSyncingContactInfosWithServer = false;
+				// in case that logout already before server returns,we should
+				// return immediately
+				if (!EaseUIHelper.getInstance().isLoggedIn()) {
+					return;
+				}
+				if (callback != null) {
+					callback.onSuccess(easeUsers);
+				}
+			}
+
+			@Override
+			public void onError(int error, String errorMsg) {
+				isSyncingContactInfosWithServer = false;
+				if (callback != null) {
+					callback.onError(error, errorMsg);
+				}
+			}
+		});
 
 	}
 
@@ -104,13 +132,14 @@ public class UserProfileManager {
 		PreferenceManager.getInstance().removeCurrentUserInfo();
 	}*/
 
+
 	public synchronized EaseUser getCurrentUserInfo() {
 		if (currentUser == null) {
 			String username = EMClient.getInstance().getCurrentUser();
 			currentUser = new EaseUser(username);
-			String nick = SharedPreferencesUtils.getString(SharedPreferencesUtils.LAST_LOGIN_NAME,null);
-			currentUser.setNick((nick != null) ? nick : username);
-			currentUser.setAvatar(GlobalParams.gUser.getHead_icon());
+			String nick = PreferenceManager.getInstance().getCurrentUserNick();
+			currentUser.setNickname((nick != null) ? nick : username);
+			currentUser.setAvatar(PreferenceManager.getInstance().getCurrentUserAvatar());
 		}
 		return currentUser;
 	}
@@ -122,5 +151,17 @@ public class UserProfileManager {
 
 	public void setCurrentUser(EaseUser currentUser) {
 		this.currentUser = currentUser;
+	}
+
+	/**
+	 * 设置用户名（环信系统用户Id）
+	 */
+	public void setCurrentUserName(){
+	}
+
+	public synchronized void reset() {
+		isSyncingContactInfosWithServer = false;
+		currentUser = null;
+		PreferenceManager.getInstance().removeCurrentUserInfo();
 	}
 }

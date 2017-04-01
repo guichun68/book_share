@@ -58,6 +58,11 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION = "SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION";
 	private static String SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION = "SHARED_KEY_FRONT_CAMERA_RESOLUTIOIN";
 	private static String SHARED_KEY_CALL_FIX_SAMPLE_RATE = "SHARED_KEY_CALL_FIX_SAMPLE_RATE";
+	private static String SHARED_KEY_LAST_LOGIN_USER_NICK = "SHARED_KEY_LAST_LOGIN_USER_NICK";
+	private static String SHARED_KEY_LAST_LOGIN_USER_ID = "SHARED_KEY_LAST_LOGIN_USER_ID";
+	private static String SHARED_KEY_LAST_LOGIN_USER_HSH = "SHARED_KEY_LAST_LOGIN_USER_HSH";
+	private static String SHARED_KEY_CURR_USER_PSW = "SHARED_KEY_CURR_USER_PSW";
+	private static String SHARED_KEY_AUTO_LOGIN_FLAG = "SHARED_KEY_AUTO_LOGIN_FLAG";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
@@ -89,6 +94,9 @@ public class PreferenceManager {
 		editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
 		editor.apply();
 	}
+	public void setAutoLoginFlag(boolean autoLogin) {
+		editor.putBoolean(SHARED_KEY_AUTO_LOGIN_FLAG, autoLogin).commit();
+	}
 
 	public boolean getSettingMsgNotification() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_NOTIFICATION, true);
@@ -102,6 +110,9 @@ public class PreferenceManager {
 	public boolean getSettingMsgSound() {
 
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SOUND, true);
+	}
+	public boolean getAutoLoginFlag() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_AUTO_LOGIN_FLAG, false);
 	}
 
 	public void setSettingMsgVibrate(boolean paramBoolean) {
@@ -195,26 +206,34 @@ public class PreferenceManager {
     }
 
 	public void setCurrentUserNick(String nick) {
-		editor.putString(SHARED_KEY_CURRENTUSER_NICK, nick);
-		editor.apply();
+		editor.putString(SHARED_KEY_CURRENTUSER_NICK, nick).commit();
+	}
+	public void setLastLoginUserNick(String nick) {
+		editor.putString(SHARED_KEY_LAST_LOGIN_USER_NICK, nick).commit();
 	}
 
 	public void setCurrentUserAvatar(String avatar) {
 		editor.putString(SHARED_KEY_CURRENTUSER_AVATAR, avatar);
 		editor.apply();
 	}
+	public void setCurrentUserPSW(String psw) {
+		editor.putString(SHARED_KEY_CURR_USER_PSW, psw);
+		editor.apply();
+	}
 
 	public String getCurrentUserNick() {
 		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_NICK, null);
 	}
+	public String getCurrentUserPsw() {
+		return mSharedPreferences.getString(SHARED_KEY_CURR_USER_PSW, null);
+	}
+	public String getLastLoginUserNick() {
+		return mSharedPreferences.getString(SHARED_KEY_LAST_LOGIN_USER_NICK, null);
+	}
+
 
 	public String getCurrentUserAvatar() {
 		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_AVATAR, null);
-	}
-
-	public void setCurrentUserName(String username){
-		editor.putString(SHARED_KEY_CURRENTUSER_USERNAME, username);
-		editor.apply();
 	}
 
 	public String getCurrentUsername(){
@@ -374,4 +393,18 @@ public class PreferenceManager {
 		editor.apply();
 	}
 
+	public void setLastLoginUserId(String userId) {
+		editor.putString(SHARED_KEY_LAST_LOGIN_USER_ID, userId);
+		editor.apply();
+	}
+	public void setLastLoginUserPSWHASH(String hashPsw) {
+		editor.putString(SHARED_KEY_LAST_LOGIN_USER_HSH, hashPsw).commit();
+	}
+
+	public String getLastLoginUserId() {
+		return mSharedPreferences.getString(SHARED_KEY_LAST_LOGIN_USER_ID, null);
+	}
+	public String getLastLoginUserPSWHASH() {
+		return mSharedPreferences.getString(SHARED_KEY_LAST_LOGIN_USER_HSH, null);
+	}
 }

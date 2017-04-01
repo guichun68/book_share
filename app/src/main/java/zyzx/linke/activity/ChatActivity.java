@@ -3,18 +3,26 @@ package zyzx.linke.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.view.View;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.util.EasyUtils;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.runtimepermissions.PermissionsManager;
+import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.StringUtil;
 
 /**
  * Created by austin on 2017/3/27.
+ * Desc: 聊天界面
  */
 
 public class ChatActivity  extends BaseActivity{
@@ -39,7 +47,61 @@ public class ChatActivity  extends BaseActivity{
         args.putString(EaseConstant.EXTRA_USER_ID, chatUserId);
         args.putString(BundleFlag.LOGIN_NAME, loginName);
         mChatFrag.setArguments(args);
+        setMessageListener();
         getSupportFragmentManager().beginTransaction().add(R.id.content,mChatFrag,"chat").commit();
+    }
+
+    private void setMessageListener() {
+        mChatFrag.setChatFragmentListener(new EaseChatFragment.EaseChatFragmentHelper() {
+            @Override
+            public void onSetMessageAttributes(EMMessage message) {
+                //设置消息扩展属性
+                // 通过扩展属性，将userAvatar和userName发送出去。
+                String userAvatar = PreferenceManager.getInstance().getCurrentUserAvatar();
+                if (!TextUtils.isEmpty(userAvatar)) {
+                    message.setAttribute("user_avatar", userAvatar);
+                }
+                String userNickName = PreferenceManager.getInstance().getCurrentUserNick();
+                if (!TextUtils.isEmpty(userNickName)) {
+                    message.setAttribute("user_nick", userNickName);
+                }
+            }
+
+            @Override
+            public void onEnterToChatDetails() {
+
+            }
+
+            @Override
+            public void onAvatarClick(String username) {
+
+            }
+
+            @Override
+            public void onAvatarLongClick(String username) {
+
+            }
+
+            @Override
+            public boolean onMessageBubbleClick(EMMessage message) {
+                return false;
+            }
+
+            @Override
+            public void onMessageBubbleLongClick(EMMessage message) {
+
+            }
+
+            @Override
+            public boolean onExtendMenuItemClick(int itemId, View view) {
+                return false;
+            }
+
+            @Override
+            public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+                return null;
+            }
+        });
     }
 
     @Override

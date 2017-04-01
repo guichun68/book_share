@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.User;
-import zyzx.linke.utils.SharedPreferencesUtils;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -185,7 +185,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             break;
             case R.id.iv_icon:
                 if(mUser!=null&& mUser.getUserid()!=null){
-                    if(mUser.getUserid() == SharedPreferencesUtils.getInt(SharedPreferencesUtils.USER_ID,-1)){
+                    if(String.valueOf(mUser.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
                         UIUtil.showToastSafe(R.string.neednot_chat_myself);
                         return;
                     }

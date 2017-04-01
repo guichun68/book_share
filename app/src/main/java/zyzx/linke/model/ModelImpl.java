@@ -2,6 +2,7 @@ package zyzx.linke.model;
 
 import android.util.Log;
 
+import com.hyphenate.EMValueCallBack;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -77,6 +78,48 @@ public class ModelImpl implements IModel {
         }*/
     }
 
+    @Override
+    public void post(String url, HashMap<String, Object> param, final EMValueCallBack callBack) throws IOException {
+        FormEncodingBuilder fb = new FormEncodingBuilder();
+        Request request;
+        if(param != null){
+            for (Map.Entry<String, Object> et : param.entrySet()) {
+                fb.add(et.getKey(), (String)et.getValue());
+            }
+            RequestBody body = fb.build();
+
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+        }else{
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        }
+
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);
+        client.setReadTimeout(30, TimeUnit.SECONDS);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:");
+                callBack.onError(500,e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                String res = new String(response.body().string());
+                if(res.toLowerCase().contains("</html>")){
+                    callBack.onError(500,"网络或服务器故障，请检查");
+                    UIUtil.showToastSafe("网络或服务器故障，请检查");
+                    return;
+                }
+                callBack.onSuccess(res);
+            }
+        });
+    }
 
 
     @Override

@@ -38,13 +38,7 @@ public class DemoModel {
         dao.saveContact(user);
     }
     
-    /**
-     * save current username
-     * @param username
-     */
-    public void setCurrentUserName(String username){
-        PreferenceManager.getInstance().setCurrentUserName(username);
-    }
+
 
     public String getCurrentUsernName(){
         return PreferenceManager.getInstance().getCurrentUsername();

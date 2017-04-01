@@ -1,5 +1,10 @@
 package zyzx.linke.presentation;
 
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.easeui.domain.EaseUser;
+
+import java.util.List;
+
 import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
 
@@ -55,11 +60,10 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
 
     /**
-     * 得到所有好友
-     * @param userId 要得到谁的好友列表
+     * 得到当前登录用户的所有好友
      * @param callBack
      */
-    public abstract void getAllMyFriends(int userId, CallBack callBack);
+    public abstract void getAllMyFriends(EMValueCallBack<List<EaseUser>> callBack);
 
     /**
      * 删除指定好友（联系人）

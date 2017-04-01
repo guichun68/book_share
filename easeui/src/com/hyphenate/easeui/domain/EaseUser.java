@@ -13,11 +13,12 @@
  */
 package com.hyphenate.easeui.domain;
 
+import android.text.TextUtils;
+
 import com.hyphenate.chat.EMContact;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public class EaseUser extends EMContact {
-	protected String loginName;//用户昵称
     /**
      * initial letter for nickname
      */
@@ -62,14 +63,6 @@ public class EaseUser extends EMContact {
 			return false;
 		}
 		return getUsername().equals(((EaseUser) o).getUsername());
-	}
-
-	public String getLoginName() {
-		return loginName;
-	}
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
 	}
 
 	@Override

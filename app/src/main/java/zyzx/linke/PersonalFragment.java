@@ -43,7 +43,7 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.ImageUtils;
-import zyzx.linke.utils.SharedPreferencesUtils;
+import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -127,7 +127,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.rl_log_out:
                 ((HomeAct)getActivity()).logoutEaseMob();
-                SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
+                PreferenceManager.getInstance().setAutoLoginFlag(false);
                 getActivity().finish();
                 gotoActivity(LoginAct.class);
                 break;
@@ -370,6 +370,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                         GlobalParams.gUser.setHead_icon(newHeadIconUrl);
                         UserDao.getInstance(mContext).updateUser(GlobalParams.gUser);
                         GlobalParams.gUser.setHead_icon(newHeadIconUrl);
+                        PreferenceManager.getInstance().setCurrentUserAvatar(newHeadIconUrl);
                         EaseUIHelper.getInstance().getUserProfileManager().getCurrentUser().setAvatar(newHeadIconUrl);
                         break;
                     default:

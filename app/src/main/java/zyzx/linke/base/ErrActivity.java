@@ -11,7 +11,7 @@ import com.hyphenate.util.EMLog;
 import zyzx.linke.R;
 import zyzx.linke.activity.AppManager;
 import zyzx.linke.activity.LoginAct;
-import zyzx.linke.utils.SharedPreferencesUtils;
+import zyzx.linke.utils.PreferenceManager;
 
 /**
  * 错误提示页（比如用户下线通知、账号被限制等）
@@ -71,7 +71,7 @@ public class ErrActivity extends BaseActivity {
 						exceptionBuilder = null;
 						AppManager.getAppManager().finishAllActivity();
 						Intent intent = new Intent(ErrActivity.this, LoginAct.class);
-						SharedPreferencesUtils.putBoolean(SharedPreferencesUtils.AUTO_LOGIN,false);
+						PreferenceManager.getInstance().setAutoLoginFlag(false);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}

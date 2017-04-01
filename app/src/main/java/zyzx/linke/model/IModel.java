@@ -1,5 +1,7 @@
 package zyzx.linke.model;
 
+import com.hyphenate.EMValueCallBack;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -10,6 +12,7 @@ import java.util.HashMap;
 
 public interface IModel {
     void post(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
+    void post(String url, HashMap<String,Object> param,EMValueCallBack callBack)throws IOException;
 
     /**
      * 目前针对上传时带图片的参数用

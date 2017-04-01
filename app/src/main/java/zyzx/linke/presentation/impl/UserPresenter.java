@@ -2,21 +2,27 @@ package zyzx.linke.presentation.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.EaseUser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.EaseUIHelper;
+import zyzx.linke.base.GlobalParams;
+import zyzx.linke.db.HXUserDao;
 import zyzx.linke.db.UserDao;
-import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
-import zyzx.linke.base.GlobalParams;
-import zyzx.linke.utils.SharedPreferencesUtils;
+import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -57,13 +63,11 @@ public class UserPresenter extends IUserPresenter {
                        User u = jsonObject.getObject("user",User.class);
                        GlobalParams.gUser = u;
                        //记录用户名和uid
-                       SharedPreferencesUtils.putString(SharedPreferencesUtils.LAST_LOGIN_NAME, u.getLogin_name());
-                       SharedPreferencesUtils.putInt(SharedPreferencesUtils.USER_ID,u.getUserid());
-                       SharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PSW_Hash,u.getPassword());
-
-                       EaseUIHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(u.getLogin_name());
+                       PreferenceManager.getInstance().setLastLoginUserNick(u.getLogin_name());
+                       PreferenceManager.getInstance().setLastLoginUserId(String.valueOf(u.getUserid()));
+                       PreferenceManager.getInstance().setLastLoginUserPSWHASH(u.getPassword());
+                       EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
                        EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(u.getHead_icon());
-                       EaseUIHelper.getInstance().setCurrentUserName(String.valueOf(u.getUserid())); // 环信Id
 
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
@@ -80,7 +84,7 @@ public class UserPresenter extends IUserPresenter {
                @Override
                public void onFailure(Object obj) {
                    if(viewCallBack!=null){
-                       viewCallBack.onFailure("连接服务器失败");
+                       viewCallBack.onFailure("连接服务器失败,请检查网络连接");
                    }
                }
            });
@@ -244,15 +248,44 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getAllMyFriends(int anInt, CallBack callBack) {
+    public void getAllMyFriends(final EMValueCallBack<List<EaseUser>> callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(anInt));
+        param.put("user_id", EMClient.getInstance().getCurrentUser());
         try {
-            getModel().post(GlobalParams.urlGetFriends,param,callBack);
+            getModel().post(GlobalParams.urlGetFriends, param, new CallBack() {
+                @Override
+                public void onSuccess(Object obj) {
+                    String json = (String) obj;
+                    if (StringUtil.isEmpty(json)) {
+                        UIUtil.showToastSafe("未能获取好友信息");
+                        if(callBack!=null){
+                            callBack.onError(500,"未能获取好友信息");
+                        }
+                        return;
+                    }
+                    List<User> friends = JSON.parseArray(json, User.class);
+                    List<EaseUser> easeUsers = new ArrayList<>();
+                    for (int i = 0; i < friends.size(); i++) {
+                        EaseUser u2 = new EaseUser(String.valueOf(friends.get(i).getUserid()));
+                        u2.setAvatar(friends.get(i).getHead_icon());
+                        u2.setNickname(friends.get(i).getLogin_name());
+                        easeUsers.add(u2);
+                    }
+                    EaseUIHelper.getInstance().saveContactList(easeUsers);
+                    if(callBack!=null){
+                        callBack.onSuccess(easeUsers);
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj) {
+
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){
-                callBack.onFailure("未能获取好友信息");
+                callBack.onError(500,"未能获取好友信息");
             }
         }
     }
