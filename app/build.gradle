@@ -24,7 +24,7 @@ android {
 
     sourceSets{
         main{
-            jniLibs.srcDirs=['libs']
+            jniLibs.srcDirs=['libs'];
         }
     }
 
@@ -64,6 +64,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+//    compile files('libs/AMap_Location_V3.3.0_20170118.jar')
+//    compile files('libs/AMap_Search_V5.0.0_20170309.jar')
+//    compile files('libs/Android_Map3D_SDK_V5.0.0_20170311.jar')
+//    compile files('libs/core-3.3.0.jar')
+//    compile files('libs/Volley.jar')
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

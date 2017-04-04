@@ -183,7 +183,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
 
-        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+        <activity android:name=".activity.EaseGaodeMapAct"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
 
@@ -291,10 +291,10 @@
             </intent-filter>
         </receiver>
         <!-- 环信 End#############################################################-->
-        <!-- 环信中用到的百度地图 -->
-        <meta-data
+        <!-- 环信中用到的百度地图,暂未使用 -->
+        <!--<meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="t39mDg6Y1V3mG2wDm3w6QSzNK22w7c9h" />
+            android:value="t39mDg6Y1V3mG2wDm3w6QSzNK22w7c9h" />-->
     </application>
 
 </manifest>

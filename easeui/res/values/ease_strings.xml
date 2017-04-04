@@ -297,4 +297,12 @@
     <string name="toast_updatephoto_fail">update photo fail!</string>
     <string name="quiting_the_chat_room">Exiting chat room</string>
 
+    <string name="Sync_Groups_From_Server">从服务器下载群聊信息</string>
+    <string name="add_public_chat_room">添加聊天室</string>
+    <string name="update_black_list">更新黑名单</string>
+    <string name="update_black_list_failed">更新黑名单失败</string>
+    <string name="update_contact_list">更新联系人列表</string>
+    <string name="update_contact_list_failed">更新联系人列表失败</string>
+    <string name="update_groups">更新群聊</string>
+    <string name="update_groups_failed">更新群聊失败</string>
 </resources>

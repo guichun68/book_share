@@ -152,10 +152,6 @@
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_emojicon.xml"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_activity_baidumap.xml",
-        "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_activity_baidumap.xml"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_showvideo_activity.xml",
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_showvideo_activity.xml"
     },

@@ -12,10 +12,6 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_sent_voice_call.xml"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_activity_baidumap.xml",
-        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_activity_baidumap.xml"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\ease_row_chat_history.xml",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\layout\\ease_row_chat_history.xml"
     },

@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.amap.api.services.cloud.CloudItem;
-import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMLocationMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
@@ -22,7 +22,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.PreferenceManager;
-import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/3/27.
@@ -33,6 +33,8 @@ public class ChatActivity  extends BaseActivity{
     EaseChatFragment mChatFrag;
     public static ChatActivity activityInstance;
     String chatUserId, loginName;
+    protected static final int REQUEST_CODE_MAP = 1;
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_chat;
@@ -42,6 +44,7 @@ public class ChatActivity  extends BaseActivity{
     protected void initView(Bundle saveInstanceState) {
         activityInstance = this;
         mChatFrag = new EaseChatFragment();
+
         Intent intent = getIntent();
         chatUserId = intent.getStringExtra(BundleFlag.UID);
         loginName = intent.getStringExtra(BundleFlag.LOGIN_NAME);
@@ -51,11 +54,11 @@ public class ChatActivity  extends BaseActivity{
         args.putString(EaseConstant.EXTRA_USER_ID, chatUserId);
         args.putString(BundleFlag.LOGIN_NAME, loginName);
         mChatFrag.setArguments(args);
-        setMessageListener();
+        registListener();
         getSupportFragmentManager().beginTransaction().add(R.id.content,mChatFrag,"chat").commit();
     }
 
-    private void setMessageListener() {
+    private void registListener() {
         mChatFrag.setChatFragmentListener(new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
             public void onSetMessageAttributes(EMMessage message) {
@@ -98,7 +101,15 @@ public class ChatActivity  extends BaseActivity{
 
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
-                return false;
+                if(message.getType()==EMMessage.Type.LOCATION){
+                    EMLocationMessageBody locBody=(EMLocationMessageBody) message.getBody();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("address",locBody.getAddress());
+                    bundle.putDouble("latitude",locBody.getLatitude());
+                    bundle.putDouble("longitude",locBody.getLongitude());
+                    gotoActivity(EaseGaodeMapAct.class,false,bundle);
+                }
+                return true;
             }
 
             @Override
@@ -114,6 +125,13 @@ public class ChatActivity  extends BaseActivity{
             @Override
             public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
                 return null;
+            }
+        });
+
+        mChatFrag.setLocationClickListener(new EaseChatFragment.LocationClickListener() {
+            @Override
+            public void onLocationClicked() {
+                startActivityForResult(new Intent(mContext, EaseGaodeMapAct.class), REQUEST_CODE_MAP);
             }
         });
     }
@@ -157,5 +175,11 @@ public class ChatActivity  extends BaseActivity{
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                      @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mChatFrag.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

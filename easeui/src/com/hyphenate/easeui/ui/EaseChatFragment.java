@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -648,7 +649,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 selectPicFromLocal();
                 break;
             case ITEM_LOCATION:
-                startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
+//                startActivityForResult(new Intent(getActivity(), EaseGaodeMapAct.class), REQUEST_CODE_MAP);
+                if(locationClickListener!=null){
+                    locationClickListener.onLocationClicked();
+                }
+                Log.e("zyzx","EaseChatFragment line653");
                 break;
 
             default:
@@ -657,7 +662,15 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
 
     }
-    
+    private LocationClickListener locationClickListener;
+    public interface LocationClickListener{
+        void onLocationClicked();
+    }
+
+    public void setLocationClickListener(LocationClickListener locationClickListener) {
+        this.locationClickListener = locationClickListener;
+    }
+
     /**
      * input @
      * @param username

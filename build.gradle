@@ -20,6 +20,7 @@ allprojects {
         all*.exclude group: 'com.android.support', module: 'support-v4'
         all*.exclude group: 'com.android.support', module: 'support-annotations'
     }
+    task allDeps(type: DependencyReportTask) {}
 }
 
 task clean(type: Delete) {
