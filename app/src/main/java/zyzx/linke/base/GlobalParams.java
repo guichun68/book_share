@@ -69,6 +69,7 @@ public class GlobalParams {
 	//checkupdate
 	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
 	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
+	public static String urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 	/**
 	 * 默认头像地址
 	 */
@@ -183,6 +184,7 @@ public class GlobalParams {
 		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
+		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

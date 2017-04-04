@@ -10,8 +10,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.TrafficStats;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
@@ -24,6 +26,7 @@ import java.util.Locale;
 
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.TelephonyManagerInfo;
 
 public class AppUtil {
 //	public static DbUtils db = DbUtils.create(GlobalParams.MAIN,
@@ -74,11 +77,10 @@ public class AppUtil {
 	public static String getAppVersionName(Context context) {
 		PackageManager pm = context.getPackageManager();
 		try {
-			ApplicationInfo info = pm.getApplicationInfo("com.austin.mynihonngo",
+			ApplicationInfo info = pm.getApplicationInfo("zyzx.linke",
 					PackageManager.GET_META_DATA);
 			int id = info.uid;
 		} catch (NameNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		// 获取当前应用程序的VersionName
@@ -419,4 +421,49 @@ public class AppUtil {
 		return screenHeight;
 	}
 
+	/**
+	 * 获取手机信息实体
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static TelephonyManagerInfo getTelephonyInfo(Context context) {
+		TelephonyManagerInfo info = new TelephonyManagerInfo();
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+		info.CallState = tm.getCallState();
+		info.CellLocation = tm.getCellLocation() != null ? tm.getCellLocation().toString() : "";
+		info.DeviceId = tm.getDeviceId();
+		info.DeviceSoftwareVersion = tm.getDeviceSoftwareVersion();
+		info.hasIccCard = tm.hasIccCard();
+		info.isNetworkRoaming = tm.isNetworkRoaming();
+		info.Line1Number = tm.getLine1Number();
+		info.NetworkCountryIso = tm.getNetworkCountryIso();
+		info.NetworkOperator = tm.getNetworkOperator();
+		info.NetworkOperatorName = tm.getNetworkOperatorName();
+		info.NetworkType = tm.getNetworkType();
+		info.PhoneType = tm.getPhoneType();
+		info.SimCountryIso = tm.getSimCountryIso();
+		info.SimOperator = tm.getSimOperator();
+		info.SimOperatorName = tm.getSimOperatorName();
+		info.SimSerialNumber = tm.getSimSerialNumber();
+		info.SimState = tm.getSimState();
+		info.SubscriberId = tm.getSubscriberId();
+		info.VoiceMailAlphaTag = tm.getVoiceMailAlphaTag();
+		info.VoiceMailNumber = tm.getVoiceMailNumber();
+		return info;
+	}
+
+	// 手机系统版本
+	public static String getOsDisplay() {
+		return Build.DISPLAY;
+	}
+
+	/**
+	 * 获取手机型号
+	 *
+	 * @return
+	 */
+	public static String getPhoneType() {
+		return Build.MODEL;
+	}
 }

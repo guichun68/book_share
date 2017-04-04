@@ -7,6 +7,7 @@ import java.util.List;
 
 import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.FeedBack;
 
 /**
  * Created by austin on 2017/2/17.
@@ -115,4 +116,6 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void resetPsw(String userId,String newPsw, CallBack callBack);
     //修改密码
     public abstract void modifyPsw(Integer userid, String oldPsw, String newPsw, CallBack callBack);
+    //意见反馈
+    public abstract void feedBack(FeedBack mFeedBack, CallBack callBack);
 }

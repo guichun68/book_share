@@ -42,6 +42,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private TextView tvLoginname;
     private TextView tvLocation;
     private TextView tvSignature;
+    private boolean headerClickable;
 
     private PullToRefreshListView mPullRefreshListView;
 
@@ -69,7 +70,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
         rlAddress = (RelativeLayout) findViewById(R.id.rl_location);
         rlAddress.setOnClickListener(this);
-        ivHeadIcon.setOnClickListener(this);
+
         if(showAddress){
             rlAddress.setVisibility(View.VISIBLE);
         }else{
@@ -91,6 +92,9 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     @Override
     protected void initData() {
         getIntentData();
+        if(headerClickable){
+            ivHeadIcon.setOnClickListener(this);
+        }
         if(mCloudItem!=null){
             tvLocation.setText(mAddress);
         }
@@ -135,6 +139,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         }
         mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
         showAddress = intent.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
+        headerClickable = intent.getBooleanExtra(BundleFlag.HEADCLICKABLE,true);
         if(mCloudItem!=null){
             mAddress = mCloudItem.getSnippet();
             if(StringUtil.isEmpty(mAddress)){

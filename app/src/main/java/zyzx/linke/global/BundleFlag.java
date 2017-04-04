@@ -10,6 +10,8 @@ public class BundleFlag {
 	public final static String ADDRESS = "address";
 	//书籍详情页面是否显示地址和分享者等信息
 	public final static String SHOWADDRESS = "showAddress";
+	//头像是否可点击flag
+	public final static String HEADCLICKABLE = "HEADCLICKABLE";
 	public final static String UID = "userId";
 	public final static String SHARER = "sharer";
 	public final static String LONGITUDE = "longitude";

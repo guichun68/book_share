@@ -11,14 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
-import zyzx.linke.db.HXUserDao;
-import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.FeedBack;
 import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.PreferenceManager;
@@ -422,6 +420,20 @@ public class UserPresenter extends IUserPresenter {
         } catch (IOException e) {
             if(callBack!=null){
                 callBack.onFailure(UIUtil.getString(R.string.err_request));
+            }
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void feedBack(FeedBack mFeedBack, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("content",JSON.toJSONString(mFeedBack));
+        try {
+            getModel().post(GlobalParams.urlFeedBack,param,callBack);
+        } catch (IOException e) {
+            if(callBack!=null){
+                callBack.onFailure("提交失败，请重试！");
             }
             e.printStackTrace();
         }

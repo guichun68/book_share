@@ -315,7 +315,7 @@
                     style="@style/rightArrow"/>
             </RelativeLayout>
             <TextView
-                android:id="@+id/fenge4"
+                android:id="@+id/fenge6"
                 style="@style/fengexian"
                 android:layout_below="@id/rl_scan_input" />
 
@@ -387,6 +387,42 @@
 
                 <ImageView
                     android:id="@+id/imageview_jiantou6"
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/fenge7"
+                style="@style/fengexian"
+                android:layout_below="@id/rl_scan_input" />
+            <RelativeLayout
+                android:id="@+id/rl_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv8"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/tv8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/iv8"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/feed_back"
+                    android:textColor="#576168" />
+
+                <ImageView
                     style="@style/rightArrow"/>
             </RelativeLayout>
 

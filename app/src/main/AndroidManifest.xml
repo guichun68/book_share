@@ -205,6 +205,9 @@
         <activity android:name=".ModifyPswAct"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FeedBackAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
 
 
 

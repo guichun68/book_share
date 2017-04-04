@@ -90,6 +90,7 @@ public class EaseContactListFragment extends EaseBaseFragment {
 
     @Override
     protected void initView() {
+        hideTitleBar();
         contentContainer = (FrameLayout) getView().findViewById(R.id.content_container);
         
         contactListLayout = (EaseContactList) getView().findViewById(R.id.contact_list);        

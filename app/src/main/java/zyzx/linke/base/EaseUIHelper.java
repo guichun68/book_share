@@ -1,5 +1,6 @@
 package zyzx.linke.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -634,6 +635,12 @@ public class EaseUIHelper {
             public void onProgress(int i, String s) {
             }
         });
+    }
+    public void pushActivity(Activity activity) {
+        easeUI.pushActivity(activity);
+    }
+    public void popActivity(Activity activity) {
+        easeUI.popActivity(activity);
     }
 
 }

@@ -29,6 +29,7 @@ import java.io.IOException;
 import zxing.CaptureActivity;
 import zyzx.linke.activity.AboutUsAct;
 import zyzx.linke.activity.BorrowedInBookAct;
+import zyzx.linke.activity.FeedBackAct;
 import zyzx.linke.activity.HomeAct;
 import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
@@ -86,6 +87,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_check_update).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_about).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_modify_psw).setOnClickListener(this);//修改密码
+        mRootView.findViewById(R.id.rl_feedback).setOnClickListener(this);//修改密码
 
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
@@ -151,6 +153,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.rl_modify_psw://修改密码
                 gotoActivity(ModifyPswAct.class);
+                break;
+            case R.id.rl_feedback:
+                gotoActivity(FeedBackAct.class);
                 break;
         }
     }

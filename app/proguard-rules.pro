@@ -16,18 +16,21 @@
 #   public *;
 #}
 
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
 #如果使用EaseUI库，需要这么写
 -keep class com.easemob.easeui.utils.EaseSmileUtils {*;}
-
-#2.0.9后加入语音通话功能，如需使用此功能的API，加入以下keep
--dontwarn ch.imvs.**
--dontwarn org.slf4j.**
--keep class org.ice4j.** {*;}
--keep class net.java.sip.** {*;}
--keep class org.webrtc.voiceengine.** {*;}
--keep class org.bitlet.** {*;}
--keep class org.slf4j.** {*;}
--keep class ch.imvs.** {*;}
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepclassmembers,allowobfuscation interface * {
+    @retrofit.http.** <methods>;
+}
+-keepattributes Signature
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.**{*; }
+-keep class zyzx.linke.model.**
 
 -keep class com.hyphenate.** {*;}
 -dontwarn  com.hyphenate.**
+
+-keep class com.superrtc.** {*;}

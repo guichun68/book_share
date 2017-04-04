@@ -140,12 +140,12 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_contact_list_normal.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_14.png",
-        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_14.png"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_record_animate_08.png",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_record_animate_08.png"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_14.png",
+        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_14.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_video_play_btn_small_nor.png",
@@ -356,12 +356,12 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_chatting_setmode_keyboard_btn_normal.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_default_avatar.png",
-        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_default_avatar.png"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_22.png",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_22.png"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_default_avatar.png",
+        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_default_avatar.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_input_bar_bg_active.9.png",
@@ -388,12 +388,12 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_chat_face_pressed.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_search_bar_icon_normal.png",
-        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_search_bar_icon_normal.png"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_video_download_btn_nor.png",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_video_download_btn_nor.png"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_search_bar_icon_normal.png",
+        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_search_bar_icon_normal.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_record_animate_07.png",

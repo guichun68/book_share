@@ -74,6 +74,10 @@ public class HomeAct extends BaseActivity {
             return;
         }
 
+        // unregister this event listener when this activity enters the
+        // background
+        EaseUIHelper.getInstance().pushActivity(this);
+
         layoutInflater = LayoutInflater.from(this);
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.contentPanel);
@@ -339,6 +343,14 @@ public class HomeAct extends BaseActivity {
         Intent intent = new Intent(HomeAct.this,ErrActivity.class);
         intent.putExtra("error_type", errType);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        EaseUIHelper.getInstance().popActivity(this);
+
+        super.onStop();
     }
 
 }

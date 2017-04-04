@@ -42,13 +42,14 @@ public class LKContactListFragment extends BaseFragment {
 
     @Override
     public void initView() {
-        mTitleText.setText("联系人");
-        showProgress("请稍后……");
+        mTitleText.setText("通讯录");
+        mBackBtn.setVisibility(View.INVISIBLE);
         refreshContacts();
     }
 
     //获取并刷新联系人列表
     private void refreshContacts() {
+        showProgress("请稍后…");
         getUserPresenter().getAllMyFriends(new EMValueCallBack<List<EaseUser>>() {
             @Override
             public void onSuccess(final List<EaseUser> easeUsers) {
@@ -111,7 +112,6 @@ public class LKContactListFragment extends BaseFragment {
                                 showDelOrBlacklistDialog(user);
                             }
                         });
-
                         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content, mContactListFrag, "contact").commit();
 
                     }
@@ -160,8 +160,13 @@ public class LKContactListFragment extends BaseFragment {
                             //deleteConversation删除和指定用户的对话,参数2：是否删除消息
                             EMClient.getInstance().chatManager()
                                     .deleteConversation(user.getUsername(), true);
-                            refreshContacts();
-//                            mContactListFrag.setContactsMap(contactListMap);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshContacts();
+                                }
+                            });
+//                          mContactListFrag.setContactsMap(contactListMap);
                         }else {
                             UIUtil.showToastSafe("未能删除成功");
                         }
@@ -201,7 +206,13 @@ public class LKContactListFragment extends BaseFragment {
                             UIUtil.showToastSafe("已添加到黑名单");
                             EMClient.getInstance().chatManager()
                                     .deleteConversation(user.getUsername(), true);
-                            refreshContacts();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshContacts();
+                                }
+                            });
+
                         }else{
                             UIUtil.showToastSafe("添加失败.");
                         }

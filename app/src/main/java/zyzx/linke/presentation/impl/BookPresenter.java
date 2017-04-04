@@ -80,7 +80,7 @@ public class BookPresenter extends IBookPresenter {
 
     @Override
     public void addBook2Map(final BookDetail2 bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
-        // 首先查询该点用户是否已经分享过图书了
+        // 首先查询用户在该点是否已经分享过图书了
         final HashMap<String,Object> param = new HashMap<>();
         param.put("key", Const.key);
 //        param.put("tableid",Const.mTableID);

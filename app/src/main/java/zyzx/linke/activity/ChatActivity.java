@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.amap.api.services.cloud.CloudItem;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
@@ -13,9 +14,12 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.util.EasyUtils;
 
+import java.util.HashMap;
+
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
@@ -74,7 +78,17 @@ public class ChatActivity  extends BaseActivity{
 
             @Override
             public void onAvatarClick(String username) {
+                CloudItem item=new CloudItem("无", Const.TianAnMenPoint,"无","");//只是为了携带用户id到详情页
+                //进入好友详情页
+                HashMap<String,String> uidMap = new HashMap<>();
+                uidMap.put("uid",username);
+                item.setCustomfield(uidMap);
 
+                Intent in = new Intent(mContext,FriendHomePageAct.class);
+                in.putExtra(BundleFlag.CLOUD_ITEM,item);
+                in.putExtra(BundleFlag.SHOWADDRESS,false);
+                in.putExtra(BundleFlag.HEADCLICKABLE,false);
+                mContext.startActivity(in);
             }
 
             @Override
