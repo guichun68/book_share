@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -36,11 +35,8 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.db.DemoDBManager;
 import zyzx.linke.db.DemoModel;
 import zyzx.linke.db.HXUserDao;
-import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.PreferenceManager;
-import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -95,10 +91,13 @@ public class EaseUIHelper {
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
         options.setAutoLogin(false);
+        options.setHuaweiPushAppId("10873988");
         if (EaseUI.getInstance().init(context, options)) {
             this.appContext = context;
             //debug mode, you'd better set it to false, if you want release your App officially.
             EMClient.getInstance().setDebugMode(true);
+            //initialize profile manager
+            getUserProfileManager().init(context);
             //get easeui instance
             easeUI = EaseUI.getInstance();
             //initialize preference manager
@@ -312,6 +311,7 @@ public class EaseUIHelper {
 
             @Override
             public void onMessageDelivered(List<EMMessage> message) {
+                Log.e("onMessageDelivered--",message.toString());
             }
 
             @Override

@@ -147,6 +147,15 @@ public class HomeAct extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            PersonalFragment personalFragment = (PersonalFragment) HomeAct.this.getSupportFragmentManager().findFragmentByTag(mTextviewArray[3]);
+            if(personalFragment!=null){
+                if(personalFragment.getUimp()!=null&& personalFragment.getUimp().isShowing()){
+                    personalFragment.getUimp().dismiss();
+                    return true;
+                }
+            }
+
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 UIUtil.showToastSafe(UIUtil.getString(R.string.press_more_then_exit));
                 exitTime = System.currentTimeMillis();

@@ -108,8 +108,9 @@ public class ChatActivity  extends BaseActivity{
                     bundle.putDouble("latitude",locBody.getLatitude());
                     bundle.putDouble("longitude",locBody.getLongitude());
                     gotoActivity(EaseGaodeMapAct.class,false,bundle);
+                    return true;
                 }
-                return true;
+                return false;
             }
 
             @Override

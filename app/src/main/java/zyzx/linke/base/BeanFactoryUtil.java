@@ -1,5 +1,7 @@
 package zyzx.linke.base;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -30,7 +32,6 @@ public class BeanFactoryUtil {
 	public static <T> T getImpl(Class<T> clazz) {
 		String key = clazz.getSimpleName();
 		String className = properties.getProperty(key);
-
 		if(key.equals("IUserPresenter")){
 			if(GlobalParams.gUserPresenter!=null){
 				return (T) GlobalParams.gUserPresenter;

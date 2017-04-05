@@ -12,6 +12,10 @@
         "source": "E:\\workspace\\linke\\easeui\\res\\drawable\\ease_search_clear.xml"
     },
     {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\drawable\\btn_sel2.xml",
+        "source": "E:\\workspace\\linke\\easeui\\res\\drawable\\btn_sel2.xml"
+    },
+    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\drawable\\ease_common_tab_bg.xml",
         "source": "E:\\workspace\\linke\\easeui\\res\\drawable\\ease_common_tab_bg.xml"
     },

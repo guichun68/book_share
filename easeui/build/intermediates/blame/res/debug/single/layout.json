@@ -156,6 +156,10 @@
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_showvideo_activity.xml"
     },
     {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\dialog_item_list.xml",
+        "source": "E:\\workspace\\linke\\easeui\\res\\layout\\dialog_item_list.xml"
+    },
+    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_row_received_file.xml",
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_row_received_file.xml"
     },

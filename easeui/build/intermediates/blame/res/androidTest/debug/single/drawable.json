@@ -24,6 +24,10 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable\\ease_chat_press_speak_btn.xml"
     },
     {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_sel2.xml",
+        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_sel2.xml"
+    },
+    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\ease_chatto_bg.xml",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable\\ease_chatto_bg.xml"
     },

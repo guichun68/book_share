@@ -15,8 +15,16 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            //开启代码混淆
+            minifyEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     //use legacy for android 6.0
@@ -42,7 +50,6 @@ android {
        //     storeFile file('D:\\debug.keystore')
             //keystore的密码
        //     storePassword 'android'
-
             //keystore中key的别名
             keyAlias 'austin'
             //keystore中key的密码

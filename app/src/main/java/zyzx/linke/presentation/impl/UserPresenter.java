@@ -1,5 +1,7 @@
 package zyzx.linke.presentation.impl;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hyphenate.EMValueCallBack;
@@ -40,6 +42,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
+        Log.e("zzyy",login_name+"-->");
         HashMap<String,Object> param = getParam();
         param.put("loginName",login_name);
         param.put("password",password);
@@ -62,8 +65,11 @@ public class UserPresenter extends IUserPresenter {
                        GlobalParams.gUser = u;
                        //记录用户名和uid
                        PreferenceManager.getInstance().setLastLoginUserNick(u.getLogin_name());
+                       Log.e("zzyy0",String.valueOf(u.getLogin_name()));
                        PreferenceManager.getInstance().setLastLoginUserId(String.valueOf(u.getUserid()));
+                       Log.e("zzyy1",String.valueOf(u.getUserid()));
                        PreferenceManager.getInstance().setLastLoginUserPSWHASH(u.getPassword());
+                       Log.e("zzyy2",String.valueOf(u.getPassword()));
                        EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
                        EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(u.getHead_icon());
 

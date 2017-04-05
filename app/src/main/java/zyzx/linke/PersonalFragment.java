@@ -403,4 +403,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
+    public UserInfoImagePOP getUimp() {
+        return uimp;
+    }
 }

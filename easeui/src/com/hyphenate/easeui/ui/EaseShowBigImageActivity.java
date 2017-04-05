@@ -14,23 +14,34 @@
 package com.hyphenate.easeui.ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.model.EaseImageCache;
 import com.hyphenate.easeui.utils.EaseLoadLocalBigImgTask;
+import com.hyphenate.easeui.utils.FileUtil;
 import com.hyphenate.easeui.widget.photoview.EasePhotoView;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +50,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * download and show original image
@@ -52,6 +65,7 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 	private String localFilePath;
 	private Bitmap bitmap;
 	private boolean isDownloaded;
+	private Uri uri;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -62,7 +76,7 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 		image = (EasePhotoView) findViewById(R.id.image);
 		ProgressBar loadLocalPb = (ProgressBar) findViewById(R.id.pb_load_local);
 		default_res = getIntent().getIntExtra("default_image", R.drawable.ease_default_avatar);
-		Uri uri = getIntent().getParcelableExtra("uri");
+		uri = getIntent().getParcelableExtra("uri");
 		localFilePath = getIntent().getExtras().getString("localUrl");
 		String msgId = getIntent().getExtras().getString("messageId");
 		EMLog.d(TAG, "show big msgId:" + msgId );
@@ -98,12 +112,90 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 				finish();
 			}
 		});
+		image.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				showSavePicDialog();
+				return false;
+			}
+		});
 	}
-	
+
+	/**
+	 * 显示是否保存图片的dialog
+	 */
+	private void showSavePicDialog() {
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		View view = View.inflate(this,R.layout.dialog_item_list, null);
+		TextView tvItem1 = (TextView) view.findViewById(R.id.tv_item1);
+		tvItem1.setText("保存图片");
+		view.findViewById(R.id.tv_item2).setVisibility(View.GONE);
+		final AlertDialog dialog = adb.create();
+		dialog.setView(view,0,0,0,0);
+
+		tvItem1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(bitmap!=null){
+					String filePath = saveBitmap(bitmap);
+					if(!TextUtils.isEmpty(filePath)){
+						Toast.makeText(EaseShowBigImageActivity.this,"已保存到"+filePath,Toast.LENGTH_LONG).show();
+					}else{
+						Toast.makeText(EaseShowBigImageActivity.this,"保存失败",Toast.LENGTH_SHORT).show();
+					}
+				}else{
+					Bitmap bmp = BitmapFactory.decodeFile(uri.getPath());
+					String filePath = saveBitmap(bmp);
+					if(!TextUtils.isEmpty(filePath)){
+						Toast.makeText(EaseShowBigImageActivity.this,"已保存到"+filePath,Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(EaseShowBigImageActivity.this,"保存失败",Toast.LENGTH_SHORT).show();
+					}
+				}
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	/**
+	 * 将Bitmap转成file的Uri
+	 *
+	 * @param bitmap
+	 * @return
+	 */
+	private String saveBitmap(Bitmap bitmap) {
+		String cacheDir = FileUtil.getCacheDir(EaseShowBigImageActivity.this);
+		String downloadDir = FileUtil.getDir(EaseShowBigImageActivity.this,"dowload");
+		File file = new File(downloadDir);
+		if (!file.exists())
+			file.mkdirs();
+		Date d = new Date();
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH);
+
+		File imgFile = new File(file.getAbsolutePath() + "/"+sdf.format(d)+".jpeg");
+		if (imgFile.exists())
+			imgFile.delete();
+		try {
+			FileOutputStream outputStream = new FileOutputStream(imgFile);
+			bitmap.compress(Bitmap.CompressFormat.JPEG,100, outputStream);
+			outputStream.flush();
+			outputStream.close();
+//            Uri uri = Uri.fromFile(imgFile);
+			return imgFile.getAbsolutePath();
+		}catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
 	/**
 	 * download image
 	 * 
-	 * @param remoteFilePath
+	 * @param msgId
 	 */
 	@SuppressLint("NewApi")
 	private void downloadImage(final String msgId) {
