@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/title_bar"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 
     <FrameLayout

@@ -140,7 +140,7 @@ public class ForceUpdateActivity extends Activity {
 		 */
 		protected void downloadFile() {
 			final String fileName = StringUtil.getExtraName(url);
-			DownloadUtil.get().download(url, "lk", new DownloadUtil.OnDownloadListener() {
+			DownloadUtil.get().download(url, GlobalParams.BaseDir, null,new DownloadUtil.OnDownloadListener() {
 				@Override
 				public void onDownloadSuccess() {
 
@@ -150,7 +150,7 @@ public class ForceUpdateActivity extends Activity {
 					Intent intent = new Intent();
 					intent.setAction("android.intent.action.VIEW");
 					intent.addCategory("android.intent.category.DEFAULT");
-					File downloadFile = new File(Environment.getExternalStorageDirectory(), "lk/"+fileName);
+					File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+fileName);
 					Toast.makeText(ForceUpdateActivity.this,"已下载到"+downloadFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
 					intent.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
 					startActivityForResult(intent, 0);

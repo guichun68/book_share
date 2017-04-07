@@ -46,16 +46,17 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:gravity="center"
-        tools:text="加入我的书架"
+        tools:text=""
         android:textSize="20sp"
         android:paddingRight="10dp"
         android:clickable="true"
-        android:textColor="@color/gray_white"
+        android:textColor="@color/white"
         />
 
     <include
         android:layout_width="match_parent"
         android:layout_height="1px"
         layout="@layout/layout_horizontal_line"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
 </RelativeLayout>

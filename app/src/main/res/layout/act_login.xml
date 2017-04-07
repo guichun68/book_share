@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/backgroud_white"
+    android:background="@mipmap/login_bg"
     android:orientation="vertical">
 
     <include
@@ -14,35 +14,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/backgroud_btn"
+        android:layout_marginLeft="62dp"
+        android:layout_marginRight="62dp"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/btn_sel3"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/textView6"
+            android:layout_width="69dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:paddingEnd="1dp"
-            android:gravity="start|center_vertical"
+            android:gravity="center"
             android:text="@string/username"
-            android:textSize="18sp" />
+            android:textColor="@color/text_tip_color"
+            android:textSize="17sp" />
 
         <View
             android:layout_width="1.0px"
             android:layout_height="fill_parent"
-            android:background="@color/ver_line" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/ver_line2" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_login_name"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@null"
             android:layout_marginStart="5dp"
             android:hint="@string/input_username"
-            android:background="@null"
+            android:layout_marginLeft="5dp"
             tools:text="浮世年华"
             android:maxLength="11" />
     </LinearLayout>
@@ -50,72 +51,66 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/backgroud_btn"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/btn_sel3"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="69dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:paddingEnd="1dp"
-            android:gravity="start|center_vertical"
+            android:gravity="center"
             android:text="@string/password"
-            android:textSize="18sp" />
+            android:textColor="@color/text_tip_color"
+            android:textSize="17sp" />
 
         <View
             android:layout_width="1.0px"
-            android:layout_height="fill_parent"
-            android:background="@color/ver_line" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/ver_line2" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_psw"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:hint="@string/input_username"
             android:background="@null"
             android:inputType="textPassword"
             tools:text="123456"
             android:maxLength="11" />
-
-        <View
-            android:layout_width="1.0px"
-            android:layout_height="fill_parent"
-            android:background="#ffd2d2d2" />
-
     </LinearLayout>
 
     <CheckBox
         android:id="@+id/cb_auto_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="70dp"
         android:paddingStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:checked="true"
-        android:text="下次自动登陆"/>
+        android:textColor="@color/text_tip_color"
+        android:text="下次自动登录"/>
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
         android:background="@drawable/btn_sel"
         android:text="登录"
-        android:textColor="@color/btn_text_color"
+        android:textColor="@color/white"
         android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal">
 
         <TextView
@@ -132,11 +127,25 @@
         <TextView
             android:id="@+id/tv_forget_psw"
             android:layout_width="0dp"
-            android:clickable="true"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:clickable="true"
+            android:layout_marginRight="20dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
             android:text="@string/forget_psw"
+            android:textColor="@color/text_tip_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_regist"
+            android:clickable="true"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/regist"
+            android:textColor="@color/text_tip_color"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -144,6 +153,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -157,15 +167,7 @@
             android:text="@string/about_us"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_regist"
-            android:clickable="true"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/regist"
-            android:textSize="18sp" />
+
     </LinearLayout>
 
 </LinearLayout>

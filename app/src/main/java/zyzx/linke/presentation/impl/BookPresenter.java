@@ -89,7 +89,7 @@ public class BookPresenter extends IBookPresenter {
 //        param.put("radius","0");
 //        param.put("filter","uid:"+userid+"");
         param.put("user_id",String.valueOf(userid));
-        param.put("book_id",bookDetail.getB_id());
+        param.put("book_id",String.valueOf(bookDetail.getB_id()));
         param.put("user_name",GlobalParams.gUser.getLogin_name());
         if(StringUtil.isEmpty(GlobalParams.gUser.getHead_icon())){
             param.put("head_url",GlobalParams.urlDefHeadIcon);
@@ -234,10 +234,10 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
-    public void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack) {
+    public void deleteUserBook(Integer userid, Integer b_id,Integer mapItemId, CallBack callBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("user_id",String.valueOf(userid));
-        param.put("book_id",b_id);
+        param.put("book_id",String.valueOf(b_id));
         param.put("map_id",String.valueOf(mapItemId));
         try {
             getModel().post(GlobalParams.urlDeleteUserBooks, param,callBack);

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 import zxing.CaptureActivity;
 import zyzx.linke.activity.AboutUsAct;
@@ -36,16 +39,20 @@ import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.EaseUIHelper;
+import zyzx.linke.base.ForceUpdateActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.utils.CapturePhoto;
+import zyzx.linke.utils.CustomProgressDialog;
+import zyzx.linke.utils.DownloadUtil;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.ImageUtils;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.ToastUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
 import zyzx.linke.views.UserInfoImagePOP;
@@ -61,6 +68,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private CapturePhoto capture;
     private TextView tvUserName;//用户昵称（login_name）
     private TextView tvSignature;
+    private Dialog dialog;
 
 
     // 裁剪后图片的宽(X)和高(Y),600 X 600的正方形。
@@ -88,6 +96,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         mRootView.findViewById(R.id.rl_about).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_modify_psw).setOnClickListener(this);//修改密码
         mRootView.findViewById(R.id.rl_feedback).setOnClickListener(this);//修改密码
+        mRootView.findViewById(R.id.rl_export).setOnClickListener(this);//导出
+        mRootView.findViewById(R.id.rl_import).setOnClickListener(this);//导入
 
         mCiv.setOnClickListener(this);
         tvSignature.setOnClickListener(this);
@@ -157,8 +167,85 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             case R.id.rl_feedback:
                 gotoActivity(FeedBackAct.class);
                 break;
+            case R.id.rl_import:
+
+                break;
+            case R.id.rl_export://导出excel
+                dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, UIUtil.getString(R.string.export_tip), UIUtil.getString(R.string.confirm), UIUtil.getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showProgress("请稍后…");
+                        downloadFile();
+                    }
+                },null);
+                dialog.show();
+                break;
         }
     }
+
+    /**
+     * 下载导出的excle清单（由服务器生成excel，实际客户端为下载操作）
+     */
+    protected void downloadFile() {
+        final String fileName = "mybooks.xls";
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("user_id",PreferenceManager.getInstance().getLastLoginUserId());
+        DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir,param, new DownloadUtil.OnDownloadListener() {
+            @Override
+            public void onDownloadSuccess() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgress();
+                        if(dialog!=null){
+                            dialog.dismiss();
+                        }
+                        String appPath = FileUtil.getExternalStoragePath();
+                        if(appPath==null){
+                            ToastUtil.show(mContext,"未检测到内存卡，导出失败！");
+                            return;
+                        }
+                        String filePath = appPath+"getSummary.action";
+                        File downloadFile = new File(filePath);
+                        File newFile = new File(appPath+"我的书单.xls");
+                        if(downloadFile.exists()){
+                            if(downloadFile.renameTo(newFile)){
+                                CustomProgressDialog.getPromptDialog(mContext,"已成功导出到:\n"+newFile.getAbsolutePath(),null).show();
+                            }
+                        }else{
+                            if(newFile.exists()){
+                                // 导出（下载）成功
+                                CustomProgressDialog.getPromptDialog(mContext,"已成功导出到:\n"+newFile.getAbsolutePath(),null).show();
+                            }else{
+                                // 导出（下载）失败
+                                UIUtil.showToastSafe(R.string.err_request);
+                            }
+                        }
+                    }
+                });
+            }
+            @Override
+            public void onDownloading(long total,int progress) {
+//                UIUtil.showTestLog("exportting……");
+            }
+            @Override
+            public void onDownloadFailed() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgress();
+                        if(dialog!=null){
+                            dialog.dismiss();
+                        }
+                        String message = "导出错误";
+                        UIUtil.showToastSafe(message);
+                    }
+                });
+
+            }
+        });
+    }
+
 
     public void showSnack(String btnText,String msg) {
         final Snackbar snackbar = Snackbar.make(tvSignature, msg, Snackbar.LENGTH_LONG);

@@ -314,7 +314,7 @@ public class ManualInputAct extends BaseActivity {
                     public void run() {
                         JSONObject jsonObject = JSON.parseObject(json);
                         Integer code = jsonObject.getInteger("code");
-                        String bookId = jsonObject.getString("book_id");
+                        Integer bookId = jsonObject.getInteger("book_id");
                         String bookImageUrl = jsonObject.getString("book_image");
                         if(code == null){
                             return;
@@ -364,16 +364,10 @@ public class ManualInputAct extends BaseActivity {
         if(promtDialog!=null){
             CustomProgressDialog.dismissDialog(promtDialog);
         }
-        promtDialog = CustomProgressDialog.getPromptDialog(mContext,msg,new PromptDialogClicklistener());
+        promtDialog = CustomProgressDialog.getPromptDialog(mContext,msg,null);
         promtDialog.show();
     }
-    class PromptDialogClicklistener implements View.OnClickListener{
 
-        @Override
-        public void onClick(View v) {
-            CustomProgressDialog.dismissDialog(promtDialog);
-        }
-    }
 
     View.OnClickListener myOk;
     View.OnClickListener myCancel;

@@ -49,7 +49,7 @@ public class HomeAct extends BaseActivity {
     private FragmentTabHost mTabHost;
     private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKContactListFragment.class,PersonalFragment.class};
     private int mTitleArray[] = {R.string.tab_homepage, R.string.tab_mesg, R.string.tab_contact_list,R.string.tab_personal};
-    private int mImageViewArray[] = {R.mipmap.home, R.mipmap.em_conversation_selected,R.mipmap.em_contact_list_selected,R.mipmap.personal};
+    private int mImageViewArray[] = {R.mipmap.home, R.mipmap.conversation,R.mipmap.contact_list,R.mipmap.personal};
     //    private String mTextviewArray[] = {"contact", "conversation", "setting"};
     private String mTextviewArray[] = {"homepage", "conversation", "contacts","me"};
     private ImageView msgUnread;

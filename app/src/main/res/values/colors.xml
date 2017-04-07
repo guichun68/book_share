@@ -11,14 +11,15 @@
     <color name="update_normal">#F6F6F6</color>
 
     <color name="gray_white">#EAEAEA</color>
-    <color name="backgroud_white">#FAFAFA</color>
-    <color name="backgroud_btn">#99C3C3C3</color>
+    <color name="backgroud_white">#66FFC046</color>
+    <color name="backgroud_btn">#FFFFFF</color>
     <color name="backgroud_black">#DD444444</color>
     <color name="common_black_color">#FF333333</color>
     <color name="common_black_color2">#AA333333</color>
     <color name="black">#000000</color>
     <color name="bg_gray">#D6D0D0</color>
     <color name="ver_line">#fff2f2f2</color>
+    <color name="ver_line2">#e5e5e5</color>
     <color name="gary">#898989</color>
     <color name="Calendar_DayBgColor">#5566b8</color>
     <color name="Calendar_DayBgColor2">#995566b8</color>
@@ -27,7 +28,7 @@
     <color name="change_city">#999999</color>
     <color name="pre_image_bg">#202020</color>
     <color name="act_background">#efefef</color>
-    <color name="title_color">#545454</color>
+    <color name="title_color">#FFC046</color>
     <color name="white">#FFFFFF</color>
     <color name="watermark_hint">#ccffffff</color>
     <color name="cicleHead">#3CB2CC</color>
@@ -73,5 +74,6 @@
     <color name="text_blue1">#1173CB</color>
     <color name="text_gray1">#777777</color>
     <color name="custom_black2">#6D6D6D</color>
+    <color name="text_tip_color">#737373</color>
 
 </resources>

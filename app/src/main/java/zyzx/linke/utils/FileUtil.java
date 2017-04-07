@@ -35,8 +35,8 @@ public class FileUtil {
 
         GlobalParams.image_file_location = null;
         if (SDState.equals(Environment.MEDIA_MOUNTED)) {
-            GlobalParams.image_file_location = Environment.getExternalStorageDirectory().getPath() + "/lk/"
-                    + cutnameString + "lk.jpg";
+            GlobalParams.image_file_location = Environment.getExternalStorageDirectory().getPath() + "/"+GlobalParams.BaseDir+"/"
+                    + cutnameString + "nearbook.jpg";
         } else {
             return null;
         }
@@ -245,11 +245,15 @@ public class FileUtil {
 
         cursor.moveToFirst();
         return cursor.getInt(0);
-
     }
 
     public static String getExternalStoragePath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/lk/";
+        String SDState = Environment.getExternalStorageState();
+        if (SDState.equals(Environment.MEDIA_MOUNTED)) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+GlobalParams.BaseDir+"/";
+        }else{
+            return null;
+        }
     }
 
     public static String getDownloadDir(Context context) {

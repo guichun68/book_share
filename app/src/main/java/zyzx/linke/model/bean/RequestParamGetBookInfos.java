@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class RequestParamGetBookInfos {
-    private List<String> bookIds;
+    private List<Integer> bookIds;
     private int uid;
     private String mTitle;//CloudItem的title（兴趣点名称）
     private String address;//CloudItem的中文名称地址（snippt）
@@ -19,7 +19,7 @@ public class RequestParamGetBookInfos {
     public RequestParamGetBookInfos() {
     }
 
-    public RequestParamGetBookInfos(List<String> bookIds, int uid, String mTitle, String address, double lat, double longi,float distance) {
+    public RequestParamGetBookInfos(List<Integer> bookIds, int uid, String mTitle, String address, double lat, double longi,float distance) {
         this.bookIds = bookIds;
         this.uid = uid;
         this.mTitle = mTitle;
@@ -29,11 +29,11 @@ public class RequestParamGetBookInfos {
         this.distance = distance;
     }
 
-    public List<String> getBookIds() {
+    public List<Integer> getBookIds() {
         return bookIds;
     }
 
-    public void setBookIds(List<String> bookIds) {
+    public void setBookIds(List<Integer> bookIds) {
         this.bookIds = bookIds;
     }
 

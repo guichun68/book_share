@@ -89,7 +89,7 @@
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/launcher_icon" />
+                    android:src="@mipmap/scan" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -127,7 +127,7 @@
                     android:layout_width="@dimen/dp_50"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/edit" />
+                    android:src="@mipmap/manual" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -171,7 +171,7 @@
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/borrow_book_all" />
+                    android:src="@mipmap/myshelf" />
 
                 <TextView
                     android:id="@+id/tv0"
@@ -209,7 +209,7 @@
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/borrow_book_in" />
+                    android:src="@mipmap/myborrows" />
 
                 <TextView
                     android:id="@+id/tv3"
@@ -335,7 +335,7 @@
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/update" />
+                    android:src="@mipmap/checkupdate" />
 
                 <TextView
                     android:id="@+id/tv5"
@@ -392,7 +392,7 @@
             <TextView
                 android:id="@+id/fenge7"
                 style="@style/fengexian"
-                android:layout_below="@id/rl_scan_input" />
+                 />
             <RelativeLayout
                 android:id="@+id/rl_feedback"
                 android:layout_width="match_parent"
@@ -426,6 +426,77 @@
                     style="@style/rightArrow"/>
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/fenge8"
+                style="@style/fengexian" />
+            <RelativeLayout
+                android:id="@+id/rl_export"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv9"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/tv9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/iv9"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/export_excel"
+                    android:textColor="#576168" />
+
+                <ImageView
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/fenge9"
+                style="@style/fengexian" />
+            <RelativeLayout
+                android:id="@+id/rl_import"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv10"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/tv10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/iv10"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/import_excel"
+                    android:textColor="#576168" />
+
+                <ImageView
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

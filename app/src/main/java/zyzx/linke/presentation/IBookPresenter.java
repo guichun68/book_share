@@ -72,7 +72,7 @@ public abstract class IBookPresenter extends IPresenter {
      * @param b_id
      * @param callBack
      */
-    public abstract void deleteUserBook(Integer userid, String b_id,Integer mapItemId, CallBack callBack);
+    public abstract void deleteUserBook(Integer userid, Integer b_id,Integer mapItemId, CallBack callBack);
 
     /**
      * 取消书籍分享

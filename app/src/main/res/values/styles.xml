@@ -1,6 +1,6 @@
 <resources>
     <style name="title_bar_style">
-        <item name="android:background">@drawable/title_background_blue</item>
+        <item name="android:background">@color/title</item>
         <item name="android:paddingLeft">0.0dip</item>
         <item name="android:paddingRight">0.0dip</item>
         <item name="android:layout_width">match_parent</item>
@@ -84,6 +84,7 @@
     <color name="bar_color">#A103A9F4</color>
     <color name="qian_garly">#DCDCDC</color>
     <color name="blue">#ff4455db</color>
+    <color name="title">@color/title_color</color>
 
 
     <!-- 蓝色为主色调 -->

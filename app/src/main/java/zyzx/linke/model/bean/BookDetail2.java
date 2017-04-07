@@ -17,7 +17,7 @@ public class BookDetail2 implements Serializable{
 
 	private String catalog;
 
-	private String b_id;
+	private Integer b_id;
 
 	private String image;
 
@@ -122,12 +122,11 @@ public class BookDetail2 implements Serializable{
 		return this.catalog;
 	}
 
-
-	public String getB_id() {
+	public Integer getB_id() {
 		return b_id;
 	}
 
-	public void setB_id(String b_id) {
+	public void setB_id(Integer b_id) {
 		this.b_id = b_id;
 	}
 

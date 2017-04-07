@@ -400,15 +400,20 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
             @Override
             public void onFailure(Object obj) {
-                dismissProgress();
-                mPullRefreshListView.onRefreshComplete();
-                mPullRefreshListView.clearAnimation();
-                if(isLoadingMore){
-                    mPageNum--;
-                    if(mPageNum<0)mPageNum=0;
-                    isLoadingMore = false;
-                }
-                UIUtil.showToastSafe("未能获取书籍信息!");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgress();
+                        mPullRefreshListView.onRefreshComplete();
+                        mPullRefreshListView.clearAnimation();
+                        if(isLoadingMore){
+                            mPageNum--;
+                            if(mPageNum<0)mPageNum=0;
+                            isLoadingMore = false;
+                        }
+                        UIUtil.showToastSafe("未能获取书籍信息!");
+                    }
+                });
             }
         });
     }

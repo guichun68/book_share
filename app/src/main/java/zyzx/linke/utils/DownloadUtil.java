@@ -5,14 +5,18 @@ import android.support.annotation.NonNull;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DownloadUtil {
 
@@ -35,8 +39,22 @@ public class DownloadUtil {
      * @param saveDir 储存下载文件的SDCard目录
      * @param listener 下载监听
      */
-    public void download(final String url, final String saveDir, final OnDownloadListener listener) {
-        Request request = new Request.Builder().url(url).build();
+    public void download(final String url, final String saveDir, HashMap<String, Object> param, final OnDownloadListener listener) {
+        Request request;
+        if(param!=null){
+            FormEncodingBuilder fb = new FormEncodingBuilder();
+            for (Map.Entry<String, Object> et : param.entrySet()) {
+                fb.add(et.getKey(), (String)et.getValue());
+            }
+            RequestBody body = fb.build();
+
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+        }else{
+            request = new Request.Builder().url(url).build();
+        }
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {

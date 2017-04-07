@@ -595,7 +595,11 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
             CloudItem cloudItem = cloudResult.get(i);
             String bookIds = cloudItem.getCustomfield().get("bookIds");
             Integer uid = Integer.parseInt(cloudItem.getCustomfield().get("uid"));
-            List<String> ids = Arrays.asList( bookIds.split("#"));
+            String[] idsStr = bookIds.split("#");
+            List<Integer> ids = new ArrayList<>();
+            for(int j=0;j<idsStr.length;j++){
+                ids.add(Integer.parseInt(idsStr[j]));
+            }
             RequestParamGetBookInfos param = new RequestParamGetBookInfos(ids,uid,cloudItem.getTitle(),cloudItem.getSnippet(),cloudItem.getLatLonPoint().getLatitude(),cloudItem.getLatLonPoint().getLongitude(),cloudItem.getDistance());
             params.add(param);
         }

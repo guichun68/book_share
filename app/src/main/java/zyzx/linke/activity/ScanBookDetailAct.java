@@ -63,7 +63,7 @@ public class ScanBookDetailAct extends BaseActivity {
         showDefProgress();
     }
 
-    String bookId;//添加地图成功后返回的bookId
+    Integer bookId;//添加地图成功后返回的bookId
 
     @Override
     public void onClick(View view) {
@@ -84,7 +84,7 @@ public class ScanBookDetailAct extends BaseActivity {
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code = jsonObject.getInteger("code");
                         if (code == 200) {
-                            bookId = jsonObject.getString("bookId");
+                            bookId = Integer.valueOf(jsonObject.getString("bookId"));
                             mBook.setB_id(bookId);
                             UIUtil.showToastSafe("添加成功");
                             runOnUiThread(new Runnable() {

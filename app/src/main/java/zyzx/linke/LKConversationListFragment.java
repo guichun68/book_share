@@ -43,10 +43,9 @@ public class LKConversationListFragment extends BaseFragment {
 
     @Override
     public void initView() {
-
+        mTitleText.setText("会话");
+        mBackBtn.setVisibility(View.GONE);
         mConversationListFrag = new EaseConversationListFragment();
-        mConversationListFrag.hideTitleBar();
-
         mConversationListFrag.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
 
             @Override

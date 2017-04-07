@@ -24,10 +24,10 @@ public class GlobalParams {
 
 	public static String image_file_location;//图片本地存储地址
 	public static boolean isCheckedUpdate;//是否已经自动检查更新了
+	public static String BaseDir = "NearBook";//本地默认保存文件夹名
 
 
-
-    static{
+	static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
 
@@ -57,6 +57,7 @@ public class GlobalParams {
 	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	//重置密码
 	public static String urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
+	public static String urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 	//添加到黑名单
 	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	//检查是否在对方的黑名单中
@@ -186,6 +187,7 @@ public class GlobalParams {
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
+		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

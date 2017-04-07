@@ -147,10 +147,19 @@ public class CustomProgressDialog {
 		TextView dialog_txt = (TextView) view.findViewById(R.id.dialog_txt);
 		Button dialog_btn = (Button) view.findViewById(R.id.dialog_btn);
 
-		AlertDialog dialog2 = adb.create();
+		final AlertDialog dialog2 = adb.create();
 		dialog2.setView(view, 0, 0, 0, 0);
 		dialog_txt.setText(msg);
-		dialog_btn.setOnClickListener(listener);
+		if(listener==null){
+			dialog_btn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog2.dismiss();
+				}
+			});
+		}else{
+			dialog_btn.setOnClickListener(listener);
+		}
 		dialog2.setCanceledOnTouchOutside(false);
 		dialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		return dialog2;

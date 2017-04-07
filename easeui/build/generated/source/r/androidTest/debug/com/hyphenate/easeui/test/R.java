@@ -982,16 +982,10 @@ containing a value of this type.
         public static final int Anim_style=0x7f060009;
         public static final int Anim_style2=0x7f060000;
         public static final int AppTheme=0x7f06000a;
-        /**  模糊 
-         */
         public static final int HeadScale=0x7f06000b;
         public static final int MyAlertDialog=0x7f06000c;
         public static final int MyDialogStyle=0x7f06000d;
-        /**  模糊 
-         */
         public static final int MyDialogStyleBottom=0x7f06000e;
-        /**  模糊 
-         */
         public static final int MyDialogStyleTop=0x7f06000f;
         public static final int bottom_line_edit_text_style=0x7f060010;
         public static final int chat_content_date_style=0x7f060011;
