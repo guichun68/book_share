@@ -48,6 +48,10 @@ public abstract class IUserPresenter extends IPresenter{
      * 上传头像
      */
     public abstract void uploadHeadIcon(Integer userId,String imagePath,CallBack viewCallBack);
+    /**
+     * 上传Excel文件
+     */
+    public abstract void uploadExcelFile(Integer userId,String filePath,CallBack viewCallBack);
 
     /**
      * 修改用户签名

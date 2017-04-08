@@ -102,8 +102,9 @@ public final class R {
 		public static final int list_itease_primary_color = 0x7f080027;
 		public static final int list_itease_secondary_color = 0x7f080028;
 		public static final int orange = 0x7f080029;
-		public static final int top_bar_normal_bg = 0x7f08002a;
-		public static final int voip_interface_text_color = 0x7f08002b;
+		public static final int title_color = 0x7f08002a;
+		public static final int top_bar_normal_bg = 0x7f08002b;
+		public static final int voip_interface_text_color = 0x7f08002c;
 	}
 	public static final class dimen {
 		public static final int activity_horizontal_margin = 0x7f050002;

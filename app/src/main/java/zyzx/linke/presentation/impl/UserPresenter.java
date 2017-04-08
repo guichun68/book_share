@@ -441,4 +441,19 @@ public class UserPresenter extends IUserPresenter {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void uploadExcelFile(Integer userId, String filePath, CallBack viewCallBack) {
+        HashMap<String,Object> params = getParam();
+        params.put("file",new File(filePath));
+        params.put("user_id",userId);
+        try {
+            getModel().post2(GlobalParams.urlUploadExcel, params, viewCallBack);
+        }catch (Exception e){
+            if(viewCallBack!=null){
+                viewCallBack.onFailure("导入失败！");
+                UIUtil.showTestLog("zyzx",e.getMessage());
+            }
+        }
+    }
 }

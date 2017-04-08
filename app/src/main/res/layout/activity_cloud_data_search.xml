@@ -7,8 +7,8 @@
     <RelativeLayout
         android:id="@+id/temp_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/titlebar_height"
-        android:background="@drawable/title_background_blue"
+        android:layout_height="@dimen/height_top_bar"
+        android:background="@color/title"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 

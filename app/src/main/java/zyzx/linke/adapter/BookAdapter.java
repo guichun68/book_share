@@ -89,7 +89,7 @@ public class BookAdapter extends BaseAdapter{
         return convertView;
     }
 
-    class BookViewHolder{
+    private class BookViewHolder{
         private final View root;
         private final ImageView ivCover;
         private final TextView tvBookName;

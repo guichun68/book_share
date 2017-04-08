@@ -81,7 +81,7 @@
 
     <color name="text_bg">#CDD1D3</color>
     <color name="main_blue_light">#3F56B5</color>
-    <color name="bar_color">#A103A9F4</color>
+    <color name="bar_color">#FFE7AD</color>
     <color name="qian_garly">#DCDCDC</color>
     <color name="blue">#ff4455db</color>
     <color name="title">@color/title_color</color>
@@ -160,7 +160,7 @@
     <style name="fengexian">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
-        <item name="android:background">@color/bg_gray_line</item>
+        <item name="android:background">@color/text_tip_color</item>
         <item name="android:layout_marginLeft">5dip</item>
         <item name="android:layout_marginRight">5dip</item>
     </style>

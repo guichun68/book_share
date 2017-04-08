@@ -5,6 +5,7 @@
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bacgroud"
     android:orientation="vertical">
 
 
@@ -24,16 +25,18 @@
                 android:id="@+id/rl_top"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@mipmap/bg2">
+                android:background="#88ffffff"
+                android:layout_marginBottom="5dp"
+                android:visibility="visible">
 
                 <zyzx.linke.views.CircleImageView
                     android:id="@+id/civ"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:src="@mipmap/person"
-                    android:layout_marginBottom="10dp"
                     app:border_color="@color/cicleHead" />
 
                 <TextView
@@ -42,35 +45,33 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/civ"
                     android:layout_centerHorizontal="true"
-                    tool:text="王者风范"
+                    android:textColor="@color/text_tip_color"
                     android:textSize="17sp"
-                    android:textColor="@color/white"
-                    />
+                    tool:text="王者风范" />
+
                 <TextView
                     android:id="@+id/tv_signature"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    tool:text="写点什么吧！"
+                    android:layout_below="@id/tv_user_login_name"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/item_press"
-                    android:gravity="center"
-                    android:maxLines="1"
                     android:clickable="true"
                     android:ellipsize="end"
-                    android:layout_below="@id/tv_user_login_name"/>
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/text_tip_color"
+                    tool:text="写点什么吧！" />
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_white"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:layout_height="25dp"
+                android:paddingLeft="17dp"
                 android:text="@string/newbookcheckin"
+                android:textSize="17sp"
+                android:gravity="center_vertical"
                  />
 
 
@@ -80,13 +81,13 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
 
                 <ImageView
                     android:id="@+id/iv1"
                     android:layout_width="@dimen/dp_50"
+                    android:paddingRight="5dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/scan" />
@@ -96,11 +97,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv1"
                     android:text="@string/scan_input"
                     android:textSize="@dimen/sp_19"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou1"
@@ -116,7 +117,7 @@
                 android:id="@+id/rl_manual_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
                 android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="20dp"
@@ -132,12 +133,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_toRightOf="@+id/iv2"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:text="@string/manual_input"
                     android:textSize="@dimen/sp_19"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/iv2" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou2"
@@ -148,12 +149,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_white"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:paddingLeft="17dp"
                 android:text="@string/manage_book"
+                android:textSize="17sp"
+                android:gravity="center_vertical"
                  />
 
             <RelativeLayout
@@ -178,11 +177,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv0"
                     android:text="@string/all_my_book"
                     android:textSize="@dimen/sp_19"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou0"
@@ -198,7 +197,7 @@
                 android:id="@+id/rl_borrow_in"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
@@ -216,32 +215,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv3"
                     android:text="@string/borrow_in"
                     android:textSize="@dimen/sp_19"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"  />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou3"
                     style="@style/rightArrow"/>
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/fenge3"
-                style="@style/fengexian"
-                android:layout_below="@id/rl_scan_input" />
 
             <TextView
                 android:id="@+id/tv_set_tip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray_white"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:paddingLeft="17dp"
                 android:text="@string/setting"
+                android:textSize="17sp"
+                android:gravity="center_vertical"
                 />
 
             <RelativeLayout
@@ -250,7 +243,6 @@
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -260,34 +252,102 @@
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/modifypsw" />
+                    android:src="@mipmap/modify_psw" />
 
                 <TextView
                     android:id="@+id/tv7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv7"
                     android:textSize="@dimen/sp_19"
                     android:text="@string/modify_psw"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"  />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou7"
                     style="@style/rightArrow"/>
             </RelativeLayout>
             <TextView
+                android:id="@+id/fenge8"
+                style="@style/fengexian" />
+
+            <RelativeLayout
+                android:id="@+id/rl_import"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv10"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/import_excel" />
+
+                <TextView
+                    android:id="@+id/tv10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv10"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/import_excel"
+                    android:textColor="@color/text_tip_color"  />
+
+                <ImageView
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/fenge7"
+                style="@style/fengexian"
+                />
+
+            <RelativeLayout
+                android:id="@+id/rl_export"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv9"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/export_excel" />
+
+                <TextView
+                    android:id="@+id/tv9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv9"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/export_excel"
+                    android:textColor="@color/text_tip_color"  />
+
+                <ImageView
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+            <TextView
                 android:id="@+id/fenge4"
                 style="@style/fengexian"
                 android:layout_below="@id/rl_scan_input" />
+
             <RelativeLayout
                 android:id="@+id/rl_log_out"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -304,11 +364,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv4"
                     android:textSize="@dimen/sp_19"
                     android:text="@string/logout"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"  />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou4"
@@ -320,12 +380,44 @@
                 android:layout_below="@id/rl_scan_input" />
 
             <RelativeLayout
+                android:id="@+id/rl_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/btn_aboutmore_selector"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv8"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/feedback" />
+
+                <TextView
+                    android:id="@+id/tv8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv8"
+                    android:textSize="@dimen/sp_19"
+                    android:text="@string/feed_back"
+                    android:textColor="@color/text_tip_color"  />
+
+                <ImageView
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/fenge9"
+                style="@style/fengexian" />
+
+            <RelativeLayout
                 android:id="@+id/rl_check_update"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -342,11 +434,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv5"
                     android:textSize="@dimen/sp_19"
                     android:text="@string/update"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"  />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou5"
@@ -356,13 +448,12 @@
                 android:id="@+id/fenge5"
                 style="@style/fengexian"
                 android:layout_below="@id/rl_scan_input" />
+
             <RelativeLayout
                 android:id="@+id/rl_about"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -372,129 +463,21 @@
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/about" />
 
                 <TextView
                     android:id="@+id/tv6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv6"
                     android:textSize="@dimen/sp_19"
                     android:text="@string/about_us"
-                    android:textColor="#576168" />
+                    android:textColor="@color/text_tip_color"  />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou6"
-                    style="@style/rightArrow"/>
-            </RelativeLayout>
-            <TextView
-                android:id="@+id/fenge7"
-                style="@style/fengexian"
-                 />
-            <RelativeLayout
-                android:id="@+id/rl_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/iv8"
-                    android:layout_width="50dp"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/tv8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_toRightOf="@id/iv8"
-                    android:textSize="@dimen/sp_19"
-                    android:text="@string/feed_back"
-                    android:textColor="#576168" />
-
-                <ImageView
-                    style="@style/rightArrow"/>
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/fenge8"
-                style="@style/fengexian" />
-            <RelativeLayout
-                android:id="@+id/rl_export"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/iv9"
-                    android:layout_width="50dp"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/tv9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_toRightOf="@id/iv9"
-                    android:textSize="@dimen/sp_19"
-                    android:text="@string/export_excel"
-                    android:textColor="#576168" />
-
-                <ImageView
-                    style="@style/rightArrow"/>
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/fenge9"
-                style="@style/fengexian" />
-            <RelativeLayout
-                android:id="@+id/rl_import"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
-                android:paddingBottom="@dimen/dp_6"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/iv10"
-                    android:layout_width="50dp"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/tv10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_toRightOf="@id/iv10"
-                    android:textSize="@dimen/sp_19"
-                    android:text="@string/import_excel"
-                    android:textColor="#576168" />
-
-                <ImageView
                     style="@style/rightArrow"/>
             </RelativeLayout>
         </LinearLayout>

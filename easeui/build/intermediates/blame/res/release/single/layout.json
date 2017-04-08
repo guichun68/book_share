@@ -28,12 +28,12 @@
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_widget_emojicon_tab_bar.xml"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_received_voice_call.xml",
-        "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_row_received_voice_call.xml"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_scroll_tab_item.xml",
         "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_scroll_tab_item.xml"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_received_voice_call.xml",
+        "source": "E:\\workspace\\linke\\easeui\\res\\layout\\ease_row_received_voice_call.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_widget_contact_list.xml",

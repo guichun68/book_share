@@ -49,6 +49,8 @@ public class GlobalParams {
 	 * 上传头像图片url
 	 */
 	public static String urlUploadHeadIcon = GlobalParams.BASE_URL+"/zyzx/uploadHeadIcon.action";
+	//导入书籍清单
+	public static String urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 	/**
 	 * 关于临客
 	 */
@@ -188,6 +190,7 @@ public class GlobalParams {
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
+		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 	}
 
 	static IBookPresenter getBookPresenter(){

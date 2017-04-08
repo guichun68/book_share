@@ -318,8 +318,9 @@ containing a value of this type.
         public static int list_itease_primary_color=0x7f080027;
         public static int list_itease_secondary_color=0x7f080028;
         public static int orange=0x7f080029;
-        public static int top_bar_normal_bg=0x7f08002a;
-        public static int voip_interface_text_color=0x7f08002b;
+        public static int title_color=0x7f08002a;
+        public static int top_bar_normal_bg=0x7f08002b;
+        public static int voip_interface_text_color=0x7f08002c;
     }
     public static final class dimen {
         public static int activity_horizontal_margin=0x7f050002;

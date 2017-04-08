@@ -172,9 +172,15 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
 
             @Override
             public void onFailure(Object obj) {
-                mPullRefreshListView.onRefreshComplete();
-                mPullRefreshListView.clearAnimation();
-                UIUtil.showToastSafe("未能获取书籍信息");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullRefreshListView.onRefreshComplete();
+                        mPullRefreshListView.clearAnimation();
+                        UIUtil.showToastSafe("未能获取书籍信息");
+                    }
+                });
+
             }
         });
     }

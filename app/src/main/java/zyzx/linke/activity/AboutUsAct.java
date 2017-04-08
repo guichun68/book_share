@@ -21,13 +21,14 @@ public class AboutUsAct extends BaseActivity {
     private WebView mWebView;
     private FrameLayout loading_view;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.act_about_us;
     }
 
     public void initView(Bundle savedInstanceState) {
-        ((TextView) findViewById(R.id.tv_version_name)).setText(AppUtil.getAppVersionName(this));
+        ((TextView) findViewById(R.id.version)).setText("当前版本："+AppUtil.getAppVersionName(this));
         mRightBtn.setVisibility(View.VISIBLE);
 
         mTitleText.setText("关于临客");

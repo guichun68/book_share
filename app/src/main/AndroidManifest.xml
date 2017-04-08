@@ -126,6 +126,10 @@
             android:screenOrientation="portrait"
             />
         <activity
+            android:name=".activity.ImportResultAct"
+            android:screenOrientation="portrait"
+            />
+        <activity
             android:name=".activity.DriveRouteDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

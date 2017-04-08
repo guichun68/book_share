@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -34,12 +34,12 @@ import zyzx.linke.activity.AboutUsAct;
 import zyzx.linke.activity.BorrowedInBookAct;
 import zyzx.linke.activity.FeedBackAct;
 import zyzx.linke.activity.HomeAct;
+import zyzx.linke.activity.ImportResultAct;
 import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.EaseUIHelper;
-import zyzx.linke.base.ForceUpdateActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
@@ -63,6 +63,7 @@ import static android.app.Activity.RESULT_OK;
  * 主页界面
  */
 public class PersonalFragment extends BaseFragment implements View.OnClickListener {
+    private final int EXCEL_FILE_SELECT_CODE = 11;
     private CircleImageView mCiv;
     private UserInfoImagePOP uimp;
     private CapturePhoto capture;
@@ -168,7 +169,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 gotoActivity(FeedBackAct.class);
                 break;
             case R.id.rl_import:
-
+                showFileChooser();
                 break;
             case R.id.rl_export://导出excel
                 dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, UIUtil.getString(R.string.export_tip), UIUtil.getString(R.string.confirm), UIUtil.getString(R.string.cancel), new View.OnClickListener() {
@@ -183,11 +184,21 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult( Intent.createChooser(intent, "请选择Excel文件"), EXCEL_FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(mContext, "Please install a File Manager.",  Toast.LENGTH_SHORT).show();
+        }
+    }
     /**
      * 下载导出的excle清单（由服务器生成excel，实际客户端为下载操作）
      */
     protected void downloadFile() {
-        final String fileName = "mybooks.xls";
         HashMap<String,Object> param = new HashMap<>();
         param.put("user_id",PreferenceManager.getInstance().getLastLoginUserId());
         DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir,param, new DownloadUtil.OnDownloadListener() {
@@ -390,9 +401,26 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 mHeadeIconImagePath = saveBitmap(cropBitmap);
                 uploadHeadIcon();
             }else{
-                UIUtil.showToastSafe("未能选择图片");
+                UIUtil.showToastSafe("未选择图片");
             }
+        }else if(requestCode==EXCEL_FILE_SELECT_CODE){
+            // Get the Uri of the selected file
+            Uri uri = intent.getData();
+            String path = FileUtil.getUriPath(mContext, uri);
+            File file = new File(path);
+            if(!(file.getName().endsWith(".xlsx") || file.getName().endsWith(".xls"))){
+                UIUtil.showToastSafe("解析错误，文件格式有误");
+            }else{
+                if(file.exists()){
+                    double length = file.length();
+                    if(length/1024/1024>2){//文件大于2M，过大
+                        UIUtil.showToastSafe("文件过大，仅支持2M内文件导入");
+                    }else{
+                        uploadExcelFile(path);
+                    }
+                }
 
+            }
         }
     }
 
@@ -415,7 +443,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
             outputStream.flush();
             outputStream.close();
-//            Uri uri = Uri.fromFile(imgFile);
             return imgFile.getAbsolutePath();
         }catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -423,27 +450,6 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 裁剪图片
-     * @param uri
-     */
-    public void cropRawPhoto(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        //把裁剪的数据填入里面
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-        // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        // outputX , outputY : 裁剪图片宽高
-        intent.putExtra("outputX", output_X);
-        intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, CODE_RESULT_REQUEST);
     }
 
     private void uploadHeadIcon() {
@@ -488,6 +494,67 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
+    }
+
+    private void uploadExcelFile(String filePath){
+        showDefProgress();
+        getUserPresenter().uploadExcelFile(GlobalParams.gUser.getUserid(), filePath, new CallBack() {
+            @Override
+            public void onSuccess(final Object obj) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgress();
+                        final String json = (String) obj;
+                        if(StringUtil.isEmpty(json)){
+                            UIUtil.showToastSafe("导入发生错误，请稍后再试！");
+                            return;
+                        }
+                        JSONObject jsonObj = JSON.parseObject(json);
+                        int code = jsonObj.getInteger("code");
+                        switch (code){
+                            case 400:
+                                CustomProgressDialog.getPromptDialog(mContext,"文件为空,请重新选择文件",null).show();
+                                break;
+                            case 500:
+                                CustomProgressDialog.getPromptDialog(mContext,"文件格式错误,目前仅支持Excel文件导入,请检查后重试!",null).show();
+                                break;
+                            case 600:
+                                CustomProgressDialog.getPromptDialog(mContext,"导入错误，检测到不合模板规范的excel文档，请确保至少有“ISBN”和“书名”两列！",null).show();
+                                break;
+                            case 700:
+                                CustomProgressDialog.getPromptDialog(mContext,"导入文档有误，请确保文档未损坏",null).show();
+                                break;
+                            case 200:
+                                succDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "导入完毕,点击确定查看导入结果！", "确定", "取消",new DialogOnClickListener(json) ,null);
+                                succDialog.show();
+                                break;
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Object obj) {
+                UIUtil.showToastSafe("导入失败");
+            }
+        });
+    }
+    private Dialog succDialog;//导入成功dialog
+    private class DialogOnClickListener implements View.OnClickListener{
+        String json;
+        DialogOnClickListener(String json){
+            this.json = json;
+        }
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putString("json",json);
+            gotoActivity(ImportResultAct.class,bundle);
+            if(succDialog!=null)
+                succDialog.dismiss();
+        }
     }
 
     public UserInfoImagePOP getUimp() {

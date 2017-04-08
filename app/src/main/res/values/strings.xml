@@ -171,9 +171,9 @@
 
     <!-- 主页 IndexActivity-->
     <string name="locate_fail">定位失败</string>
-    <string name="pull_label">上拉刷新...</string>
+    <string name="pull_label">上拉加载...</string>
     <string name="refresh_label">正在载入...</string>
-    <string name="release_label">放开刷新...</string>
+    <string name="release_label">放开加载更多...</string>
 
     <!-- 城市列表 -->
     <string name="city_used">常用城市</string>

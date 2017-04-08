@@ -30,6 +30,7 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.User;
+import zyzx.linke.utils.ColoredSnackbar;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -186,14 +187,15 @@ public class LoginAct extends BaseActivity {
     }
 
     private boolean checkInput() {
+        Snackbar snackbar;
         if(StringUtil.isEmpty(aetLoginName.getText().toString())){
-            aetLoginName.setError("用户名不能为空");
-            Snackbar.make(aetLoginName,"用户名不能为空",Snackbar.LENGTH_SHORT).show();
+            snackbar = Snackbar.make(aetLoginName,"用户名不能为空",Snackbar.LENGTH_SHORT);
+            ColoredSnackbar.info(snackbar).show();
             return false;
         }
         if(StringUtil.isEmpty(aetPsw.getText().toString())){
-            Snackbar.make(aetLoginName,"密码不能为空",Snackbar.LENGTH_SHORT).show();
-            aetPsw.setError("密码不能为空");
+            snackbar = Snackbar.make(aetLoginName,"密码不能为空",Snackbar.LENGTH_SHORT);
+            ColoredSnackbar.info(snackbar).show();
             return false;
         }
         return true;

@@ -4,7 +4,6 @@ package zyzx.linke;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,7 +40,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,13 +68,11 @@ import zyzx.linke.views.CityChoosePopupWindow;
 /**
  * 主页界面
  */
-public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener<ListView>,View.OnClickListener, AbsListView.OnScrollListener, AMapLocationListener, CloudSearch.OnCloudSearchListener {
-
+public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2<ListView>,View.OnClickListener, AbsListView.OnScrollListener, AMapLocationListener, CloudSearch.OnCloudSearchListener {
     private static final String WHOLE_CITY = "全城";
     private final int CITY_CHOOSE_REQUEST_CODE = 10;
     private final int POI_CHOOSE_REQUEST_CODE = 20;
 
-    private ImageView mBtnMap;
     private ArrayList<City> mCityList;
     private ArrayList<String> mCityLetterList;
     private HashMap<String, Integer> mCityMap;
@@ -94,7 +89,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
             "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
             "U", "V", "W", "X", "Y", "Z"};
 
-
+    private boolean isRefresh;//是否是下拉刷新，默认false
     private AllUserBooksListAdapter mAdapter;
     private CloudSearch mCloudSearch;
     private CloudSearch.Query mQuery;
@@ -236,14 +231,22 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         mRootView.findViewById(R.id.ll_search).setOnClickListener(this);
         btnAreaChoose.setOnClickListener(this);
 
-        mBtnMap = (ImageView) mRootView.findViewById(R.id.btn_map);
-        mBtnMap.setOnClickListener(this);
+       mRootView.findViewById(R.id.btn_map).setOnClickListener(this);
 
 
         // Set a listener to be invoked when the list should be refreshed.
         mPullRefreshListView = (PullToRefreshListView)mRootView. findViewById(R.id.pull_refresh_list);
         mPullRefreshListView.setOnRefreshListener(this);
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel(getResources().getString(R.string.pull_label));
+        endLabels.setRefreshingLabel(getResources().getString(
+                R.string.refresh_label));
+        endLabels.setReleaseLabel(getResources().getString(
+                R.string.release_label));
+        endLabels.setLoadingDrawable(getResources().getDrawable(
+                R.mipmap.publicloading));
         // Add an end-of-list listener
 //        mPullRefreshListView.setOnLastItemVisibleListener(this);
         ListView actualListView = mPullRefreshListView.getRefreshableView();
@@ -514,7 +517,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                 mCenterPoint.getLatitude(), mCenterPoint.getLongitude()),
                 Const.SEARCH_AROUND);
         try {
-
             mQuery = new CloudSearch.Query(Const.mTableID, mKeywords, bound);
             mQuery.setPageSize(10);
             mQuery.setPageNum(pagenum);
@@ -524,24 +526,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         }
     }
 
-    @Override
-    public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(
-                false, true);
-        endLabels.setPullLabel(getResources().getString(R.string.pull_label));
-        endLabels.setRefreshingLabel(getResources().getString(
-                R.string.refresh_label));
-        endLabels.setReleaseLabel(getResources().getString(
-                R.string.release_label));
-        endLabels.setLoadingDrawable(getResources().getDrawable(
-                R.mipmap.publicloading));
-        mCurrentPageNum++;
-        if (mCurrentSearchType == ARROUND_SEARCH_TYPE) {
-            searchByArround(mCurrentPageNum);
-        } else {
-            searchByLocal(mCurrentPageNum);
-        }
-    }
 
     @Override
     public void onCloudSearched(CloudResult result, int errorCode) {
@@ -551,10 +535,18 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         if (errorCode == Const.NO_ERROR && result != null) {
             ArrayList<CloudItem> cloudResult = result.getClouds();
             if (cloudResult != null && cloudResult.size() > 0) {
+                if(isRefresh){
+                    mCoudItemList.clear();
+                }
                 mCoudItemList.addAll(cloudResult);
                 parseData(cloudResult);
             } else {
                 dismissProgress();
+                if(isRefresh){
+                    mCoudItemList.clear();
+                    mListViewItems.clear();
+                    mAdapter.notifyDataSetChanged();
+                }
                 Toast.makeText(getContext(),
                         R.string.error_no_more_item, Toast.LENGTH_SHORT).show();
             }
@@ -582,7 +574,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
     @Override
     public void onCloudItemDetailSearched(CloudItemDetail cloudItemDetail, int i) {}
-    private boolean isRefresh;//是否是下拉刷新，默认false
+
     /**
      * 解析数据（将每个坐标点数据中包含的书籍全部解析出来）
      * @param cloudResult
@@ -701,4 +693,28 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     }
 
 
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+        //下拉刷新
+        isRefresh = true;
+        mCurrentPageNum=0;
+
+        if (mCurrentSearchType == ARROUND_SEARCH_TYPE) {
+            searchByArround(mCurrentPageNum);
+        } else {
+            searchByLocal(mCurrentPageNum);
+        }
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+        isRefresh= false;
+
+        mCurrentPageNum++;
+        if (mCurrentSearchType == ARROUND_SEARCH_TYPE) {
+            searchByArround(mCurrentPageNum);
+        } else {
+            searchByLocal(mCurrentPageNum);
+        }
+    }
 }
