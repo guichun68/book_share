@@ -28,7 +28,7 @@ import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/2/21.
- * Desc: 扫码识别图书详情页
+ * Desc: 扫码识别图书详情页(区别于CommonBookDetail)
  */
 
 public class ScanBookDetailAct extends BaseActivity {

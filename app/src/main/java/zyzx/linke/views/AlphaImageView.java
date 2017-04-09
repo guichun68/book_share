@@ -10,12 +10,12 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.support.v7.widget.AppCompatImageView;
 
 import zyzx.linke.R;
 
 //可以进行透明度渐变的ImageView
-public class AlphaImageView extends ImageView {
+public class AlphaImageView extends AppCompatImageView {
     //图像透明度每次改变的大小
     private int perAlpha = 0;
     //当前图像的透明度

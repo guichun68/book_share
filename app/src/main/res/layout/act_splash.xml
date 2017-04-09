@@ -13,6 +13,25 @@
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/splash"
+        android:src="@mipmap/bacgroud"
+        android:scaleType="fitXY"
         aiv:duration="60000"/>
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="爱读书·爱分享"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:layout_above="@id/tip"
+        android:layout_marginBottom="30dp"
+        android:gravity="center_horizontal"
+        android:text="NearBook"/>
 </RelativeLayout>
