@@ -31,7 +31,7 @@ public class AboutUsAct extends BaseActivity {
         ((TextView) findViewById(R.id.version)).setText("当前版本："+AppUtil.getAppVersionName(this));
         mRightBtn.setVisibility(View.VISIBLE);
 
-        mTitleText.setText("关于临客");
+        mTitleText.setText("关于我们");
         mRightBtn.setVisibility(View.INVISIBLE);
         mRightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
