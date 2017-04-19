@@ -16,6 +16,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.Iterator;
 import java.util.List;
 
+import cn.sharesdk.framework.ShareSDK;
+
 
 /**
  * @Description TODO

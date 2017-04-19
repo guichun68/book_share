@@ -11,7 +11,8 @@ import com.amap.api.services.core.LatLonPoint;
 
 public class Const {
 	public static final int SUCCESSCODE = 1000;
-	/**
+    public static final String TAG = "BookShare";
+    /**
 	 *高德web服务--临客-存储图书经纬度--key
 	 */
 	public static String key = "49f0e1fd42a68fcf794c5e135a357f1a";

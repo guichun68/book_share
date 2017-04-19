@@ -14,7 +14,7 @@ import zyzx.linke.presentation.IUserPresenter;
 public class GlobalParams {
 
 	public static final Integer AROUND = 5000;//查询地图时默认搜索的半径
-	public static String BASE_URL ;
+    public static String BASE_URL ;
 	protected static IUserPresenter gUserPresenter;
 	protected static IModel gModel;
 	protected static IBookPresenter gBookPresenter;

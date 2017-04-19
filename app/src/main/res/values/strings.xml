@@ -6,6 +6,7 @@
     <string name="forget_psw_title">忘记密码</string>
     <string name="regist"><u>用户注册</u></string>
     <string name="about_us">关于NearBook</string>
+    <string name="login_third">———————— 其他登录方式 ————————</string>
     <string name="feed_back">意见反馈</string>
     <string name="import_excel">导入</string>
     <string name="export_excel">导出书籍清单</string>
