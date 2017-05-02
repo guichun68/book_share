@@ -197,7 +197,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
             switch (operId){
                 case REMOVE_FROM_BOOKRACK://从书架删除
                     showDefProgress();
-                    getBookPresenter().deleteUserBook(GlobalParams.gUser.getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
+                    getBookPresenter().deleteUserBook(GlobalParams.getLastLoginUser().getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
 
                         @Override
                         public void onSuccess(final Object obj) {
@@ -347,7 +347,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     protected void initData() {
         mBooks.clear();
         showDefProgress();
-        getBooks(GlobalParams.gUser.getUserid(), 0);
+        getBooks(GlobalParams.getLastLoginUser().getUserid(), 0);
     }
 
     @Override
@@ -363,7 +363,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 R.mipmap.publicloading));
         mPageNum++;
         isLoadingMore = true;
-        getBooks(GlobalParams.gUser.getUserid(), mPageNum);
+        getBooks(GlobalParams.getLastLoginUser().getUserid(), mPageNum);
     }
 
     /**

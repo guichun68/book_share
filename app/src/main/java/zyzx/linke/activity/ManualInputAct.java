@@ -298,7 +298,7 @@ public class ManualInputAct extends BaseActivity {
         if(!StringUtil.isEmpty(mCoverImagePath)){//加入图片本地手机路径参数
             params.put("book_cover",new File(mCoverImagePath));
         }
-        params.put("user_id",GlobalParams.gUser.getUserid());
+        params.put("user_id",GlobalParams.getLastLoginUser().getUserid());
         params.put("book", JSON.toJSONString(mBook));
         mBook.setFromDouban(false);
         showDefProgress();

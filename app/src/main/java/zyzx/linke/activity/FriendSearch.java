@@ -1,33 +1,24 @@
 package zyzx.linke.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.amap.api.services.cloud.CloudItem;
-import com.amap.api.services.core.LatLonPoint;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
-import zyzx.linke.adapter.AllUserBooksListAdapter;
 import zyzx.linke.adapter.FriendListAdapter;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -39,7 +30,7 @@ public class FriendSearch extends BaseActivity implements PullToRefreshBase.OnRe
 
     private int mCurrentPageNum;
     private FriendListAdapter mAdapter;
-    private ArrayList<User> mUsers = new ArrayList<>();
+    private ArrayList<UserVO> mUserVOs = new ArrayList<>();
     private String mKeyWord=null;
     //view
     private PullToRefreshListView mPullRefreshListView;
@@ -71,7 +62,7 @@ public class FriendSearch extends BaseActivity implements PullToRefreshBase.OnRe
 
     @Override
     protected void initData() {
-        mAdapter = new FriendListAdapter( mUsers);
+        mAdapter = new FriendListAdapter(mUserVOs);
         ListView actualListView = mPullRefreshListView.getRefreshableView();
         // Need to use the Actual ListView when registering for Context Menu
         registerForContextMenu(actualListView);
@@ -116,23 +107,23 @@ public class FriendSearch extends BaseActivity implements PullToRefreshBase.OnRe
                         mPullRefreshListView.clearAnimation();
                         UIUtil.print("查找成功");
                         String json = (String) obj;
-                        List<User> users = JSON.parseArray(json,User.class);
-                        if(users==null || users.isEmpty()){
+                        List<UserVO> userVOs = JSON.parseArray(json,UserVO.class);
+                        if(userVOs ==null || userVOs.isEmpty()){
                             if(isLoadingMore){
                                 mCurrentPageNum--;
                             }
                             UIUtil.showToastSafe("没有更多数据了");
                             if(!isLoadingMore){
-                                mUsers.clear();
+                                mUserVOs.clear();
                                 mAdapter.notifyDataSetChanged();
                             }
                         }else{
                             if(isLoadingMore){
                                 //有值
-                                mUsers.addAll(users);
+                                mUserVOs.addAll(userVOs);
                             }else{
-                                mUsers.clear();
-                                mUsers.addAll(users);
+                                mUserVOs.clear();
+                                mUserVOs.addAll(userVOs);
                             }
                         }
 

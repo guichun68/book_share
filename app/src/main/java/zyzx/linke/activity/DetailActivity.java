@@ -190,6 +190,7 @@ public class DetailActivity extends CheckPermissionsActivity {
 	private LinearLayout createPropsLayout(String key, String value,
 										   boolean isShowLine) {
 		LinearLayout lly = new LinearLayout(this);
+
 		LinearLayout.LayoutParams llyParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		llyParams.topMargin = 24;

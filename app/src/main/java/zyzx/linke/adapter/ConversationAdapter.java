@@ -1,7 +1,6 @@
 package zyzx.linke.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +10,8 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.BufferType;
-
 
 import com.bumptech.glide.Glide;
-import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
@@ -30,7 +26,7 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 
 /**
@@ -122,9 +118,9 @@ public class ConversationAdapter extends ArrayAdapter<EMConversation> {
             }
 
             if(!StringUtil.isEmpty(loginName) && userId!=null){//更新本地sqlite User记录
-                UserDao.getInstance(getContext()).updateUser(new User(userId,loginName,headIconUrl));
+                UserDao.getInstance(getContext()).updateUser(new UserVO(userId,loginName,headIconUrl));
             }
-            User u = UserDao.getInstance(getContext()).queryUserByUid(userId);
+            UserVO u = UserDao.getInstance(getContext()).queryUserByUid(userId);
             Glide.with(getContext()).load(u.getHead_icon()).into(holder.avatar);
             holder.name.setText(u.getLogin_name());
             holder.motioned.setVisibility(View.GONE);

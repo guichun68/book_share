@@ -17,13 +17,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.mob.commons.SHARESDK;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,14 +30,17 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.BeanFactoryUtil;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.ColoredSnackbar;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
@@ -114,7 +115,6 @@ public class LoginAct extends BaseActivity {
                 getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
-                        PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
                         loginEaseMob();
                     }
 
@@ -147,36 +147,47 @@ public class LoginAct extends BaseActivity {
                 gotoActivity(AboutUsAct.class, false);
                 break;
             case R.id.iv_qq://qq账号登录
-                UIUtil.showToastSafe("QQ登录实现中，敬请期待…");
+//                UIUtil.showToastSafe("QQ登录实现中，敬请期待…");
+                loginByThirdPlatform(QQ.NAME);
                 break;
             case R.id.iv_wechat://微信登录
-                UIUtil.showToastSafe("微信登录实现中，敬请期待…");
+//                UIUtil.showToastSafe("微信登录实现中，敬请期待…");
+                loginByThirdPlatform(Wechat.NAME);
                 break;
             case R.id.iv_sina://新浪微博账号登录
-                loginBySina();
+                loginByThirdPlatform(SinaWeibo.NAME);
                 break;
         }
     }
 
-    public void loginBySina() {
-        Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+    public void loginByThirdPlatform(String platformName) {
+        Platform platform = ShareSDK.getPlatform(platformName);
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
-        weibo.setPlatformActionListener(new PlatformActionListener() {
+        platform.setPlatformActionListener(new PlatformActionListener() {
 
             @Override
             public void onError(Platform arg0, int arg1, Throwable arg2) {
                 // TODO Auto-generated method stub
-                UIUtil.showTestLog(Const.TAG,"发生错误");
+//                UIUtil.showTestLog(Const.TAG,"发生错误");
                 arg2.printStackTrace();
+                UIUtil.showToastSafe("登录错误");
             }
 
             @Override
-            public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
+            public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
                 UIUtil.showTestLog(Const.TAG,"授权完毕");
+                Platform plat = ShareSDK.getPlatform(QQ.NAME);
+
                 //输出所有授权信息
-                arg0.getDb().exportData();
-                if(arg2!=null){
-                    for (Map.Entry<String, Object> entry : arg2.entrySet()) {
+                UIUtil.showTestLog(Const.TAG+"_userId:",platform.getDb().getUserId());
+                if(res!=null){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                            getUserPresenter().login
+                        }
+                    });
+                    for (Map.Entry<String, Object> entry : res.entrySet()) {
                         UIUtil.showTestLog(Const.TAG,entry.getKey()+"-"+entry.getValue());
                     }
                 }
@@ -184,12 +195,13 @@ public class LoginAct extends BaseActivity {
 
             @Override
             public void onCancel(Platform arg0, int arg1) {
-                UIUtil.showTestLog(Const.TAG,"授权取消");
+//                UIUtil.showTestLog(Const.TAG,"授权取消");
+                UIUtil.showToastSafe("登录取消");
             }
         });
         //authorize与showUser单独调用一个即可
 //        weibo.authorize();//单独授权,OnComplete返回的hashmap是空的
-        weibo.showUser(null);//授权并获取用户信息
+        platform.showUser(null);//授权并获取用户信息
         //移除授权
         //weibo.removeAccount(true);
     }
@@ -198,12 +210,15 @@ public class LoginAct extends BaseActivity {
      * 登录环信
      */
     private void loginEaseMob() {
-        String userId = PreferenceManager.getInstance().getLastLoginUserId();
-        Log.e("zzyy10", String.valueOf(userId));
-        EMClient.getInstance().login(PreferenceManager.getInstance().getLastLoginUserId(), PreferenceManager.getInstance().getLastLoginUserPSWHASH(), new EMCallBack() {
+        EMClient.getInstance().login(String.valueOf(PreferenceManager.getInstance().getLastLoginUserId()), PreferenceManager.getInstance().getLastLoginUserPSWHASH(), new EMCallBack() {
             @Override
             public void onSuccess() {
                 dismissProgress();
+                PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
+                //记录用户名和uid
+//                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
+                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHead_icon());
+
                 if (cbAutoLogin.isChecked()) {
                     PreferenceManager.getInstance().setAutoLoginFlag(true);
                 }
@@ -212,11 +227,11 @@ public class LoginAct extends BaseActivity {
                 EMClient.getInstance().groupManager().loadAllGroups();
                 //一并将登录成功的user信息缓存到sqlite
                 //先查询sqlite，如果本地没有记录，再添加，如果有记录，则直接更新
-                User u = UserDao.getInstance(mContext).queryUserByUid(GlobalParams.gUser.getUserid());
+                UserVO u = UserDao.getInstance(mContext).queryUserByUid(GlobalParams.getLastLoginUser().getUserid());
                 if (u != null) {
-                    UserDao.getInstance(mContext).updateUser(GlobalParams.gUser);
+                    UserDao.getInstance(mContext).updateUser(GlobalParams.getLastLoginUser());
                 } else {
-                    UserDao.getInstance(mContext).add(GlobalParams.gUser);
+                    UserDao.getInstance(mContext).add(GlobalParams.getLastLoginUser());
                 }
 //                gotoActivity(IndexActivity2.class,true);
                 gotoActivity(HomeAct.class, true);
@@ -361,6 +376,10 @@ public class LoginAct extends BaseActivity {
 //                finish();
                 AppManager.getAppManager().finishAllActivity();
 //                System.exit(0);
+                Platform platf = ShareSDK.getPlatform(Wechat.NAME);
+                if (platf.isAuthValid()) {
+                    platf.removeAccount(true);
+                }
             }
             return true;
         }

@@ -19,7 +19,7 @@ import zyzx.linke.R;
 import zyzx.linke.activity.FriendHomePageAct;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -30,19 +30,19 @@ import zyzx.linke.utils.UIUtil;
 
 public class FriendListAdapter extends BaseAdapter {
 
-    List<User> mUsers;
-    public FriendListAdapter(List<User> users){
-        this.mUsers = users;
+    List<UserVO> mUserVOs;
+    public FriendListAdapter(List<UserVO> userVOs){
+        this.mUserVOs = userVOs;
     }
 
     @Override
     public int getCount() {
-        return mUsers.size();
+        return mUserVOs.size();
     }
 
     @Override
-    public User getItem(int position) {
-        return mUsers.get(position);
+    public UserVO getItem(int position) {
+        return mUserVOs.get(position);
     }
 
     @Override
@@ -78,9 +78,9 @@ public class FriendListAdapter extends BaseAdapter {
         private final TextView tvId;//userId
         private final Button btnAddFriend;//添加好友按钮
         private Context mContext;
-        private User user;
-        FriendViewHolder(View root,User u,Context context){
-            this.user = u;
+        private UserVO userVO;
+        FriendViewHolder(View root, UserVO u, Context context){
+            this.userVO = u;
             this.mContext = context;
             this.root = root;
             ivHeadIcon = (ImageView) root.findViewById(R.id.avatar);
@@ -104,13 +104,13 @@ public class FriendListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if(isAddFriend){
                     //添加好友
-                    UIUtil.showToastSafe("添加好友:"+user.getLogin_name());
+                    UIUtil.showToastSafe("添加好友:"+ userVO.getLogin_name());
                 }else{
                     CloudItem item;//只是为了携带用户id到详情页
                     //进入好友详情页
                     item = new CloudItem("无", Const.TianAnMenPoint,"无","");
                     HashMap<String,String> uidMap = new HashMap<>();
-                    uidMap.put("uid",String.valueOf(user.getUserid()));
+                    uidMap.put("uid",String.valueOf(userVO.getUserid()));
                     item.setCustomfield(uidMap);
 
                     Intent in = new Intent(mContext,FriendHomePageAct.class);

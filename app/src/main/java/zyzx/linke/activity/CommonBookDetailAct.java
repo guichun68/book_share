@@ -88,7 +88,7 @@ public class CommonBookDetailAct extends BaseActivity {
                 }
                 showDefProgress();
                 mBook.setFromDouban(true);
-                getBookPresenter().addBook2MyLib(mBook,GlobalParams.gUser.getUserid(), new CallBack() {
+                getBookPresenter().addBook2MyLib(mBook,GlobalParams.getLastLoginUser().getUserid(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj) {
                         dismissProgress();

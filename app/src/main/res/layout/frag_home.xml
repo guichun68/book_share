@@ -91,7 +91,7 @@
             <ImageView
                 android:id="@+id/btn_map"
                 android:layout_gravity="end"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="10dp"
                 android:layout_width="@dimen/index_map_width"

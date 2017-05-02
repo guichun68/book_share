@@ -172,5 +172,18 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">@dimen/sp_19</item>
     </style>
+    <style name="user_info">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="user_info.small">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
 
 </resources>

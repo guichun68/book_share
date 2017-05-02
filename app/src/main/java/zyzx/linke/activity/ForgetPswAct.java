@@ -13,7 +13,6 @@ import android.widget.Button;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import zyzx.linke.PersonalFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;

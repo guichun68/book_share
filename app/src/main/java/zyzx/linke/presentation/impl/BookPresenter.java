@@ -90,11 +90,11 @@ public class BookPresenter extends IBookPresenter {
 //        param.put("filter","uid:"+userid+"");
         param.put("user_id",String.valueOf(userid));
         param.put("book_id",String.valueOf(bookDetail.getB_id()));
-        param.put("user_name",GlobalParams.gUser.getLogin_name());
-        if(StringUtil.isEmpty(GlobalParams.gUser.getHead_icon())){
+        param.put("user_name",GlobalParams.getLastLoginUser().getLogin_name());
+        if(StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHead_icon())){
             param.put("head_url",GlobalParams.urlDefHeadIcon);
         }else{
-            param.put("head_url",GlobalParams.gUser.getHead_icon());
+            param.put("head_url",GlobalParams.getLastLoginUser().getHead_icon());
         }
 
         try {

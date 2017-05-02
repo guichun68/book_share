@@ -1,29 +1,16 @@
 package zyzx.linke.base;
 
 import android.content.Context;
-import android.content.Intent;
 
-import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.ui.EaseContactListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import zyzx.linke.R;
-import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.base.EaseUIHelper.DataSyncListener;
-import zyzx.linke.base.GlobalParams;
-import zyzx.linke.db.HXUserDao;
-import zyzx.linke.db.UserDao;
-import zyzx.linke.global.BundleFlag;
-import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
 import zyzx.linke.utils.PreferenceManager;
-import zyzx.linke.utils.StringUtil;
-import zyzx.linke.utils.UIUtil;
 
 public class UserProfileManager {
 

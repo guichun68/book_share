@@ -102,4 +102,5 @@ public class BundleFlag {
 	//是否是从首页进入的图书详情页（如果是，则详情页不显示添加按钮）
 	public static final String isFromIndexAct="is_from_index_act";
 	public static final String LOGIN_NAME="login_name";
+	public static final String SHOULD_REFRESH = "ifRefresh";//是否需要刷新
 }

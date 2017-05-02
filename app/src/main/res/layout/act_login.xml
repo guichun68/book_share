@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@mipmap/login_bg"
     android:orientation="vertical">
 
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:background="@drawable/btn_sel3"
         android:orientation="horizontal">
 
@@ -32,29 +32,29 @@
         <View
             android:layout_width="1.0px"
             android:layout_height="fill_parent"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:background="@color/ver_line2" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_login_name"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@null"
-            android:layout_marginStart="5dp"
-            android:hint="@string/input_username"
             android:layout_marginLeft="5dp"
-            tools:text="浮世年华"
+            android:layout_marginStart="5dp"
+            android:background="@null"
+            android:hint="@string/input_username"
+            android:maxLength="11"
             android:singleLine="true"
-            android:maxLength="11" />
+            tools:text="浮世年华" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/btn_sel3"
         android:orientation="horizontal">
 
@@ -69,22 +69,22 @@
         <View
             android:layout_width="1.0px"
             android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:background="@color/ver_line2" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/aet_psw"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:hint="@string/input_username"
+            android:layout_marginStart="5dp"
             android:background="@null"
+            android:hint="@string/input_username"
             android:inputType="textPassword"
-            tools:text="123456"
+            android:maxLength="11"
             android:singleLine="true"
-            android:maxLength="11" />
+            tools:text="123456" />
     </LinearLayout>
 
     <CheckBox
@@ -92,11 +92,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
-        android:paddingStart="5dp"
         android:layout_marginTop="10dp"
         android:checked="true"
-        android:textColor="@color/text_tip_color"
-        android:text="下次自动登录"/>
+        android:paddingStart="5dp"
+        android:text="下次自动登录"
+        android:textColor="@color/text_tip_color" />
 
     <Button
         android:id="@+id/btn_login"
@@ -118,21 +118,21 @@
         <TextView
             android:id="@+id/tv_sms_login"
             android:layout_width="0dp"
-            android:clickable="true"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:clickable="true"
             android:gravity="center"
-            android:visibility="gone"
             android:text="@string/sms_login"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_forget_psw"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:clickable="true"
-            android:layout_marginRight="20dp"
-            android:layout_height="match_parent"
             android:gravity="right|center_vertical"
             android:text="@string/forget_psw"
             android:textColor="@color/text_tip_color"
@@ -140,11 +140,11 @@
 
         <TextView
             android:id="@+id/tv_regist"
-            android:clickable="true"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
             android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:clickable="true"
             android:gravity="left|center_vertical"
             android:text="@string/regist"
             android:textColor="@color/text_tip_color"
@@ -152,46 +152,75 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@color/backgroud_black" />
 
         <TextView
             android:id="@+id/tv_about_us"
-            android:clickable="true"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/login_third"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/text_tip_color"
-            />
+            android:text="@string/login_third"
+            android:textColor="@color/text_tip_color" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@color/backgroud_black" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_wechat"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@mipmap/weichat" />
-
-        <ImageView
-            android:id="@+id/iv_qq"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="50dp"
-            android:src="@mipmap/qq"/>
-
-        <ImageView
+        <TextView
             android:id="@+id/iv_sina"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="50dp"
-            android:src="@mipmap/sina"/>
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/login_weibo"
+            android:gravity="center_horizontal"
+            android:text="微博登录" />
+
+        <TextView
+            android:id="@+id/iv_wechat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/login_weixin"
+            android:gravity="center_horizontal"
+            android:text="微信登录" />
+
+        <TextView
+            android:id="@+id/iv_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/login_qq"
+            android:gravity="center_horizontal"
+            android:text="QQ登录" />
+
 
     </LinearLayout>
 

@@ -9,7 +9,7 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.UIUtil;
 
 public class UserDao {
@@ -45,18 +45,18 @@ public class UserDao {
 
 	/**
 	 * 添加一条用户数据
-	 * @param user 带插入db用户
+	 * @param userVO 带插入db用户
 	 */
-	public void add(User user) {
-		if(queryUserByUid(user.getUserid())!=null){
-			updateUser(user);
+	public void add(UserVO userVO) {
+		if(queryUserByUid(userVO.getUserid())!=null){
+			updateUser(userVO);
 			return;
 		}
 		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put("userid", user.getUserid());
-		values.put("login_name", user.getLogin_name());
-		values.put("head_icon", user.getHead_icon());
+		values.put("userid", userVO.getUserid());
+		values.put("login_name", userVO.getLogin_name());
+		values.put("head_icon", userVO.getHead_icon());
 		long affectRows = db.insert(TABLE_USER_NAME, null, values);
 		// db.close();
 
@@ -71,14 +71,14 @@ public class UserDao {
 	/**
 	 * 更新用户信息（根据userId更新）
 	 */
-	public void updateUser(User user){
+	public void updateUser(UserVO userPO){
 		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		if(user.getLogin_name()!=null)
-			values.put(DbHelper.COLUM_LOGIN_NAME, user.getLogin_name());
-		if(user.getHead_icon()!=null)
-			values.put(DbHelper.COLUM_HEAD_ICON, user.getHead_icon());
-		int affectRows = db.update(TABLE_USER_NAME,values,"userid=?",new String[]{String.valueOf(user.getUserid())});
+		if(userPO.getLogin_name()!=null)
+			values.put(DbHelper.COLUM_LOGIN_NAME, userPO.getLogin_name());
+		if(userPO.getHead_icon()!=null)
+			values.put(DbHelper.COLUM_HEAD_ICON, userPO.getHead_icon());
+		int affectRows = db.update(TABLE_USER_NAME,values,"userid=?",new String[]{String.valueOf(userPO.getUserid())});
 		UIUtil.print("zyzx-affectRows:"+affectRows);
 	}
 
@@ -113,21 +113,21 @@ public class UserDao {
 	 * 
 	 * @return
 	 */
-	public ArrayList<User> queryAll() {
-		ArrayList<User> allUserInfo = new ArrayList<>();
+	public ArrayList<UserVO> queryAll() {
+		ArrayList<UserVO> allUserPOInfo = new ArrayList<>();
 		db = helper.getReadableDatabase();
 		Cursor cursor = null;
 		cursor = db.query(TABLE_USER_NAME, new String[] { "userid", "login_name", "head_icon" }, null, null, null,null,
 				"login_name desc");
 		while (cursor.moveToNext()) {
-			allUserInfo.add(new User(cursor.getInt(cursor.getColumnIndex("userid")), cursor.getString(cursor
+			allUserPOInfo.add(new UserVO(cursor.getInt(cursor.getColumnIndex("userid")), cursor.getString(cursor
 					.getColumnIndex("login_name")), cursor.getString(cursor.getColumnIndex("head_icon"))));
 		}
 		// 为cursor设置通知提醒的uri
 		cursor.setNotificationUri(context.getContentResolver(), uri);
 		cursor.close();
 //		db.close();
-		return allUserInfo;
+		return allUserPOInfo;
 	}
 
 
@@ -154,14 +154,14 @@ public class UserDao {
 	 * @param uid
 	 * @return
 	 */
-	public User queryUserByUid(Integer uid){
+	public UserVO queryUserByUid(Integer uid){
 		db = helper.getReadableDatabase();
 //		Cursor cursor = db.query(TABLE_USER_NAME, new String[]{"userid", "login_name", "head_icon"}, "userid=?", new String[]{String.valueOf(uid)}, null, null, null);
 		Cursor cursor = db.rawQuery("select * from zyzx_user where userid=?",new String[]{String.valueOf(uid)});
-		User u=null;
+		UserVO u=null;
 		if(cursor.getCount()==1){
 			cursor.moveToNext();
-			u = new User(cursor.getInt(cursor.getColumnIndex("userid")),
+			u = new UserVO(cursor.getInt(cursor.getColumnIndex("userid")),
 					cursor.getString(cursor.getColumnIndex("login_name")),
 					cursor.getString(cursor.getColumnIndex("head_icon")));
 		}

@@ -10,13 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 
 import zyzx.linke.activity.ChatActivity;
@@ -24,8 +19,7 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
-import zyzx.linke.utils.StringUtil;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -35,7 +29,7 @@ import zyzx.linke.utils.UIUtil;
 public class LKConversationListFragment extends BaseFragment {
 
     private EaseConversationListFragment mConversationListFrag;
-    private User mUser;
+    private UserVO mUserVO;
     @Override
     protected View getView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.frag_msg,container,false);
@@ -56,26 +50,26 @@ public class LKConversationListFragment extends BaseFragment {
                     public void onSuccess(Object obj) {
                         dismissProgress();
                         String userJson = (String) obj;
-                        mUser = JSON.parseObject(userJson,User.class);
-                        if(mUser==null){
+                        mUserVO = JSON.parseObject(userJson,UserVO.class);
+                        if(mUserVO ==null){
                            UIUtil.showToastSafe("未查询到用户信息,请稍后重试。");
                             return;
                         }
-                        if(mUser.getBak4().equals("500")){
+                        if(mUserVO.getBak4().equals("500")){
                             UIUtil.showToastSafe(R.string.error_chat);
                             return;
                         }
-                        if(mUser.getBak4().equals("400")){
+                        if(mUserVO.getBak4().equals("400")){
                             UIUtil.showToastSafe("未查询到用户信息,请稍后重试");
                             return;
                         }
-                        if(!mUser.getBak4().equals("200")){
+                        if(!mUserVO.getBak4().equals("200")){
                             UIUtil.showToastSafe("请求出错，请稍后重试");
                             return;
                         }
                         Intent in = new Intent(getActivity(),ChatActivity.class);
-                        in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
-                        in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                        in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLogin_name());
+                        in.putExtra(BundleFlag.UID,String.valueOf(mUserVO.getUserid()));
                         startActivity(in);
                     }
 

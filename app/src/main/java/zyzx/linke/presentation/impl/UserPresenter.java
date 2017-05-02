@@ -1,7 +1,5 @@
 package zyzx.linke.presentation.impl;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hyphenate.EMValueCallBack;
@@ -19,7 +17,7 @@ import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.FeedBack;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
@@ -42,7 +40,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
-        Log.e("zzyy",login_name+"-->");
+//        Log.e("zzyy",login_name+"-->");
         HashMap<String,Object> param = getParam();
         param.put("loginName",login_name);
         param.put("password",password);
@@ -61,15 +59,8 @@ public class UserPresenter extends IUserPresenter {
                    int code = jsonObject.getInteger("code");
                    if(code == 200){
                        //登录成功
-                       User u = jsonObject.getObject("user",User.class);
-                       GlobalParams.gUser = u;
-                       //记录用户名和uid
-                       PreferenceManager.getInstance().setLastLoginUserNick(u.getLogin_name());
-                       PreferenceManager.getInstance().setLastLoginUserId(String.valueOf(u.getUserid()));
-                       PreferenceManager.getInstance().setLastLoginUserPSWHASH(u.getPassword());
-                       EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
-                       EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(u.getHead_icon());
-
+                       UserVO u = jsonObject.getObject("user",UserVO.class);
+                       GlobalParams.saveUser(u);
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
                        }
@@ -97,7 +88,6 @@ public class UserPresenter extends IUserPresenter {
         }
     }
 
-
     @Override
     public void sendLoginSMSVerifyCode(String phone,final CallBack viewCallBack) {
         HashMap<String,Object> param = getParam();
@@ -117,7 +107,8 @@ public class UserPresenter extends IUserPresenter {
                     int code = jsonObject.getInteger("code");
                     if(code == 200){
                         GlobalParams.gVerifyCode = jsonObject.getInteger("verifyCode");
-                        GlobalParams.gUser = jsonObject.getObject("user",User.class);
+                        UserVO userVO = jsonObject.getObject("user",UserVO.class);
+                        PreferenceManager.getInstance().saveLastLoginUser(userVO);
                     }else{
                         GlobalParams.gVerifyCode = 0;
                     }
@@ -156,9 +147,9 @@ public class UserPresenter extends IUserPresenter {
                     JSONObject jsonObject = JSON.parseObject(response);
                     int code = jsonObject.getInteger("code");
                     if(code == 200){
-                        GlobalParams.gUser = jsonObject.getObject("user",User.class);
+                        GlobalParams.saveUser(jsonObject.getObject("user",UserVO.class));
                     }else{
-                        GlobalParams.gUser = null;
+                        GlobalParams.saveUser(null);
                     }
                     if(viewCallBack!=null){
                         viewCallBack.onSuccess(code);
@@ -167,7 +158,9 @@ public class UserPresenter extends IUserPresenter {
 
                 @Override
                 public void onFailure(Object obj) {
-
+                    if(viewCallBack!=null){
+                        viewCallBack.onFailure("网络错误，请稍后重试！");
+                    }
                 }
             });
         } catch (IOException e) {
@@ -264,7 +257,7 @@ public class UserPresenter extends IUserPresenter {
                         }
                         return;
                     }
-                    List<User> friends = JSON.parseArray(json, User.class);
+                    List<UserVO> friends = JSON.parseArray(json, UserVO.class);
                     List<EaseUser> easeUsers = new ArrayList<>();
                     for (int i = 0; i < friends.size(); i++) {
                         EaseUser u2 = new EaseUser(String.valueOf(friends.get(i).getUserid()));
@@ -294,7 +287,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void delFriend(Integer friendUserId,CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("owner_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("owner_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
         param.put("friend_id",String.valueOf(friendUserId));
         try {
             getModel().post(GlobalParams.urlDelFriend,param,callBack);
@@ -309,7 +302,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void addBlackList(String userId, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("from_user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("from_user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
         param.put("to_user_id",userId);
         try {
             getModel().post(GlobalParams.urlAddBlackList,param,callBack);
@@ -324,7 +317,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void checkIfInBlackList(Integer userid, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
         param.put("friend_id",String.valueOf(userid));
 
         try {
@@ -340,7 +333,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void addFriend(Integer userid, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
         param.put("friend_id",String.valueOf(userid));
         try {
             getModel().post(GlobalParams.urlAddFriend,param,callBack);
@@ -355,7 +348,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void getUserInfoInConversation(String userId, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.gUser.getUserid()));
+        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
         param.put("friend_id",userId);
         try {
             getModel().post(GlobalParams.urlGetUserInfoInConversation,param,callBack);

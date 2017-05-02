@@ -444,7 +444,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 
                 showDefProgress();
 //                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
-                    getBookPresenter().addBook2Map(mBook, GlobalParams.gUser.getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
+                    getBookPresenter().addBook2Map(mBook, GlobalParams.getLastLoginUser().getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                         @Override
                         public void onSuccess(Object obj) {
                             dismissProgress();

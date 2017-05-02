@@ -30,12 +30,11 @@ import java.util.List;
 import zyzx.linke.HomeFragment;
 import zyzx.linke.LKContactListFragment;
 import zyzx.linke.LKConversationListFragment;
-import zyzx.linke.PersonalFragment;
+import zyzx.linke.MeFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.ErrActivity;
-import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.utils.UIUtil;
@@ -47,7 +46,7 @@ public class HomeAct extends BaseActivity {
     private LayoutInflater layoutInflater;
     private boolean isFirstStartApp = true;//flag,一开始启动App时不检查更新(在首页加载完图书信息后更新),只为了绑定binder，使其不为空
     private FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKContactListFragment.class,PersonalFragment.class};
+    private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKContactListFragment.class,MeFragment.class};
     private int mTitleArray[] = {R.string.tab_homepage, R.string.tab_mesg, R.string.tab_contact_list,R.string.tab_personal};
 //    private int mImageViewArray[] = {R.mipmap.home, R.mipmap.conversation,R.mipmap.contact_list,R.mipmap.personal};
     //    private String mTextviewArray[] = {"contact", "conversation", "setting"};
@@ -147,14 +146,6 @@ public class HomeAct extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-
-            PersonalFragment personalFragment = (PersonalFragment) HomeAct.this.getSupportFragmentManager().findFragmentByTag(mTextviewArray[3]);
-            if(personalFragment!=null){
-                if(personalFragment.getUimp()!=null&& personalFragment.getUimp().isShowing()){
-                    personalFragment.getUimp().dismiss();
-                    return true;
-                }
-            }
 
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 UIUtil.showToastSafe(UIUtil.getString(R.string.press_more_then_exit));

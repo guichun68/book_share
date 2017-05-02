@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">NearBook</string>
+    <string name="app_name">BookShare</string>
     <string name="sms_login"><u>短信验证码登录</u></string>
     <string name="forget_psw"><u>忘记密码</u></string>
     <string name="twopsw_not_equal">两次密码不一致</string>
     <string name="forget_psw_title">忘记密码</string>
     <string name="regist"><u>用户注册</u></string>
     <string name="about_us">关于NearBook</string>
-    <string name="login_third">———————— 其他登录方式 ————————</string>
+    <string name="login_third">其他登录方式</string>
     <string name="feed_back">意见反馈</string>
     <string name="import_excel">导入</string>
     <string name="export_excel">导出书籍清单</string>
@@ -214,8 +214,9 @@
     <string name="current_city_is">当前城市</string>
     <string name="default_city">北京</string>
     <string name="scan_input">扫码录入(推荐)</string>
-    <string name="borrow_in">借入的书籍</string>
-    <string name="all_my_book">我的所有书籍</string>
+    <string name="borrow_in">我的借入</string>
+    <string name="all_my_book">我的书架</string>
+    <string name="my_share">我的分享</string>
     <string name="borrow_out">借出的书籍</string>
     <string name="logout">注销登录</string>
     <string name="update">检查更新</string>
@@ -254,4 +255,5 @@
     <string name="user_forbidden">用户被服务器限制连接</string>
     <string name="connect_conflict">同一帐号已在其他设备登录</string>
     <string name="contact_way">联系方式</string>
+    <string name="not_fill">未填写</string>
 </resources>

@@ -24,7 +24,7 @@ import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -74,20 +74,20 @@ public class LKContactListFragment extends BaseFragment {
                                     public void onSuccess(Object obj) {
                                         dismissProgress();
                                         String userJson = (String) obj;
-                                        User userTemp = JSON.parseObject(userJson,User.class);
-                                        if(userTemp==null){
+                                        UserVO userPOTemp = JSON.parseObject(userJson,UserVO.class);
+                                        if(userPOTemp ==null){
                                             UIUtil.showToastSafe("未查询到用户信息,请稍后重试。");
                                             return;
                                         }
-                                        if(userTemp.getBak4().equals("500")){
+                                        if(userPOTemp.getBak4().equals("500")){
                                             UIUtil.showToastSafe(R.string.error_chat);
                                             return;
                                         }
-                                        if(userTemp.getBak4().equals("400")){
+                                        if(userPOTemp.getBak4().equals("400")){
                                             UIUtil.showToastSafe("未查询到用户信息,请稍后重试");
                                             return;
                                         }
-                                        if(!userTemp.getBak4().equals("200")){
+                                        if(!userPOTemp.getBak4().equals("200")){
                                             UIUtil.showToastSafe("请求出错，请稍后重试");
                                             return;
                                         }

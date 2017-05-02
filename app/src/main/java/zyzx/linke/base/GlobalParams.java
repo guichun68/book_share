@@ -2,14 +2,12 @@ package zyzx.linke.base;
 
 
 import android.app.Activity;
-import android.util.Log;
-
-import java.util.HashMap;
 
 import zyzx.linke.model.IModel;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.presentation.IUserPresenter;
+import zyzx.linke.utils.PreferenceManager;
 
 public class GlobalParams {
 
@@ -154,7 +152,7 @@ public class GlobalParams {
 	public static int gVerifyCode ;
 	public static boolean shouldRefreshContactList;//需要更新好友列表么？
 
-	public static User gUser;//登录成功后记录的用户
+	private static UserVO gUserVO;//登录成功后记录的用户
 	public static void refreshIP(){
 		urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
 		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
@@ -191,6 +189,29 @@ public class GlobalParams {
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
+	}
+
+	public static UserVO getLastLoginUser(){
+		if(gUserVO!=null){
+			return gUserVO;
+		}
+		gUserVO = PreferenceManager.getInstance().getLastLoginUser();
+		return gUserVO;
+	}
+	public static void setCurrUserHeadAvatar(String headAvatar){
+		getLastLoginUser().setHead_icon(headAvatar);
+		PreferenceManager.getInstance().setCurrentUserAvatar(headAvatar);
+		EaseUIHelper.getInstance().getUserProfileManager().getCurrentUser().setAvatar(headAvatar);
+	}
+
+	public static void saveUser(UserVO userVO){
+		if(userVO!=null) {
+			PreferenceManager.getInstance().saveLastLoginUser(userVO);
+			gUserVO = userVO;
+		}else{
+			PreferenceManager.getInstance().saveLastLoginUser(null);
+			gUserVO = null;
+		}
 	}
 
 	static IBookPresenter getBookPresenter(){

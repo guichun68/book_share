@@ -26,7 +26,7 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
-import zyzx.linke.model.bean.User;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -50,7 +50,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private CloudItem mCloudItem;
     private int pageNum = 0;
     private String mAddress;//中文地址描述
-    private User mUser;
+    private UserVO mUserVO;
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
     private boolean showAddress;//是否显示地理位置信息
     private RelativeLayout rlAddress;
@@ -102,20 +102,20 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             @Override
             public void onSuccess(Object obj) {
                 String userJson = (String) obj;
-                mUser = JSON.parseObject(userJson,User.class);
+                mUserVO = JSON.parseObject(userJson,UserVO.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvLoginname.setText(mUser!=null?mUser.getLogin_name():"用户不存在");
-                        if(mUser!=null){
-                            if(!StringUtil.isEmpty(mUser.getSignature())){
-                                tvSignature.setText(mUser.getSignature());
+                        tvLoginname.setText(mUserVO !=null? mUserVO.getLogin_name():"用户不存在");
+                        if(mUserVO !=null){
+                            if(!StringUtil.isEmpty(mUserVO.getSignature())){
+                                tvSignature.setText(mUserVO.getSignature());
                             }else{
                                 tvSignature.setText(UIUtil.getString(R.string.nowordsig));
                             }
                         }
-                        if(!StringUtil.isEmpty(mUser.getHead_icon())){
-                            Glide.with(mContext).load(mUser.getHead_icon()).into(ivHeadIcon);
+                        if(!StringUtil.isEmpty(mUserVO.getHead_icon())){
+                            Glide.with(mContext).load(mUserVO.getHead_icon()).into(ivHeadIcon);
                         }else{
                             Glide.with(mContext).load(R.mipmap.person).asBitmap().into(ivHeadIcon) ;
                         }
@@ -195,14 +195,14 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                 this.startActivity(intent);
             break;
             case R.id.iv_icon:
-                if(mUser!=null&& mUser.getUserid()!=null){
-                    if(String.valueOf(mUser.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
+                if(mUserVO !=null&& mUserVO.getUserid()!=null){
+                    if(String.valueOf(mUserVO.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
                         UIUtil.showToastSafe(R.string.neednot_chat_myself);
                         return;
                     }
                     showProgress("正在添加好友…");
                     //检查该用户是否已被对方加入黑名单
-                    getUserPresenter().addFriend(mUser.getUserid(),new CallBack(){
+                    getUserPresenter().addFriend(mUserVO.getUserid(),new CallBack(){
 
                         @Override
                         public void onSuccess(Object obj) {
@@ -221,11 +221,11 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                                 return;
                             }else if(code ==200){
                                 //添加成功
-                                UIUtil.showToastSafe("已添加好友"+mUser.getLogin_name());
+                                UIUtil.showToastSafe("已添加好友"+ mUserVO.getLogin_name());
                                 GlobalParams.shouldRefreshContactList = true;
                                 Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
-                                in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
-                                in.putExtra(BundleFlag.LOGIN_NAME,mUser.getLogin_name());
+                                in.putExtra(BundleFlag.UID,String.valueOf(mUserVO.getUserid()));
+                                in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLogin_name());
                                 startActivity(in);
                             }else{
                                 UIUtil.showToastSafe("添加好友失败！");

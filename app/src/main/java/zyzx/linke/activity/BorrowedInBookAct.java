@@ -79,7 +79,7 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
     protected void initData() {
         mBooks.clear();
         showDefProgress();
-        getBooks(GlobalParams.gUser.getUserid(), 0);
+        getBooks(GlobalParams.getLastLoginUser().getUserid(), 0);
     }
 
     /**
@@ -144,6 +144,6 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
                 R.mipmap.publicloading));
         mPageNum++;
         isLoadingMore = true;
-        getBooks(GlobalParams.gUser.getUserid(), mPageNum);
+        getBooks(GlobalParams.getLastLoginUser().getUserid(), mPageNum);
     }
 }
