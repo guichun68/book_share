@@ -19,7 +19,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.List;
 import java.util.Map;
-
+//环信 相关userdao
 public class HXUserDao {
 	public static final String TABLE_NAME = "uers";
 	public static final String COLUMN_NAME_ID = "username";

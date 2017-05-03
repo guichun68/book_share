@@ -122,4 +122,6 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void modifyPsw(Integer userid, String oldPsw, String newPsw, CallBack callBack);
     //意见反馈
     public abstract void feedBack(FeedBack mFeedBack, CallBack callBack);
+    //获取指定省份(省份id)下的所有地级市
+    public abstract void getProCity(Integer pid,CallBack callBack);
 }

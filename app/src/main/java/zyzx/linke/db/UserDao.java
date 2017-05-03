@@ -9,6 +9,8 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 
+import zyzx.linke.global.Const;
+import zyzx.linke.model.Area;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.UIUtil;
 
@@ -20,7 +22,12 @@ public class UserDao {
 	SQLiteDatabase db;
 	private DbHelper helper;
 	private Context context;
-	private final String TABLE_USER_NAME = "zyzx_user";//用户表
+	public static final String TABLE_USER_NAME = "zyzx_user";//用户表
+	public static final String TABLE_PROVINCE = "zyzx_provice";//省份表
+
+	private static final String COLUM_USER_ID = "userid";
+	private static final String COLUM_LOGIN_NAME= "login_name";
+	private static final String COLUM_HEAD_ICON= "head_icon";
 
 	private static UserDao mUserSQLDao;
 
@@ -75,9 +82,9 @@ public class UserDao {
 		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		if(userPO.getLogin_name()!=null)
-			values.put(DbHelper.COLUM_LOGIN_NAME, userPO.getLogin_name());
+			values.put(COLUM_LOGIN_NAME, userPO.getLogin_name());
 		if(userPO.getHead_icon()!=null)
-			values.put(DbHelper.COLUM_HEAD_ICON, userPO.getHead_icon());
+			values.put(COLUM_HEAD_ICON, userPO.getHead_icon());
 		int affectRows = db.update(TABLE_USER_NAME,values,"userid=?",new String[]{String.valueOf(userPO.getUserid())});
 		UIUtil.print("zyzx-affectRows:"+affectRows);
 	}
@@ -180,4 +187,100 @@ public class UserDao {
 			db.close();
 		}
 	}
+
+	/**
+	 * 添加一条用户数据
+	 * @param areas 待插入省份信息列表
+	 */
+	public void addAreas(SQLiteDatabase db,ArrayList<Area> areas) {
+//		db = helper.getWritableDatabase();
+
+		for(int i=0;i<areas.size();i++){
+			ContentValues values = new ContentValues();
+			values.put("pid", areas.get(i).getId());
+			values.put("areacode", areas.get(i).getAreacode());
+			values.put("depth", areas.get(i).getDepth());
+			values.put("name", areas.get(i).getName());
+			values.put("parentid", areas.get(i).getParentid());
+			values.put("zipcode", areas.get(i).getZipcode());
+			long affectRows = db.insert(TABLE_PROVINCE, null, values);
+			if(affectRows>0){
+				UIUtil.showTestLog(Const.TAG,"插入第"+i+"条数据成功");
+			}else{
+				UIUtil.showTestLog(Const.TAG,"插入第"+i+"条数据失败-----"+areas.get(i));
+			}
+		}
+	}
+
+	/**
+	 * 查询指定id的省份信息
+	 * @param pid
+	 * @return
+	 */
+	public Area queryProByid(Integer pid){
+		db = helper.getReadableDatabase();
+//		Cursor cursor = db.query(TABLE_USER_NAME, new String[]{"userid", "login_name", "head_icon"}, "userid=?", new String[]{String.valueOf(uid)}, null, null, null);
+		Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_PROVINCE+" WHERE pid=?",new String[]{String.valueOf(pid)});
+		Area a=null;
+		if(cursor.getCount()==1){
+			cursor.moveToNext();
+			a = new Area(cursor.getInt(cursor.getColumnIndex("pid")),
+					cursor.getString(cursor.getColumnIndex("areacode")),
+					cursor.getInt(cursor.getColumnIndex("depth")),
+					cursor.getString(cursor.getColumnIndex("name")),
+					cursor.getInt(cursor.getColumnIndex("parentid")),
+					cursor.getString(cursor.getColumnIndex("zipcode")));
+		}
+		if(cursor.getCount()>1){
+			UIUtil.showTestLog(Const.TAG,"there are exceed one record in zyzx_area where pid="+pid+"!??");
+		}
+		cursor.close();
+//		db.close();
+		return a;
+	}
+	/**
+	 * 查询指定名称的省份的详情
+	 * @param proName 省份名（依据表中数据规范，不包含“省”字）
+	 * @return
+	 */
+	public Area queryProByName(String proName){
+		db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_PROVINCE+" WHERE name=?",new String[]{proName});
+		Area a=null;
+		if(cursor.getCount()==1){
+			cursor.moveToNext();
+			a = new Area(cursor.getInt(cursor.getColumnIndex("pid")),
+					cursor.getString(cursor.getColumnIndex("areacode")),
+					cursor.getInt(cursor.getColumnIndex("depth")),
+					cursor.getString(cursor.getColumnIndex("name")),
+					cursor.getInt(cursor.getColumnIndex("parentid")),
+					cursor.getString(cursor.getColumnIndex("zipcode")));
+		}
+		if(cursor.getCount()>1){
+			UIUtil.showTestLog(Const.TAG,"there are exceed one record in zyzx_area where name="+proName+"!??");
+		}
+		cursor.close();
+//		db.close();
+		return a;
+	}
+
+	//查询所有省份(或直辖市+“国外”)
+	public ArrayList<Area> queryAllPro(){
+		db = helper.getReadableDatabase();
+		ArrayList<Area> areas = new ArrayList<>();
+//		Cursor cursor = db.query(TABLE_USER_NAME, new String[]{"userid", "login_name", "head_icon"}, "userid=?", new String[]{String.valueOf(uid)}, null, null, null);
+		Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_PROVINCE+" WHERE parentid=?",new String[]{String.valueOf(0)});
+		while (cursor.moveToNext()) {
+			Area a = new Area(cursor.getInt(cursor.getColumnIndex("pid")),
+					cursor.getString(cursor.getColumnIndex("areacode")),
+					cursor.getInt(cursor.getColumnIndex("depth")),
+					cursor.getString(cursor.getColumnIndex("name")),
+					cursor.getInt(cursor.getColumnIndex("parentid")),
+					cursor.getString(cursor.getColumnIndex("zipcode")));
+			areas.add(a);
+		}
+		cursor.close();
+		return areas;
+	}
+
 }

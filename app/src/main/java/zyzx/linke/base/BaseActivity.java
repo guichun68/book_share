@@ -70,7 +70,7 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
 
     protected IUserPresenter getUserPresenter(){
         if(mUserPresenter==null){
-            mUserPresenter=(GlobalParams.getUserPresenter());
+            mUserPresenter=GlobalParams.getUserPresenter();
         }
         return mUserPresenter;
     }

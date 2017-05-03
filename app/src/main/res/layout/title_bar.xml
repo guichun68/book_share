@@ -46,7 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:gravity="center"
-        tools:text=""
+        tools:text="保存"
         android:textSize="20sp"
         android:paddingRight="10dp"
         android:clickable="true"

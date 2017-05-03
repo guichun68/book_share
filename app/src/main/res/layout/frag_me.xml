@@ -24,8 +24,8 @@
                 android:id="@+id/rl_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#88ffffff"
                 android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_top_selr"
                 android:visibility="visible">
 
                 <zyzx.linke.views.CircleImageView
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
 
@@ -140,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
@@ -218,7 +218,7 @@
                 android:id="@+id/rl_my_share"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
@@ -255,7 +255,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
@@ -299,7 +299,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -335,7 +335,7 @@
                 android:id="@+id/rl_import"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -371,7 +371,7 @@
                 android:id="@+id/rl_export"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -407,7 +407,7 @@
                 android:id="@+id/rl_log_out"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -443,7 +443,7 @@
                 android:id="@+id/rl_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -478,7 +478,7 @@
                 android:id="@+id/rl_check_update"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">
@@ -515,7 +515,7 @@
                 android:id="@+id/rl_about"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_aboutmore_selector"
+                android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:visibility="visible">

@@ -25,7 +25,8 @@ public class GlobalParams {
 	public static String BaseDir = "NearBook";//本地默认保存文件夹名
 
 
-	static{
+
+    static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
 	}
 
@@ -38,7 +39,7 @@ public class GlobalParams {
 	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
 
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
-
+	public static String urlGetProCitys = GlobalParams.BASE_URL+"/app/getProCitys.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -189,6 +190,7 @@ public class GlobalParams {
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
+		urlGetProCitys = GlobalParams.BASE_URL+"/app/getProCitys.action";
 	}
 
 	public static UserVO getLastLoginUser(){

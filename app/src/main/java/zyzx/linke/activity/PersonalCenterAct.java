@@ -67,6 +67,7 @@ public class PersonalCenterAct extends BaseActivity {
 
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         tvSignature.setOnClickListener(this);
+        findViewById(R.id.iv_edit).setOnClickListener(this);
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLogin_name());
         ((TextView)findViewById(R.id.tv_birthday)).setText(StringUtil.isEmpty(mUser.getBirthday())?"未填写":mUser.getBirthday());
         ((TextView)findViewById(R.id.tv_gender)).setText(StringUtil.isEmpty(mUser.getGenderName())?"未填写":mUser.getGenderName());
@@ -157,6 +158,9 @@ public class PersonalCenterAct extends BaseActivity {
             case R.id.tv_signature:
                 //弹出修改签名的dialog
                 showModifySignatureDialog();
+                break;
+            case R.id.iv_edit:
+                gotoActivity(EditUserInfoAct.class);
                 break;
         }
     }
