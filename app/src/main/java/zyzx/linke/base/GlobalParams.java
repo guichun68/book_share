@@ -39,7 +39,7 @@ public class GlobalParams {
 	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
 
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
-	public static String urlGetProCitys = GlobalParams.BASE_URL+"/app/getProCitys.action";
+	public static String urlGetSubArea = GlobalParams.BASE_URL+"/app/getSubAreas.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -54,6 +54,8 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	//保存用户信息
+	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
 	//验证短信验证码正确否的url
 	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	//重置密码
@@ -190,7 +192,8 @@ public class GlobalParams {
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
-		urlGetProCitys = GlobalParams.BASE_URL+"/app/getProCitys.action";
+		urlGetSubArea = GlobalParams.BASE_URL+"/app/getSubAreas.action";
+		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
 	}
 
 	public static UserVO getLastLoginUser(){

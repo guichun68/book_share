@@ -1,23 +1,22 @@
 package zyzx.linke.model.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class UserVO implements Serializable{
+public class UserVO implements Serializable, Cloneable{
 	
 	private String genderName;
-	
+
+	private String provinceName;
 	private String cityName;
-	
+	private String countyName;
 	private String diplomaName;//学历
-
-
 
 	private Integer userid;
 	private String login_name;
 	private String mobile_phone;
 	private String address;
 	private String password;
-	private Integer age;
 	private Integer gender;
 	private String hobby;
 	private String email;
@@ -28,7 +27,7 @@ public class UserVO implements Serializable{
 	private String signature;
 	private String head_icon;//头像地址
 	private String bak4;//勿删，目前已用作返回给会话页面的用户信息时的code使用
-	private String birthday;
+	private Date birthday;
 	private String school;
 	private int errorCode;//只在Server中用于Dao层判断查询成功否
 	private String department;//院系
@@ -54,12 +53,28 @@ public class UserVO implements Serializable{
 		this.genderName = genderName;
 	}
 
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
 	public String getCityName() {
 		return cityName;
 	}
 
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
+	}
+
+	public String getCountyName() {
+		return countyName;
+	}
+
+	public void setCountyName(String countyName) {
+		this.countyName = countyName;
 	}
 
 	public String getDiplomaName() {
@@ -109,14 +124,6 @@ public class UserVO implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
 	}
 
 	public Integer getGender() {
@@ -191,11 +198,11 @@ public class UserVO implements Serializable{
 		this.bak4 = bak4;
 	}
 
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 
@@ -245,5 +252,48 @@ public class UserVO implements Serializable{
 
 	public void setCreditScore(Integer creditScore) {
 		this.creditScore = creditScore;
+	}
+
+	@Override
+	public String toString() {
+		return "UserVO{" +
+				"genderName='" + genderName + '\'' +
+				", provinceName='" + provinceName + '\'' +
+				", cityName='" + cityName + '\'' +
+				", countyName='" + countyName + '\'' +
+				", diplomaName='" + diplomaName + '\'' +
+				", userid=" + userid +
+				", login_name='" + login_name + '\'' +
+				", mobile_phone='" + mobile_phone + '\'' +
+				", address='" + address + '\'' +
+				", password='" + password + '\'' +
+				", gender=" + gender +
+				", hobby='" + hobby + '\'' +
+				", email='" + email + '\'' +
+				", real_name='" + real_name + '\'' +
+				", cityId=" + cityId +
+				", lastLoginTime='" + lastLoginTime + '\'' +
+				", signature='" + signature + '\'' +
+				", head_icon='" + head_icon + '\'' +
+				", bak4='" + bak4 + '\'' +
+				", birthday='" + birthday + '\'' +
+				", school='" + school + '\'' +
+				", errorCode=" + errorCode +
+				", department='" + department + '\'' +
+				", diplomaId=" + diplomaId +
+				", soliloquy='" + soliloquy + '\'' +
+				", creditScore=" + creditScore +
+				'}';
+	}
+
+	@Override
+	public Object clone()  {
+		UserVO uv = null;
+		try{
+			uv = (UserVO) super.clone();
+		}catch(CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return uv;
 	}
 }

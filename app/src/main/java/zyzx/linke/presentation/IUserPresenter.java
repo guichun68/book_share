@@ -8,6 +8,7 @@ import java.util.List;
 import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.FeedBack;
+import zyzx.linke.model.bean.UserVO;
 
 /**
  * Created by austin on 2017/2/17.
@@ -123,5 +124,7 @@ public abstract class IUserPresenter extends IPresenter{
     //意见反馈
     public abstract void feedBack(FeedBack mFeedBack, CallBack callBack);
     //获取指定省份(省份id)下的所有地级市
-    public abstract void getProCity(Integer pid,CallBack callBack);
+    public abstract void getSubArea(Integer pid, CallBack callBack);
+
+    public abstract void saveUserInfo(UserVO user,CallBack callBack);
 }

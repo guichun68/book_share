@@ -451,11 +451,25 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getProCity(Integer pid, CallBack callBack) {
+    public void getSubArea(Integer pid, CallBack callBack) {
         HashMap<String,Object> params = getParam();
         params.put("pid",String.valueOf(pid));
         try {
-            getModel().post(GlobalParams.urlGetProCitys,params,callBack);
+            getModel().post(GlobalParams.urlGetSubArea,params,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("访问出错，请稍后再试.");
+            }
+        }
+    }
+
+    @Override
+    public void saveUserInfo(UserVO user, CallBack callBack) {
+        HashMap<String,Object> params = getParam();
+        params.put("user",JSON.toJSONString(user));
+        try {
+            getModel().post(GlobalParams.urlSaveUserInfo,params,callBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){

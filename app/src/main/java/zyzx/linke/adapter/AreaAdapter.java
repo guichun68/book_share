@@ -15,11 +15,11 @@ import zyzx.linke.model.Area;
  * Desc :省份adapter
  */
 
-public class ProvinceAdapter extends BaseAdapter {
+public class AreaAdapter extends BaseAdapter {
 
     private ArrayList<Area> provinces;
 
-    public ProvinceAdapter(ArrayList<Area> provinces){
+    public AreaAdapter(ArrayList<Area> provinces){
         this.provinces = provinces;
     }
 

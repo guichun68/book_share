@@ -35,11 +35,33 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tv_pro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                tool:text="山东"
+                android:singleLine="true"
+                android:paddingRight="10dp"
+                android:textSize="16sp"/>
+            <TextView
+                style="@style/horizontal_line"/>
+            <TextView
                 android:id="@+id/tv_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                tool:text="山东省青岛市黄岛区"
+                tool:text="青岛"
+                android:singleLine="true"
+                android:paddingRight="10dp"
+                android:textSize="16sp"/>
+            <TextView
+                style="@style/horizontal_line"/>
+            <TextView
+                android:id="@+id/tv_county"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                tool:text="黄岛"
                 android:singleLine="true"
                 android:paddingRight="10dp"
                 android:textSize="16sp"/>
@@ -131,6 +153,7 @@
                     android:textSize="16sp"/>
 
                 <TextView
+                    android:id="@+id/tv_modify_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="修改"
@@ -146,8 +169,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/watermark_hint"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -158,22 +179,15 @@
                     android:text="学校:"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/tv_school"
+                <EditText
+                    android:id="@+id/et_school"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     tool:text="北京交通大学"
+                    android:maxLength="25"
+                    android:singleLine="true"
                     android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="修改"
-                    android:textSize="18sp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/blue"/>
 
             </LinearLayout>
             <LinearLayout
@@ -231,13 +245,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/watermark_hint"
                 android:gravity="center_vertical"
                 android:text="内心独白:"
-                android:background="@color/watermark_hint"
                 android:textSize="20sp" />
 
             <LinearLayout

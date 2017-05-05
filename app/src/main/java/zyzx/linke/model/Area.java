@@ -13,6 +13,8 @@ public class Area {
     private Integer parentid;
     private String zipcode;
 
+    public Area(){}
+
     public Area(Integer id, String areacode, Integer depth, String name, Integer parentid, String zipcode) {
         this.id = id;
         this.areacode = areacode;

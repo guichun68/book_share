@@ -18,6 +18,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import zyzx.linke.model.bean.UserVO;
 
 public class PreferenceManager {
@@ -68,7 +72,6 @@ public class PreferenceManager {
 	private static String KEY_AUTO_LOGIN_FLAG = "KEY_AUTO_LOGIN_FLAG";
 	private static String KEY_MOBILE_PHONE = "KEY_MOBILE_PHONE";
 	private static String KEY_ADDRESS = "KEY_ADDRESS";
-	private static String KEY_AGE = "KEY_AGE";
 	private static String KEY_GENDER = "KEY_GENDER";
 	private static String KEY_GENDER_NAME = "KEY_GENDER_NAME";
 	private static String KEY_HOBBY = "KEY_HOBBY";
@@ -265,10 +268,6 @@ public class PreferenceManager {
 		u.setMobile_phone(mSharedPreferences.getString(KEY_MOBILE_PHONE,""));
 		u.setAddress(mSharedPreferences.getString(KEY_ADDRESS,""));
 		u.setPassword(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_HSH,""));
-		value = mSharedPreferences.getInt(KEY_AGE,-1);
-		if(value!=-1){
-			u.setAge(value);
-		}
 		value = mSharedPreferences.getInt(KEY_GENDER,-1);
 		if(value!=-1){
 			u.setGender(value);
@@ -286,7 +285,11 @@ public class PreferenceManager {
 		u.setSignature(mSharedPreferences.getString(KEY_SIGNATURE,""));
 		u.setHead_icon(mSharedPreferences.getString(KEY_CURRENTUSER_AVATAR,""));
 		u.setBak4(mSharedPreferences.getString(KEY_BAK4,""));
-		u.setBirthday(mSharedPreferences.getString(KEY_BIRTHDAY,""));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		ParsePosition pos = new ParsePosition(0);
+		Date d = sdf.parse(mSharedPreferences.getString(KEY_BIRTHDAY,""), pos);
+		u.setBirthday(d==null?null:d);
 		u.setSchool(mSharedPreferences.getString(KEY_SCHOOL,""));
 		u.setDepartment(mSharedPreferences.getString(KEY_DEPARTMENT,""));
 		value = mSharedPreferences.getInt(KEY_DIPLOMAID,-1);
@@ -308,7 +311,6 @@ public class PreferenceManager {
 			editor.remove(KEY_MOBILE_PHONE);
 			editor.remove(KEY_ADDRESS);
 			editor.remove(KEY_LAST_LOGIN_USER_HSH);
-			editor.remove(KEY_AGE);
 			editor.remove(KEY_GENDER);
 			editor.remove(KEY_GENDER_NAME);
 			editor.remove(KEY_HOBBY);
@@ -342,9 +344,6 @@ public class PreferenceManager {
 		}
 		if(!TextUtils.isEmpty(u.getPassword())){
 			editor.putString(KEY_LAST_LOGIN_USER_HSH, u.getPassword());
-		}
-		if(u.getAge()!=null){
-			editor.putInt(KEY_AGE, u.getAge());
 		}
 		if(u.getGender()!=null){
 			editor.putInt(KEY_GENDER, u.getGender());
@@ -380,8 +379,9 @@ public class PreferenceManager {
 		if(!TextUtils.isEmpty(u.getBak4())){
 			editor.putString(KEY_BAK4,u.getBak4());
 		}
-		if(!TextUtils.isEmpty(u.getBirthday())){
-			editor.putString(KEY_BIRTHDAY,u.getBirthday());
+		if(u.getBirthday()!=null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			editor.putString(KEY_BIRTHDAY,sdf.format(u.getBirthday()));
 		}
 		if(!TextUtils.isEmpty(u.getSchool())){
 			editor.putString(KEY_SCHOOL,u.getSchool());

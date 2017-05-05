@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -52,6 +53,7 @@ public class PersonalCenterAct extends BaseActivity {
     private TextView tvSignature;
     private UserVO mUser;
     private boolean isUserInfoUpdated;//用户是否修改了 头像信息
+    private final int EDIT_USERINFO_CODE = 0x375B;
 
     @Override
     protected int getLayoutId() {
@@ -60,7 +62,6 @@ public class PersonalCenterAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        mUser = GlobalParams.getLastLoginUser();
         mTitleText.setText("个人资料");
         mCiv = (CircleImageView)findViewById(R.id.civ);
         mCiv.setOnClickListener(this);
@@ -68,21 +69,31 @@ public class PersonalCenterAct extends BaseActivity {
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         tvSignature.setOnClickListener(this);
         findViewById(R.id.iv_edit).setOnClickListener(this);
+        refreshUI();
+    }
+
+    //刷新界面（不刷新头像）
+    private void refreshUI() {
+        mUser = GlobalParams.getLastLoginUser();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLogin_name());
-        ((TextView)findViewById(R.id.tv_birthday)).setText(StringUtil.isEmpty(mUser.getBirthday())?"未填写":mUser.getBirthday());
+        ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
         ((TextView)findViewById(R.id.tv_gender)).setText(StringUtil.isEmpty(mUser.getGenderName())?"未填写":mUser.getGenderName());
         ((TextView)findViewById(R.id.tv_location)).setText(StringUtil.isEmpty(mUser.getCityName())?"未填写":mUser.getCityName());
         ((TextView)findViewById(R.id.tv_school)).setText(StringUtil.isEmpty(mUser.getSchool())?"未填写":mUser.getSchool());
         ((TextView)findViewById(R.id.tv_department)).setText(StringUtil.isEmpty(mUser.getDepartment())?"未填写":mUser.getDepartment());
         ((TextView)findViewById(R.id.tv_diploma)).setText(StringUtil.isEmpty(mUser.getDiplomaName())?"未填写":mUser.getDiplomaName());
         ((TextView)findViewById(R.id.tv_soliloquy)).setText(StringUtil.isEmpty(mUser.getSoliloquy())?"未填写":mUser.getSoliloquy());
+        if(!StringUtil.isEmpty(mUser.getSignature())){
+            tvSignature.setText(mUser.getSignature());
+        }else{
+            tvSignature.setText("写点什么吧！");
+        }
     }
 
     @Override
     protected void initData() {
         capture = new CapturePhoto(this);
-        refreshSignature();
-
         if(!StringUtil.isEmpty(mUser.getHead_icon())){
             Glide.with(mContext).load(mUser.getHead_icon()).into(mCiv);
         }
@@ -134,18 +145,11 @@ public class PersonalCenterAct extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                refreshSignature();
+                refreshUI();
             }
         });
     }
 
-    private void refreshSignature(){
-        if(!StringUtil.isEmpty(mUser.getSignature())){
-            tvSignature.setText(mUser.getSignature());
-        }else{
-            tvSignature.setText("写点什么吧！");
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -160,7 +164,8 @@ public class PersonalCenterAct extends BaseActivity {
                 showModifySignatureDialog();
                 break;
             case R.id.iv_edit:
-                gotoActivity(EditUserInfoAct.class);
+                Intent intent = new Intent(mContext,EditUserInfoAct.class);
+                startActivityForResult(intent,EDIT_USERINFO_CODE);
                 break;
         }
     }
@@ -237,8 +242,12 @@ public class PersonalCenterAct extends BaseActivity {
             }else{
                 UIUtil.showToastSafe("未选择图片");
             }
+        }else if(requestCode==EDIT_USERINFO_CODE){
+            refreshUI();
         }
     }
+
+
     /**
      * 将Bitmap转成file的Uri
      * @param bitmap 待转bitmap
@@ -339,4 +348,6 @@ public class PersonalCenterAct extends BaseActivity {
         setResult(RESULT_OK, intent); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
         finish();//此处一定要调用finish()方法
     }
+
+
 }
