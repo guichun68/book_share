@@ -423,7 +423,7 @@ public class EditUserInfoAct extends BaseActivity {
                 Date currDate = new Date();
                 if(!StringUtil.isEmpty(dateStr)){
                     currDate = sdf.parse(dateStr,new ParsePosition(0));
-                }
+                } 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currDate==null?new Date():currDate);
 
