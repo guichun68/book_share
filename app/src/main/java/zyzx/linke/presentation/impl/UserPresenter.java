@@ -451,9 +451,10 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getSubArea(Integer pid, CallBack callBack) {
+    public void getSubArea(Integer pid, Integer holdFlag, CallBack callBack) {
         HashMap<String,Object> params = getParam();
         params.put("pid",String.valueOf(pid));
+        params.put("hold",String.valueOf(holdFlag));
         try {
             getModel().post(GlobalParams.urlGetSubArea,params,callBack);
         } catch (IOException e) {

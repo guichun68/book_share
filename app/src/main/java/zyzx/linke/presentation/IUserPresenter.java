@@ -124,7 +124,7 @@ public abstract class IUserPresenter extends IPresenter{
     //意见反馈
     public abstract void feedBack(FeedBack mFeedBack, CallBack callBack);
     //获取指定省份(省份id)下的所有地级市
-    public abstract void getSubArea(Integer pid, CallBack callBack);
+    public abstract void getSubArea(Integer pid, Integer holdFlag,CallBack callBack);
 
     public abstract void saveUserInfo(UserVO user,CallBack callBack);
 }

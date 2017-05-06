@@ -56,8 +56,8 @@ public class ModelImpl implements IModel {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:");
-                callBack.onFailure(e.getMessage());
+                UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:"+e.getMessage());
+                callBack.onFailure("Error accessing network!");
             }
 
             @Override

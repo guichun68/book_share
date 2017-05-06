@@ -67,15 +67,16 @@
 
                 <TextView
                     android:id="@+id/tv_signature"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_below="@id/rl_username"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="10dp"
                     android:clickable="true"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@mipmap/edit_small"
                     android:textColor="@color/text_tip_color"
                     tool:text="写点什么吧" />
             </RelativeLayout>

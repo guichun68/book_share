@@ -54,6 +54,7 @@ public class PersonalCenterAct extends BaseActivity {
     private UserVO mUser;
     private boolean isUserInfoUpdated;//用户是否修改了 头像信息
     private final int EDIT_USERINFO_CODE = 0x375B;
+    private TextView tvGender;
 
     @Override
     protected int getLayoutId() {
@@ -67,6 +68,7 @@ public class PersonalCenterAct extends BaseActivity {
         mCiv.setOnClickListener(this);
 
         tvSignature = (TextView) findViewById(R.id.tv_signature);
+        tvGender = (TextView) findViewById(R.id.tv_gender);
         tvSignature.setOnClickListener(this);
         findViewById(R.id.iv_edit).setOnClickListener(this);
         refreshUI();
@@ -78,8 +80,29 @@ public class PersonalCenterAct extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLogin_name());
         ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
-        ((TextView)findViewById(R.id.tv_gender)).setText(StringUtil.isEmpty(mUser.getGenderName())?"未填写":mUser.getGenderName());
-        ((TextView)findViewById(R.id.tv_location)).setText(StringUtil.isEmpty(mUser.getCityName())?"未填写":mUser.getCityName());
+        switch (mUser.getGender()){
+            case 0:tvGender.setText("未填写");
+                break;
+            case 1:tvGender.setText("男");
+                break;
+            case 2:
+                tvGender.setText("女");
+                break;
+            case 3:
+                tvGender.setText("保密");
+                break;
+        }
+        StringBuilder sb = new StringBuilder();
+        if(!StringUtil.isEmpty(mUser.getProvinceName())){
+            sb.append(" ").append(mUser.getProvinceName());
+        }
+        if(!StringUtil.isEmpty(mUser.getCityName())){
+            sb.append(" ").append(mUser.getCityName());
+        }
+        if(!StringUtil.isEmpty(mUser.getCountyName())){
+            sb.append(" ").append(mUser.getCountyName());
+        }
+        ((TextView)findViewById(R.id.tv_location)).setText(StringUtil.isEmpty(sb.toString())?"未填写":sb.toString());
         ((TextView)findViewById(R.id.tv_school)).setText(StringUtil.isEmpty(mUser.getSchool())?"未填写":mUser.getSchool());
         ((TextView)findViewById(R.id.tv_department)).setText(StringUtil.isEmpty(mUser.getDepartment())?"未填写":mUser.getDepartment());
         ((TextView)findViewById(R.id.tv_diploma)).setText(StringUtil.isEmpty(mUser.getDiplomaName())?"未填写":mUser.getDiplomaName());
