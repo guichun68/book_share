@@ -139,7 +139,7 @@ public class ForceUpdateActivity extends Activity {
 		 * 下载新版app
 		 */
 		protected void downloadFile() {
-			final String fileName = StringUtil.getExtraName(url);
+			GlobalParams.downloadFileName = StringUtil.getExtraName(url);
 			DownloadUtil.get().download(url, GlobalParams.BaseDir, null,new DownloadUtil.OnDownloadListener() {
 				@Override
 				public void onDownloadSuccess() {
@@ -150,14 +150,14 @@ public class ForceUpdateActivity extends Activity {
 					Intent intent = new Intent();
 					intent.setAction("android.intent.action.VIEW");
 					intent.addCategory("android.intent.category.DEFAULT");
-					File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+fileName);
+					File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+GlobalParams.downloadFileName);
 					Toast.makeText(ForceUpdateActivity.this,"已下载到"+downloadFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
 					intent.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
 					startActivityForResult(intent, 0);
 				}
 				@Override
 				public void onDownloading(long total,int progress) {
-					mBuilder.setProgress((int) total, progress, false);
+					mBuilder.setProgress(100, progress, false);
 					mNotificationManager.notify(0x00000fff, mBuilder.build());
 				}
 				@Override

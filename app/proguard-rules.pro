@@ -74,3 +74,16 @@
 -keep class android.net.http.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.**
+
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+# sharesdk
+-keep class com.mob.**{*;}
+-dontwarn com.mob.**
+-dontwarn cn.sharesdk.**
+-dontwarn **.R$*
+
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable

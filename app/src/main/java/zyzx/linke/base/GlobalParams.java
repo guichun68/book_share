@@ -54,6 +54,7 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	public static String downloadFileName = "";
 	//保存用户信息
 	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
 	//验证短信验证码正确否的url

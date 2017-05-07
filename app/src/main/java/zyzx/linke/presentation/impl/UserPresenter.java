@@ -49,7 +49,7 @@ public class UserPresenter extends IUserPresenter {
                @Override
                public void onSuccess(Object obj) {
                    String response = (String)obj;
-                   if(response.contains("</html>")){
+                   if(response.contains("</html>")||response.contains("<html>")||response.contains("</HTML>")||response.contains("<HTML>")){
                        if(viewCallBack!=null){
                            viewCallBack.onFailure("服务器错误，请检查URL");
                        }

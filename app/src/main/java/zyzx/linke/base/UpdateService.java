@@ -22,6 +22,7 @@ public class UpdateService extends Service implements CallBack {
 	private PackageManager pm;
 	private int currVersionCode;
 	private CheckUpdateCallBack callBack;
+	private MyBinder localBinder = new MyBinder();
 
 
 	@Override
@@ -40,7 +41,7 @@ public class UpdateService extends Service implements CallBack {
 	
 	@Override
 	public IBinder onBind(Intent intent) {
-		return new MyBinder();
+		return localBinder;
 	}
 
 	@Override
@@ -103,7 +104,6 @@ public class UpdateService extends Service implements CallBack {
 	public class MyBinder extends Binder {
 		public void callCheckUpdate(CheckUpdateCallBack callBack){
 			checkUpdate(callBack);
-
 		}
 	}
 	void checkUpdate(CheckUpdateCallBack callBack){

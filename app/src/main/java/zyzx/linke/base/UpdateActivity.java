@@ -15,6 +15,7 @@ import android.view.Window;
 import java.io.File;
 
 import zyzx.linke.R;
+import zyzx.linke.global.Const;
 import zyzx.linke.utils.DownloadUtil;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -32,6 +33,7 @@ public class UpdateActivity extends Activity {
 			desc = getIntent().getStringExtra("desc");
 			url = getIntent().getStringExtra("url");
 			mBuilder = new NotificationCompat.Builder(this);
+
 //			url = "http://m.apk.67mo.com/apk/999129_21769077_1443483983292.apk";
 			initNotify();
 			showConfirmUpdateDialog();
@@ -59,7 +61,10 @@ public class UpdateActivity extends Activity {
 		 * 点击去除： Notification.FLAG_AUTO_CANCEL 
 		 */
 		public PendingIntent getDefalutIntent(int flags){
-			PendingIntent pendingIntent= PendingIntent.getActivity(this, 1, new Intent(), flags);
+//			PendingIntent pendingIntent= PendingIntent.getActivity(this, 1, new Intent(), flags);
+			Intent Intent_pre = new Intent(Const.ONCLICK);
+			//得到PendingIntent
+			PendingIntent pendingIntent= PendingIntent.getBroadcast(this, 0, Intent_pre, flags);
 			return pendingIntent;
 		}
 		/**
@@ -108,24 +113,27 @@ public class UpdateActivity extends Activity {
 		 * 
 		 */
 		protected void downloadFile() {
-			final String fileName = StringUtil.getExtraName(url);
+			GlobalParams.downloadFileName = StringUtil.getExtraName(url);
 			DownloadUtil.get().download(url, GlobalParams.BaseDir, null,new DownloadUtil.OnDownloadListener() {
 				@Override
 				public void onDownloadSuccess() {
 					UIUtil.showToastSafe(UpdateActivity.this, "下载完成");
 
 					mBuilder.setContentText("下载完成");
+
+
 					mNotificationManager.notify(0x00000fff, mBuilder.build());
 					Intent intent = new Intent();
 					intent.setAction("android.intent.action.VIEW");
 					intent.addCategory("android.intent.category.DEFAULT");
-					File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+fileName);
+					File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+GlobalParams.downloadFileName);
 					intent.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
 					startActivityForResult(intent, 0);
 				}
 				@Override
 				public void onDownloading(long total,int progress) {
-					mBuilder.setProgress((int) total, progress, false);
+					mBuilder.setProgress(100, progress, false);
+					UIUtil.showTestLog("notifier:",total+","+progress);
 					mNotificationManager.notify(0x00000fff, mBuilder.build());
 				}
 				@Override

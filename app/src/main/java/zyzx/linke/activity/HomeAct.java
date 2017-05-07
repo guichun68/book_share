@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 
+import java.io.File;
 import java.util.List;
 
 import zyzx.linke.HomeFragment;
@@ -35,8 +38,10 @@ import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.ErrActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
+import zyzx.linke.global.Const;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -130,6 +135,7 @@ public class HomeAct extends BaseActivity {
         filter.addAction(EaseConstant.ACCOUNT_CONFLICT);
         filter.addAction(EaseConstant.ACCOUNT_FORBIDDEN);
         filter.addAction(EaseConstant.ACCOUNT_REMOVED);
+        filter.addAction(Const.ONCLICK);
         registerReceiver(mMessageReceiver, filter);
         checkUpdate();
     }
@@ -275,7 +281,7 @@ public class HomeAct extends BaseActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
 //            Log.e(TAG,"Update service is Connected.");
             mBinder = (UpdateService.MyBinder) service;
-            if(!isFirstStartApp){
+            if(isFirstStartApp){
                 mBinder.callCheckUpdate(null);
                 isFirstStartApp = false;
             }
@@ -336,6 +342,13 @@ public class HomeAct extends BaseActivity {
                 gotoErrAct(EaseConstant.ACCOUNT_FORBIDDEN);
             }else if(action.equals(EaseConstant.ACCOUNT_REMOVED)){
                 gotoErrAct(EaseConstant.ACCOUNT_REMOVED);
+            }else if(action.equals(Const.ONCLICK)){
+                Intent inten = new Intent();
+                inten.setAction("android.intent.action.VIEW");
+                inten.addCategory("android.intent.category.DEFAULT");
+                File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+GlobalParams.downloadFileName);
+                inten.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
+                startActivityForResult(inten, 0);
             }
         }
     }
