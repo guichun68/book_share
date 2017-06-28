@@ -526,7 +526,7 @@
                     android:layout_height="@dimen/dp_50"
                     android:padding="3dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/about" />
+                    android:src="@mipmap/about_me" />
 
                 <TextView
                     android:id="@+id/tv6"

@@ -21,6 +21,6 @@ public interface IModel {
      * @param callBack
      * @throws IOException
      */
-    void post2(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
+//    void post2(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
     void get(String url,HashMap<String,String> param,CallBack callBack);
 }

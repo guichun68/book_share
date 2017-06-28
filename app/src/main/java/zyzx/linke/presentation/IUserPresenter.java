@@ -3,6 +3,7 @@ package zyzx.linke.presentation;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.easeui.domain.EaseUser;
 
+import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.base.IPresenter;
@@ -127,4 +128,6 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void getSubArea(Integer pid, Integer holdFlag,CallBack callBack);
 
     public abstract void saveUserInfo(UserVO user,CallBack callBack);
+    //通过第三方账号登录系统
+    public abstract void loginByThirdPlatform(String paraJSON,CallBack callBack);
 }

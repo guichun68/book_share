@@ -3,7 +3,6 @@ package zyzx.linke.activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -387,7 +386,7 @@ public class EditUserInfoAct extends BaseActivity {
         showProgress("请稍后");
         getUserPresenter().saveUserInfo(usvo, new CallBack() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(Object obj, int... code) {
                 dismissProgress();
                 String json = (String) obj;
                 if (StringUtil.isEmpty(json)) {
@@ -395,9 +394,9 @@ public class EditUserInfoAct extends BaseActivity {
                     return;
                 }
                 JSONObject jsonObject = JSON.parseObject(json);
-                Integer code = jsonObject.getInteger("code");
-                if (code != null) {
-                    switch (code) {
+                Integer code2 = jsonObject.getInteger("code");
+                if (code2 != null) {
+                    switch (code2) {
                         case 200:
                             UIUtil.showToastSafe("保存成功");
                             GlobalParams.saveUser(usvo);
@@ -414,7 +413,7 @@ public class EditUserInfoAct extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showToastSafe(obj != null ? (String) obj : "访问出错，请稍后再试");
             }
@@ -529,7 +528,7 @@ public class EditUserInfoAct extends BaseActivity {
     private class AreaCallBack implements CallBack {
 
         @Override
-        public void onSuccess(Object obj) {
+        public void onSuccess(Object obj, int... code) {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
             JSONObject jsonObj = JSON.parseObject(jsonTemp);
@@ -551,7 +550,7 @@ public class EditUserInfoAct extends BaseActivity {
         }
 
         @Override
-        public void onFailure(Object obj) {
+        public void onFailure(Object obj, int... code) {
             Message msg = mHandler.obtainMessage();
             msg.what = GET_AREA_ERROR;
             msg.obj = obj;

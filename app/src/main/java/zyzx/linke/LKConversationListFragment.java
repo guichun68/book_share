@@ -47,7 +47,7 @@ public class LKConversationListFragment extends BaseFragment {
                 showProgress("请稍后……");
                 getUserPresenter().getUserInfoInConversation(conversation.conversationId(),new CallBack(){
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String userJson = (String) obj;
                         mUserVO = JSON.parseObject(userJson,UserVO.class);
@@ -68,13 +68,13 @@ public class LKConversationListFragment extends BaseFragment {
                             return;
                         }
                         Intent in = new Intent(getActivity(),ChatActivity.class);
-                        in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLogin_name());
+                        in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLoginName());
                         in.putExtra(BundleFlag.UID,String.valueOf(mUserVO.getUserid()));
                         startActivity(in);
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe("未能获取用户信息");
 

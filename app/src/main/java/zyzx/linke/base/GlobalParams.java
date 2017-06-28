@@ -36,10 +36,13 @@ public class GlobalParams {
 	/**
 	 * 登录URL
 	 */
-	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+//	public static String urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+	public static String urlLogin = GlobalParams.BASE_URL+"/user/mobileSDK/login.action";
+    //第三方账号登录
+	public static String urlthirdLogin = GlobalParams.BASE_URL+"/user/third_platform_login.action";
 
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
-	public static String urlGetSubArea = GlobalParams.BASE_URL+"/app/getSubAreas.action";
+	public static String urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -128,7 +131,7 @@ public class GlobalParams {
 	/**
 	 * 注册
 	 */
-	public static String urlRegist = GlobalParams.BASE_URL+"/zyzx/regist.action";
+	public static String urlRegist = GlobalParams.BASE_URL+"/user/mobileSDK/regUser.action";
 	/**
 	 * 当用户在地图中分享图书成功后，立即更改表zyzx_user_books表中该书籍的状态为“已添加到地图"
 	 */
@@ -158,10 +161,12 @@ public class GlobalParams {
 
 	private static UserVO gUserVO;//登录成功后记录的用户
 	public static void refreshIP(){
-		urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+//		urlLogin = GlobalParams.BASE_URL+"/zyzx/login.action";
+		urlLogin = GlobalParams.BASE_URL+"/user/mobileSDK/login.action";
+        urlthirdLogin = GlobalParams.BASE_URL+"/user/third_platform_login.action";
 		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
-		urlRegist = GlobalParams.BASE_URL+"/zyzx/regist.action";
+		urlRegist = GlobalParams.BASE_URL+"/user/mobileSDK/regUser.action";
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
 		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
@@ -193,7 +198,7 @@ public class GlobalParams {
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
-		urlGetSubArea = GlobalParams.BASE_URL+"/app/getSubAreas.action";
+		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
 	}
 
@@ -205,7 +210,7 @@ public class GlobalParams {
 		return gUserVO;
 	}
 	public static void setCurrUserHeadAvatar(String headAvatar){
-		getLastLoginUser().setHead_icon(headAvatar);
+		getLastLoginUser().setHeadIcon(headAvatar);
 		PreferenceManager.getInstance().setCurrentUserAvatar(headAvatar);
 		EaseUIHelper.getInstance().getUserProfileManager().getCurrentUser().setAvatar(headAvatar);
 	}

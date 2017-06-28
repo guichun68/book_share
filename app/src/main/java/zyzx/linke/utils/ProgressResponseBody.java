@@ -1,10 +1,10 @@
 package zyzx.linke.utils;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ForwardingSource;
@@ -45,7 +45,8 @@ public class ProgressResponseBody extends ResponseBody {
      * @return contentLength
      * @throws IOException 异常
      */
-    @Override public long contentLength() throws IOException {
+    @Override
+    public long contentLength() {
         return responseBody.contentLength();
     }
 
@@ -54,7 +55,7 @@ public class ProgressResponseBody extends ResponseBody {
      * @return BufferedSource
      * @throws IOException 异常
      */
-    @Override public BufferedSource source() throws IOException {
+    @Override public BufferedSource source() {
         if (bufferedSource == null) {
             //包装
             bufferedSource = Okio.buffer(source(responseBody.source()));

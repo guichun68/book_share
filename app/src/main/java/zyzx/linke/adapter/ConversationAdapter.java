@@ -121,8 +121,8 @@ public class ConversationAdapter extends ArrayAdapter<EMConversation> {
                 UserDao.getInstance(getContext()).updateUser(new UserVO(userId,loginName,headIconUrl));
             }
             UserVO u = UserDao.getInstance(getContext()).queryUserByUid(userId);
-            Glide.with(getContext()).load(u.getHead_icon()).into(holder.avatar);
-            holder.name.setText(u.getLogin_name());
+            Glide.with(getContext()).load(u.getHeadIcon()).into(holder.avatar);
+            holder.name.setText(u.getLoginName());
             holder.motioned.setVisibility(View.GONE);
         }
 

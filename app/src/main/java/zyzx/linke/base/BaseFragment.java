@@ -19,14 +19,18 @@ import zyzx.linke.utils.CustomProgressDialog;
 
 /**
  * Created by austin on 2017/3/25.
+ * Desc:
  */
 
 public abstract class BaseFragment extends Fragment{
+    private Dialog mProgressDialog,mProDialogWithTip,mToastDialog;
+
     protected Context mContext;
     protected TextView mTitleText;
     protected ImageView mBackBtn;
     protected ImageView mRightBtn;
     protected View mRootView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,15 +47,12 @@ public abstract class BaseFragment extends Fragment{
         if (parent != null) {
             parent.removeView(mRootView);
         }
-
         return mRootView;
     }
 
     protected abstract View getView(LayoutInflater inflater, ViewGroup container);
 
     public abstract void initView() ;
-
-
 
     protected void initTitleBar() {
 //        Log.e("initTitleBar:",this.toString());
@@ -83,9 +84,6 @@ public abstract class BaseFragment extends Fragment{
         return mUserPresenter;
     }
 
-    private Dialog mProgressDialog;
-    private Dialog mProgressDialogWithTip;
-
     /**
      * 显示默认的不确定进度条
      */
@@ -99,20 +97,19 @@ public abstract class BaseFragment extends Fragment{
      * 显示默认的不确定进度条
      */
     protected void showProgress(String tip){
-        if(mProgressDialogWithTip == null){
-//            mProgressDialogWithTip = CustomProgressDialog.getNewProgressBar(mContext,tip);
-            mProgressDialogWithTip = CustomProgressDialog.getProgressUtil().getRequestDialog(getContext(),null);
+        if(mProDialogWithTip == null){
+//            mProDialogWithTip = CustomProgressDialog.getNewProgressBar(mContext,tip);
+            mProDialogWithTip = CustomProgressDialog.getProgressUtil().getRequestDialog(getContext(),null);
         }
-        mProgressDialogWithTip.show();
+        mProDialogWithTip.show();
     }
 
     protected void dismissProgress(){
         CustomProgressDialog.dismissDialog(mProgressDialog);
-        CustomProgressDialog.dismissDialog(mProgressDialogWithTip);
+        CustomProgressDialog.dismissDialog(mProDialogWithTip);
         CustomProgressDialog.dismissDialog(mToastDialog);
     }
 
-    private Dialog mToastDialog;
     protected void showToastDialog(String msg){
         mToastDialog = CustomProgressDialog.getToastDialog(getContext(),msg);
         mToastDialog.setCancelable(true);

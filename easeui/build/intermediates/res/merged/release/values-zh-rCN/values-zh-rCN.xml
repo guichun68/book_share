@@ -112,6 +112,7 @@
     <string name="add_friend">添加好友</string>
     <string name="add_public_chat_room">添加聊天室</string>
     <string name="add_public_group_chat">添加公开群</string>
+    <string name="address">%1$s%2$s</string>
     <string name="address_book">通讯录</string>
     <string name="agree">同意</string>
     <string name="all_members">所有成员</string>

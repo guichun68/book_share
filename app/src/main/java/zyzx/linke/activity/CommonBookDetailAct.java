@@ -90,12 +90,12 @@ public class CommonBookDetailAct extends BaseActivity {
                 mBook.setFromDouban(true);
                 getBookPresenter().addBook2MyLib(mBook,GlobalParams.getLastLoginUser().getUserid(), new CallBack() {
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String responseJson = (String)obj;
                         JSONObject jsonObject = JSON.parseObject(responseJson);
-                        int code = jsonObject.getInteger("code");
-                        if(code == 200){
+                        int code2 = jsonObject.getInteger("code");
+                        if(code2 == 200){
                             bookId = jsonObject.getInteger("bookId");
                             mBook.setB_id(bookId);
                             UIUtil.showToastSafe("添加成功");
@@ -105,13 +105,13 @@ public class CommonBookDetailAct extends BaseActivity {
                                     showAskIfShareOnMapDialog();
                                 }
                             });
-                        }else if(code == 500){
+                        }else if(code2 == 500){
                             UIUtil.showToastSafe("未能成功添加书籍信息");
                         }
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                     }
                 });

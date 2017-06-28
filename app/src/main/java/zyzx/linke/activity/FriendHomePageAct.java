@@ -100,13 +100,13 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         }
         getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(Object obj, int... code) {
                 String userJson = (String) obj;
                 mUserVO = JSON.parseObject(userJson,UserVO.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvLoginname.setText(mUserVO !=null? mUserVO.getLogin_name():"用户不存在");
+                        tvLoginname.setText(mUserVO !=null? mUserVO.getLoginName():"用户不存在");
                         if(mUserVO !=null){
                             if(!StringUtil.isEmpty(mUserVO.getSignature())){
                                 tvSignature.setText(mUserVO.getSignature());
@@ -114,8 +114,8 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                                 tvSignature.setText(UIUtil.getString(R.string.nowordsig));
                             }
                         }
-                        if(!StringUtil.isEmpty(mUserVO.getHead_icon())){
-                            Glide.with(mContext).load(mUserVO.getHead_icon()).into(ivHeadIcon);
+                        if(!StringUtil.isEmpty(mUserVO.getHeadIcon())){
+                            Glide.with(mContext).load(mUserVO.getHeadIcon()).into(ivHeadIcon);
                         }else{
                             Glide.with(mContext).load(R.mipmap.person).asBitmap().into(ivHeadIcon) ;
                         }
@@ -124,7 +124,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 UIUtil.showToastSafe("未能获取用户信息");
             }
         });
@@ -152,7 +152,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     public void getBooks(String uid,int pageNum){
         getBookPresenter().getUserBooks(uid, pageNum, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -171,7 +171,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -205,7 +205,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                     getUserPresenter().addFriend(mUserVO.getUserid(),new CallBack(){
 
                         @Override
-                        public void onSuccess(Object obj) {
+                        public void onSuccess(Object obj, int... code) {
                             dismissProgress();
                             String json = (String) obj;
                             if(StringUtil.isEmpty(json)){
@@ -213,19 +213,18 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                                 return;
                             }
                             JSONObject jsonObj = JSON.parseObject(json);
-                            int code = jsonObj.getInteger("code");
-                            if(code==500){
+                            if(code[0]==500){
                                 //在对方的黑名单中
                                 GlobalParams.shouldRefreshContactList = true;
                                 UIUtil.showToastSafe(R.string.error_chat);
                                 return;
-                            }else if(code ==200){
+                            }else if(code[0] ==200){
                                 //添加成功
-                                UIUtil.showToastSafe("已添加好友"+ mUserVO.getLogin_name());
+                                UIUtil.showToastSafe("已添加好友"+ mUserVO.getLoginName());
                                 GlobalParams.shouldRefreshContactList = true;
                                 Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
                                 in.putExtra(BundleFlag.UID,String.valueOf(mUserVO.getUserid()));
-                                in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLogin_name());
+                                in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLoginName());
                                 startActivity(in);
                             }else{
                                 UIUtil.showToastSafe("添加好友失败！");
@@ -233,7 +232,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
                         }
 
                         @Override
-                        public void onFailure(Object obj) {
+                        public void onFailure(Object obj, int... code) {
                             dismissProgress();
                             UIUtil.showToastSafe("请求出错,请稍后再试！");
                         }

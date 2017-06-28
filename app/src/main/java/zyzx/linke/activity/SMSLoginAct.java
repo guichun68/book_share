@@ -55,9 +55,8 @@ public class SMSLoginAct extends BaseActivity {
                 final TimeUtils tu = new TimeUtils(btnSendVerifyCode,"发送验证码");
                 getUserPresenter().sendLoginSMSVerifyCode(aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
-                    public void onSuccess(Object obj) {
-                        Integer code = (Integer) obj;
-                        switch (code){
+                    public void onSuccess(Object obj, int... code) {
+                        switch (code[0]){
                             case 200://发送成功
                                 tu.runTimer();
                                 break;
@@ -75,7 +74,7 @@ public class SMSLoginAct extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         UIUtil.showTestLog("zyzx","sms verifyCode send failure.");
                     }
                 });

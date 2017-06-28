@@ -200,7 +200,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     getBookPresenter().deleteUserBook(GlobalParams.getLastLoginUser().getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
 
                         @Override
-                        public void onSuccess(final Object obj) {
+                        public void onSuccess(final Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -222,7 +222,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         }
 
                         @Override
-                        public void onFailure(Object obj) {
+                        public void onFailure(Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -246,7 +246,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     pop.dismiss();
                     getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
-                        public void onSuccess(final Object obj) {
+                        public void onSuccess(final Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -268,7 +268,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         }
 
                         @Override
-                        public void onFailure(Object obj) {
+                        public void onFailure(Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -285,7 +285,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     showDefProgress();
                     getBookPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
-                        public void onSuccess(final Object obj) {
+                        public void onSuccess(final Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -311,7 +311,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         }
 
                         @Override
-                        public void onFailure(Object obj) {
+                        public void onFailure(Object obj, int... code) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -375,7 +375,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private void getBooks(Integer userid, int pageNum) {
         getBookPresenter().getMyBooks(userid, pageNum, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -399,7 +399,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

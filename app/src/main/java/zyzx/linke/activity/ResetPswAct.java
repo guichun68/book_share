@@ -61,7 +61,7 @@ public class ResetPswAct extends BaseActivity{
                 getUserPresenter().resetPsw(mUserId,newPsw,new CallBack(){
 
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String json = (String) obj;
                         if(StringUtil.isEmpty(json)){
@@ -69,8 +69,7 @@ public class ResetPswAct extends BaseActivity{
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        int code = jsonObj.getInteger("code");
-                        if(code == 200){
+                        if(code[0] == 200){
                             UIUtil.showToastSafe("重置成功,请重新登录");
                             finish();
                         }else{
@@ -79,7 +78,7 @@ public class ResetPswAct extends BaseActivity{
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe(R.string.err_request);
                     }

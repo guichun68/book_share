@@ -33,5 +33,5 @@
         android:layout_above="@id/tip"
         android:layout_marginBottom="30dp"
         android:gravity="center_horizontal"
-        android:text="NearBook"/>
+        android:text="BookShare"/>
 </RelativeLayout>

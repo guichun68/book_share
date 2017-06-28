@@ -55,9 +55,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/aet_isbn"

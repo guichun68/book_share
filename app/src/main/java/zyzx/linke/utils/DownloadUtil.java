@@ -3,20 +3,20 @@ package zyzx.linke.utils;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class DownloadUtil {
 
@@ -35,16 +35,16 @@ public class DownloadUtil {
     }
 
     /**
-     * @param url 下载连接
-     * @param saveDir 储存下载文件的SDCard目录
+     * @param url      下载连接
+     * @param saveDir  储存下载文件的SDCard目录
      * @param listener 下载监听
      */
     public void download(final String url, final String saveDir, HashMap<String, Object> param, final OnDownloadListener listener) {
         Request request;
-        if(param!=null){
-            FormEncodingBuilder fb = new FormEncodingBuilder();
+        if (param != null) {
+            FormBody.Builder fb = new FormBody.Builder();
             for (Map.Entry<String, Object> et : param.entrySet()) {
-                fb.add(et.getKey(), (String)et.getValue());
+                fb.add(et.getKey(), (String) et.getValue());
             }
             RequestBody body = fb.build();
 
@@ -52,17 +52,18 @@ public class DownloadUtil {
                     .url(url)
                     .post(body)
                     .build();
-        }else{
+        } else {
             request = new Request.Builder().url(url).build();
         }
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 // 下载失败
                 listener.onDownloadFailed();
             }
+
             @Override
-            public void onResponse( Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 InputStream is = null;
                 byte[] buf = new byte[2048];
                 int len = 0;
@@ -80,7 +81,7 @@ public class DownloadUtil {
                         sum += len;
                         int progress = (int) (sum * 1.0f / total * 100);
                         // 下载中
-                        listener.onDownloading(total,progress);
+                        listener.onDownloading(total, progress);
                     }
                     fos.flush();
                     // 下载完成
@@ -106,8 +107,7 @@ public class DownloadUtil {
     /**
      * @param saveDir
      * @return
-     * @throws IOException
-     * 判断下载目录是否存在
+     * @throws IOException 判断下载目录是否存在
      */
     private String isExistDir(String saveDir) throws IOException {
         // 下载位置
@@ -121,8 +121,7 @@ public class DownloadUtil {
 
     /**
      * @param url
-     * @return
-     * 从下载连接中解析出文件名
+     * @return 从下载连接中解析出文件名
      */
     @NonNull
     private String getNameFromUrl(String url) {
@@ -136,10 +135,9 @@ public class DownloadUtil {
         void onDownloadSuccess();
 
         /**
-         * @param progress
-         * 下载进度
+         * @param progress 下载进度
          */
-        void onDownloading(long total,int progress);
+        void onDownloading(long total, int progress);
 
         /**
          * 下载失败

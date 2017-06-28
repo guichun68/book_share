@@ -294,6 +294,7 @@ public class CaptureActivity extends Activity implements Callback {
 		if(rawResult==null && barcode == null){
 			dialogView.findViewById(R.id.tv_result).setVisibility(View.GONE);
 			dialogView.findViewById(R.id.ll_center).setVisibility(View.GONE);
+			dialogView.findViewById(R.id.ll_bottom).setVisibility(View.VISIBLE);
 		}
 		dialog.show();
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

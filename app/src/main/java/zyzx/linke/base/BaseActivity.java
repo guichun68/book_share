@@ -89,14 +89,18 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
     }
     /**
      * 显示默认的不确定进度条
+     * @param tip 提示文字
+     * @param args  args[0] 代表dialog弹出后会点击屏幕或物理返回键，dialog消不消失（false不消失）
      */
-    protected void showProgress(String tip){
+    protected void showProgress(String tip,Boolean ...args){
         if(mProgressDialogWithTip == null){
 //            mProgressDialogWithTip = CustomProgressDialog.getNewProgressBar(mContext,tip);
             mProgressDialogWithTip = CustomProgressDialog.getProgressUtil().getRequestDialog(this,tip);
         }
+        mProgressDialogWithTip.setCancelable(args.length>0?args[0]:true);
         mProgressDialogWithTip.show();
     }
+
 
     protected void dismissProgress(){
         CustomProgressDialog.dismissDialog(mProgressDialog);

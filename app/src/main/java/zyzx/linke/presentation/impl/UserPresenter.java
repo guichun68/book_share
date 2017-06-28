@@ -1,5 +1,7 @@
 package zyzx.linke.presentation.impl;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hyphenate.EMValueCallBack;
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import zyzx.linke.R;
@@ -17,6 +20,7 @@ import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.FeedBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.presentation.IUserPresenter;
 import zyzx.linke.utils.PreferenceManager;
@@ -47,34 +51,40 @@ public class UserPresenter extends IUserPresenter {
         try {
            getModel().post(GlobalParams.urlLogin, param, new CallBack() {
                @Override
-               public void onSuccess(Object obj) {
+               public void onSuccess(Object obj, int... code) {
                    String response = (String)obj;
-                   if(response.contains("</html>")||response.contains("<html>")||response.contains("</HTML>")||response.contains("<HTML>")){
-                       if(viewCallBack!=null){
-                           viewCallBack.onFailure("服务器错误，请检查URL");
-                       }
-                       return;
-                   }
-                   JSONObject jsonObject = JSON.parseObject(response);
-                   int code = jsonObject.getInteger("code");
-                   if(code == 200){
+                   ResponseJson rj = new ResponseJson(response);
+                   if(rj.errorCode == 1){
                        //登录成功
-                       UserVO u = jsonObject.getObject("user",UserVO.class);
+                       UserVO u = new UserVO();
+                       Iterator<Object> it = rj.data.iterator();
+                       while(it.hasNext()){
+                           JSONObject jo = (JSONObject) it.next();
+                           u.setErrorCode(rj.errorCode);
+                           u.setCreditScore(jo.getInteger("credit_socre"));
+                           u.setLoginName(jo.getString("loginName"));
+                           u.setHeadIcon(jo.getString("photo"));
+                           u.setPassword(jo.getString("psw"));
+                           u.setRealName(jo.getString("realName"));
+                           u.setUrl(jo.getString("url"));
+                           u.setUserid(jo.getInteger("userid"));
+                       }
                        GlobalParams.saveUser(u);
                        if(viewCallBack!=null){
                            viewCallBack.onSuccess(true);
                        }
-                   }else if(code==404){
+                   }else if(rj.errorCode==0){
+                       Log.e("failure","登录失败");
                        if(viewCallBack!=null) {
-                           viewCallBack.onFailure("无此用户");
+                           viewCallBack.onFailure(rj.errorMsg);
                        }
                    }else if(viewCallBack!=null){
-                           viewCallBack.onFailure("用户名或密码错误");
+                           viewCallBack.onFailure("登录错误" );
                    }
                }
 
                @Override
-               public void onFailure(Object obj) {
+               public void onFailure(Object obj, int... code) {
                    if(viewCallBack!=null){
                        viewCallBack.onFailure("连接服务器失败,请检查网络连接");
                    }
@@ -95,17 +105,11 @@ public class UserPresenter extends IUserPresenter {
         try {
             getModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String response = (String)obj;
-                    if(response.toLowerCase().contains("</html>")){
-                        if(viewCallBack!=null){
-                            viewCallBack.onFailure("服务器错误，请检查URL");
-                        }
-                        return;
-                    }
                     JSONObject jsonObject = JSON.parseObject(response);
-                    int code = jsonObject.getInteger("code");
-                    if(code == 200){
+                    int code2 = jsonObject.getInteger("code");
+                    if(code2 == 200){
                         GlobalParams.gVerifyCode = jsonObject.getInteger("verifyCode");
                         UserVO userVO = jsonObject.getObject("user",UserVO.class);
                         PreferenceManager.getInstance().saveLastLoginUser(userVO);
@@ -118,7 +122,7 @@ public class UserPresenter extends IUserPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     UIUtil.showTestLog("zyzx","beijing");
                 }
             });
@@ -130,42 +134,35 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void regist(String userName, String psw, String phone, final CallBack viewCallBack) {
         HashMap<String,Object> param = getParam();
-        param.put("login_name",userName);
+        param.put("loginName",userName);
         param.put("password",psw);
         param.put("phone",phone);
         try {
             getModel().post(GlobalParams.urlRegist, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String response = (String)obj;
-                    if(response.toLowerCase().contains("</html>")){
+                    ResponseJson rj = new ResponseJson(response);
+                    if(rj.errorCode == 0){
                         if(viewCallBack!=null){
-                            viewCallBack.onFailure("服务器错误，请检查URL");
+                            viewCallBack.onSuccess(rj.errorCode);
                         }
-                        return;
-                    }
-                    JSONObject jsonObject = JSON.parseObject(response);
-                    int code = jsonObject.getInteger("code");
-                    if(code == 200){
-                        GlobalParams.saveUser(jsonObject.getObject("user",UserVO.class));
                     }else{
-                        GlobalParams.saveUser(null);
-                    }
-                    if(viewCallBack!=null){
-                        viewCallBack.onSuccess(code);
+                        if(viewCallBack !=null){
+                            viewCallBack.onFailure(rj.errorMsg,rj.errorCode);
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     if(viewCallBack!=null){
-                        viewCallBack.onFailure("网络错误，请稍后重试！");
+                        viewCallBack.onFailure(UIUtil.getString(R.string.network_error));
                     }
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -176,7 +173,7 @@ public class UserPresenter extends IUserPresenter {
         try {
             getModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     if(obj != null){
                         if(viewCallBack!=null){
                             viewCallBack.onSuccess(obj);
@@ -185,7 +182,7 @@ public class UserPresenter extends IUserPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     UIUtil.showTestLog("zyzx","根据uid获取用户信息失败！");
                     UIUtil.showTestLog("zyzx",obj.toString());
                 }
@@ -200,14 +197,15 @@ public class UserPresenter extends IUserPresenter {
         HashMap<String,Object> params = getParam();
         params.put("head_icon",new File(imagePath));
         params.put("user_id",userId);
-        try {
+        //TODO 新接口待实现
+        /*try {
             getModel().post2(GlobalParams.urlUploadHeadIcon,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {
                 viewCallBack.onFailure("上传失败");
             }
-        }
+        }*/
     }
 
     @Override
@@ -248,7 +246,7 @@ public class UserPresenter extends IUserPresenter {
         try {
             getModel().post(GlobalParams.urlGetFriends, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String json = (String) obj;
                     if (StringUtil.isEmpty(json)) {
                         UIUtil.showToastSafe("未能获取好友信息");
@@ -261,8 +259,8 @@ public class UserPresenter extends IUserPresenter {
                     List<EaseUser> easeUsers = new ArrayList<>();
                     for (int i = 0; i < friends.size(); i++) {
                         EaseUser u2 = new EaseUser(String.valueOf(friends.get(i).getUserid()));
-                        u2.setAvatar(friends.get(i).getHead_icon());
-                        u2.setNickname(friends.get(i).getLogin_name());
+                        u2.setAvatar(friends.get(i).getHeadIcon());
+                        u2.setNickname(friends.get(i).getLoginName());
                         easeUsers.add(u2);
                     }
                     EaseUIHelper.getInstance().saveContactList(easeUsers);
@@ -272,7 +270,7 @@ public class UserPresenter extends IUserPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
 
                 }
             });
@@ -440,14 +438,15 @@ public class UserPresenter extends IUserPresenter {
         HashMap<String,Object> params = getParam();
         params.put("file",new File(filePath));
         params.put("user_id",userId);
-        try {
+        //TODO 新接口待实现
+        /*try {
             getModel().post2(GlobalParams.urlUploadExcel, params, viewCallBack);
         }catch (Exception e){
             if(viewCallBack!=null){
                 viewCallBack.onFailure("导入失败！");
                 UIUtil.showTestLog("zyzx",e.getMessage());
             }
-        }
+        }*/
     }
 
     @Override
@@ -471,6 +470,20 @@ public class UserPresenter extends IUserPresenter {
         params.put("user",JSON.toJSONString(user));
         try {
             getModel().post(GlobalParams.urlSaveUserInfo,params,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("访问出错，请稍后再试.");
+            }
+        }
+    }
+
+    @Override
+    public void loginByThirdPlatform(String paramJSON,CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("param",paramJSON);
+        try {
+            getModel().post(GlobalParams.urlthirdLogin,param,callBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(callBack!=null){

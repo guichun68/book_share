@@ -6,6 +6,6 @@ package zyzx.linke.model;
  */
 
 public interface CallBack {
-    void onSuccess(Object obj);
-    void onFailure(Object obj);
+    void onSuccess(Object obj, int... code);
+    void onFailure(Object obj, int... code);
 }

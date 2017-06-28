@@ -9,8 +9,6 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.android.volley.Response;
 
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.UpdateBeanVO;
@@ -45,7 +43,7 @@ public class UpdateService extends Service implements CallBack {
 	}
 
 	@Override
-	public void onSuccess(Object obj) {
+	public void onSuccess(Object obj, int... code) {
 		String response = (String) obj;
 		GlobalParams.isCheckedUpdate = true;
 		if(StringUtil.isEmpty(response)){
@@ -97,7 +95,7 @@ public class UpdateService extends Service implements CallBack {
 	}
 
 	@Override
-	public void onFailure(Object obj) {
+	public void onFailure(Object obj, int... code) {
 		GlobalParams.isCheckedUpdate = true;
 	}
 

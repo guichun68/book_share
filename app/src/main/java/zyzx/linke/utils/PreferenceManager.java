@@ -17,10 +17,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import zyzx.linke.model.bean.UserVO;
 
@@ -264,8 +267,8 @@ public class PreferenceManager {
 			return null;
 		}
 		int value;
-		u.setLogin_name(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_NICK,""));
-		u.setMobile_phone(mSharedPreferences.getString(KEY_MOBILE_PHONE,""));
+		u.setLoginName(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_NICK,""));
+		u.setMobilePhone(mSharedPreferences.getString(KEY_MOBILE_PHONE,""));
 		u.setAddress(mSharedPreferences.getString(KEY_ADDRESS,""));
 		u.setPassword(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_HSH,""));
 		value = mSharedPreferences.getInt(KEY_GENDER,-1);
@@ -275,7 +278,7 @@ public class PreferenceManager {
 		u.setGenderName(mSharedPreferences.getString(KEY_GENDER_NAME,""));
 		u.setHobby(mSharedPreferences.getString(KEY_HOBBY,""));
 		u.setEmail(mSharedPreferences.getString(KEY_EMAIL,""));
-		u.setReal_name(mSharedPreferences.getString(KEY_REAL_NAME,""));
+		u.setRealName(mSharedPreferences.getString(KEY_REAL_NAME,""));
 		u.setCityName(mSharedPreferences.getString(KEY_CITY_NAME,""));
 		value = mSharedPreferences.getInt(KEY_CITY_ID,-1);
 		if(value!=-1){
@@ -283,7 +286,7 @@ public class PreferenceManager {
 		}
 		u.setLastLoginTime(mSharedPreferences.getString(KEY_LAST_LOGIN_TIME,""));
 		u.setSignature(mSharedPreferences.getString(KEY_SIGNATURE,""));
-		u.setHead_icon(mSharedPreferences.getString(KEY_CURRENTUSER_AVATAR,""));
+		u.setHeadIcon(mSharedPreferences.getString(KEY_CURRENTUSER_AVATAR,""));
 		u.setBak4(mSharedPreferences.getString(KEY_BAK4,""));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -332,12 +335,12 @@ public class PreferenceManager {
 			editor.commit();
 			return;
 		}
-		editor.putString(KEY_LAST_LOGIN_USER_NICK, u.getLogin_name());
+		editor.putString(KEY_LAST_LOGIN_USER_NICK, u.getLoginName());
 		if(u.getUserid()!=null){
 			editor.putInt(KEY_LAST_LOGIN_USER_ID,u.getUserid());
 		}
-		if(!TextUtils.isEmpty(u.getMobile_phone())){
-			editor.putString(KEY_MOBILE_PHONE,u.getMobile_phone());
+		if(!TextUtils.isEmpty(u.getMobilePhone())){
+			editor.putString(KEY_MOBILE_PHONE,u.getMobilePhone());
 		}
 		if(!TextUtils.isEmpty(u.getAddress())){
 			editor.putString(KEY_ADDRESS,u.getAddress());
@@ -358,8 +361,8 @@ public class PreferenceManager {
 		if(!TextUtils.isEmpty(u.getEmail())){
             editor.putString(KEY_EMAIL,u.getEmail());
         }
-		if(!TextUtils.isEmpty(u.getReal_name())){
-            editor.putString(KEY_REAL_NAME,u.getReal_name());
+		if(!TextUtils.isEmpty(u.getRealName())){
+            editor.putString(KEY_REAL_NAME,u.getRealName());
         }
         if(!TextUtils.isEmpty(u.getCityName())){
 			editor.putString(KEY_CITY_NAME,u.getCityName());
@@ -373,8 +376,8 @@ public class PreferenceManager {
 		if(!TextUtils.isEmpty(u.getSignature())){
 			editor.putString(KEY_SIGNATURE,u.getSignature());
 		}
-		if(!TextUtils.isEmpty(u.getHead_icon())){
-			editor.putString(KEY_CURRENTUSER_AVATAR,u.getHead_icon());
+		if(!TextUtils.isEmpty(u.getHeadIcon())){
+			editor.putString(KEY_CURRENTUSER_AVATAR,u.getHeadIcon());
 		}
 		if(!TextUtils.isEmpty(u.getBak4())){
 			editor.putString(KEY_BAK4,u.getBak4());
@@ -579,4 +582,24 @@ public class PreferenceManager {
 	public String getLastLoginUserPSWHASH() {
 		return mSharedPreferences.getString(KEY_LAST_LOGIN_USER_HSH, null);
 	}
+
+	public void saveCookie(HashSet<String> cookie){
+		Iterator<String> it = cookie.iterator();
+		for(int i=0;it.hasNext();i++){
+			String value = it.next();
+			editor.putString("cookie"+i,value);
+			UIUtil.showTestLog("cookie","cookie"+i+":"+value);
+			editor.putInt("cookie_size",i);
+		}
+		editor.commit();
+	}
+	public HashSet<String> getCookie(){
+		HashSet<String> cookies = new HashSet<>();
+		int cookieSize = mSharedPreferences.getInt("cookie_size",0);
+		for(int i=0;i<cookieSize;i++){
+			cookies.add(mSharedPreferences.getString("cookie"+i,""));
+		}
+		return cookies;
+	}
+
 }

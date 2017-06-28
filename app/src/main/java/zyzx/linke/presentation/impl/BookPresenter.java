@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
@@ -15,7 +16,6 @@ import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.presentation.IBookPresenter;
-import zyzx.linke.base.GlobalParams;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -32,7 +32,7 @@ public class BookPresenter extends IBookPresenter {
         try {
             getModel().post(GlobalParams.urlISBNAPI+isbn,null, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String response = (String)obj;
                     if(response.toLowerCase().contains("</html>")){
                         if(viewCallBack!=null){
@@ -41,8 +41,8 @@ public class BookPresenter extends IBookPresenter {
                         return;
                     }
                     JSONObject jsonObject = JSON.parseObject(response);
-                    Integer code = jsonObject.getInteger("code");
-                    if(code != null){
+                    Integer code2 = jsonObject.getInteger("code");
+                    if(code2 != null){
                         viewCallBack.onFailure("未找到相关书籍信息");
                         UIUtil.showTestLog("zyzx",jsonObject.getString("msg"));
                         return;
@@ -54,7 +54,7 @@ public class BookPresenter extends IBookPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     viewCallBack.onFailure("未找到相关书籍信息");
                 }
             });
@@ -90,11 +90,11 @@ public class BookPresenter extends IBookPresenter {
 //        param.put("filter","uid:"+userid+"");
         param.put("user_id",String.valueOf(userid));
         param.put("book_id",String.valueOf(bookDetail.getB_id()));
-        param.put("user_name",GlobalParams.getLastLoginUser().getLogin_name());
-        if(StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHead_icon())){
+        param.put("user_name",GlobalParams.getLastLoginUser().getLoginName());
+        if(StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())){
             param.put("head_url",GlobalParams.urlDefHeadIcon);
         }else{
-            param.put("head_url",GlobalParams.getLastLoginUser().getHead_icon());
+            param.put("head_url",GlobalParams.getLastLoginUser().getHeadIcon());
         }
 
         try {
@@ -117,7 +117,7 @@ public class BookPresenter extends IBookPresenter {
 
         getModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(Object obj, int... code) {
                 String json = (String) obj;
                 UIUtil.showTestLog("zyzx",json);
                 QueryBookAroundMap queriedBooks = JSON.parseObject(json, QueryBookAroundMap.class);
@@ -127,7 +127,7 @@ public class BookPresenter extends IBookPresenter {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 UIUtil.showTestLog("zyzx_failure",obj.toString());
             }
         });
@@ -142,7 +142,7 @@ public class BookPresenter extends IBookPresenter {
         try {
             getModel().post(GlobalParams.urlGetUserBooks, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String jsonResult = (String) obj;
                     List<BookDetail2> bookDetails = JSONObject.parseArray(jsonResult, BookDetail2.class);
                     if(viewCallBack!=null){
@@ -151,7 +151,7 @@ public class BookPresenter extends IBookPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     if(viewCallBack!=null){
                         viewCallBack.onFailure(obj);
                     }
@@ -170,7 +170,7 @@ public class BookPresenter extends IBookPresenter {
         try {
             getModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     if(obj.toString().toLowerCase().contains("</html>")){
                         UIUtil.showToastSafe(R.string.network_error);
                         onFailure(obj);
@@ -180,7 +180,7 @@ public class BookPresenter extends IBookPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                         UIUtil.showTestLog("zyzx","access book interface failure.");
                 }
             });
@@ -192,14 +192,15 @@ public class BookPresenter extends IBookPresenter {
 
     @Override
     public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {
-        try {
+        //TODO 新接口待实现
+        /*try {
             getModel().post2(GlobalParams.urlUploadBook,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {
                 viewCallBack.onFailure("上传失败");
             }
-        }
+        }*/
     }
 
     @Override
@@ -210,7 +211,7 @@ public class BookPresenter extends IBookPresenter {
         try {
             getModel().post(GlobalParams.urlGetMyBooks, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String json = (String) obj;
                     if(StringUtil.isEmpty(json)){
                         if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
@@ -223,7 +224,7 @@ public class BookPresenter extends IBookPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
                 }
             });
@@ -285,7 +286,7 @@ public class BookPresenter extends IBookPresenter {
         try {
             getModel().post(GlobalParams.urlGetMyBorrowedInBooks, param, new CallBack() {
                 @Override
-                public void onSuccess(Object obj) {
+                public void onSuccess(Object obj, int... code) {
                     String json = (String) obj;
                     if(StringUtil.isEmpty(json)){
                         if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
@@ -298,7 +299,7 @@ public class BookPresenter extends IBookPresenter {
                 }
 
                 @Override
-                public void onFailure(Object obj) {
+                public void onFailure(Object obj, int... code) {
                     if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
                 }
             });

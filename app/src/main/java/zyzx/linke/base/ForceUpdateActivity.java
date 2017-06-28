@@ -21,10 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.IOException;

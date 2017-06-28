@@ -99,7 +99,7 @@ public class FriendSearch extends BaseActivity implements PullToRefreshBase.OnRe
     private void searchFriend(String keyWord, final int pageNum, final boolean isLoadingMore) {
         getUserPresenter().searchFriend(keyWord, pageNum, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -133,7 +133,7 @@ public class FriendSearch extends BaseActivity implements PullToRefreshBase.OnRe
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 mPullRefreshListView.onRefreshComplete();
                 mPullRefreshListView.clearAnimation();
                 if(isLoadingMore){

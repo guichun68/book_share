@@ -83,7 +83,7 @@ public class ForgetPswAct extends BaseActivity{
                 getUserPresenter().verifySMSCode(etVerifycode.getText().toString(),mUserId.intValue(),2,new CallBack(){
 
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String json = (String) obj;
                         if(StringUtil.isEmpty(json)){
@@ -91,12 +91,12 @@ public class ForgetPswAct extends BaseActivity{
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        int code = jsonObj.getInteger("code");
-                        if(code ==200){
+                        int code2 = jsonObj.getInteger("code");
+                        if(code2 ==200){
                             Bundle bundle = new Bundle();
                             bundle.putString(BundleFlag.UID,String.valueOf(mUserId));
                             gotoActivity(ResetPswAct.class,true,bundle);
-                        }else if(code ==500){
+                        }else if(code2 ==500){
                             UIUtil.showToastSafe("验证码错误或已过期");
                         }else{
                             UIUtil.showToastSafe(R.string.err_request);
@@ -104,7 +104,7 @@ public class ForgetPswAct extends BaseActivity{
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe(R.string.err_request);
                     }
@@ -119,7 +119,7 @@ public class ForgetPswAct extends BaseActivity{
                 final TimeUtils tu = new TimeUtils(btnSendVerifyCode,"发送验证码");
                 getUserPresenter().sendForgetPswSMSVerifyCode(etPhone.getText().toString().trim(), new CallBack() {
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String json = (String) obj;
                         if(StringUtil.isEmpty(json)){
@@ -127,9 +127,9 @@ public class ForgetPswAct extends BaseActivity{
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        int code = jsonObj.getInteger("code");
+                        int code2 = jsonObj.getInteger("code");
 
-                        switch (code){
+                        switch (code2){
                             case 200://发送成功
                                 tu.runTimer();
                                 mUserId = jsonObj.getInteger("uid");
@@ -144,7 +144,7 @@ public class ForgetPswAct extends BaseActivity{
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe("未能成功发送.");
                         UIUtil.showTestLog("zyzx","sms verifyCode send failure.");

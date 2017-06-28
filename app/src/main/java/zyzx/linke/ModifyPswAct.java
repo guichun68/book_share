@@ -50,7 +50,7 @@ public class ModifyPswAct extends BaseActivity {
                         etNewPsw.getText().toString().trim(),new CallBack(){
 
                             @Override
-                            public void onSuccess(final Object obj) {
+                            public void onSuccess(final Object obj, int... code) {
                                 dismissProgress();
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -82,7 +82,7 @@ public class ModifyPswAct extends BaseActivity {
                             }
 
                             @Override
-                            public void onFailure(Object obj) {
+                            public void onFailure(Object obj, int... code) {
                                 dismissProgress();
                             }
                         });

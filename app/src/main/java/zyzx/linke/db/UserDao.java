@@ -62,8 +62,8 @@ public class UserDao {
 		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("userid", userVO.getUserid());
-		values.put("login_name", userVO.getLogin_name());
-		values.put("head_icon", userVO.getHead_icon());
+		values.put("login_name", userVO.getLoginName());
+		values.put("head_icon", userVO.getHeadIcon());
 		long affectRows = db.insert(TABLE_USER_NAME, null, values);
 		// db.close();
 
@@ -81,10 +81,10 @@ public class UserDao {
 	public void updateUser(UserVO userPO){
 		db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		if(userPO.getLogin_name()!=null)
-			values.put(COLUM_LOGIN_NAME, userPO.getLogin_name());
-		if(userPO.getHead_icon()!=null)
-			values.put(COLUM_HEAD_ICON, userPO.getHead_icon());
+		if(userPO.getLoginName()!=null)
+			values.put(COLUM_LOGIN_NAME, userPO.getLoginName());
+		if(userPO.getHeadIcon()!=null)
+			values.put(COLUM_HEAD_ICON, userPO.getHeadIcon());
 		int affectRows = db.update(TABLE_USER_NAME,values,"userid=?",new String[]{String.valueOf(userPO.getUserid())});
 		UIUtil.print("zyzx-affectRows:"+affectRows);
 	}

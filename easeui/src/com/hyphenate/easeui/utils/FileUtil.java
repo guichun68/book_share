@@ -230,7 +230,7 @@ public class FileUtil {
     }
 
     public static String getExternalStoragePath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/NearBook/";
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/BookShare/";
     }
 
     public static String getDownloadDir(Context context) {

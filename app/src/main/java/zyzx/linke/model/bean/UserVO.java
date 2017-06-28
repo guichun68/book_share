@@ -6,26 +6,26 @@ import java.util.Date;
 public class UserVO implements Serializable, Cloneable{
 	
 	private String genderName;
-
+	private String url;
 	private String provinceName;
 	private String cityName;
 	private String countyName;
 	private String diplomaName;//学历
 
 	private Integer userid;
-	private String login_name;
-	private String mobile_phone;
+	private String loginName;
+	private String mobilePhone;
 	private String address;
 	private String password;
 	private Integer gender;
 	private String hobby;
 	private String email;
-	private String real_name;
+	private String realName;
 	private Integer cityId;
 
 	private String lastLoginTime;
 	private String signature;
-	private String head_icon;//头像地址
+	private String headIcon;//头像地址
 	private String bak4;//勿删，目前已用作返回给会话页面的用户信息时的code使用
 	private Date birthday;
 	private String school;
@@ -34,16 +34,16 @@ public class UserVO implements Serializable, Cloneable{
 	private Integer diplomaId;//学历
 	private String soliloquy;//内心独白
 	private Integer creditScore;//信用积分
+	private Integer fromSystem;//来自哪个系统，1App，2微信，3微博，4qq
 
 	public UserVO() {
 	}
 
 	public UserVO(Integer userId, String loginName, String headIcon){
 		this.userid = userId;
-		this.login_name = loginName;
-		this.head_icon = headIcon;
+		this.loginName = loginName;
+		this.headIcon = headIcon;
 	}
-
 
 	public String getGenderName() {
 		return genderName;
@@ -94,22 +94,6 @@ public class UserVO implements Serializable, Cloneable{
 		this.userid = userid;
 	}
 
-	public String getLogin_name() {
-		return login_name;
-	}
-
-	public void setLogin_name(String login_name) {
-		this.login_name = login_name;
-	}
-
-	public String getMobile_phone() {
-		return mobile_phone;
-	}
-
-	public void setMobile_phone(String mobile_phone) {
-		this.mobile_phone = mobile_phone;
-	}
-
 	public String getAddress() {
 		return address;
 	}
@@ -150,20 +134,20 @@ public class UserVO implements Serializable, Cloneable{
 		this.email = email;
 	}
 
-	public String getReal_name() {
-		return real_name;
-	}
-
-	public void setReal_name(String real_name) {
-		this.real_name = real_name;
-	}
-
 	public Integer getCityId() {
 		return cityId;
 	}
 
 	public void setCityId(Integer cityId) {
 		this.cityId = cityId;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public String getLastLoginTime() {
@@ -180,14 +164,6 @@ public class UserVO implements Serializable, Cloneable{
 
 	public void setSignature(String signature) {
 		this.signature = signature;
-	}
-
-	public String getHead_icon() {
-		return head_icon;
-	}
-
-	public void setHead_icon(String head_icon) {
-		this.head_icon = head_icon;
 	}
 
 	public String getBak4() {
@@ -254,6 +230,46 @@ public class UserVO implements Serializable, Cloneable{
 		this.creditScore = creditScore;
 	}
 
+	public Integer getFromSystem() {
+		return fromSystem;
+	}
+
+	public void setFromSystem(Integer fromSystem) {
+		this.fromSystem = fromSystem;
+	}
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getHeadIcon() {
+		return headIcon;
+	}
+
+	public void setHeadIcon(String headIcon) {
+		this.headIcon = headIcon;
+	}
+
 	@Override
 	public String toString() {
 		return "UserVO{" +
@@ -263,18 +279,18 @@ public class UserVO implements Serializable, Cloneable{
 				", countyName='" + countyName + '\'' +
 				", diplomaName='" + diplomaName + '\'' +
 				", userid=" + userid +
-				", login_name='" + login_name + '\'' +
-				", mobile_phone='" + mobile_phone + '\'' +
+				", loginName='" + loginName + '\'' +
+				", mobilePhone='" + mobilePhone + '\'' +
 				", address='" + address + '\'' +
 				", password='" + password + '\'' +
 				", gender=" + gender +
 				", hobby='" + hobby + '\'' +
 				", email='" + email + '\'' +
-				", real_name='" + real_name + '\'' +
+				", realName='" + realName + '\'' +
 				", cityId=" + cityId +
 				", lastLoginTime='" + lastLoginTime + '\'' +
 				", signature='" + signature + '\'' +
-				", head_icon='" + head_icon + '\'' +
+				", headIcon='" + headIcon + '\'' +
 				", bak4='" + bak4 + '\'' +
 				", birthday='" + birthday + '\'' +
 				", school='" + school + '\'' +

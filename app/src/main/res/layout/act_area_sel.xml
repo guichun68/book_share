@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:background="#33222222"
+    android:focusableInTouchMode="false">
+
+    <include layout="@layout/title_bar"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+         >
+
+        <LinearLayout
+            android:id="@+id/ll_title"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_shangyuanjiao"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="地区选择"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_title"
+            android:background="@color/watermark_hint"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="所选城市:"
+                android:textColor="@color/text_gray1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_pro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:textColor="@color/text_gray1"
+                tool:text="山东" />
+
+            <TextView style="@style/horizontal_line" />
+
+            <TextView
+                android:id="@+id/tv_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:textColor="@color/text_gray1"
+                tool:text="青岛" />
+
+            <TextView style="@style/horizontal_line" />
+
+            <TextView
+                android:id="@+id/tv_county"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:textColor="@color/text_gray1"
+                tool:text="黄岛" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sel"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:background="@color/white"
+            android:paddingRight="10dp" >
+
+            <TableLayout
+                android:id="@+id/tableLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="20px"
+                android:stretchColumns="1"
+                >
+
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10px"
+                    android:scrollbarAlwaysDrawVerticalTrack="false" >
+
+                    <TextView
+                        android:id="@+id/province_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="省份："
+                        android:textColor="@color/text_gray1"/>
+
+                    <Spinner
+                        android:id="@+id/sp_province"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+                    </Spinner>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10px"
+                    android:scrollbarAlwaysDrawVerticalTrack="false" >
+
+                    <TextView
+                        android:id="@+id/city_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="城市："
+                        android:textColor="@color/text_gray1">
+                    </TextView>
+
+                    <Spinner
+                        android:id="@+id/sp_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+                    </Spinner>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10px"
+                    android:scrollbarAlwaysDrawVerticalTrack="false" >
+
+                    <TextView
+                        android:id="@+id/county_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="县城镇："
+                        android:textColor="@color/text_gray1"/>
+
+                    <Spinner
+                        android:id="@+id/sp_county"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+                    </Spinner>
+                </TableRow>
+
+
+
+                <TableRow
+                    android:id="@+id/tableRow4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:scrollbarAlwaysDrawVerticalTrack="false" >
+
+                    <Button
+                        android:id="@+id/btn_cancell"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="取消" />
+
+                    <Button
+                        android:id="@+id/btn_ok"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="确定" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

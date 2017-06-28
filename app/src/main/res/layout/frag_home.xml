@@ -3,42 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <include layout="@layout/title_bar"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/title_bar"
+        android:visibility="gone" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
+        android:layout_alignParentTop="true"
         android:background="@color/title"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:layout_alignParentTop="true"
-        >
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
         <!--自定义标题栏内容-->
         <LinearLayout
             android:id="@+id/rl_title_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/btn_area_choose"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingLeft="5dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:paddingLeft="5dp"
                 >
 
                 <TextView
-                    android:id="@+id/current_city_district_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="更改城市"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/textsize_noData_text" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/btn_area_choose2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/current_city_district_textview2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/default_city"
@@ -46,7 +63,7 @@
                     android:textSize="@dimen/detail_size_img_des" />
 
                 <ImageView
-                    android:id="@+id/up_down_arrow"
+                    android:id="@+id/up_down_arrow2"
                     android:layout_width="@dimen/busroute_offset"
                     android:layout_height="@dimen/busroute_offset"
                     android:layout_marginLeft="@dimen/index_offset"
@@ -57,11 +74,11 @@
 
             <LinearLayout
                 android:id="@+id/ll_search"
-                android:layout_gravity="center_vertical"
-                android:layout_height="@dimen/index_input_height"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_height="@dimen/index_input_height"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="20dp"
+                android:layout_weight="2"
                 android:background="@drawable/search_bar_blue"
                 android:gravity="center_vertical"
                 android:visibility="visible">
@@ -90,22 +107,21 @@
 
             <ImageView
                 android:id="@+id/btn_map"
-                android:layout_gravity="end"
-                android:visibility="invisible"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="10dp"
                 android:layout_width="@dimen/index_map_width"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_gravity="end"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/goto_map_status"
-                android:contentDescription="@string/app_name" />
+                android:visibility="invisible" />
 
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/pull_refresh_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -122,19 +138,13 @@
         ptr:ptrHeaderTextColor="@color/blue_cloud_scheme" />
 
 
-
-
-
-
-
-
     <LinearLayout
         android:id="@+id/lly_noData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_thumb"

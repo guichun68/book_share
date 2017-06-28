@@ -276,10 +276,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     public void refreshUserInfo(){
-        tvUserName.setText(GlobalParams.getLastLoginUser().getLogin_name());
+        tvUserName.setText(GlobalParams.getLastLoginUser().getLoginName());
         tvCreditScore.setText(String.valueOf(GlobalParams.getLastLoginUser().getCreditScore()));
-        if(!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHead_icon())){
-            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHead_icon()).into((CircleImageView)mRootView.findViewById(R.id.civ));
+        if(!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())){
+            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).into((CircleImageView)mRootView.findViewById(R.id.civ));
         }
     }
 
@@ -287,7 +287,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         showDefProgress();
         getUserPresenter().uploadExcelFile(GlobalParams.getLastLoginUser().getUserid(), filePath, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -323,7 +323,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 UIUtil.showToastSafe("导入失败");
             }
         });

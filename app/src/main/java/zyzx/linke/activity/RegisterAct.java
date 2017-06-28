@@ -6,9 +6,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.model.CallBack;
@@ -59,44 +56,42 @@ public class RegisterAct extends BaseActivity {
                 showProgress("请稍后……");
                 getUserPresenter().regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
-                    public void onSuccess(final Object obj) {
+                    public void onSuccess(final Object obj, int... code) {
                         RegisterAct.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 dismissProgress();
-                                Integer code = (Integer) obj;
-                                switch (code) {
-                                    case 200:
-                                        UIUtil.showToastSafe(R.string.regist_succ);
-                                        setResult(300);
-                                        finish();
-                                        break;
-                                    case 201:
-                                        aetPhone.setError(UIUtil.getString(R.string.phoneOccupation));
-                                        Snackbar.make(aetPhone, R.string.phoneOccupation, Snackbar.LENGTH_SHORT).show();
-                                        break;
-                                    case 202:
-                                        aetLoginName.setError(UIUtil.getString(R.string.usernameOccupation));
-                                        Snackbar.make(aetLoginName, R.string.usernameOccupation, Snackbar.LENGTH_SHORT).show();
-                                        break;
-                                    case 500:
-                                        Snackbar.make(btnRegister, R.string.server_err, Snackbar.LENGTH_SHORT).show();
-                                        break;
-                                    default:
-                                        Snackbar.make(aetLoginName,UIUtil.getString(R.string.regist_err)+code,Snackbar.LENGTH_SHORT).show();
-                                        break;
-                                }
+                                UIUtil.showToastSafe(R.string.regist_succ);
+                                setResult(300);
+                                finish();
                             }
                         });
 
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(final Object obj, final int... code) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                UIUtil.showToastSafe("访问出错，请稍后再试");
+                                String errMsg = (String)obj;
+                                if(code.length>0)
+                                    switch (code[0]) {
+                                        case 2:
+                                            aetPhone.setError(errMsg);
+                                            Snackbar.make(aetPhone, errMsg, Snackbar.LENGTH_SHORT).show();
+                                            break;
+                                        case 1:
+                                            aetLoginName.setError(errMsg);
+                                            Snackbar.make(aetLoginName, errMsg, Snackbar.LENGTH_SHORT).show();
+                                            break;
+                                        default:
+                                            Snackbar.make(aetLoginName,errMsg+code[0]+"",Snackbar.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                else{
+                                  UIUtil.showToastSafe(errMsg);
+                                }
                                 dismissProgress();
                             }
                         });

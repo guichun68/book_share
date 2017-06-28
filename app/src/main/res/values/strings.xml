@@ -5,7 +5,7 @@
     <string name="twopsw_not_equal">两次密码不一致</string>
     <string name="forget_psw_title">忘记密码</string>
     <string name="regist"><u>用户注册</u></string>
-    <string name="about_us">关于NearBook</string>
+    <string name="about_us">关于</string>
     <string name="login_third">其他登录方式</string>
     <string name="feed_back">意见反馈</string>
     <string name="import_excel">导入</string>
@@ -15,7 +15,7 @@
     <string name="regist_err">注册失败，code=</string>
     <string name="modify_psw">修改密码</string>
     <string name="regist_succ">注册成功,请登录!</string>
-    <string name="usernameOccupation">用户名已被占用,请使用其他名称</string>
+    <string name="usernameOccupation">用户名已被注册</string>
     <string name="phone">手机号</string>
     <string name="err_phone">手机号码格式错误</string>
     <string name="modify_succ">修改成功!</string>
@@ -55,7 +55,7 @@
 
     <string name="roundGeoFence">圆形地理围栏</string>
     <string name="roundGeoFence_dec">展示圆形地理围栏</string>
-
+    <string name="address">%1$s%2$s</string>
     <string name="polygonGeoFence">多边形地理围栏</string>
     <string name="polygonGeoFence_dec">展示多边形地理围栏</string>
 

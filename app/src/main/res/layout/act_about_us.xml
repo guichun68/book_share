@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NearBook\n\n爱读书，爱分享\n\n寻觅身边的美好"
+            android:text="BookShare\n\n爱读书，爱分享\n\n寻觅身边的美好"
             android:textColor="#BBffffff"
             android:layout_marginTop="100dp"
             android:gravity="center"

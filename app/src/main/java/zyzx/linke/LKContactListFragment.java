@@ -71,7 +71,7 @@ public class LKContactListFragment extends BaseFragment {
                             public void onListItemClicked(final EaseUser user) {
                                 getUserPresenter().getUserInfoInConversation(user.getUsername(),new CallBack(){
                                     @Override
-                                    public void onSuccess(Object obj) {
+                                    public void onSuccess(Object obj, int... code) {
                                         dismissProgress();
                                         String userJson = (String) obj;
                                         UserVO userPOTemp = JSON.parseObject(userJson,UserVO.class);
@@ -98,7 +98,7 @@ public class LKContactListFragment extends BaseFragment {
                                     }
 
                                     @Override
-                                    public void onFailure(Object obj) {
+                                    public void onFailure(Object obj, int... code) {
                                         dismissProgress();
                                         UIUtil.showToastSafe("未能获取用户信息");
 
@@ -143,7 +143,7 @@ public class LKContactListFragment extends BaseFragment {
                 showProgress("正在删除……");
                 getUserPresenter().delFriend(Integer.valueOf(user.getUsername()), new CallBack() {
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         if(dialog!=null) {
                             dialog.dismiss();
@@ -154,8 +154,7 @@ public class LKContactListFragment extends BaseFragment {
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        Integer code = jsonObj.getInteger("code");
-                        if(code!=null && code.intValue()==200 ){
+                        if(code!=null && code[0]==200 ){
                             UIUtil.showToastSafe("已删除"+user.getNickname());
                             //deleteConversation删除和指定用户的对话,参数2：是否删除消息
                             EMClient.getInstance().chatManager()
@@ -173,7 +172,7 @@ public class LKContactListFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         UIUtil.showToastSafe("未能成功删除,请稍后重试!");
                         dismissProgress();
                         if(dialog!=null) {
@@ -190,7 +189,7 @@ public class LKContactListFragment extends BaseFragment {
                 getUserPresenter().addBlackList(user.getUsername(),new CallBack(){
 
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         if(dialog!=null){
                             dialog.dismiss();
@@ -201,8 +200,7 @@ public class LKContactListFragment extends BaseFragment {
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        Integer code = jsonObj.getInteger("code");
-                        if(code!=null && code.intValue()==200){
+                        if(code!=null && code[0]==200){
                             UIUtil.showToastSafe("已添加到黑名单");
                             EMClient.getInstance().chatManager()
                                     .deleteConversation(user.getUsername(), true);
@@ -219,7 +217,7 @@ public class LKContactListFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                     }
                 });

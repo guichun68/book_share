@@ -78,7 +78,7 @@ public class PersonalCenterAct extends BaseActivity {
     private void refreshUI() {
         mUser = GlobalParams.getLastLoginUser();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLogin_name());
+        ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLoginName());
         ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
         switch (mUser.getGender()){
             case 0:tvGender.setText("未填写");
@@ -117,8 +117,8 @@ public class PersonalCenterAct extends BaseActivity {
     @Override
     protected void initData() {
         capture = new CapturePhoto(this);
-        if(!StringUtil.isEmpty(mUser.getHead_icon())){
-            Glide.with(mContext).load(mUser.getHead_icon()).into(mCiv);
+        if(!StringUtil.isEmpty(mUser.getHeadIcon())){
+            Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
         }
     }
 
@@ -138,14 +138,13 @@ public class PersonalCenterAct extends BaseActivity {
                 }
                 getUserPresenter().mofiySignature(mUser.getUserid(),sig,new CallBack(){
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         String json = (String) obj;
                         JSONObject jsonObject = JSON.parseObject(json);
-                        Integer code = jsonObject.getInteger("code");
                         if(code ==null){
                             UIUtil.showToastSafe("发生错误-未知错误");
                         }else{
-                            switch (code){
+                            switch (code[0]){
                                 case 200:
                                     UIUtil.showToastSafe("设置成功");
                                     mUser.setSignature(sig);
@@ -158,7 +157,7 @@ public class PersonalCenterAct extends BaseActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         UIUtil.showToastSafe("设置出错-未知错误");
                     }
                 });
@@ -311,13 +310,12 @@ public class PersonalCenterAct extends BaseActivity {
         showDefProgress();
         getUserPresenter().uploadHeadIcon(mUser.getUserid(), mHeadeIconImagePath, new CallBack() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(Object obj, int... code) {
                 dismissProgress();
                 String json = (String) obj;
                 JSONObject jsonObject = JSON.parseObject(json);
-                Integer code = jsonObject.getInteger("code");
                 String newHeadIconUrl = jsonObject.getString("icon_url");
-                switch (code){
+                switch (code[0]){
                     case 200:
                         isUserInfoUpdated = true;
                         UIUtil.showToastSafe("修改成功");
@@ -330,14 +328,14 @@ public class PersonalCenterAct extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showToastSafe("修改失败");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(!StringUtil.isEmpty(mUser.getHead_icon())){
-                            Glide.with(mContext).load(mUser.getHead_icon()).into(mCiv);
+                        if(!StringUtil.isEmpty(mUser.getHeadIcon())){
+                            Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
                         }else{
                             Glide.with(mContext).load(R.mipmap.person).asBitmap().into(mCiv) ;
                         }

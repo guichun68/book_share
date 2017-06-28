@@ -91,7 +91,7 @@ public class FeedBackAct extends BaseActivity{
                 getUserPresenter().feedBack(mFeedBack,new CallBack(){
 
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String json = (String) obj;
                         if(TextUtils.isEmpty(json)){
@@ -99,8 +99,8 @@ public class FeedBackAct extends BaseActivity{
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        int code = jsonObj.getInteger("code");
-                        if(code ==200){
+                        int code2 = jsonObj.getInteger("code");
+                        if(code2 ==200){
                             UIUtil.showToastSafe("提交成功，谢谢反馈！");
                             finish();
                         }else{
@@ -109,7 +109,7 @@ public class FeedBackAct extends BaseActivity{
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe("未能成功提交，请稍后重试!");
                     }

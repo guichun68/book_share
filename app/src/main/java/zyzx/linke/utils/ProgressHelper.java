@@ -1,10 +1,12 @@
 package zyzx.linke.utils;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
+
 
 import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * 进度回调辅助类
@@ -20,8 +22,12 @@ public class ProgressHelper {
      * @return 包装后的OkHttpClient，使用clone方法返回
      */
     public static OkHttpClient addProgressResponseListener(OkHttpClient client, final ProgressResponseBody.ProgressResponseListener progressListener){
+        //TODO 新҉接҉口҉待҉实҉现҉,前提学习Rxjava 参考： http://www.jb51.net/article/104456.htm
+
+        /*
         //克隆
         OkHttpClient clone = client.clone();
+
         //增加拦截器
         clone.networkInterceptors().add(new Interceptor() {
             @Override
@@ -35,7 +41,9 @@ public class ProgressHelper {
             }
         });
         return clone;
+         */
+        return null;
     }
- 
+
 
 }

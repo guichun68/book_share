@@ -91,7 +91,7 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
     private void getBooks(Integer userid, int pageNum) {
         getBookPresenter().getMyBorrowedInBooks(userid, pageNum, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -115,7 +115,7 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 mPullRefreshListView.onRefreshComplete();
                 mPullRefreshListView.clearAnimation();

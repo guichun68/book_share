@@ -3,22 +3,19 @@ package zyzx.linke.model;
 import android.util.Log;
 
 import com.hyphenate.EMValueCallBack;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -28,15 +25,24 @@ import zyzx.linke.utils.UIUtil;
 
 public class ModelImpl implements IModel {
 
-    private OkHttpClient client = new OkHttpClient();
+    private OkHttpClient mClient = new OkHttpClient();
 
+/*
     @Override
     public void post(String url, HashMap<String, Object> param, final CallBack callBack) throws IOException {
         FormEncodingBuilder fb = new FormEncodingBuilder();
         Request request;
         if(param != null){
             for (Map.Entry<String, Object> et : param.entrySet()) {
-                fb.add(et.getKey(), (String)et.getValue());
+                String value = "";
+                if(et.getValue() instanceof Integer){
+                    value= et.getValue()+"";
+                }else if(et.getValue() instanceof Boolean){
+                    value= ((Boolean)et.getValue()).toString();
+                }else if(et.getValue() instanceof String){
+                    value=(String)et.getValue();
+                }
+                fb.add(et.getKey(),value);
             }
             RequestBody body = fb.build();
 
@@ -50,10 +56,10 @@ public class ModelImpl implements IModel {
                 .build();
         }
 
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-        client.newCall(request).enqueue(new Callback() {
+        mClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        mClient.setWriteTimeout(10, TimeUnit.SECONDS);
+        mClient.setReadTimeout(30, TimeUnit.SECONDS);
+        mClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:"+e.getMessage());
@@ -63,7 +69,7 @@ public class ModelImpl implements IModel {
             @Override
             public void onResponse(Response response) throws IOException {
                 String res = new String(response.body().string());
-                if(res.toLowerCase().contains("</html>")){
+                if(res.toLowerCase().contains("</html>")||res.toLowerCase().contains("<html>")){
                     callBack.onFailure(res);
                     UIUtil.showToastSafe("网络或服务器故障，请检查");
                     return;
@@ -71,16 +77,20 @@ public class ModelImpl implements IModel {
                 callBack.onSuccess(res);
             }
         });
-        /*if (response.isSuccessful()) {
+        */
+/*if (response.isSuccessful()) {
             return response.body().string();
         } else {
             throw new IOException("Unexpected code " + response);
-        }*/
+        }*//*
+
     }
+*/
+
 
     @Override
     public void post(String url, HashMap<String, Object> param, final EMValueCallBack callBack) throws IOException {
-        FormEncodingBuilder fb = new FormEncodingBuilder();
+        FormBody.Builder fb = new FormBody.Builder();
         Request request;
         if(param != null){
             for (Map.Entry<String, Object> et : param.entrySet()) {
@@ -97,29 +107,31 @@ public class ModelImpl implements IModel {
                     .url(url)
                     .build();
         }
-
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-        client.newCall(request).enqueue(new Callback() {
+        mClient = new OkHttpClient.Builder()
+                .connectTimeout(10,TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS).build();
+        mClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:");
                 callBack.onError(500,e.getMessage());
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 String res = new String(response.body().string());
-                if(res.toLowerCase().contains("</html>")){
+                if(res.toLowerCase().contains("</html>")||res.toLowerCase().contains("<html>")){
                     callBack.onError(500,"网络或服务器故障，请检查");
                     UIUtil.showToastSafe("网络或服务器故障，请检查");
                     return;
                 }
                 callBack.onSuccess(res);
             }
+
         });
     }
+
 
 
     @Override
@@ -138,9 +150,9 @@ public class ModelImpl implements IModel {
                 .url(url+sb.toString())
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
+        mClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 UIUtil.showTestLog("zyzx","访问网络出错！");
                 if(callBack!=null){
                     callBack.onFailure(e.getMessage());
@@ -148,7 +160,7 @@ public class ModelImpl implements IModel {
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 String responseJson;
                 //NOT UI Thread
                 if(response.isSuccessful()){
@@ -165,6 +177,7 @@ public class ModelImpl implements IModel {
         });
     }
 
+/*
     @Override
     public void post2(String url, HashMap<String, Object> param, final CallBack callBack) throws IOException {
         //补全请求地址
@@ -188,9 +201,9 @@ public class ModelImpl implements IModel {
         //创建Request
         final Request request = new Request.Builder().url(url).post(body).build();
         //单独设置参数 比如读取超时时间
-        client.setWriteTimeout(50, TimeUnit.SECONDS);
-        Call call = client.newCall(request);
-//        final Call call = client.build(newCall(request)
+        mClient.setWriteTimeout(50, TimeUnit.SECONDS);
+        Call call = mClient.newCall(request);
+//        final Call call = mClient.build(newCall(request)
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -217,5 +230,43 @@ public class ModelImpl implements IModel {
         });
 
     }
+*/
+    public void post(String url, HashMap<String,Object> param, final CallBack callBack) {
 
+        mClient = new OkHttpClient.Builder()
+                .addInterceptor(new ReceivedCookiesInterceptor())
+                .addInterceptor(new AddCookiesInterceptor())
+                .build();
+
+        FormBody.Builder builder = new FormBody.Builder();
+
+        for (Map.Entry<String, Object> et : param.entrySet()) {
+            builder.add(et.getKey(), (String)et.getValue());
+        }
+        Request request = new Request.Builder()
+                .url(url)
+                .post(builder.build())
+                .build();
+        Call call = mClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("Error",e!=null?e.getMessage()+"":"An Error has occurred");
+            }
+
+            @Override
+            public void onResponse(final Call call, Response response) throws IOException {
+                final String res = new String(response.body().string());
+                if(res.toLowerCase().contains("</html>")||res.toLowerCase().contains("<html>")){
+                    callBack.onFailure(res);
+                    Log.e("error","网络或服务器故障，请检查");
+                    return;
+                }
+                if(callBack!=null){
+                    callBack.onSuccess(res);
+                }
+            }
+
+        });
+    }
 }

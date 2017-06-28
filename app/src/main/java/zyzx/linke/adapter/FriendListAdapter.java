@@ -61,12 +61,12 @@ public class FriendListAdapter extends BaseAdapter {
             vh = (FriendViewHolder) convertView.getTag();
         }
         //头像处理
-        if(!StringUtil.isEmpty(getItem(position).getHead_icon())){
-            Glide.with(parent.getContext()).load(getItem(position).getHead_icon()).into(vh.ivHeadIcon);
+        if(!StringUtil.isEmpty(getItem(position).getHeadIcon())){
+            Glide.with(parent.getContext()).load(getItem(position).getHeadIcon()).into(vh.ivHeadIcon);
         }else{
             Glide.with(parent.getContext()).load(R.mipmap.ease_default_avatar).asBitmap().into(vh.ivHeadIcon);
         }
-        vh.tvLoginName.setText(getItem(position).getLogin_name());
+        vh.tvLoginName.setText(getItem(position).getLoginName());
         vh.tvId .setText(String.valueOf(getItem(position).getUserid()));
         return convertView;
     }
@@ -104,7 +104,7 @@ public class FriendListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if(isAddFriend){
                     //添加好友
-                    UIUtil.showToastSafe("添加好友:"+ userVO.getLogin_name());
+                    UIUtil.showToastSafe("添加好友:"+ userVO.getLoginName());
                 }else{
                     CloudItem item;//只是为了携带用户id到详情页
                     //进入好友详情页

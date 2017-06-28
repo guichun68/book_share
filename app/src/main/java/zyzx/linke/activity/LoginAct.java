@@ -3,6 +3,8 @@ package zyzx.linke.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
@@ -11,7 +13,6 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +21,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +57,39 @@ import zyzx.linke.utils.UIUtil;
 public class LoginAct extends BaseActivity {
     private AppCompatEditText aetLoginName, aetPsw;
     private CheckBox cbAutoLogin;
+    private final int WHAT_THRID_PLAT_FORM = 0x7BF;
+    private final int WHAT_ERROR = 0x7CF;
+
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case WHAT_ERROR:
+                    UIUtil.showToastSafe("登录出错");
+                    break;
+                case WHAT_THRID_PLAT_FORM:
+                    HashMap<String,Object> res = (HashMap<String, Object>) msg.obj;
+                    if(res==null){
+                        UIUtil.showToastSafe("授权出错");
+                        return;
+                    }
+
+                    getUserPresenter().loginByThirdPlatform(JSON.toJSONString(res), new CallBack() {
+                        @Override
+                        public void onSuccess(Object obj, int... code) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Object obj, int... code) {
+
+                        }
+                    });
+                    break;
+            }
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -108,18 +144,22 @@ public class LoginAct extends BaseActivity {
         super.onClick(view);
         switch (view.getId()) {
             case R.id.btn_login:
+                if(!EaseCommonUtils.isNetWorkConnected(this)){
+                    Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!checkInput()) {
                     return;
                 }
-                showProgress("正在登录…");
+                showProgress("正在登录…",true);
                 getUserPresenter().loginByLoginName(aetLoginName.getText().toString(), aetPsw.getText().toString(), new CallBack() {
                     @Override
-                    public void onSuccess(Object obj) {
+                    public void onSuccess(Object obj, int... code) {
                         loginEaseMob();
                     }
 
                     @Override
-                    public void onFailure(Object obj) {
+                    public void onFailure(Object obj, int... code) {
                         dismissProgress();
 //                        UIUtil.showToastSafe("用户名或密码错误.");
                         UIUtil.showToastSafe((String) obj);
@@ -161,46 +201,43 @@ public class LoginAct extends BaseActivity {
     }
 
     public void loginByThirdPlatform(String platformName) {
+        showProgress("请稍后……");
         Platform platform = ShareSDK.getPlatform(platformName);
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
         platform.setPlatformActionListener(new PlatformActionListener() {
 
             @Override
             public void onError(Platform arg0, int arg1, Throwable arg2) {
-                // TODO Auto-generated method stub
-//                UIUtil.showTestLog(Const.TAG,"发生错误");
+                Message msg = mHandler.obtainMessage(WHAT_ERROR);
+                mHandler.sendMessage(msg);
                 arg2.printStackTrace();
-                UIUtil.showToastSafe("登录错误");
+
             }
 
             @Override
-            public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
+            public void onComplete(Platform platform, int action, final HashMap<String, Object> res) {
                 UIUtil.showTestLog(Const.TAG,"授权完毕");
-                Platform plat = ShareSDK.getPlatform(QQ.NAME);
-
+//                Platform plat = ShareSDK.getPlatform(QQ.NAME);
                 //输出所有授权信息
                 UIUtil.showTestLog(Const.TAG+"_userId:",platform.getDb().getUserId());
-                if(res!=null){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            getUserPresenter().login
-                        }
-                    });
-                    for (Map.Entry<String, Object> entry : res.entrySet()) {
-                        UIUtil.showTestLog(Const.TAG,entry.getKey()+"-"+entry.getValue());
-                    }
+                Message msg = mHandler.obtainMessage(WHAT_THRID_PLAT_FORM);
+                msg.obj = res;
+                mHandler.sendMessage(msg);
+                platform.getDb().exportData();
+                for (Map.Entry<String, Object> entry : res.entrySet()) {
+                    UIUtil.showTestLog(Const.TAG,entry.getKey()+"-"+entry.getValue());
                 }
             }
 
             @Override
             public void onCancel(Platform arg0, int arg1) {
-//                UIUtil.showTestLog(Const.TAG,"授权取消");
-                UIUtil.showToastSafe("登录取消");
+                UIUtil.showToastSafe("授权取消");
             }
         });
         //authorize与showUser单独调用一个即可
 //        weibo.authorize();//单独授权,OnComplete返回的hashmap是空的
+        platform.SSOSetting(false);//设置false表示使用SSO授权方式,简单来说就是有客户端的都会优先启用客户端授权，没客户端的则任然使用网页版进行授权。
+
         platform.showUser(null);//授权并获取用户信息
         //移除授权
         //weibo.removeAccount(true);
@@ -217,7 +254,7 @@ public class LoginAct extends BaseActivity {
                 PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
                 //记录用户名和uid
 //                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
-                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHead_icon());
+                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHeadIcon());
 
                 if (cbAutoLogin.isChecked()) {
                     PreferenceManager.getInstance().setAutoLoginFlag(true);
@@ -350,7 +387,7 @@ public class LoginAct extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("BaseURL_fjjsp");
+                GlobalParams.BASE_URL = BeanFactoryUtil.properties.getProperty("FuJia");
                 GlobalParams.refreshIP();
                 UIUtil.showToastSafe("已设置为:" + GlobalParams.BASE_URL);
             }

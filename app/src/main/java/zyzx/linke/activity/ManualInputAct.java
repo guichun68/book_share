@@ -111,7 +111,7 @@ public class ManualInputAct extends BaseActivity {
     private void getBookFromDouban(String isbn) {
         getBookPresenter().getBookDetailByISBN(isbn, new CallBack() {
             @Override
-            public void onSuccess(Object obj) {
+            public void onSuccess(Object obj, int... code) {
                 dismissProgress();
                 if (obj == null) {
                     //"未能在豆瓣获取书籍信息"
@@ -126,7 +126,7 @@ public class ManualInputAct extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showTestLog("zyzx failure", (String) obj);
                 handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
@@ -305,7 +305,7 @@ public class ManualInputAct extends BaseActivity {
 
         getBookPresenter().uploadBook(params, new CallBack() {
             @Override
-            public void onSuccess(final Object obj) {
+            public void onSuccess(final Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showToastSafe("保存成功");
                 final String json = (String)obj;
@@ -352,7 +352,7 @@ public class ManualInputAct extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Object obj) {
+            public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showToastSafe("上传失败");
             }

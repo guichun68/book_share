@@ -446,7 +446,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
 //                Log.e("zyzx",GlobalParams.gUser.getUserid()+"");
                     getBookPresenter().addBook2Map(mBook, GlobalParams.getLastLoginUser().getUserid(),false, mClickPoint.getLatitude(), mClickPoint.getLongitude(), new CallBack() {
                         @Override
-                        public void onSuccess(Object obj) {
+                        public void onSuccess(Object obj, int... code) {
                             dismissProgress();
                             String json = (String)obj;
                             if(StringUtil.isEmpty(json)){
@@ -462,7 +462,7 @@ public class BookShareOnMapAct extends BaseActivity implements Inputtips.Inputti
                         }
 
                         @Override
-                        public void onFailure(Object obj) {
+                        public void onFailure(Object obj, int... code) {
                             dismissProgress();
                             if(obj!=null)
                             UIUtil.showToastSafe(obj.toString());
