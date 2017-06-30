@@ -194,18 +194,17 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void uploadHeadIcon(Integer userId,String imagePath, CallBack viewCallBack) {
-        HashMap<String,Object> params = getParam();
-        params.put("head_icon",new File(imagePath));
-        params.put("user_id",userId);
-        //TODO 新接口待实现
-        /*try {
-            getModel().post2(GlobalParams.urlUploadHeadIcon,params,viewCallBack);
-        } catch (IOException e) {
+        HashMap<String, Object> params = getParam();
+        params.put("img", new File(imagePath));
+        params.put("user_id", userId);
+        try {
+            getModel().sendMultipart(GlobalParams.urlUploadHeadIcon, params, viewCallBack);
+        } catch (Exception e) {
             e.printStackTrace();
-            if(viewCallBack!=null) {
+            if (viewCallBack != null) {
                 viewCallBack.onFailure("上传失败");
             }
-        }*/
+        }
     }
 
     @Override

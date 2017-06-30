@@ -4,14 +4,20 @@ import android.util.Log;
 
 import com.hyphenate.EMValueCallBack;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -132,8 +138,6 @@ public class ModelImpl implements IModel {
         });
     }
 
-
-
     @Override
     public void get(String url, HashMap<String, String> param, final CallBack callBack) {
 
@@ -231,11 +235,76 @@ public class ModelImpl implements IModel {
 
     }
 */
+
+
+    /**
+     * 上传文件及参数
+     */
+    public void sendMultipart(String url, HashMap<String, Object> param, final CallBack callBack){
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        File imageFile = null;
+        MultipartBody.Builder mbody=new MultipartBody.Builder().setType(MultipartBody.FORM);
+        //追加参数
+        for (String key : param.keySet()) {
+            Object object = param.get(key);
+            if (!(object instanceof File)) {
+                mbody.addFormDataPart(key, object.toString());
+            } else {
+                imageFile = (File) object;
+                mbody.addFormDataPart(key,imageFile.getName(),RequestBody.create(MEDIA_TYPE_PNG,imageFile));
+            }
+        }
+        //设置超时时间及缓存
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(new ReceivedCookiesInterceptor())
+                .addInterceptor(new AddCookiesInterceptor());
+
+        OkHttpClient mOkHttpClient=builder.build();
+
+        RequestBody requestBody =mbody.build();
+        Request request = new Request.Builder()
+//                .header("Authorization", "Client-ID " + "...")
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("Error",e!=null?e.getMessage()+"":"An Error has occurred");
+                if(callBack!=null){
+                    callBack.onFailure(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String string = response.body().string();
+                    UIUtil.showTestLog("zyzx", "response ----->" + string);
+                    if(callBack!=null){
+                        callBack.onSuccess(string);
+                    }
+                } else {
+                    if(callBack!=null){
+                        callBack.onFailure("上传失败");
+                    }
+                }
+            }
+        });
+    }
+
+
     public void post(String url, HashMap<String,Object> param, final CallBack callBack) {
 
         mClient = new OkHttpClient.Builder()
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
         FormBody.Builder builder = new FormBody.Builder();
@@ -243,15 +312,19 @@ public class ModelImpl implements IModel {
         for (Map.Entry<String, Object> et : param.entrySet()) {
             builder.add(et.getKey(), (String)et.getValue());
         }
+        RequestBody requestBody = builder.build();
         Request request = new Request.Builder()
                 .url(url)
-                .post(builder.build())
+                .post(requestBody)
                 .build();
         Call call = mClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("Error",e!=null?e.getMessage()+"":"An Error has occurred");
+                if(callBack!=null){
+                    callBack.onFailure(e.getMessage());
+                }
             }
 
             @Override

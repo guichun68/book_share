@@ -1,6 +1,7 @@
 package zyzx.linke.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import zyzx.linke.R;
 import zyzx.linke.adapter.AreaAdapter;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.db.UserDao;
+import zyzx.linke.global.BundleResult;
 import zyzx.linke.model.Area;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
@@ -200,6 +201,28 @@ public class AreaSelAct extends BaseActivity {
         spProvince = (Spinner) findViewById(R.id.sp_province);
         spCity = (Spinner) findViewById(R.id.sp_city);
         spCounty = (Spinner) findViewById(R.id.sp_county);
+        findViewById(R.id.btn_ok).setOnClickListener(this);
+        findViewById(R.id.btn_cancel).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()){
+            case R.id.btn_ok:
+                Intent data = new Intent();
+                ArrayList<Area> areas = new ArrayList<>();
+                areas.add(savePro);
+                areas.add(saveCity);
+                areas.add(saveCounty);
+                data.putParcelableArrayListExtra("areas",areas);
+                setResult(BundleResult.SUCCESS,data);
+                finish();
+                break;
+            case R.id.btn_cancel:
+                this.finish();
+                break;
+        }
     }
 
     @Override
@@ -288,7 +311,7 @@ public class AreaSelAct extends BaseActivity {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
             ResponseJson rj = new ResponseJson(jsonTemp);
-            if(rj.errorCode!=0){
+            if(rj==null || rj.errorCode!=0 || rj.data==null){
                 msg.what = GET_AREA_ERROR;
                 msg.obj = "访问出错 code="+rj.errorCode;
                 mHandler.sendMessage(msg);

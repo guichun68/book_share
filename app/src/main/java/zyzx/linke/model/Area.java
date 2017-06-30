@@ -1,11 +1,14 @@
 package zyzx.linke.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by austin on 2017/5/3.
  * Desc: 省市行政区划表 PO
  */
 
-public class Area {
+public class Area implements Parcelable {
     private Integer id;
     private String areacode;
     private Integer depth;
@@ -24,6 +27,27 @@ public class Area {
         this.zipcode = zipcode;
     }
 
+
+    protected Area(Parcel in) {
+        id = in.readInt();
+        parentid = in.readInt();
+        depth = in.readInt();
+        areacode = in.readString();
+        name = in.readString();
+        zipcode = in.readString();
+    }
+
+    public static final Creator<Area> CREATOR = new Creator<Area>() {
+        @Override
+        public Area createFromParcel(Parcel in) {
+            return new Area(in);
+        }
+
+        @Override
+        public Area[] newArray(int size) {
+            return new Area[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -96,5 +120,20 @@ public class Area {
                 ", parentid=" + parentid +
                 ", zipcode='" + zipcode + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(parentid);
+        dest.writeInt(depth);
+        dest.writeString(areacode);
+        dest.writeString(name);
+        dest.writeString(zipcode);
     }
 }

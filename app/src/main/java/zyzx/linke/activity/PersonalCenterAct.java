@@ -23,6 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -31,6 +34,7 @@ import zyzx.linke.db.UserDao;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
@@ -80,17 +84,21 @@ public class PersonalCenterAct extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLoginName());
         ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
-        switch (mUser.getGender()){
-            case 0:tvGender.setText("未填写");
-                break;
-            case 1:tvGender.setText("男");
-                break;
-            case 2:
-                tvGender.setText("女");
-                break;
-            case 3:
-                tvGender.setText("保密");
-                break;
+        if(mUser.getGender()!=null)
+            switch (mUser.getGender()){
+                case 0:tvGender.setText("未填写");
+                    break;
+                case 1:tvGender.setText("男");
+                    break;
+                case 2:
+                    tvGender.setText("女");
+                    break;
+                case 3:
+                    tvGender.setText("保密");
+                    break;
+            }
+        else{
+            tvGender.setText("未填写");
         }
         StringBuilder sb = new StringBuilder();
         if(!StringUtil.isEmpty(mUser.getProvinceName())){
@@ -312,15 +320,20 @@ public class PersonalCenterAct extends BaseActivity {
             @Override
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
-                String json = (String) obj;
-                JSONObject jsonObject = JSON.parseObject(json);
-                String newHeadIconUrl = jsonObject.getString("icon_url");
-                switch (code[0]){
-                    case 200:
+                ResponseJson rj = new ResponseJson((String) obj);
+                if(rj.errorCode!=null)
+                switch (rj.errorCode){
+                    case 0:
                         isUserInfoUpdated = true;
                         UIUtil.showToastSafe("修改成功");
-                        UserDao.getInstance(mContext).updateUser(mUser);
-                        GlobalParams.setCurrUserHeadAvatar(newHeadIconUrl);
+                        Iterator<Object> it = rj.data.iterator();
+                        while(it.hasNext()){
+                            JSONObject jo = (JSONObject) it.next();
+                            String headUrl = jo.getString("headUrl");
+                            mUser.setHeadIcon(headUrl);
+                            GlobalParams.setCurrUserHeadAvatar(headUrl);
+                            UserDao.getInstance(mContext).updateUser(mUser);
+                        }
                         break;
                     default:
                         UIUtil.showToastSafe("修改头像失败");

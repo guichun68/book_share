@@ -50,7 +50,7 @@ public class GlobalParams {
 	/**
 	 * 上传头像图片url
 	 */
-	public static String urlUploadHeadIcon = GlobalParams.BASE_URL+"/zyzx/uploadHeadIcon.action";
+	public static String urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 	//导入书籍清单
 	public static String urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 	/**
@@ -174,7 +174,7 @@ public class GlobalParams {
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
-		urlUploadHeadIcon = GlobalParams.BASE_URL+"/zyzx/uploadHeadIcon.action";
+		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";

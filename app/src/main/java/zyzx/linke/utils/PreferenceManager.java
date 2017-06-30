@@ -588,8 +588,8 @@ public class PreferenceManager {
 		for(int i=0;it.hasNext();i++){
 			String value = it.next();
 			editor.putString("cookie"+i,value);
-			UIUtil.showTestLog("cookie","cookie"+i+":"+value);
-			editor.putInt("cookie_size",i);
+			UIUtil.showTestLog("cookie_save","cookie"+i+":"+value);
+			editor.putInt("cookie_size",i+1);
 		}
 		editor.commit();
 	}

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,16 +18,10 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.services.cloud.CloudItem;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,27 +35,23 @@ import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.BundleResult;
 import zyzx.linke.global.Const;
+import zyzx.linke.model.Area;
 import zyzx.linke.model.bean.City;
 import zyzx.linke.model.bean.IndexItem;
 import zyzx.linke.utils.CityUtil;
 import zyzx.linke.utils.UIUtil;
-import zyzx.linke.utils.Utils;
 import zyzx.linke.views.CityChoosePopupWindow;
 
 /**
  * 主页界面
  */
 public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2<ListView>, View.OnClickListener, AMapLocationListener {
-    private String mCurrPro,mCurrCity,mCurrCounty;
     private final String TAG = HomeFragment.class.getSimpleName();
     private final int CITY_CHOOSE_REQUEST_CODE = 10;
     private final int POI_CHOOSE_REQUEST_CODE = 20;
     private String mKeywords = "";
-    private ArrayList<City> mCityList;
-    private ArrayList<String> mCityLetterList;
-    private HashMap<String, Integer> mCityMap;
     private TextView mCurrCityDistrictTv;
-    private String mCurrentDistrict;
+
     private AMapLocationClient mAMapLocationClient = null;
 
     private Toolbar mToolbar;
@@ -77,8 +66,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private AllUserBooksListAdapter mAdapter;
 
     private CityChoosePopupWindow mPopupWindow;
-    private ImageView mUpDownArrow;
-    private String mCurrentCity;
+    private String mCurrPro, mCurrCity, mCurrCounty;
     private int mCurrentPageNum = 0;
     private ArrayList<IndexItem> mListViewItems = new ArrayList<>();
 
@@ -89,9 +77,9 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                                 long arg3) {
 
             mChosenDistrictIndex = arg2;
-            mCurrentDistrict = mDistrictsOfCurrentCity[arg2];
+            mCurrCounty = mDistrictsOfCurrentCity[arg2];
             mCurrCityDistrictTv.setText(
-                    String.format(getResources().getString(R.string.address), getCurrentCity(), mCurrentDistrict));
+                    String.format(getResources().getString(R.string.address), getCurrentCity(), mCurrCounty));
 
             mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
@@ -104,7 +92,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
 
     public String getCurrentCity() {
-        return mCurrentCity;
+        return mCurrCity;
     }
 
     @Override
@@ -130,12 +118,11 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         mAMapLocationClient.setLocationListener(this);
         mAMapLocationClient.startLocation();
         setUpInteractiveControls();
-        mCurrentCity = getResources().getString(R.string.default_city);
+        mCurrCity = getResources().getString(R.string.default_city);
     }
 
     private void setUpInteractiveControls() {
         mCurrCityDistrictTv = (TextView) mRootView.findViewById(R.id.current_city_district_textview);
-        mUpDownArrow = (ImageView) mRootView.findViewById(R.id.up_down_arrow);
 
         mRootView.findViewById(R.id.ll_search).setOnClickListener(this);
         mRootView.findViewById(R.id.btn_area_choose).setOnClickListener(this);
@@ -190,65 +177,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         startActivityForResult(areaIntent,CITY_CHOOSE_REQUEST_CODE);
     }
 
-    private void createCityListForCityChoose() {
-        try {
-
-            String content = Utils.getAssetsFie(getContext(), "city.json");
-            dealWithJson(content);
-        } catch (IOException e) {
-            Log.e("aaa", "city init failed", e);
-        }
-    }
-
-    private void dealWithJson(String content) {
-
-        try {
-            JSONObject json = new JSONObject(content);
-            String status = json.getString("status");
-            if ("200".equals(status)) {
-                JSONObject result = json.getJSONObject("result");
-                int cityVersion = result.optInt("version");
-                JSONObject data = result.getJSONObject("city");
-                HashMap<String, Integer> tempCityHashMap = new HashMap<>();
-                ArrayList<String> temp_city_letter_list = new ArrayList<>();
-                ArrayList<City> tempCityList = new ArrayList<>();
-                for (int m = 0; m < mLetterStrs.length; m++) {
-                    String key = mLetterStrs[m];
-                    JSONArray array = data.optJSONArray(key);
-                    if (array == null) {
-                        continue;
-                    }
-                    temp_city_letter_list.add(key);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject json_city = array.getJSONObject(i);
-                        City model_item = new City();
-                        model_item.name = json_city.optString("name");
-                        model_item.code = json_city.optString("cityCode");
-                        if (i == 0) {
-                            model_item.letter = key;
-                            tempCityHashMap.put(key, tempCityList.size());
-                        }
-                        tempCityList.add(model_item);
-                    }
-                }
-
-                if (mCityList == null || mCityList.size() <= 0) {
-                    mCityList = tempCityList;
-                    mCityMap = tempCityHashMap;
-                    mCityLetterList = temp_city_letter_list;
-                }
-            } else {
-                if (mCityList == null || mCityList.size() <= 0) {
-                    showErrorDialog(getString(R.string.city_get_error));
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void showErrorDialog(String string) {
 
         Dialog dialog = new Dialog(getContext());
@@ -269,7 +197,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
      * @param pagenum pageNO
      */
     private void searchByLocal(int pagenum) {
-        Log.e(TAG, "在城市(" + mCurrentCity + "->"+mCurrentDistrict+") 查找第" + pagenum + "页的所有书籍信息--待完善");
+        Log.e(TAG, "在城市(" + mCurrCity + "->"+ mCurrCounty +") 查找第" + pagenum + "页的所有书籍信息--待完善");
 
     }
 
@@ -344,15 +272,9 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         if (mCurrentCity == null)
             mCurrentCity = "北京";//"未能定位当前城市",默认北京
         mCurrCityDistrictTv.setText(mCurrentCity);
-        this.mCurrentCity = mCurrentCity;
+        this.mCurrCity = mCurrentCity;
     }
 
-    /**
-     * @param cloudResult
-     */
-    private void parseData(ArrayList<CloudItem> cloudResult) {
-
-    }
 
     private void setCity(City city) {
         mChosenDistrictIndex = -1;
@@ -367,13 +289,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         }
         if (CITY_CHOOSE_REQUEST_CODE == requestCode
                 && resultCode == BundleResult.SUCCESS) {
-            City city = (City) data.getSerializableExtra(BundleFlag.CITY_MODEL);
-            if (city != null) {
-                setCity(city);
-            }
+            ArrayList<Area> areas = data.getParcelableArrayListExtra("areas");
+            UIUtil.showTestLog("AreaSelAct:",areas.get(0).toString());
+            UIUtil.showTestLog("AreaSelAct:",areas.get(1).toString());
+            UIUtil.showTestLog("AreaSelAct:",areas.get(2)!=null?areas.get(2).toString():"县为空！");
             mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
-            mCurrentDistrict = "";
             searchByLocal(0);
             return;
         }
@@ -437,7 +358,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
      * @param pagenum 页码
      */
     private void searchDefault(int pagenum) {
-        mCurrentCity = getResources().getString(R.string.default_city);
+        mCurrCity = getResources().getString(R.string.default_city);
         searchByLocal(pagenum);
     }
 

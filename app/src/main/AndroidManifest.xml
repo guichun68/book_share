@@ -248,6 +248,7 @@
 
         <activity android:name=".activity.AreaSelAct"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.ActivityDialogStyle"
             />
         <activity android:name=".ModifyPswAct"
             android:label="@string/app_name"

@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tool="http://schemas.android.com/tools"
-    android:background="#33222222"
     android:focusableInTouchMode="false">
 
     <include layout="@layout/title_bar"
@@ -15,6 +14,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@color/white"
          >
 
         <LinearLayout
@@ -95,7 +95,6 @@
             android:layout_below="@id/sel"
             android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:background="@color/white"
             android:paddingRight="10dp" >
 
             <TableLayout
@@ -183,7 +182,7 @@
                     android:scrollbarAlwaysDrawVerticalTrack="false" >
 
                     <Button
-                        android:id="@+id/btn_cancell"
+                        android:id="@+id/btn_cancel"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
