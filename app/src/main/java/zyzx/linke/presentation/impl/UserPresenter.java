@@ -170,29 +170,26 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getUserInfo(String uid, final CallBack viewCallBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("uid",uid);
-        try {
-            getModel().post(GlobalParams.urlGetUserInfo, param, new CallBack() {
-                @Override
-                public void onSuccess(Object obj, int... code) {
-                    if(obj != null){
-                        if(viewCallBack!=null){
-                            viewCallBack.onSuccess(obj);
-                        }
+    public void getUserInfo(String userid, final CallBack viewCallBack) {
+        String url = GlobalParams.urlGetUserInfo.replace("#",userid);
+        getModel().get(url, null, new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                if(obj != null){
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(obj);
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(Object obj, int... code) {
-                    UIUtil.showTestLog("zyzx","根据uid获取用户信息失败！");
-                    UIUtil.showTestLog("zyzx",obj.toString());
+            @Override
+            public void onFailure(Object obj, int... code) {
+                UIUtil.showTestLog("zyzx",obj.toString());
+                if(viewCallBack!=null) {
+                    viewCallBack.onFailure("未能获取用户信息");
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     @Override

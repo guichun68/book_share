@@ -24,9 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
@@ -35,6 +35,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
+import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
@@ -75,12 +76,12 @@ public class PersonalCenterAct extends BaseActivity {
         tvGender = (TextView) findViewById(R.id.tv_gender);
         tvSignature.setOnClickListener(this);
         findViewById(R.id.iv_edit).setOnClickListener(this);
-        refreshUI();
     }
+
+
 
     //刷新界面（不刷新头像）
     private void refreshUI() {
-        mUser = GlobalParams.getLastLoginUser();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLoginName());
         ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
@@ -124,10 +125,64 @@ public class PersonalCenterAct extends BaseActivity {
 
     @Override
     protected void initData() {
+        mUser = GlobalParams.getLastLoginUser();
         capture = new CapturePhoto(this);
         if(!StringUtil.isEmpty(mUser.getHeadIcon())){
             Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
         }
+        showDefProgress();
+        getUserPresenter().getUserInfo(String.valueOf(mUser.getUserid()), new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                dismissProgress();
+                UserInfoResult ui = JSON.parseObject((String)obj, UserInfoResult.class);
+                if(ui.getErrorCode().equals("0")){
+                    //获取失败
+                    UIUtil.showToastSafe("用户信息获取失败！");
+                    return;
+                }
+                if(ui.getErrorCode().equals("1")){
+                    mUser = GlobalParams.getLastLoginUser();
+                    mUser.setLoginName(ui.getData().getItems().get(0).getLogin_name());
+                    mUser.setMobilePhone(ui.getData().getItems().get(0).getMobile_phone());
+                    mUser.setAddress(ui.getData().getItems().get(0).getAddress());
+                    mUser.setPassword(ui.getData().getItems().get(0).getPassword());
+
+                    String genderStr = ui.getData().getItems().get(0).getGender();
+                    Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
+                    mUser.setGender(gender);
+                    mUser.setHobby(ui.getData().getItems().get(0).getHobby());
+                    mUser.setEmail(ui.getData().getItems().get(0).getEmail());
+                    mUser.setRealName(ui.getData().getItems().get(0).getReal_name());
+                    mUser.setCityId(ui.getData().getItems().get(0).getCity_id());
+                    mUser.setLastLoginTime(ui.getData().getItems().get(0).getLast_login_time());
+
+                    mUser.setSignature(ui.getData().getItems().get(0).getSignature());
+//                  mUser.setHeadIcon(ui.getData().getItems().get(0).getHead_icon());
+                    mUser.setBak4(ui.getData().getItems().get(0).getBak4());
+                    mUser.setBirthday(ui.getData().getItems().get(0).getBirthday());
+                    mUser.setSchool(ui.getData().getItems().get(0).getSchool());
+                    mUser.setDepartment(ui.getData().getItems().get(0).getDepartment());
+                    mUser.setDiplomaId(ui.getData().getItems().get(0).getDiploma_id());
+                    mUser.setSoliloquy(ui.getData().getItems().get(0).getSoliloquy());
+                    mUser.setCreditScore(ui.getData().getItems().get(0).getCredit_score());
+                    mUser.setFromSystem(ui.getData().getItems().get(0).getFrom_system());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshUI();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                dismissProgress();
+                UIUtil.showToastSafe("用户信息获取失败！");
+                refreshUI();
+            }
+        });
     }
 
     private void showModifySignatureDialog() {

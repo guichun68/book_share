@@ -88,10 +88,7 @@ public class GlobalParams {
 	public static String urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 	//忘记密码页发送验证码
 	public static String urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
-	/**
-	 * 通过用户id获取其下所有书籍和其用户基本信息
-	 */
-	public static String urlGetUserInfo= GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
+	public static String urlGetUserInfo = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 	/**
 	 * 用户删除指定书籍
 	 */
@@ -170,7 +167,7 @@ public class GlobalParams {
 		urlRegist = GlobalParams.BASE_URL+"/user/mobileSDK/regUser.action";
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
 		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
-		urlGetUserInfo = GlobalParams.BASE_URL+"/zyzx/getUserinfo.action";
+		urlGetUserInfo = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";

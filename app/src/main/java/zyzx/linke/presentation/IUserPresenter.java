@@ -42,10 +42,10 @@ public abstract class IUserPresenter extends IPresenter{
 
     /**
      * 获取用户信息
-     * @param uid
+     * @param userId
      * @param callBack
      */
-    public abstract void getUserInfo(String uid, CallBack callBack);
+    public abstract void getUserInfo(String userId, CallBack callBack);
     /**
      * 上传头像
      */

@@ -143,6 +143,7 @@ public class ModelImpl implements IModel {
 
         Request.Builder builder = new Request.Builder();
         StringBuilder sb = new StringBuilder("?");
+        if(param!=null)
         for (Map.Entry<String,String> entry:param.entrySet()) {
            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
@@ -151,9 +152,11 @@ public class ModelImpl implements IModel {
             sb.deleteCharAt(sb.length()-1);
         }
         final Request request = builder
-                .url(url+sb.toString())
+                .url(url+(param!=null?sb.toString():""))
                 .build();
-
+        OkHttpClient.Builder builder1 = new OkHttpClient.Builder()
+                .addInterceptor(new AddCookiesInterceptor());
+        mClient = builder1.build();
         mClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
