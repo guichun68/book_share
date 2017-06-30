@@ -120,7 +120,7 @@ public class ModelImpl implements IModel {
         mClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                UIUtil.showTestLog("zyzx", "access Internet error,error msg as follows:");
+                UIUtil.showTestLog("bookshare", "access Internet error,error msg as follows:");
                 callBack.onError(500,e.getMessage());
             }
 

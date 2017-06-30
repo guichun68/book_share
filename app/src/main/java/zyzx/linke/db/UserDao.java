@@ -28,6 +28,7 @@ public class UserDao {
 	private static final String COLUM_USER_ID = "userid";
 	private static final String COLUM_LOGIN_NAME= "login_name";
 	private static final String COLUM_HEAD_ICON= "head_icon";
+	private static final String COLUM_SIGNATURE= "signature";
 
 	private static UserDao mUserSQLDao;
 

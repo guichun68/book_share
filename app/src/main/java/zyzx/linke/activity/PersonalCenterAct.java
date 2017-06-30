@@ -148,22 +148,23 @@ public class PersonalCenterAct extends BaseActivity {
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         String json = (String) obj;
-                        JSONObject jsonObject = JSON.parseObject(json);
-                        if(code ==null){
-                            UIUtil.showToastSafe("发生错误-未知错误");
-                        }else{
-                            switch (code[0]){
-                                case 200:
-                                    UIUtil.showToastSafe("设置成功");
-                                    mUser.setSignature(sig);
-                                    dialog.dismiss();
-                                    break;
-                                case 500:
-                                    UIUtil.showToastSafe("发生错误-未知错误");
-                                    break;
+                        ResponseJson rj = new ResponseJson(json);
+                        if(rj.errorCode==null || rj.errorCode!=0 ) {
+                            UIUtil.showToastSafe("设置出错");
+                            return;
+                        }
+                        switch (rj.errorCode){
+                            case Const.SUCC_ERR_CODE:
+                                UIUtil.showToastSafe("设置成功");
+                                dialog.dismiss();
+                                GlobalParams.getLastLoginUser().setSignature(sig);
+                                mUser.setSignature(sig);
+                                break;
+                            default:
+                                UIUtil.showToastSafe("发生错误-未知错误");
+                                break;
                             }
                         }
-                    }
                     @Override
                     public void onFailure(Object obj, int... code) {
                         UIUtil.showToastSafe("设置出错-未知错误");
@@ -323,7 +324,7 @@ public class PersonalCenterAct extends BaseActivity {
                 ResponseJson rj = new ResponseJson((String) obj);
                 if(rj.errorCode!=null)
                 switch (rj.errorCode){
-                    case 0:
+                    case Const.SUCC_ERR_CODE:
                         isUserInfoUpdated = true;
                         UIUtil.showToastSafe("修改成功");
                         Iterator<Object> it = rj.data.iterator();

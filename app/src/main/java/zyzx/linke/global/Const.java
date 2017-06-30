@@ -10,7 +10,9 @@ import com.amap.api.services.core.LatLonPoint;
  */
 
 public class Const {
-	public static final int SUCCESSCODE = 1000;
+	public static final int SUCC_ERR_CODE = 0;
+
+	public static final int GAODE_SUCCESSCODE = 1000;
     public static final String TAG = "BookShare";
 	public static final String ONCLICK = "zyzx.linke";
     /**

@@ -367,7 +367,7 @@ public class RouteMapActivity extends Activity implements
 		mAMap.clear();// 清理地图上的所有覆盖物
 		mBottomLayout.setVisibility(View.GONE);
 		dissmissProgressDialog();
-		if (errorCode == Const.SUCCESSCODE) {
+		if (errorCode == Const.GAODE_SUCCESSCODE) {
 			if (result != null && result.getPaths() != null) {
 				int size = result.getPaths().size();
 				mBusRouteResult = result;
@@ -410,7 +410,7 @@ public class RouteMapActivity extends Activity implements
 		mAMap.clear();// 清理地图上的所有覆盖物
 		mBottomLayout.setVisibility(View.GONE);
 		dissmissProgressDialog();
-		if (errorCode == Const.SUCCESSCODE) {
+		if (errorCode == Const.GAODE_SUCCESSCODE) {
 			if (result != null && result.getPaths() != null) {
 				if (result.getPaths().size() > 0) {
 					mDriveRouteResult = result;
@@ -482,7 +482,7 @@ public class RouteMapActivity extends Activity implements
 		mAMap.clear();// 清理地图上的所有覆盖物
 		mBottomLayout.setVisibility(View.GONE);
 		dissmissProgressDialog();
-		if (errorCode == Const.SUCCESSCODE) {
+		if (errorCode == Const.GAODE_SUCCESSCODE) {
 			if (result != null && result.getPaths() != null
 					&& result.getPaths().size() > 0) {
 				mWalkRouteResult = result;

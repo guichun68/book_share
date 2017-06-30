@@ -12,7 +12,7 @@ import zyzx.linke.utils.PreferenceManager;
 public class GlobalParams {
 
 	public static final Integer AROUND = 5000;//查询地图时默认搜索的半径
-    public static String BASE_URL ;
+    public static String BASE_URL, AvatarDirName;
 	protected static IUserPresenter gUserPresenter;
 	protected static IModel gModel;
 	protected static IBookPresenter gBookPresenter;
@@ -28,6 +28,7 @@ public class GlobalParams {
 
     static{
 		BASE_URL = BeanFactoryUtil.properties.getProperty("chanURL");
+		AvatarDirName = BeanFactoryUtil.properties.getProperty("AvatarDirName");
 	}
 
 
@@ -118,7 +119,7 @@ public class GlobalParams {
 	/**
 	 * 获取用户签名
 	 */
-	public static String urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
+	public static String urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
 	/**
 	 *通过给定的bookId集合来批量获取这些书籍的详细信息
 	 */
@@ -175,7 +176,7 @@ public class GlobalParams {
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
-		urlSetUserSig = GlobalParams.BASE_URL+"/zyzx/setUserSig.action";
+		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
