@@ -311,10 +311,10 @@ public class ModelImpl implements IModel {
                 .build();
 
         FormBody.Builder builder = new FormBody.Builder();
-
-        for (Map.Entry<String, Object> et : param.entrySet()) {
-            builder.add(et.getKey(), (String)et.getValue());
-        }
+        if(param!=null)
+            for (Map.Entry<String, Object> et : param.entrySet()) {
+                builder.add(et.getKey(), (String)et.getValue());
+            }
         RequestBody requestBody = builder.build();
         Request request = new Request.Builder()
                 .url(url)

@@ -10,16 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BundleFlag;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -63,7 +65,7 @@ public class ScanBookDetailAct extends BaseActivity {
         showDefProgress();
     }
 
-    Integer bookId;//添加地图成功后返回的bookId
+    private String bookId;//添加书库成功后返回的bookId
 
     @Override
     public void onClick(View view) {
@@ -76,29 +78,38 @@ public class ScanBookDetailAct extends BaseActivity {
                 }
                 showDefProgress();
                 mBook.setFromDouban(true);
-                getBookPresenter().addBook2MyLib(mBook, GlobalParams.getLastLoginUser().getUserid(), new CallBack() {
+                StringBuilder authorsSB = new StringBuilder(),translatorSB = new StringBuilder();
+                for(String a:mBook.getAuthor()){
+                    authorsSB.append(a);
+                }
+                for(String b:mBook.getTranslator()){
+                    translatorSB.append(b);
+                }
+
+                getBookPresenter().addBook2MyLib(mBook,GlobalParams.getLastLoginUser().getUserid(), new CallBack() {
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String responseJson = (String) obj;
-                        JSONObject jsonObject = JSON.parseObject(responseJson);
-                        if (code[0] == 200) {
-                            bookId = Integer.valueOf(jsonObject.getString("bookId"));
-                            mBook.setB_id(bookId);
-                            UIUtil.showToastSafe("添加成功");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showAskIfShareOnMapDialog();
-                                }
-                            });
-                        } else if (code[0] == 500) {
-                            UIUtil.showToastSafe("未能成功添加书籍信息");
+                        ResponseJson rj = new ResponseJson(responseJson);
+                        if(rj.errorCode!=null) {
+                            switch (rj.errorCode) {
+                                case Const.SUCC_ERR_CODE:
+                                    bookId = (String) ((Map) rj.data.get(0)).get("bookId");
+                                    mBook.setId(bookId);
+                                    UIUtil.showToastSafe("添加成功");
+                                    break;
+                                default:
+                                    UIUtil.showToastSafe(rj.errorMsg);
+                            }
+                        }else{
+                            UIUtil.showToastSafe("未能成功添加");
                         }
                     }
 
                     @Override
                     public void onFailure(Object obj, int... code) {
+                        UIUtil.showToastSafe("添加失败");
                         dismissProgress();
                     }
                 });
@@ -112,51 +123,6 @@ public class ScanBookDetailAct extends BaseActivity {
     View.OnClickListener myOk;
     View.OnClickListener myCancel;
     Dialog askDialog = null;
-
-    private void showAskIfShareOnMapDialog() {
-        myOk = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (askDialog != null)
-                    askDialog.dismiss();
-                Bundle bundle = new Bundle();
-//                bundle.putParcelable("book",mBook);
-                bundle.putSerializable(BundleFlag.BOOK, mBook);
-
-                gotoActivity(BookShareOnMapAct.class, true, bundle);
-            }
-        };
-        myCancel = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (askDialog != null && askDialog.isShowing())
-                    askDialog.dismiss();
-                finish();
-            }
-        };
-        askDialog = CustomProgressDialog.getPromptDialog2Btn(this, "添加成功,是否在地图分享此书?", "分享", "不需要", myOk, myCancel);
-
-
-        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("添加成功,是否在地图分享此书?");
-        dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("book",mBook);
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
-            }
-        });
-        dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });*/
-        askDialog.show();
-    }
 
     @Override
     protected void initData() {
@@ -227,7 +193,11 @@ public class ScanBookDetailAct extends BaseActivity {
                     }
                     tvAuthor.setText(sb);
                     tvPublisher.setText(mBook.getPublisher());
-                    tvPublishDate.setText(mBook.getPubdate());
+                    if(mBook.getPubdateDateType()!=null){
+                        tvPublishDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType()));
+                    }else{
+                        tvPublishDate.setVisibility(View.GONE);
+                    }
                     if (mBook.getTags() != null) {
                         for (Tags tag : mBook.getTags()) {
                             tvTags.append(tag.getName() + ";");

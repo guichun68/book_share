@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
+import zyzx.linke.model.bean.Tags;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -47,7 +49,11 @@ public class BookPresenter extends IBookPresenter {
                         UIUtil.showTestLog("zyzx",jsonObject.getString("msg"));
                         return;
                     }
+                    Date pubdate = StringUtil.getDate(jsonObject.getString("pubdate"));
                     BookDetail2 bookDetail = JSON.parseObject(response, BookDetail2.class);
+                    if(pubdate!=null){
+                        bookDetail.setPubdateDateType(pubdate);
+                    }
                     if(viewCallBack!=null){
                         viewCallBack.onSuccess(bookDetail);
                     }
@@ -67,6 +73,7 @@ public class BookPresenter extends IBookPresenter {
     public void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("book",JSON.toJSONString(mBook));
+        param.put("bindName",mBook.getBinding());
         param.put("userId",userId+"");
         try {
             getModel().post(GlobalParams.urlAddBook2MyLib, param, viewCallBack);

@@ -60,7 +60,7 @@ public class GlobalParams {
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 	public static String downloadFileName = "";
 	//保存用户信息
-	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
+	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
 	//验证短信验证码正确否的url
 	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	//重置密码
@@ -139,7 +139,7 @@ public class GlobalParams {
 	 */
 	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
-	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
+	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/user/mobileSDK/addBook2Lib.action";
 	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
     //会话页面点击用户聊天时获得用户信息
     public static String urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
@@ -165,7 +165,7 @@ public class GlobalParams {
 		urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 		urlRegist = GlobalParams.BASE_URL+"/user/mobileSDK/regUser.action";
-		urlAddBook2MyLib = GlobalParams.BASE_URL+"/zyzx/add2MyLib.action";
+		urlAddBook2MyLib = GlobalParams.BASE_URL+"/user/mobileSDK/addBook2Lib.action";
 		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 		urlGetUserInfo = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
@@ -197,7 +197,7 @@ public class GlobalParams {
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
-		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/saveUserInfo.action";
+		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
 	}
 
 	public static UserVO getLastLoginUser(){

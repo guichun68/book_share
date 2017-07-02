@@ -329,6 +329,7 @@ public class PersonalCenterAct extends BaseActivity {
                 UIUtil.showToastSafe("未选择图片");
             }
         }else if(requestCode==EDIT_USERINFO_CODE){
+            mUser = GlobalParams.getLastLoginUser();
             refreshUI();
         }
     }

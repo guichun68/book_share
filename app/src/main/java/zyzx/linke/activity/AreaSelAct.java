@@ -311,7 +311,7 @@ public class AreaSelAct extends BaseActivity {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
             ResponseJson rj = new ResponseJson(jsonTemp);
-            if(rj==null || rj.errorCode!=0 || rj.data==null){
+            if(rj.errorCode!=0 || rj.data==null){
                 msg.what = GET_AREA_ERROR;
                 msg.obj = "访问出错 code="+rj.errorCode;
                 mHandler.sendMessage(msg);

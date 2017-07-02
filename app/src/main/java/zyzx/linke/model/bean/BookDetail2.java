@@ -1,10 +1,11 @@
 package zyzx.linke.model.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class BookDetail2 implements Serializable{
-
+	private String id;
 	private String alt;
 
 	private String alt_title;
@@ -35,6 +36,7 @@ public class BookDetail2 implements Serializable{
 	private String price;
 
 	private String pubdate;
+	private Date pubdateDateType;
 
 	private String publisher;
 
@@ -56,6 +58,14 @@ public class BookDetail2 implements Serializable{
 	private String url;
 	//标记是否是来自豆瓣的数据
 	private boolean isFromDouban;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public void setAlt(String alt) {
 		this.alt = alt;
@@ -186,12 +196,20 @@ public class BookDetail2 implements Serializable{
 		return this.price;
 	}
 
+	public String getPubdate() {
+		return pubdate;
+	}
+
 	public void setPubdate(String pubdate) {
 		this.pubdate = pubdate;
 	}
 
-	public String getPubdate() {
-		return this.pubdate;
+	public Date getPubdateDateType() {
+		return pubdateDateType;
+	}
+
+	public void setPubdateDateType(Date pubdateDateType) {
+		this.pubdateDateType = pubdateDateType;
 	}
 
 	public void setPublisher(String publisher) {

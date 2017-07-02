@@ -8,6 +8,7 @@ import zyzx.linke.base.UpdateService;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
+import zyzx.linke.model.bean.Tags;
 
 /**
  * Created by austin on 2017/2/17.
@@ -19,10 +20,13 @@ public abstract class IBookPresenter extends IPresenter {
     //通过ISBN获取图书详情
     public abstract void getBookDetailByISBN(String isbn, CallBack viewCallBack);
 
-    /*
+    /**
     *将图书添加到我的书库（仅仅添加，不在地图中展示）
-     */
-    public abstract void addBook2MyLib(BookDetail2 mBook, Integer userId, CallBack viewCallBack);
+    *@param mBook 书籍
+     *@param userId 用户id（取自uuid）
+     *@param viewCallBack 回调
+     **/
+    public abstract void addBook2MyLib(BookDetail2 mBook,Integer userId, CallBack viewCallBack);
 
     /**
      * 向高德地图中添加图书坐标

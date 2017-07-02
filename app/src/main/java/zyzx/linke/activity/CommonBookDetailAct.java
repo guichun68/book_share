@@ -15,6 +15,7 @@ import com.amap.api.services.cloud.CloudItem;
 import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import zyzx.linke.R;
@@ -86,6 +87,7 @@ public class CommonBookDetailAct extends BaseActivity {
                     Toast.makeText(mContext, "没有要添加的书籍", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 showDefProgress();
                 mBook.setFromDouban(true);
                 getBookPresenter().addBook2MyLib(mBook,GlobalParams.getLastLoginUser().getUserid(), new CallBack() {
@@ -248,12 +250,9 @@ public class CommonBookDetailAct extends BaseActivity {
             tvPublisher.setText(mBook.getPublisher());
         }
         //设置出版日期------start---------
-        String pubDate = mBook.getPubdate();
-        if(!StringUtil.isEmpty(pubDate)){
-            if(pubDate.contains(" ")){//去掉日期后的时分秒信息
-                pubDate = mBook.getPubdate().substring(0,mBook.getPubdate().indexOf(" "));
-            }
-            tvPublishDate.setText(pubDate);
+
+        if(mBook.getPubdateDateType()!=null){
+            tvPublishDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType()));
         }else{
             tvPublishDate.setVisibility(View.GONE);
         }

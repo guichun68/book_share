@@ -7,6 +7,9 @@ package zyzx.linke.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -428,5 +431,120 @@ public class StringUtil {
         }else{
             return false;
         }
+    }
+
+    public static Date getDate(String dateStr){
+        if(isEmpty(dateStr)){
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            try {
+                sdf.applyPattern("yyyy MM dd");
+                date = sdf.parse(dateStr);
+            } catch (ParseException e1) {
+                try {
+                    sdf.applyPattern("yyyy.MM.dd");
+                    date = sdf.parse(dateStr);
+                } catch (ParseException e2) {
+                    try {
+                        sdf.applyPattern("yyyy-MM");
+                        date = sdf.parse(dateStr);
+                    } catch (ParseException e3) {
+                        try {
+                            sdf.applyPattern("yyyy年MM月dd日");
+                            date = sdf.parse(dateStr);
+                        } catch (ParseException e4) {
+                            try {
+                                sdf.applyPattern("yyyy 年MM 月dd 日");
+                                date = sdf.parse(dateStr);
+                            } catch (ParseException e5) {
+                                try {
+                                    sdf.applyPattern("yyyy年 MM月 dd日");
+                                    date = sdf.parse(dateStr);
+                                } catch (ParseException e6) {
+                                    try {
+                                        sdf.applyPattern("yyyy 年 MM 月 dd 日");
+                                        date = sdf.parse(dateStr);
+                                    } catch (ParseException e7) {
+                                        try {
+                                            sdf.applyPattern("yyyy 年 MM 月");
+                                            date = sdf.parse(dateStr);
+                                        } catch (ParseException e8) {
+                                            try {
+                                                sdf.applyPattern("yyyy 年 MM 月 ");
+                                                date = sdf.parse(dateStr);
+                                            } catch (ParseException e9) {
+                                                try {
+                                                    sdf.applyPattern("yyyy 年 MM月");
+                                                    date = sdf.parse(dateStr);
+                                                } catch (ParseException e10) {
+                                                    try {
+                                                        sdf.applyPattern("yyyy 年MM月");
+                                                        date = sdf.parse(dateStr);
+                                                    } catch (ParseException e11) {
+                                                        try {
+                                                            sdf.applyPattern("yyyy年MM月");
+                                                            date = sdf.parse(dateStr);
+                                                        } catch (ParseException e12) {
+                                                            try {
+                                                                sdf.applyPattern("yyyy 年MM 月");
+                                                                date = sdf.parse(dateStr);
+                                                            } catch (ParseException e13) {
+                                                                try {
+                                                                    sdf.applyPattern("yyyy年 MM月");
+                                                                    date = sdf.parse(dateStr);
+                                                                } catch (ParseException e14) {
+                                                                    try {
+                                                                        sdf.applyPattern("yyyy.MM");
+                                                                        date = sdf.parse(dateStr);
+                                                                    } catch (ParseException e15) {
+                                                                        try {
+                                                                            sdf.applyPattern("yyyy 年");
+                                                                            date = sdf.parse(dateStr);
+                                                                        } catch (ParseException e16) {
+                                                                            try {
+                                                                                sdf.applyPattern("yyyy 年 ");
+                                                                                date = sdf.parse(dateStr);
+                                                                            } catch (ParseException e17) {
+                                                                                try {
+                                                                                    sdf.applyPattern("yyyy MM");
+                                                                                    date = sdf.parse(dateStr);
+                                                                                } catch (ParseException e18) {
+                                                                                    try {
+                                                                                        sdf.applyPattern("yyyy年");
+                                                                                        date = sdf.parse(dateStr);
+                                                                                    } catch (ParseException e19) {
+                                                                                        try {
+                                                                                            sdf.applyPattern("yyyy");
+                                                                                            date = sdf.parse(dateStr);
+                                                                                        } catch (ParseException e20) {
+                                                                                            System.out.println("未能识别的日期"+dateStr);
+                                                                                            return null;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return date;
     }
 }

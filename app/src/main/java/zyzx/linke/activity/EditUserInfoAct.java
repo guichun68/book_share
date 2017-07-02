@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.AreaAdapter;
@@ -32,6 +33,7 @@ import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.Area;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
@@ -71,12 +73,22 @@ public class EditUserInfoAct extends BaseActivity {
             CustomProgressDialog.dismissDialog(progress);
             switch (msg.what) {
                 case GET_CITIES:
-                    Object obj = msg.obj;
-                    String json = "";
-                    if (obj != null) json = (String) obj;
-                    List<Area> areas = JSON.parseArray(json, Area.class);
+                    List<Area> areas = new ArrayList<>();
+                    if(msg.obj!=null){
+                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                        for (JSONObject jobj:areasJSON) {
+                            Area a = new Area();
+                            a.setName(jobj.getString("name"));
+                            a.setAreacode(jobj.getString("areaCode"));
+                            a.setDepth(jobj.getInteger("depth"));
+                            a.setId(jobj.getInteger("id"));
+                            a.setParentid(jobj.getInteger("parentId"));
+                            a.setZipcode(jobj.getString("zipCode"));
+                            areas.add(a);
+                        }
+                    }
                     cities.clear();
-                    if (areas != null && !areas.isEmpty()) {
+                    if (!areas.isEmpty()) {
                         cities.addAll(areas);
                         spCity.setSelection(0);
                     }
@@ -94,12 +106,22 @@ public class EditUserInfoAct extends BaseActivity {
                     }
                     break;
                 case GET_COUNTIES:
-                    String gson = "";
-                    if (msg.obj != null) gson = (String) msg.obj;
-                    List<Area> areas1 = JSON.parseArray(gson, Area.class);
-
+                    List<Area> areas1 = new ArrayList<>();
+                    if(msg.obj != null){
+                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                        for (JSONObject jobj:areasJSON) {
+                            Area a = new Area();
+                            a.setName(jobj.getString("name"));
+                            a.setAreacode(jobj.getString("areaCode"));
+                            a.setDepth(jobj.getInteger("depth"));
+                            a.setId(jobj.getInteger("id"));
+                            a.setParentid(jobj.getInteger("parentId"));
+                            a.setZipcode(jobj.getString("zipCode"));
+                            areas1.add(a);
+                        }
+                    }
                     counties.clear();
-                    if (areas1 != null && !areas1.isEmpty()) {
+                    if (!areas1.isEmpty()) {
                         counties.addAll(areas1);
                         spCounty.setSelection(0);
                     }
@@ -117,12 +139,22 @@ public class EditUserInfoAct extends BaseActivity {
                 case INIT_CITY://初始化页面时不修改 顶部地区显示,显示用户未修改之前的选择地区
                     //显示所在的地级市
                     String json2 = "";
+                    List<Area> areas2 =new ArrayList<>();
                     if (msg.obj != null) {
-                        json2 = (String) msg.obj;
+                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                        for (JSONObject jobj:areasJSON) {
+                            Area a = new Area();
+                            a.setName(jobj.getString("name"));
+                            a.setAreacode(jobj.getString("areaCode"));
+                            a.setDepth(jobj.getInteger("depth"));
+                            a.setId(jobj.getInteger("id"));
+                            a.setParentid(jobj.getInteger("parentId"));
+                            a.setZipcode(jobj.getString("zipCode"));
+                            areas2.add(a);
+                        }
                     }
-                    List<Area> areas2 = JSON.parseArray(json2, Area.class);
                     cities.clear();
-                    if (areas2 != null && !areas2.isEmpty()) {
+                    if (!areas2.isEmpty()) {
                         cities.addAll(areas2);
                         for (int i = 0; i < cities.size(); i++) {
                             if (cities.get(i).getName().equals(mUser.getCityName())) {
@@ -136,18 +168,26 @@ public class EditUserInfoAct extends BaseActivity {
                 case INIT_COUNTY:
                     //显示所在的县
                     String json3 = "";
+                    List<Area> areas3 = new ArrayList<>();
                     if (msg.obj != null) {
-                        json3 = (String) msg.obj;
+                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                        for (JSONObject jobj:areasJSON) {
+                            Area a = new Area();
+                            a.setName(jobj.getString("name"));
+                            a.setAreacode(jobj.getString("areaCode"));
+                            a.setDepth(jobj.getInteger("depth"));
+                            a.setId(jobj.getInteger("id"));
+                            a.setParentid(jobj.getInteger("parentId"));
+                            a.setZipcode(jobj.getString("zipCode"));
+                            areas3.add(a);
+                        }
                     }
-                    List<Area> areas3 = JSON.parseArray(json3, Area.class);
                     counties.clear();
-                    if (areas3 != null) {
-                        counties.addAll(areas3);
-                        for (int i = 0; i < counties.size(); i++) {
-                            if (counties.get(i).getName().equals(mUser.getCountyName())) {
-                                spCounty.setSelection(counties.indexOf(counties.get(i)));
-                                break;
-                            }
+                    counties.addAll(areas3);
+                    for (int i = 0; i < counties.size(); i++) {
+                        if (counties.get(i).getName().equals(mUser.getCountyName())) {
+                            spCounty.setSelection(counties.indexOf(counties.get(i)));
+                            break;
                         }
                     }
                     countyAdapter.notifyDataSetChanged();
@@ -393,18 +433,17 @@ public class EditUserInfoAct extends BaseActivity {
                     UIUtil.showToastSafe("保存失败，请检查网络");
                     return;
                 }
-                JSONObject jsonObject = JSON.parseObject(json);
-                Integer code2 = jsonObject.getInteger("code");
-                if (code2 != null) {
-                    switch (code2) {
-                        case 200:
+                ResponseJson rj = new ResponseJson(json);
+                if (rj.errorCode != null) {
+                    switch (rj.errorCode) {
+                        case Const.SUCC_ERR_CODE:
                             UIUtil.showToastSafe("保存成功");
                             GlobalParams.saveUser(usvo);
                             setResult(RESULT_OK); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
                             finish();//此处一定要调用finish()方法
                             break;
-                        case 500:
-                            UIUtil.showToastSafe("保存失败,code=500");
+                        default:
+                            UIUtil.showToastSafe("保存失败,code="+rj.errorCode);
                             break;
                     }
                 } else {
@@ -531,19 +570,27 @@ public class EditUserInfoAct extends BaseActivity {
         public void onSuccess(Object obj, int... code) {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
-            JSONObject jsonObj = JSON.parseObject(jsonTemp);
-            Integer hold = jsonObj.getInteger("hold");
+            ResponseJson rj = new ResponseJson(jsonTemp);
+            if(rj.errorCode!=0 || rj.data==null){
+                msg.what = GET_AREA_ERROR;
+                msg.obj = "访问出错 code="+rj.errorCode;
+                mHandler.sendMessage(msg);
+                return;
+            }
+            Map map = (Map) rj.data.get(0);
+            Integer hold = Integer.parseInt((String)map.get("hold"));
+            List<JSONObject> areas = (List<JSONObject>) map.get("areas");
             switch (hold) {
                 case HOLD_FLAG_CITY:
                     msg.what = isFirstComeIn ? INIT_CITY : GET_CITIES;
                     if (initDept == 1) isFirstComeIn = false;
-                    msg.obj = jsonObj.getString("areas");
+                    msg.obj = areas;
                     mHandler.sendMessage(msg);
                     break;
                 case HOLD_FLAG_COUNTY:
                     msg.what = isFirstComeIn ? INIT_COUNTY : GET_COUNTIES;
                     if (initDept == 2) isFirstComeIn = false;
-                    msg.obj = jsonObj.getString("areas");
+                    msg.obj = areas;
                     mHandler.sendMessage(msg);
                     break;
             }
