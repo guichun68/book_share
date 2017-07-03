@@ -481,6 +481,17 @@ public class AppUtil {
 			mV.setPubdateDateType(jo.getDate("CREATE_DATE"));
 			mV.setAlt(jo.getString("alt"));
 			mV.setTitle(jo.getString("alt_title"));
+			String authors = jo.getString("author_name");
+			String[] auArr = {};
+			if(authors!=null)
+			{
+				auArr= authors.split(";");
+			}
+			List<String> au = new ArrayList<>();
+			for(int i=0;i<auArr.length;i++){
+				au.add(auArr[i]);
+			}
+			mV.setAuthor(au);
 			mV.setAuthor_intro(jo.getString("author_intro"));
 			mBV.setBookStatusId(jo.getString("book_status_id"));
 			mV.setCatalog(jo.getString("catalog"));

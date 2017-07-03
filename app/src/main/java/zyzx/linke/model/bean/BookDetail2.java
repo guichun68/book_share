@@ -7,7 +7,6 @@ import java.util.List;
 public class BookDetail2 implements Serializable{
 	private String id;
 	private String alt;
-
 	private String alt_title;
 
 	private List<String> author;

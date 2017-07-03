@@ -220,11 +220,11 @@ public class BookPresenter extends IBookPresenter {
 
     @Override
     public void getMyBooks(String uid, int pageNum, final CallBack viewCallBack) {
-        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{uid}",uid);
-        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{pageSize}",String.valueOf(Const.PAGE_SIZE_MYBOOKS));
-        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{curPage}",String.valueOf(pageNum));
+        String url = GlobalParams.urlGetMyBooks.replace("{uid}",uid);
+        url = url.replace("{pageSize}",String.valueOf(Const.PAGE_SIZE_MYBOOKS));
+        url = url.replace("{curPage}",String.valueOf(pageNum));
         try {
-            getModel().get(GlobalParams.urlGetMyBooks, null, new CallBack() {
+            getModel().get(url, null, new CallBack() {
                 @Override
                 public void onSuccess(Object obj, int... code) {
                     String json = (String) obj;

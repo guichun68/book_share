@@ -37,7 +37,6 @@ import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.CustomProgressDialog;
-import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -248,85 +247,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 case CANCEL_SHARE://取消分享
                     showDefProgress();
                     pop.dismiss();
-                    /*getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
-                        @Override
-                        public void onSuccess(final Object obj, int... code) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissProgress();
-                                    final String json = (String) obj;
-                                    if (StringUtil.isEmpty(json)) {
-                                        Snackbar.make(llRoot,"未操作成功",Snackbar.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    JSONObject jsonObj = JSON.parseObject(json);
-                                    Integer code = jsonObj.getInteger("code");
-                                    if (code != null && code == 200) {
-                                        Snackbar.make(llRoot,"已取消分享",Snackbar.LENGTH_SHORT).show();
-                                        mBooks.get(position - 1).setStatus(1);
-                                        myBookAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(Object obj, int... code) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pop.dismiss();
-                                    dismissProgress();
-                                    Snackbar.make(llRoot,"操作失败", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        }
-                    });*/
                     break;
                 case CANCEL_AND_REMOVE://取消分享并从书架移除
                     showDefProgress();
-                    /*getBookPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
-                        @Override
-                        public void onSuccess(final Object obj, int... code) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pop.dismiss();
-                                    dismissProgress();
-                                    final String json = (String) obj;
-                                    if (StringUtil.isEmpty(json)) {
-                                        Snackbar.make(llRoot,"操作失败",Snackbar.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    JSONObject jsonObj = JSON.parseObject(json);
-                                    Integer code = jsonObj.getInteger("code");
-                                    if (code != null && code == 200) {
-                                        Snackbar.make(llRoot,"操作成功",Snackbar.LENGTH_SHORT).show();
-                                        mBooks.remove(position-1);
-                                        myBookAdapter.notifyDataSetChanged();
-                                    }else{
-                                        Snackbar.make(llRoot,"操作失败",Snackbar.LENGTH_SHORT).show();
-
-                                    }
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(Object obj, int... code) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    pop.dismiss();
-                                    dismissProgress();
-                                    Snackbar.make(llRoot,"操作失败",Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        }
-                    });*/
                     break;
             }
         }
@@ -334,17 +257,6 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            /*if(1001==resultCode){
-                if(requestCode==tempPosition){
-                    mBooks.get(tempPosition-1).setStatus(2);
-                    mBooks.get(tempPosition-1).setMapId(Integer.valueOf(data.getStringExtra("map_id")));
-                    if(pop!=null){
-                        pop.dismiss();
-                    }
-                    myBookAdapter.notifyDataSetChanged();
-                    UIUtil.showTestLog("zyzx","新插入的云图id："+data.getStringExtra("map_id"));
-                }
-            }*/
     }
 
     @Override
