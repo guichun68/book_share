@@ -31,8 +31,9 @@ import java.util.ArrayList;
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllMyBookAdapter;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BundleFlag;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -49,7 +50,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private PullToRefreshListView mPullRefreshListView;
     private AllMyBookAdapter myBookAdapter;
     private ArrayList<MyBookDetailVO> mBooks;
-    private int mPageNum;
+    private int mPageNum=1;
     private PopupWindow pop;
     private int mWindowWidth;
     private boolean isLoadingMore;//是否是加载更多的动作
@@ -139,8 +140,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
         final TextView item1 = (TextView) popView.findViewById(R.id.tv_item1);
         final TextView item2 = (TextView) popView.findViewById(R.id.tv_item2);
-        switch (bookDetailVO.getStatus()) {
-            case 1://在书架上
+        switch (bookDetailVO.getBookStatusId()) {
+            case Const.BOOK_STATUS_ONSHELF://在书架上
                 item1.setText("从书架上移除");
                 item2.setText("在地图中分享");
                 item1.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +155,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 });
                 item2.setOnClickListener(new PopItemClickListener(bookDetailVO,position,PopItemClickListener.SHARE_ON_MAP));
                 break;
-            case 2://地图分享中。。。
+            case Const.BOOK_STATUS_SHARED://地图分享中。。。
                 item1.setText("取消分享");
                 item2.setText("取消分享并从书架删除");
                 item1.setOnClickListener(new PopItemClickListener(bookDetailVO,position,PopItemClickListener.CANCEL_SHARE));
@@ -169,6 +170,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
                     }
                 });
+                break;
+            case Const.BOOK_STATUS_BORROWED://已借出
+
                 break;
         }
     }
@@ -244,7 +248,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 case CANCEL_SHARE://取消分享
                     showDefProgress();
                     pop.dismiss();
-                    getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
+                    /*getBookPresenter().cancelShare(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
                         public void onSuccess(final Object obj, int... code) {
                             runOnUiThread(new Runnable() {
@@ -279,11 +283,11 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                             });
 
                         }
-                    });
+                    });*/
                     break;
                 case CANCEL_AND_REMOVE://取消分享并从书架移除
                     showDefProgress();
-                    getBookPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
+                    /*getBookPresenter().cancelShareAndDelBook(bookDetailVO.getUserBookId(), bookDetailVO.getMapId(),new CallBack() {
                         @Override
                         public void onSuccess(final Object obj, int... code) {
                             runOnUiThread(new Runnable() {
@@ -322,7 +326,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                             });
 
                         }
-                    });
+                    });*/
                     break;
             }
         }
@@ -330,7 +334,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if(1001==resultCode){
+            /*if(1001==resultCode){
                 if(requestCode==tempPosition){
                     mBooks.get(tempPosition-1).setStatus(2);
                     mBooks.get(tempPosition-1).setMapId(Integer.valueOf(data.getStringExtra("map_id")));
@@ -340,14 +344,14 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     myBookAdapter.notifyDataSetChanged();
                     UIUtil.showTestLog("zyzx","新插入的云图id："+data.getStringExtra("map_id"));
                 }
-            }
+            }*/
     }
 
     @Override
     protected void initData() {
         mBooks.clear();
         showDefProgress();
-        getBooks(GlobalParams.getLastLoginUser().getUserid(), 0);
+        getBooks(GlobalParams.getLastLoginUser().getUid(), 1);
     }
 
     @Override
@@ -363,17 +367,17 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 R.mipmap.publicloading));
         mPageNum++;
         isLoadingMore = true;
-        getBooks(GlobalParams.getLastLoginUser().getUserid(), mPageNum);
+        getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
     }
 
     /**
      * 获取我的所有书籍（不包含借入的书籍）
      *
-     * @param userid userId
+     * @param uid user's uuid
      * @param pageNum pageNo
      */
-    private void getBooks(Integer userid, int pageNum) {
-        getBookPresenter().getMyBooks(userid, pageNum, new CallBack() {
+    private void getBooks(String uid, int pageNum) {
+        getBookPresenter().getMyBooks(uid, pageNum, new CallBack() {
             @Override
             public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {

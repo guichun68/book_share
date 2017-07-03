@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
@@ -75,7 +76,7 @@ public class AllMyBookAdapter extends BaseAdapter {
 
         holder.tvAuthor.setText(sb.toString());
         holder.tvIntro.setText(getItem(position).getBook().getSummary());
-        holder.refreshBookState(getItem(position).getStatus());
+        holder.refreshBookState(getItem(position).getBookStatusId());
         return convertView;
     }
 
@@ -105,27 +106,27 @@ public class AllMyBookAdapter extends BaseAdapter {
          * 更新书籍状态
          * @param state 1:在库， 2:分享中， 3:已借出
          */
-        public void refreshBookState(int state){
+        public void refreshBookState(String state){
             switch (state){
-                case 1:
+                case Const.BOOK_STATUS_ONSHELF:
                     this.ivInStock.setVisibility(View.VISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
                     break;
-                case 2:
+                case Const.BOOK_STATUS_SHARED:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.VISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
                     break;
-                case 3:
+                case Const.BOOK_STATUS_LOANED:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
                     this.ivBorrowedOut.setVisibility(View.VISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
                     break;
-                case 4:
+                case Const.BOOK_STATUS_BORROWED:
                     this.ivBorrowedIn.setVisibility(View.VISIBLE);
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);

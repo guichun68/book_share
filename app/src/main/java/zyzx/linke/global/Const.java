@@ -97,4 +97,16 @@ public class Const {
 
 	public static final int AVATAR_SELECTION=0x38F;//头像选择
 	public static final LatLonPoint TianAnMenPoint = new LatLonPoint(39.906905, 116.397541);
+	public static final int PAGE_SIZE_MYBOOKS = 10;//我的所有书籍 页 每次刷新页面条目数量
+
+	//状态：在架
+	public static final String BOOK_STATUS_ONSHELF="2308b2e0-3df2-11e7-84d2-005056c00001";
+	//分享中
+	public static final String BOOK_STATUS_SHARED="29890cac-3df2-11e7-84d2-005056c00001";
+	//已借出
+	public static final String BOOK_STATUS_LOANED="5c79df56-5f9c-11e7-bccd-00163e062b56";
+	//已借入
+	public static final String BOOK_STATUS_BORROWED="37277044-3df2-11e7-84d2-005056c00001";
+	//交换中
+	public static final String BOOK_STATUS_CHANGING="7fc7a219-5f9c-11e7-bccd-00163e062b56";
 }

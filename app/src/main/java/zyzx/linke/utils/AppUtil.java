@@ -18,14 +18,20 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.Images;
+import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.model.bean.Rating;
 import zyzx.linke.model.bean.TelephonyManagerInfo;
 
 public class AppUtil {
@@ -466,4 +472,50 @@ public class AppUtil {
 	public static String getPhoneType() {
 		return Build.MODEL;
 	}
+
+    public static ArrayList<MyBookDetailVO> getBookDetailVOs(List<JSONObject> items) {
+		ArrayList<MyBookDetailVO> mBvos = new ArrayList<>();
+		for (JSONObject jo:items) {
+			MyBookDetailVO mBV = new MyBookDetailVO();
+			BookDetail2 mV = new BookDetail2();
+			mV.setPubdateDateType(jo.getDate("CREATE_DATE"));
+			mV.setAlt(jo.getString("alt"));
+			mV.setTitle(jo.getString("alt_title"));
+			mV.setAuthor_intro(jo.getString("author_intro"));
+			mBV.setBookStatusId(jo.getString("book_status_id"));
+			mV.setCatalog(jo.getString("catalog"));
+			mV.setBinding(jo.getString("bindName"));
+			mV.setId(jo.getString("id"));
+			Images img = new Images();
+			img.setLarge(jo.getString("image_large"));
+			img.setMedium(jo.getString("image_medium"));
+			img.setSmall(jo.getString("image_small"));
+			mV.setImages(img);
+			mV.setIsbn10(jo.getString("isbn10"));
+			mV.setIsbn13(jo.getString("isbn13"));
+			mV.setFromDouban(jo.getBoolean("isfrom_douban"));
+			mV.setOrigin_title(jo.getString("origin_title"));
+			mV.setPages(String.valueOf(jo.getInteger("pages")));
+			mV.setPrice(jo.getString("price"));
+			mV.setPubdateDateType(jo.getDate("pubdate"));
+			mV.setPubdate(new SimpleDateFormat("yyyy-MM-dd").format(mV.getPubdateDateType()));
+			mV.setPublisher(jo.getString("publisher"));
+			Rating rate = new Rating();
+			rate.setAverage(jo.getDouble("rating_average"));
+			rate.setMax(jo.getDouble("rating_max"));
+			rate.setMin(jo.getDouble("rating_min"));
+			rate.setNumRaters(jo.getInteger("rating_numRaters"));
+			mV.setRating(rate);
+			mV.setSubtitle(jo.getString("subtitle"));
+			mV.setSummary(jo.getString("summary"));
+			mV.setTitle(jo.getString("title"));
+			List<String> tran = new ArrayList<>();
+			tran.add(jo.getString("translator"));
+			mV.setTranslator(tran);
+			mBV.setUserBookId(jo.getString("user_book_id"));
+			mBV.setBook(mV);
+			mBvos.add(mBV);
+		}
+		return mBvos;
+    }
 }

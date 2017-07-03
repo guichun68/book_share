@@ -12,7 +12,8 @@ public class UserVO implements Serializable, Cloneable{
 	private String countyName;
 	private String diplomaName;//学历
 
-	private Integer userid;
+	private String uid;//uuid
+	private Integer userid;//环信用
 	private String loginName;
 	private String mobilePhone;
 	private String address;
@@ -43,6 +44,14 @@ public class UserVO implements Serializable, Cloneable{
 		this.userid = userId;
 		this.loginName = loginName;
 		this.headIcon = headIcon;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getGenderName() {

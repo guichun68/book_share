@@ -16,13 +16,11 @@ import java.util.List;
  */
 
 public class ResponseJson {
-    private String json;
     public JSONArray data;
     public Integer errorCode;
     public String errorMsg;
 
     public ResponseJson(String json){
-        this.json = json;
         JSONObject jsonObject = JSON.parseObject(json);
         errorCode = jsonObject.getInteger("errorCode");
         errorMsg = jsonObject.getString("errorMsg");

@@ -144,9 +144,9 @@ public class ModelImpl implements IModel {
         Request.Builder builder = new Request.Builder();
         StringBuilder sb = new StringBuilder("?");
         if(param!=null)
-        for (Map.Entry<String,String> entry:param.entrySet()) {
-           sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-        }
+            for (Map.Entry<String,String> entry:param.entrySet()) {
+               sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+            }
         if(sb.length()>0)
         {
             sb.deleteCharAt(sb.length()-1);

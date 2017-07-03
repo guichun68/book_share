@@ -112,7 +112,7 @@ public class GlobalParams {
 	/**
 	 * 获取我登录的所有书籍(借入的除外)
 	 */
-	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
+	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 	/**
 	 * 获取用户签名
 	 */
@@ -174,7 +174,7 @@ public class GlobalParams {
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
-		urlGetMyBooks = GlobalParams.BASE_URL+"/zyzx/getMyBooks.action";
+		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";

@@ -71,6 +71,7 @@ public class UserPresenter extends IUserPresenter {
                            u.setRealName(jo.getString("realName"));
                            u.setUrl(jo.getString("url"));
                            u.setUserid(jo.getInteger("userid"));
+                           u.setUid(jo.getString("uid"));
                        }
                        GlobalParams.saveUser(u);
                        if(viewCallBack!=null){

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +14,14 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.model.bean.Page;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.presentation.IBookPresenter;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -50,9 +54,13 @@ public class BookPresenter extends IBookPresenter {
                         return;
                     }
                     Date pubdate = StringUtil.getDate(jsonObject.getString("pubdate"));
+                    Integer pages = StringUtil.getNumFromStr(jsonObject.getString("pages"));
                     BookDetail2 bookDetail = JSON.parseObject(response, BookDetail2.class);
                     if(pubdate!=null){
                         bookDetail.setPubdateDateType(pubdate);
+                    }
+                    if(pages !=null){
+                        bookDetail.setPages(String.valueOf(pages));
                     }
                     if(viewCallBack!=null){
                         viewCallBack.onSuccess(bookDetail);
@@ -211,12 +219,12 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
-    public void getMyBooks(Integer userid, int pageNum, final CallBack viewCallBack) {
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("user_id",String.valueOf(userid));
-        param.put("page_num",String.valueOf(pageNum));
+    public void getMyBooks(String uid, int pageNum, final CallBack viewCallBack) {
+        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{uid}",uid);
+        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{pageSize}",String.valueOf(Const.PAGE_SIZE_MYBOOKS));
+        GlobalParams.urlGetMyBooks=GlobalParams.urlGetMyBooks.replace("{curPage}",String.valueOf(pageNum));
         try {
-            getModel().post(GlobalParams.urlGetMyBooks, param, new CallBack() {
+            getModel().get(GlobalParams.urlGetMyBooks, null, new CallBack() {
                 @Override
                 public void onSuccess(Object obj, int... code) {
                     String json = (String) obj;
@@ -224,9 +232,17 @@ public class BookPresenter extends IBookPresenter {
                         if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
                         return;
                     }
-                    List<MyBookDetailVO> myBookDetailVOs = JSON.parseArray(json, MyBookDetailVO.class);
-                    if(viewCallBack!=null){
-                        viewCallBack.onSuccess(myBookDetailVOs);
+                    DefindResponseJson drj = new DefindResponseJson(json);
+                    if(drj.errorCode!=null) {
+                        if(drj.errorCode!=1 && viewCallBack!=null){
+                                viewCallBack.onFailure(drj.errorMsg);
+                        }
+                        if(drj.errorCode==1){//成功获取
+                            Page page = drj.data;
+                            List<JSONObject> items = page.getItems();
+                            ArrayList<MyBookDetailVO> myBooks = AppUtil.getBookDetailVOs(items);
+                            if(viewCallBack!=null)viewCallBack.onSuccess(myBooks);
+                        }
                     }
                 }
 
@@ -235,7 +251,7 @@ public class BookPresenter extends IBookPresenter {
                     if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
         }

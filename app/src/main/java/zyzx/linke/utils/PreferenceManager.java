@@ -70,6 +70,7 @@ public class PreferenceManager {
 	private static String KEY_CALL_FIX_SAMPLE_RATE = "KEY_CALL_FIX_SAMPLE_RATE";
 	private static String KEY_LAST_LOGIN_USER_NICK = "KEY_LAST_LOGIN_USER_NICK";
 	private static String KEY_LAST_LOGIN_USER_ID = "KEY_LAST_LOGIN_USER_ID";
+	private static String KEY_LAST_LOGIN_USER_UUID = "KEY_LAST_LOGIN_USER_UUID";
 	private static String KEY_LAST_LOGIN_USER_HSH = "KEY_LAST_LOGIN_USER_HSH";
 	private static String KEY_CURR_USER_PSW = "KEY_CURR_USER_PSW";
 	private static String KEY_AUTO_LOGIN_FLAG = "KEY_AUTO_LOGIN_FLAG";
@@ -262,7 +263,8 @@ public class PreferenceManager {
 
 	public UserVO getLastLoginUser(){
 		UserVO u = new UserVO();
-		u.setUserid(mSharedPreferences.getInt(KEY_LAST_LOGIN_USER_ID,0));
+		u.setUserid(mSharedPreferences.getInt(KEY_LAST_LOGIN_USER_ID,0));//环信用id
+		u.setUid(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_UUID,""));
 		if(u.getUserid()==0){
 			return null;
 		}
@@ -311,6 +313,7 @@ public class PreferenceManager {
 		if(u==null){
 			editor.remove(KEY_LAST_LOGIN_USER_NICK);
 			editor.remove(KEY_LAST_LOGIN_USER_ID);
+			editor.remove(KEY_LAST_LOGIN_USER_UUID);
 			editor.remove(KEY_MOBILE_PHONE);
 			editor.remove(KEY_ADDRESS);
 			editor.remove(KEY_LAST_LOGIN_USER_HSH);
@@ -338,6 +341,12 @@ public class PreferenceManager {
 		editor.putString(KEY_LAST_LOGIN_USER_NICK, u.getLoginName());
 		if(u.getUserid()!=null){
 			editor.putInt(KEY_LAST_LOGIN_USER_ID,u.getUserid());
+		}
+		if(!TextUtils.isEmpty(u.getUid())){
+			editor.putString(KEY_LAST_LOGIN_USER_UUID,u.getUid());
+		}
+		if(!TextUtils.isEmpty(u.getUid())){
+			editor.putString(KEY_LAST_LOGIN_USER_UUID,u.getUid());
 		}
 		if(!TextUtils.isEmpty(u.getMobilePhone())){
 			editor.putString(KEY_MOBILE_PHONE,u.getMobilePhone());
@@ -572,12 +581,20 @@ public class PreferenceManager {
 		editor.putString(KEY_LAST_LOGIN_USER_ID, userId);
 		editor.apply();
 	}
+	public void setLastLoginUserUuid(String uid){
+		editor.putString(KEY_LAST_LOGIN_USER_UUID, uid);
+		editor.apply();
+	}
+
 	public void setLastLoginUserPSWHASH(String hashPsw) {
 		editor.putString(KEY_LAST_LOGIN_USER_HSH, hashPsw).commit();
 	}
 
 	public Integer getLastLoginUserId() {
 		return mSharedPreferences.getInt(KEY_LAST_LOGIN_USER_ID, 0);
+	}
+	public String getLastLoginUserUUId() {
+		return mSharedPreferences.getString(KEY_LAST_LOGIN_USER_UUID, "");
 	}
 	public String getLastLoginUserPSWHASH() {
 		return mSharedPreferences.getString(KEY_LAST_LOGIN_USER_HSH, null);

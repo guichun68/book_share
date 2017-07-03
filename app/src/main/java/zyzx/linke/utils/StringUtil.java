@@ -4,6 +4,8 @@
  */
 package zyzx.linke.utils;
 
+import android.text.TextUtils;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -546,5 +548,22 @@ public class StringUtil {
             }
         }
         return date;
+    }
+
+    /**
+     * 从一堆字符串中提取数字；如“共56页”，返回56
+     */
+    public static Integer getNumFromStr(String str){
+        if(isEmpty(str)){
+            return null;
+        }
+        String regEx="[^0-9]";
+        Pattern p= Pattern.compile(regEx);
+        Matcher m= p.matcher(str);
+        try{
+            return Integer.parseInt(m.replaceAll("").trim());
+        }catch(NumberFormatException e){
+            return null;
+        }
     }
 }
