@@ -404,9 +404,9 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void modifyPsw(Integer userid, String oldPsw, String newPsw, CallBack callBack) {
+    public void modifyPsw(String uid, String oldPsw, String newPsw, CallBack callBack) {
         HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(userid));
+        param.put("uid",uid);
         param.put("old_psw",oldPsw);
         param.put("new_psw",newPsw);
         try {

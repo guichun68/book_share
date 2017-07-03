@@ -314,7 +314,7 @@ public class ManualInputAct extends BaseActivity {
                     public void run() {
                         JSONObject jsonObject = JSON.parseObject(json);
                         Integer code = jsonObject.getInteger("code");
-                        Integer bookId = jsonObject.getInteger("book_id");
+                        String bookId = jsonObject.getString("book_id");
                         String bookImageUrl = jsonObject.getString("book_image");
                         if(code == null){
                             return;
@@ -324,7 +324,7 @@ public class ManualInputAct extends BaseActivity {
                                 showDialog("您已经添加过该书了,无须重复添加！");
                                 break;
                             case 300://book有记录，user_book无记录，自动关联该书籍成功
-                                mBook.setB_id(bookId);
+                                mBook.setId(bookId);
                                 mBook.setImage(bookImageUrl);
                                 mBook.setImage_medium(bookImageUrl);
                                 showAskIfShareOnMapDialog("系统搜索到该书籍信息,已自动关联并添加！是否在地图中分享此书?");
@@ -337,7 +337,7 @@ public class ManualInputAct extends BaseActivity {
                                 break;
                             case 700://book无记录，user_book无记录，插入book数据成功，插入user_book成功
 //                                showDialog("添加成功！");
-                                mBook.setB_id(bookId);
+                                mBook.setId(bookId);
                                 mBook.setImage(bookImageUrl);
                                 mBook.setImage_medium(bookImageUrl);
                                 showAskIfShareOnMapDialog("添加成功,是否在地图分享此书?");

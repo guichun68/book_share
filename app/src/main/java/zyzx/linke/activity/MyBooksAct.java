@@ -36,6 +36,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
 
@@ -49,7 +50,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private PullToRefreshListView mPullRefreshListView;
     private AllMyBookAdapter myBookAdapter;
     private ArrayList<MyBookDetailVO> mBooks;
-    private int mPageNum=1;
+    private int mPageNum = 1;
     private PopupWindow pop;
     private int mWindowWidth;
     private boolean isLoadingMore;//是否是加载更多的动作
@@ -130,9 +131,11 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
     private Dialog mPromptDialog;
     private int tempPosition;//临时记录点击条目跳转到分享页面时的position
+
     /**
      * 初始化并设置popupWin中的控件
-     * @param popView popWindow View
+     *
+     * @param popView      popWindow View
      * @param bookDetailVO book detail bean
      */
     private void setPopwinViewControls(final View popView, final MyBookDetailVO bookDetailVO, final int position) {
@@ -147,24 +150,24 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext,"确定要移除《"+bookDetailVO.getBook().getTitle()+"》这本书么?","确定","保留",
-                                new PopItemClickListener(bookDetailVO,position,PopItemClickListener.REMOVE_FROM_BOOKRACK),null);
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定要移除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
+                                new PopItemClickListener(bookDetailVO, position, PopItemClickListener.REMOVE_FROM_BOOKRACK), null);
                         mPromptDialog.show();
                     }
                 });
-                item2.setOnClickListener(new PopItemClickListener(bookDetailVO,position,PopItemClickListener.SHARE_ON_MAP));
+                item2.setOnClickListener(new PopItemClickListener(bookDetailVO, position, PopItemClickListener.SHARE_ON_MAP));
                 break;
             case Const.BOOK_STATUS_SHARED://地图分享中。。。
                 item1.setText("取消分享");
                 item2.setText("取消分享并从书架删除");
-                item1.setOnClickListener(new PopItemClickListener(bookDetailVO,position,PopItemClickListener.CANCEL_SHARE));
+                item1.setOnClickListener(new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SHARE));
 
                 item2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext,"确定取消分享并移除《"+bookDetailVO.getBook().getTitle()+"》这本书么?","确定","取消",
-                                new PopItemClickListener(bookDetailVO,position,PopItemClickListener.CANCEL_AND_REMOVE),null);
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定取消分享并移除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                                new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_AND_REMOVE), null);
                         mPromptDialog.show();
 
                     }
@@ -176,7 +179,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         }
     }
 
-    private class PopItemClickListener implements View.OnClickListener{
+    private class PopItemClickListener implements View.OnClickListener {
         private int operId;
         private MyBookDetailVO bookDetailVO;
         private static final int REMOVE_FROM_BOOKRACK = 0;//从书架移除
@@ -184,11 +187,12 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         private static final int CANCEL_SHARE = 2;//取消地图分享
         private static final int CANCEL_AND_REMOVE = 3;//取消地图中分享并从书架移除
         private int position;//在listView中的位置索引
+
         /**
          * @param bookDetailVO 操作的书籍
-         * @param operId 操作id
+         * @param operId       操作id
          */
-        PopItemClickListener(MyBookDetailVO bookDetailVO,int position,Integer operId){
+        PopItemClickListener(MyBookDetailVO bookDetailVO, int position, Integer operId) {
             this.operId = operId;
             this.bookDetailVO = bookDetailVO;
             this.position = position;
@@ -197,10 +201,10 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         @Override
         public void onClick(final View v) {
             CustomProgressDialog.dismissDialog(mPromptDialog);
-            switch (operId){
+            switch (operId) {
                 case REMOVE_FROM_BOOKRACK://从书架删除
                     showDefProgress();
-                    getBookPresenter().deleteUserBook(GlobalParams.getLastLoginUser().getUserid(), bookDetailVO.getBook().getB_id(), null, new CallBack() {
+                    getBookPresenter().deleteUserBook(GlobalParams.getLastLoginUser().getUid(), bookDetailVO.getBook().getId(), new CallBack() {
 
                         @Override
                         public void onSuccess(final Object obj, int... code) {
@@ -212,12 +216,20 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                         pop.dismiss();
                                     }
                                     String json = (String) obj;
-                                    JSONObject jsonObj = JSON.parseObject(json);
-                                    Integer code = jsonObj.getInteger("code");
-                                    if (code != null && code == 200) {
-                                        Snackbar.make(llRoot,"删除成功",Snackbar.LENGTH_SHORT).show();
-                                        mBooks.remove(bookDetailVO);
-                                        myBookAdapter.notifyDataSetChanged();
+                                    ResponseJson rj = new ResponseJson(json);
+                                    if (rj.errorCode != null) {
+                                        switch (rj.errorCode) {
+                                            case Const.SUCC_ERR_CODE:
+                                                UIUtil.showToastSafe(rj.errorMsg);
+                                                mBooks.remove(bookDetailVO);
+                                                myBookAdapter.notifyDataSetChanged();
+                                                break;
+                                            default:
+                                                UIUtil.showToastSafe(rj.errorMsg);
+                                                break;
+                                        }
+                                    }else{
+                                        UIUtil.showToastSafe("未能成功删除");
                                     }
                                 }
                             });
@@ -230,19 +242,19 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                 @Override
                                 public void run() {
                                     dismissProgress();
-                                    Snackbar.make(llRoot,"删除失败",Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(llRoot, "删除失败", Snackbar.LENGTH_LONG).show();
                                 }
                             });
                         }
                     });
                     break;
                 case SHARE_ON_MAP://地图中分享
-                    Intent in = new Intent(mContext,BookShareOnMapAct.class);
+                    Intent in = new Intent(mContext, BookShareOnMapAct.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(BundleFlag.BOOK,bookDetailVO.getBook());
+                    bundle.putSerializable(BundleFlag.BOOK, bookDetailVO.getBook());
                     in.putExtras(bundle);
                     tempPosition = position;
-                    startActivityForResult(in,tempPosition);
+                    startActivityForResult(in, tempPosition);
                     break;
                 case CANCEL_SHARE://取消分享
                     showDefProgress();
@@ -285,7 +297,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     /**
      * 获取我的所有书籍（不包含借入的书籍）
      *
-     * @param uid user's uuid
+     * @param uid     user's uuid
      * @param pageNum pageNo
      */
     private void getBooks(String uid, int pageNum) {
@@ -301,10 +313,10 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
                         if (books == null || books.isEmpty()) {
                             UIUtil.showToastSafe("没有更多书籍了!");
-                            if(isLoadingMore){
+                            if (isLoadingMore) {
                                 mPageNum--;
-                                if(mPageNum<0)mPageNum=0;
-                                isLoadingMore=false;
+                                if (mPageNum < 0) mPageNum = 0;
+                                isLoadingMore = false;
                             }
                         } else {
                             mBooks.addAll(books);
@@ -322,9 +334,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         dismissProgress();
                         mPullRefreshListView.onRefreshComplete();
                         mPullRefreshListView.clearAnimation();
-                        if(isLoadingMore){
+                        if (isLoadingMore) {
                             mPageNum--;
-                            if(mPageNum<0)mPageNum=0;
+                            if (mPageNum < 0) mPageNum = 0;
                             isLoadingMore = false;
                         }
                         UIUtil.showToastSafe("未能获取书籍信息!");
@@ -337,7 +349,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     @Override
     protected void onResume() {
         super.onResume();
-        if(pop!=null){
+        if (pop != null) {
             pop.dismiss();
         }
     }

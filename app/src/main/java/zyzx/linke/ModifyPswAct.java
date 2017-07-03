@@ -10,7 +10,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -46,31 +48,31 @@ public class ModifyPswAct extends BaseActivity {
             case R.id.btn_ok:
                 if(!checkInput()){return;}
                 showProgress(UIUtil.getString(R.string.loading));
-                getUserPresenter().modifyPsw(GlobalParams.getLastLoginUser().getUserid(),etOldPsw.getText().toString().trim(),
+                getUserPresenter().modifyPsw(GlobalParams.getLastLoginUser().getUid(),etOldPsw.getText().toString().trim(),
                         etNewPsw.getText().toString().trim(),new CallBack(){
 
                             @Override
-                            public void onSuccess(final Object obj, int... code) {
+                            public void onSuccess(final Object obj, final int... code) {
                                 dismissProgress();
+                                final String json = (String) obj;
+                                if(StringUtil.isEmpty(json)){
+                                    UIUtil.showToastSafe("修改失败，请稍后再试！");
+                                    return;
+                                }
+                                final ResponseJson rj = new ResponseJson((String)obj);
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        String json = (String) obj;
-                                        if(StringUtil.isEmpty(json)){
-                                            UIUtil.showToastSafe(R.string.err_request);
-                                            return;
-                                        }
-                                        JSONObject jsonObj = JSON.parseObject(json);
-                                        int code = jsonObj.getInteger("code");
-                                        switch(code){
-                                            case 500://不可预知异常错误
+                                        switch(rj.errorCode){
+                                            case 2://Server不可预知异常错误
                                                 UIUtil.showToastSafe(R.string.err_request);
                                                 break;
-                                            case 400://旧密码错误
+                                            case 1://旧密码错误
                                                 UIUtil.showToastSafe(R.string.err_old_psw);
                                                 etOldPsw.setError(UIUtil.getString(R.string.err_old_psw));
                                                 break;
-                                            case 200://修改成功
+                                            case Const.SUCC_ERR_CODE://修改成功
                                                 UIUtil.showToastSafe(R.string.modify_succ);
                                                 finish();
                                                 break;
@@ -84,6 +86,9 @@ public class ModifyPswAct extends BaseActivity {
                             @Override
                             public void onFailure(Object obj, int... code) {
                                 dismissProgress();
+                                if(obj instanceof String){
+                                    UIUtil.showToastSafe((String) obj);
+                                }
                             }
                         });
 

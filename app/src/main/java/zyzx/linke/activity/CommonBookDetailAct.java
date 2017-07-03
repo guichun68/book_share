@@ -76,7 +76,7 @@ public class CommonBookDetailAct extends BaseActivity {
         rlLocation.setOnClickListener(this);
     }
 
-    Integer bookId;//添加地图成功后返回的bookId
+    String bookId;//添加地图成功后返回的bookId
 
     @Override
     public void onClick(View view) {
@@ -98,8 +98,8 @@ public class CommonBookDetailAct extends BaseActivity {
                         JSONObject jsonObject = JSON.parseObject(responseJson);
                         int code2 = jsonObject.getInteger("code");
                         if(code2 == 200){
-                            bookId = jsonObject.getInteger("bookId");
-                            mBook.setB_id(bookId);
+                            bookId = jsonObject.getString("bookId");
+                            mBook.setId(bookId);
                             UIUtil.showToastSafe("添加成功");
                             runOnUiThread(new Runnable() {
                                 @Override

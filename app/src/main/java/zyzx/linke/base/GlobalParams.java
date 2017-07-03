@@ -78,7 +78,7 @@ public class GlobalParams {
 	public static String urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 	//checkupdate
 	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
-	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
+	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 	public static String urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 	/**
 	 * 默认头像地址
@@ -92,7 +92,7 @@ public class GlobalParams {
 	/**
 	 * 用户删除指定书籍
 	 */
-	public static String urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
+	public static String urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 	/**
 	 * 获取用户的所有书籍
 	 */
@@ -112,7 +112,7 @@ public class GlobalParams {
 	/**
 	 * 获取我登录的所有书籍(借入的除外)
 	 */
-	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
+	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 	/**
 	 * 获取用户签名
 	 */
@@ -174,8 +174,8 @@ public class GlobalParams {
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
-		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
-		urlDeleteUserBooks= GlobalParams.BASE_URL+"/zyzx/delUserBook.action";
+		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
+		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
@@ -192,7 +192,7 @@ public class GlobalParams {
 		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
 		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
-		urlModifyPsw = GlobalParams.BASE_URL+"/user/modifyPsw.action";
+		urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";

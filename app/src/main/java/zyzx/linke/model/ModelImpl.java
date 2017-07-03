@@ -334,7 +334,7 @@ public class ModelImpl implements IModel {
             public void onResponse(final Call call, Response response) throws IOException {
                 final String res = new String(response.body().string());
                 if(res.toLowerCase().contains("</html>")||res.toLowerCase().contains("<html>")){
-                    callBack.onFailure(res);
+                    callBack.onFailure("网络或服务器故障，请检查");
                     Log.e("error","网络或服务器故障，请检查");
                     return;
                 }

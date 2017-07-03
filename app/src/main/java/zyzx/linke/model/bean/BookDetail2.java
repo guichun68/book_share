@@ -17,8 +17,6 @@ public class BookDetail2 implements Serializable{
 
 	private String catalog;
 
-	private Integer b_id;
-
 	private String image;
 
 	private Images images;
@@ -129,14 +127,6 @@ public class BookDetail2 implements Serializable{
 
 	public String getCatalog() {
 		return this.catalog;
-	}
-
-	public Integer getB_id() {
-		return b_id;
-	}
-
-	public void setB_id(Integer b_id) {
-		this.b_id = b_id;
 	}
 
 	public void setImage(String image) {
