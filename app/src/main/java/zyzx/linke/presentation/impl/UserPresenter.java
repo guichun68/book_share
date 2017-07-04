@@ -436,19 +436,18 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void uploadExcelFile(Integer userId, String filePath, CallBack viewCallBack) {
+    public void uploadExcelFile(String userId, String filePath, CallBack viewCallBack) {
         HashMap<String,Object> params = getParam();
         params.put("file",new File(filePath));
         params.put("user_id",userId);
-        //TODO 新接口待实现
-        /*try {
-            getModel().post2(GlobalParams.urlUploadExcel, params, viewCallBack);
+        try {
+            getModel().sendMultipart(GlobalParams.urlUploadExcel, params, viewCallBack);
         }catch (Exception e){
             if(viewCallBack!=null){
                 viewCallBack.onFailure("导入失败！");
                 UIUtil.showTestLog("zyzx",e.getMessage());
             }
-        }*/
+        }
     }
 
     @Override

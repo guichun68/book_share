@@ -14,15 +14,9 @@ public interface IModel {
     void post(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
     void post(String url, HashMap<String,Object> param,EMValueCallBack callBack)throws IOException;
 
-    /**
-     * 目前针对上传时带图片的参数用
-     * @param url
-     * @param param
-     * @param callBack
-     * @throws IOException
-     */
-//    void post2(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
     void get(String url,HashMap<String,String> param,CallBack callBack);
     //上传文件及参数
     void sendMultipart(String url, HashMap<String, Object> param, final CallBack callBack);
+
+    void uploadMultiFile(String url, HashMap<String,Object> param,  CallBack callBack) throws IOException;
 }

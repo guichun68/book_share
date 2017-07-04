@@ -266,6 +266,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     }else{
                         uploadExcelFile(path);
                     }
+                }else{
+                    UIUtil.showToastSafe("未能检测到该文件");
                 }
             }
         }else if(requestCode==REQUEST_CODE_PERSONAL_ACT){
@@ -285,7 +287,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     private void uploadExcelFile(String filePath){
         showDefProgress();
-        getUserPresenter().uploadExcelFile(GlobalParams.getLastLoginUser().getUserid(), filePath, new CallBack() {
+        getUserPresenter().uploadExcelFile(GlobalParams.getLastLoginUser().getUid(), filePath, new CallBack() {
             @Override
             public void onSuccess(final Object obj, int... code) {
                 getActivity().runOnUiThread(new Runnable() {

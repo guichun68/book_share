@@ -53,7 +53,7 @@ public abstract class IUserPresenter extends IPresenter{
     /**
      * 上传Excel文件
      */
-    public abstract void uploadExcelFile(Integer userId,String filePath,CallBack viewCallBack);
+    public abstract void uploadExcelFile(String uid,String filePath,CallBack viewCallBack);
 
     /**
      * 修改用户签名

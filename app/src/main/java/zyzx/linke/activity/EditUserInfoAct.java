@@ -74,9 +74,9 @@ public class EditUserInfoAct extends BaseActivity {
             switch (msg.what) {
                 case GET_CITIES:
                     List<Area> areas = new ArrayList<>();
-                    if(msg.obj!=null){
+                    if (msg.obj != null) {
                         List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj:areasJSON) {
+                        for (JSONObject jobj : areasJSON) {
                             Area a = new Area();
                             a.setName(jobj.getString("name"));
                             a.setAreacode(jobj.getString("areaCode"));
@@ -107,9 +107,9 @@ public class EditUserInfoAct extends BaseActivity {
                     break;
                 case GET_COUNTIES:
                     List<Area> areas1 = new ArrayList<>();
-                    if(msg.obj != null){
+                    if (msg.obj != null) {
                         List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj:areasJSON) {
+                        for (JSONObject jobj : areasJSON) {
                             Area a = new Area();
                             a.setName(jobj.getString("name"));
                             a.setAreacode(jobj.getString("areaCode"));
@@ -139,10 +139,10 @@ public class EditUserInfoAct extends BaseActivity {
                 case INIT_CITY://初始化页面时不修改 顶部地区显示,显示用户未修改之前的选择地区
                     //显示所在的地级市
                     String json2 = "";
-                    List<Area> areas2 =new ArrayList<>();
+                    List<Area> areas2 = new ArrayList<>();
                     if (msg.obj != null) {
                         List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj:areasJSON) {
+                        for (JSONObject jobj : areasJSON) {
                             Area a = new Area();
                             a.setName(jobj.getString("name"));
                             a.setAreacode(jobj.getString("areaCode"));
@@ -171,7 +171,7 @@ public class EditUserInfoAct extends BaseActivity {
                     List<Area> areas3 = new ArrayList<>();
                     if (msg.obj != null) {
                         List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj:areasJSON) {
+                        for (JSONObject jobj : areasJSON) {
                             Area a = new Area();
                             a.setName(jobj.getString("name"));
                             a.setAreacode(jobj.getString("areaCode"));
@@ -443,7 +443,7 @@ public class EditUserInfoAct extends BaseActivity {
                             finish();//此处一定要调用finish()方法
                             break;
                         default:
-                            UIUtil.showToastSafe("保存失败,code="+rj.errorCode);
+                            UIUtil.showToastSafe("保存失败,code=" + rj.errorCode);
                             break;
                     }
                 } else {
@@ -467,22 +467,18 @@ public class EditUserInfoAct extends BaseActivity {
      * @return 如果不一致，则返回一个包含最新最全数据的UserVO对象；如一致则返回null
      */
     private UserVO isDifference(UserVO uv, UserVO rawUV) {
+        if (rawUV.getCityId() != null && uv.getCityId() != null)
+            if (uv.getCityId().intValue() == rawUV.getCityId().intValue())
+                if (uv.getGender().intValue() == rawUV.getGender().intValue())
+                    if (uv.getSchool().equals(rawUV.getSchool()))
+                        if (uv.getDepartment().equals(rawUV.getDepartment()))
+                            if (uv.getDiplomaId().intValue() == rawUV.getDiplomaId().intValue())
+                                if (uv.getSoliloquy().equals(rawUV.getSoliloquy()))
+                                    if (uv.getBirthday() != null && rawUV.getBirthday() != null)
+                                        if (uv.getBirthday().equals(rawUV.getBirthday()))
+                                            return null;
 
-        if (uv.getCityId().intValue() == rawUV.getCityId().intValue()) {
-            if (uv.getGender().intValue() == rawUV.getGender().intValue()) {
-                if (uv.getSchool().equals(rawUV.getSchool())) {
-                    if (uv.getDepartment().equals(rawUV.getDepartment())) {
-                        if (uv.getDiplomaId().intValue() == rawUV.getDiplomaId().intValue()) {
-                            if (uv.getSoliloquy().equals(rawUV.getSoliloquy())) {
-                                if (uv.getBirthday().equals(rawUV.getBirthday())) {
-                                    return null;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
         UserVO usv = (UserVO) rawUV.clone();
         if (saveCounty != null) {
             usv.setCityId(saveCounty.getId());
@@ -571,14 +567,14 @@ public class EditUserInfoAct extends BaseActivity {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
             ResponseJson rj = new ResponseJson(jsonTemp);
-            if(rj.errorCode!=0 || rj.data==null){
+            if (rj.errorCode != 0 || rj.data == null) {
                 msg.what = GET_AREA_ERROR;
-                msg.obj = "访问出错 code="+rj.errorCode;
+                msg.obj = "访问出错 code=" + rj.errorCode;
                 mHandler.sendMessage(msg);
                 return;
             }
             Map map = (Map) rj.data.get(0);
-            Integer hold = Integer.parseInt((String)map.get("hold"));
+            Integer hold = Integer.parseInt((String) map.get("hold"));
             List<JSONObject> areas = (List<JSONObject>) map.get("areas");
             switch (hold) {
                 case HOLD_FLAG_CITY:

@@ -184,36 +184,36 @@ public class ModelImpl implements IModel {
         });
     }
 
-/*
-    @Override
-    public void post2(String url, HashMap<String, Object> param, final CallBack callBack) throws IOException {
-        //补全请求地址
-        MultipartBuilder builder = new MultipartBuilder();
-//        MultipartBody.Builder builder = new MultipartBody.Builder();
-        //设置类型
-        builder.type(MediaType.parse("multipart/form-data"));
-//        builder.setType(MultipartBody.FORM);
-        //追加参数
+    public void uploadMultiFile(String url, HashMap<String,Object> param, final CallBack callBack)throws IOException {
+        final String TAG= "update";
+        File file = new File("fileDir", "test.jpg");
+
+        MultipartBody.Builder builder = new MultipartBody.Builder();
         for (String key : param.keySet()) {
             Object object = param.get(key);
             if (!(object instanceof File)) {
                 builder.addFormDataPart(key, object.toString());
             } else {
-                File file = (File) object;
-                builder.addFormDataPart(key, file.getName(), RequestBody.create(null, file));
+                File fileTemp = (File) object;
+                builder.addFormDataPart(key, fileTemp.getName(), RequestBody.create(null, fileTemp));
             }
         }
-        //创建RequestBody
-        RequestBody body = builder.build();
-        //创建Request
-        final Request request = new Request.Builder().url(url).post(body).build();
-        //单独设置参数 比如读取超时时间
-        mClient.setWriteTimeout(50, TimeUnit.SECONDS);
-        Call call = mClient.newCall(request);
-//        final Call call = mClient.build(newCall(request)
-        call.enqueue(new Callback() {
+        builder.setType(MultipartBody.FORM);
+        RequestBody requestBody = builder.build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        final okhttp3.OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient  = httpBuilder
+                //设置超时
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 Log.e("zyzx", e.toString());
                 if(callBack!=null){
                     callBack.onFailure("上传失败");
@@ -221,7 +221,7 @@ public class ModelImpl implements IModel {
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String string = response.body().string();
                     UIUtil.showTestLog("zyzx", "response ----->" + string);
@@ -235,10 +235,7 @@ public class ModelImpl implements IModel {
                 }
             }
         });
-
     }
-*/
-
 
     /**
      * 上传文件及参数

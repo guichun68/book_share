@@ -53,7 +53,7 @@ public class GlobalParams {
 	 */
 	public static String urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 	//导入书籍清单
-	public static String urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
+	public static String urlUploadExcel = GlobalParams.BASE_URL+"/user/mobileSDK/uploadExcel.action";
 	/**
 	 * 关于临客
 	 */
@@ -196,7 +196,7 @@ public class GlobalParams {
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/mobileSDK/feedback.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
-		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
+		urlUploadExcel = GlobalParams.BASE_URL+"/user/mobileSDK/uploadExcel.action";
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
 	}
