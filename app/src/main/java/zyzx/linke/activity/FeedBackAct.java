@@ -10,13 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.FeedBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.TelephonyManagerInfo;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.NetworkUtil;
@@ -73,6 +72,7 @@ public class FeedBackAct extends BaseActivity{
                 TelephonyManagerInfo telephonyInfo = AppUtil.getTelephonyInfo(mContext);
                 mFeedBack = new FeedBack();
                 mFeedBack
+                        .setUid(GlobalParams.getLastLoginUser().getUid())
                         .setPhoneNetworkStandard(telephonyInfo.NetworkType + "")
                         .setPhoneOperatorName(NetworkUtil.getProvidersName(mContext))
                         .setPhoneOsVersion(AppUtil.getOsDisplay())
@@ -98,11 +98,17 @@ public class FeedBackAct extends BaseActivity{
                             UIUtil.showToastSafe("未能成功提交，请稍后重试!");
                             return;
                         }
-                        JSONObject jsonObj = JSON.parseObject(json);
-                        int code2 = jsonObj.getInteger("code");
-                        if(code2 ==200){
-                            UIUtil.showToastSafe("提交成功，谢谢反馈！");
-                            finish();
+                        ResponseJson rj = new ResponseJson(json);
+                        if(rj.errorCode!=null){
+                            switch (rj.errorCode){
+                                case 0://失败
+                                    UIUtil.showToastSafe("未能成功提交，请稍后重试!");
+                                    break;
+                                case 1:
+                                    UIUtil.showToastSafe("提交成功，谢谢反馈！");
+                                    finish();
+                                    break;
+                            }
                         }else{
                             UIUtil.showToastSafe("未能成功提交，请稍后重试!");
                         }

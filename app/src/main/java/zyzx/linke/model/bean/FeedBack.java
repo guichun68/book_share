@@ -7,6 +7,7 @@ public class FeedBack {
 	 * 5 EVDO revision 0;6 EVDO revision A;7 1xRTT;8 HSDPA;9 HSUPA;
 	 * 10 HSPA;11 iDen;12 EVDO revision B;13 LTE;14 eHRPD;15 HSPA+ 
 	 */
+	private String uid;
 	private String phoneNetworkStandard;
 	private String phoneOperatorName;//网络运营商
 	private String phoneOsVersion;
@@ -24,7 +25,16 @@ public class FeedBack {
 	private String title;
 	private String contactWay;
 	private String content;
-	
+
+	public String getUid() {
+		return uid;
+	}
+
+	public FeedBack setUid(String uid) {
+		this.uid = uid;
+		return this;
+	}
+
 	public String getPhoneNetworkStandard() {
 		return phoneNetworkStandard;
 	}

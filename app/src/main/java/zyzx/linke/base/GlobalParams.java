@@ -80,7 +80,7 @@ public class GlobalParams {
 	//checkupdate
 	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
 	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
-	public static String urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
+	public static String urlFeedBack = GlobalParams.BASE_URL+"/user/mobileSDK/feedback.action";
 	/**
 	 * 默认头像地址
 	 */
@@ -194,7 +194,7 @@ public class GlobalParams {
 		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
-		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
+		urlFeedBack = GlobalParams.BASE_URL+"/user/mobileSDK/feedback.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
