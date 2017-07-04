@@ -64,7 +64,9 @@ public class UserPresenter extends IUserPresenter {
                            u.setCreditScore(jo.getInteger("credit_socre"));
                            u.setLoginName(jo.getString("loginName"));
                            String tempUrl = jo.getString("photo");
-                           String headUrl = GlobalParams.BASE_URL+GlobalParams.AvatarDirName+tempUrl;
+                           String headUrl = null;
+                           if(!StringUtil.isEmpty(tempUrl))
+                               headUrl= GlobalParams.BASE_URL+GlobalParams.AvatarDirName+tempUrl;
                            u.setHeadIcon(headUrl);
                            u.setSignature(jo.getString("sig"));
                            u.setPassword(jo.getString("psw"));

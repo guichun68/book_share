@@ -65,14 +65,14 @@ public class ModifyPswAct extends BaseActivity {
                                     @Override
                                     public void run() {
                                         switch(rj.errorCode){
-                                            case 2://Server不可预知异常错误
+                                            case 0://Server不可预知异常错误
                                                 UIUtil.showToastSafe(R.string.err_request);
                                                 break;
-                                            case 1://旧密码错误
+                                            case 2://旧密码错误
                                                 UIUtil.showToastSafe(R.string.err_old_psw);
                                                 etOldPsw.setError(UIUtil.getString(R.string.err_old_psw));
                                                 break;
-                                            case Const.SUCC_ERR_CODE://修改成功
+                                            case 1://修改成功
                                                 UIUtil.showToastSafe(R.string.modify_succ);
                                                 finish();
                                                 break;

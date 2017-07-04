@@ -17,11 +17,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import zyzx.linke.model.AddCookiesInterceptor;
 
 public class DownloadUtil {
 
     private static DownloadUtil downloadUtil;
-    private final OkHttpClient okHttpClient;
+    private OkHttpClient okHttpClient;
 
     public static DownloadUtil get() {
         if (downloadUtil == null) {
@@ -55,6 +56,9 @@ public class DownloadUtil {
         } else {
             request = new Request.Builder().url(url).build();
         }
+        OkHttpClient.Builder builder1 = new OkHttpClient.Builder()
+                .addInterceptor(new AddCookiesInterceptor());
+        okHttpClient = builder1.build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

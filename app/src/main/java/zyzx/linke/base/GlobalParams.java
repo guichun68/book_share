@@ -65,7 +65,8 @@ public class GlobalParams {
 	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
 	//重置密码
 	public static String urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
-	public static String urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
+	//localhost//
+	public static String urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
 	//添加到黑名单
 	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 	//检查是否在对方的黑名单中
@@ -194,7 +195,7 @@ public class GlobalParams {
 		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/feedBack.action";
-		urlExportExcle = GlobalParams.BASE_URL+"/user/getSummary.action";
+		urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
 		urlUploadExcel = GlobalParams.BASE_URL+"/book/uploadExcel.action";
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";

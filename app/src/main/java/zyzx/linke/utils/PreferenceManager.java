@@ -590,6 +590,10 @@ public class PreferenceManager {
 		editor.putString(KEY_LAST_LOGIN_USER_HSH, hashPsw).commit();
 	}
 
+	/**
+	 * 环信Id
+	 * @return
+	 */
 	public Integer getLastLoginUserId() {
 		return mSharedPreferences.getInt(KEY_LAST_LOGIN_USER_ID, 0);
 	}

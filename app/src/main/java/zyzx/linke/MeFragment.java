@@ -168,7 +168,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
      */
     protected void downloadFile() {
         HashMap<String,Object> param = new HashMap<>();
-        param.put("user_id",PreferenceManager.getInstance().getLastLoginUserId());
+        param.put("uid",PreferenceManager.getInstance().getLastLoginUserUUId());
         DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir,param, new DownloadUtil.OnDownloadListener() {
             @Override
             public void onDownloadSuccess() {
