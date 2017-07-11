@@ -241,6 +241,8 @@
     <string name="open">打开</string>
     <string name="close">关闭</string>
     <string name="book_name">书名</string>
+    <string name="material_title">标题</string>
+    <string name="book_classify">类别</string>
     <string name="album_name">Camera</string>
 
     <string name="_jiantou">右侧箭头</string>
@@ -256,4 +258,9 @@
     <string name="connect_conflict">同一帐号已在其他设备登录</string>
     <string name="contact_way">联系方式</string>
     <string name="not_fill">未填写</string>
+
+    <string-array name="bookType">
+        <item>普通书籍</item>
+        <item>手写资料(笔记)</item>
+    </string-array>
 </resources>

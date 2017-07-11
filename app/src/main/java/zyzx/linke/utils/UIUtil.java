@@ -189,8 +189,9 @@ public class UIUtil {
 			Log.i(TAG, str);
 		}
 	}
-
-
+	public static void showTestLog(String str) {
+		showTestLog(TAG,str);
+	}
 
 	/**
 	 * 给button设置drawableLeft图片

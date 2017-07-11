@@ -72,7 +72,6 @@ public class UpdateActivity extends Activity {
 		 */
 		protected void showConfirmUpdateDialog() {
 			//对话框，他是activity的一部分。
-
 			android.support.v7.app.AlertDialog.Builder adb = new android.support.v7.app.AlertDialog.Builder(this);
 			adb.setTitle("升级提醒");
 			adb.setMessage(desc);
@@ -83,7 +82,6 @@ public class UpdateActivity extends Activity {
 					UpdateActivity.this.finish();
 				}
 			});
-			
 			adb.setPositiveButton("立刻升级", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -98,7 +96,6 @@ public class UpdateActivity extends Activity {
 			});
 
 			adb.setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
-				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					//跳转至主页面
@@ -118,10 +115,7 @@ public class UpdateActivity extends Activity {
 				@Override
 				public void onDownloadSuccess() {
 					UIUtil.showToastSafe(UpdateActivity.this, "下载完成");
-
 					mBuilder.setContentText("下载完成");
-
-
 					mNotificationManager.notify(0x00000fff, mBuilder.build());
 					Intent intent = new Intent();
 					intent.setAction("android.intent.action.VIEW");
@@ -143,5 +137,36 @@ public class UpdateActivity extends Activity {
 					UpdateActivity.this.finish();
 				}
 			});
+
+			/*DownloadManager.getInstance().download(url, new DownLoadObserver() {
+				@Override
+				public void onNext(DownloadInfo value) {
+					super.onNext(value);
+//					progress2.setMax((int) value.getTotal());
+//					progress2.setProgress((int) value.getProgress());
+					int progress =  (int)(value.getProgress()/value.getTotal());
+					mBuilder.setProgress(100,progress, false);
+					UIUtil.showTestLog("notifier:",progress+"");
+					mNotificationManager.notify(0x00000fff, mBuilder.build());
+				}
+
+				@Override
+				public void onComplete() {
+					if(downloadInfo != null){
+						UIUtil.showToastSafe(downloadInfo.getFileName() + Uri.encode("下载完成"));
+
+//						UIUtil.showToastSafe(UpdateActivity.this, "下载完成");
+						mBuilder.setContentText("下载完成");
+						mNotificationManager.notify(0x00000fff, mBuilder.build());
+						Intent intent = new Intent();
+						intent.setAction("android.intent.action.VIEW");
+						intent.addCategory("android.intent.category.DEFAULT");
+						File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir+"/"+GlobalParams.downloadFileName);
+						intent.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
+						startActivityForResult(intent, 0);
+					}
+				}
+			});*/
+
 		}
 }

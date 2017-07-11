@@ -107,4 +107,7 @@ public abstract class IBookPresenter extends IPresenter {
      * @param flag
      */
     public abstract void checkUpdate(int currVersionCode, CallBack callBack, boolean flag);
+
+    //得到用户发布的图书资料分类，如 考研、中考、高考
+    public abstract void getBookClassify(CallBack callBack);
 }

@@ -94,7 +94,7 @@ public class ScanBookDetailAct extends BaseActivity {
                         ResponseJson rj = new ResponseJson(responseJson);
                         if(rj.errorCode!=null) {
                             switch (rj.errorCode) {
-                                case Const.SUCC_ERR_CODE:
+                                case 1:
                                     bookId = (String) ((Map) rj.data.get(0)).get("bookId");
                                     mBook.setId(bookId);
                                     UIUtil.showToastSafe("添加成功");

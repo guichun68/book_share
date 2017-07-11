@@ -185,9 +185,6 @@ public class ModelImpl implements IModel {
     }
 
     public void uploadMultiFile(String url, HashMap<String,Object> param, final CallBack callBack)throws IOException {
-        final String TAG= "update";
-        File file = new File("fileDir", "test.jpg");
-
         MultipartBody.Builder builder = new MultipartBody.Builder();
         for (String key : param.keySet()) {
             Object object = param.get(key);
@@ -210,6 +207,7 @@ public class ModelImpl implements IModel {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(40, TimeUnit.SECONDS)
                 .readTimeout(40, TimeUnit.SECONDS)
+                .addInterceptor(new AddCookiesInterceptor())
                 .build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override

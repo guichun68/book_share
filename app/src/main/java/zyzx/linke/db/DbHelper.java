@@ -47,11 +47,11 @@ public class DbHelper extends SQLiteOpenHelper{
 	//数据库的版本变更时候执行1---》2
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			System.out.println("oldVersion:"+oldVersion+" newVersion:"+newVersion);
+			/*System.out.println("oldVersion:"+oldVersion+" newVersion:"+newVersion);
 			if(oldVersion<2){
 				db.execSQL(CREATE_PROVINCE_TABLE);
 				insertProData(db);
-			}
+			}*/
 	}
 
 

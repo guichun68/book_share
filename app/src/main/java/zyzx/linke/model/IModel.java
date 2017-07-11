@@ -18,5 +18,6 @@ public interface IModel {
     //上传文件及参数
     void sendMultipart(String url, HashMap<String, Object> param, final CallBack callBack);
 
+    //带有图片参数的请求
     void uploadMultiFile(String url, HashMap<String,Object> param,  CallBack callBack) throws IOException;
 }

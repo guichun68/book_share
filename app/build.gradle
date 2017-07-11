@@ -11,6 +11,10 @@ android {
         versionName "1.1.0 beta"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //为了开启Java8
+//        jackOptions{
+//            enabled true;
+//        }
     }
 
     buildTypes {
@@ -27,6 +31,12 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    //开启Java1.8 能够使用lambda表达式
+/*    compileOptions{
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }*/
     //use legacy for android 6.0
     useLibrary 'org.apache.http.legacy'
 
@@ -87,4 +97,7 @@ dependencies {
     compile 'com.android.support:multidex:'
     compile project(':easeui')
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    //RxJava和RxAndroid 用来做线程切换的
+//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+//    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
 }

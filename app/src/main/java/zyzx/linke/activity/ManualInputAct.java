@@ -9,10 +9,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -22,14 +25,16 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
-import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.FileUtil;
@@ -48,10 +53,15 @@ public class ManualInputAct extends BaseActivity {
     private TextView tvSave;
     private AppCompatEditText acetBookName,acetISBN,acetAuthor,acetPublisher,acetIntro;
     private AppCompatImageView acivCover;
-    private static UserInfoImagePOP uimp;
-//    private Uri imageUri;
+    private UserInfoImagePOP uimp;
     private CapturePhoto capture;
     private BookDetail2 mBook;
+    private AppCompatSpinner spBookClassify;
+
+    // 建立数据源
+    String[] mItems ;
+    // 建立Adapter并且绑定数据源
+    ArrayAdapter<String> adapter;
 
     @Override
     protected int getLayoutId() {
@@ -60,6 +70,8 @@ public class ManualInputAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        mItems = UIUtil.getStringArray(R.array.bookType);
+        adapter = new ArrayAdapter<String>(this,R.layout.item_location, mItems);
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);
         acetBookName = (AppCompatEditText) findViewById(R.id.acet_book_name);
         acetISBN = (AppCompatEditText) findViewById(R.id.acet_isbn);
@@ -67,11 +79,25 @@ public class ManualInputAct extends BaseActivity {
         acetPublisher = (AppCompatEditText) findViewById(R.id.acet_publisher);
         acetIntro = (AppCompatEditText) findViewById(R.id.acet_intro);
         acivCover = (AppCompatImageView) findViewById(R.id.aciv_cover);
+        spBookClassify = (AppCompatSpinner) findViewById(R.id.sp_book_classify);
 
+        spBookClassify.setAdapter(adapter);
         acivCover.setOnClickListener(this);
         mTitleText.setText("书籍录入");
         tvSave.setText("保存");
         tvSave.setOnClickListener(this);
+        spBookClassify.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position==1){
+                    gotoActivity(ManualPersonBookAct.class);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
@@ -82,7 +108,6 @@ public class ManualInputAct extends BaseActivity {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-
         switch (view.getId()) {
             case R.id.tv_add_mylib:
                 //保存按钮
@@ -135,6 +160,12 @@ public class ManualInputAct extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spBookClassify.setSelection(0);
+    }
+
     class BookHandler extends Handler {
 
         @Override
@@ -148,7 +179,7 @@ public class ManualInputAct extends BaseActivity {
 
                 case BOOKWHAT://成功获取图书信息
                     mBook = (BookDetail2) msg.obj;
-                    CustomProgressDialog.getPromptDialog(mContext, "系统已自动匹配到该书籍详情,点击确定为您跳转到详情页,直接添加到我的书架即可。", new View.OnClickListener() {
+                    CustomProgressDialog.getPromptDialog(mContext, "根据提供的ISBN查找到该书籍详情,点击确定为您跳转到详情页,确认后可添加到书架。", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Bundle bundle = new Bundle();
@@ -182,11 +213,6 @@ public class ManualInputAct extends BaseActivity {
                 shake(acetISBN);
                 return false;
             }
-            /*if(!StringUtil.isISBN(acetISBN.getText().toString())){
-                acetISBN.setError("非法的ISBN号,请检查");
-                shake(acetISBN);
-                return false;
-            }*/
         }
 
         return true;
@@ -241,7 +267,6 @@ public class ManualInputAct extends BaseActivity {
     }
 
     private String mCoverImagePath;
-    private File file;// 图片上传 所保存图片file
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        isSetHeadIcon = true;
@@ -250,28 +275,20 @@ public class ManualInputAct extends BaseActivity {
             if (capture.getActionCode() == CapturePhoto.PICK_ALBUM_IMAGE) {
                 Uri targetUri = data.getData();
                 if (targetUri != null) {
-                    String img_path = FileUtil.uriToFilePath(targetUri,this);
                     if (requestCode == Const.CAMERA_REQUEST_CODE) {
-                        mCoverImagePath = img_path;
-                        img_path = null;
-                        file = new File(mCoverImagePath);
+                        mCoverImagePath = FileUtil.uriToFilePath(targetUri,this);
                         Glide.with(this).load(targetUri).into(acivCover);
-//                        Bitmap bbb = PicConvertUtil.convertToBitmap(mCoverImagePath, 90, 90);
-//                        acivCover.setImageBitmap(bbb);
                     }
                 }
             } else {
                 if (requestCode == Const.CAMERA_REQUEST_CODE) {
                     mCoverImagePath = capture.getmCurrentPhotoPath();
                     Glide.with(this).load(mCoverImagePath).into(acivCover);
-                    /*file = new File(mCoverImagePath);
-                    Bitmap bbb = PicConvertUtil.convertToBitmap(mCoverImagePath, 90, 90);
-                    acivCover.setImageBitmap(bbb);*/
                 }
             }
         }
     }
-
+    private String bookId;//添加书库成功后返回的bookId
     public void saveBook() {
         mBook = new BookDetail2();
         HashMap<String,Object> params = new HashMap<>();
@@ -296,9 +313,9 @@ public class ManualInputAct extends BaseActivity {
             mBook.setSummary(acetIntro.getText().toString());
         }
         if(!StringUtil.isEmpty(mCoverImagePath)){//加入图片本地手机路径参数
-            params.put("book_cover",new File(mCoverImagePath));
+            params.put("img",new File(mCoverImagePath));
         }
-        params.put("user_id",GlobalParams.getLastLoginUser().getUserid());
+        params.put("uid",GlobalParams.getLastLoginUser().getUid());
         params.put("book", JSON.toJSONString(mBook));
         mBook.setFromDouban(false);
         showDefProgress();
@@ -307,47 +324,22 @@ public class ManualInputAct extends BaseActivity {
             @Override
             public void onSuccess(final Object obj, int... code) {
                 dismissProgress();
-                UIUtil.showToastSafe("保存成功");
-                final String json = (String)obj;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = JSON.parseObject(json);
-                        Integer code = jsonObject.getInteger("code");
-                        String bookId = jsonObject.getString("book_id");
-                        String bookImageUrl = jsonObject.getString("book_image");
-                        if(code == null){
-                            return;
-                        }
-                        switch (code){
-                            case 200://book有记录，user_book有记录，直接返回，用户已经将该书加入进来了，无须重复操作
-                                showDialog("您已经添加过该书了,无须重复添加！");
-                                break;
-                            case 300://book有记录，user_book无记录，自动关联该书籍成功
-                                mBook.setId(bookId);
-                                mBook.setImage(bookImageUrl);
-                                mBook.setImage_medium(bookImageUrl);
-                                showAskIfShareOnMapDialog("系统搜索到该书籍信息,已自动关联并添加！是否在地图中分享此书?");
-                                break;
-                            case 500://book有记录，user_book无记录，自动关联该书籍失败
-                                showDialog("未能成功添加,code="+code);
-                                break;
-                            case 600://book无记录，user_book无记录，插入book数据失败
-                                showDialog("未能成功添加书籍,code="+code);
-                                break;
-                            case 700://book无记录，user_book无记录，插入book数据成功，插入user_book成功
-//                                showDialog("添加成功！");
-                                mBook.setId(bookId);
-                                mBook.setImage(bookImageUrl);
-                                mBook.setImage_medium(bookImageUrl);
-                                showAskIfShareOnMapDialog("添加成功,是否在地图分享此书?");
-                                break;
-                            case 800://book无记录，user_book无记录，插入book数据成功，插入user_book失败
-                                showDialog("未能成功添加书籍,code="+code);
-                                break;
-                        }
+                String responseJson = (String) obj;
+                ResponseJson rj = new ResponseJson(responseJson);
+                if(rj.errorCode!=null) {
+                    switch (rj.errorCode) {
+                        case 1:
+                            bookId = (String) ((Map) rj.data.get(0)).get("bookId");
+                            mBook.setId(bookId);
+                            UIUtil.showToastSafe("添加成功");
+                            ManualInputAct.this.finish();
+                            break;
+                        default:
+                            UIUtil.showToastSafe(rj.errorMsg);
                     }
-                });
+                }else{
+                    UIUtil.showToastSafe("未能成功添加");
+                }
 
             }
 

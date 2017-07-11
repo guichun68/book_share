@@ -47,7 +47,7 @@ public class GlobalParams {
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
-	public static String urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
+	public static String urlUploadBook = GlobalParams.BASE_URL+"/user/zyzx/uploadbook.action";
 	/**
 	 * 上传头像图片url
 	 */
@@ -58,6 +58,10 @@ public class GlobalParams {
 	 * 关于临客
 	 */
 	public static String urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
+	/**
+	 * 得到图书分类，如考研、中考等
+	 */
+	public static String urlGetBookClassify = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getBookClassify&page.pageSize=30&page.curPage=1";
 	public static String downloadFileName = "";
 	//保存用户信息
 	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
@@ -78,7 +82,7 @@ public class GlobalParams {
 	 */
 	public static String urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 	//checkupdate
-	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
+	public static String urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";
 	public static String urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 	public static String urlFeedBack = GlobalParams.BASE_URL+"/user/mobileSDK/feedback.action";
 	/**
@@ -141,7 +145,8 @@ public class GlobalParams {
 	public static String urlSmsLogin = GlobalParams.BASE_URL+"/zyzx/sms_login.action";
 	public static final String urlISBNAPI = "https://api.douban.com/v2/book/isbn/";
 	public static String urlAddBook2MyLib = GlobalParams.BASE_URL+"/user/mobileSDK/addBook2Lib.action";
-	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
+	public static String urlAddManualBook2Lib = GlobalParams.BASE_URL+"/user/mobileSDK/uploadManualBook.action";
+//	public static String urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
     //会话页面点击用户聊天时获得用户信息
     public static String urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
 
@@ -167,7 +172,7 @@ public class GlobalParams {
 		urlAboutus = GlobalParams.BASE_URL+"/pages/aboutlinke.html";
 		urlRegist = GlobalParams.BASE_URL+"/user/mobileSDK/regUser.action";
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/user/mobileSDK/addBook2Lib.action";
-		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
+//		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 		urlGetUserInfo = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
@@ -184,7 +189,7 @@ public class GlobalParams {
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
-		urlCheckUpdate = GlobalParams.BASE_URL+"/zyzx/checkupdate.action";
+		urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";
 		urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 		urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
 		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
@@ -199,6 +204,8 @@ public class GlobalParams {
 		urlUploadExcel = GlobalParams.BASE_URL+"/user/mobileSDK/uploadExcel.action";
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
+		urlGetBookClassify = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getBookClassify&page.pageSize=30&page.curPage=1";
+		urlAddManualBook2Lib = GlobalParams.BASE_URL+"/user/mobileSDK/uploadManualBook.action";
 	}
 
 	public static UserVO getLastLoginUser(){

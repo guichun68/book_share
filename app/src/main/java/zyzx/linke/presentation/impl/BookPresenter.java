@@ -3,6 +3,7 @@ package zyzx.linke.presentation.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +20,6 @@ import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Page;
 import zyzx.linke.model.bean.QueryBookAroundMap;
 import zyzx.linke.model.bean.RequestParamGetBookInfos;
-import zyzx.linke.model.bean.Tags;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
@@ -207,15 +207,14 @@ public class BookPresenter extends IBookPresenter {
 
     @Override
     public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {
-        //TODO 新接口待实现
-        /*try {
-            getModel().post2(GlobalParams.urlUploadBook,params,viewCallBack);
+        try {
+            getModel().uploadMultiFile(GlobalParams.urlAddManualBook2Lib,params,viewCallBack);
         } catch (IOException e) {
             e.printStackTrace();
             if(viewCallBack!=null) {
                 viewCallBack.onFailure("上传失败");
             }
-        }*/
+        }
     }
 
     @Override
@@ -343,5 +342,10 @@ public class BookPresenter extends IBookPresenter {
                 callBack.onFailure("检查更新失败");
             }
         }
+    }
+
+    @Override
+    public void getBookClassify(CallBack callBack) {
+        getModel().get(GlobalParams.urlGetBookClassify,null,callBack);
     }
 }

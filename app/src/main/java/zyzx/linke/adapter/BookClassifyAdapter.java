@@ -7,17 +7,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.model.Area;
+import zyzx.linke.model.bean.EnumConst;
 
 /**
- * Created by austin on 2017/5/3.
- * Desc :省份adapter
+ * Created by austin on 2017/7/9.
+ * Desc: 图书分类 sp的列表
  */
 
-public class AreaAdapter extends MyBaseAdapter<Area> {
+public class BookClassifyAdapter extends MyBaseAdapter<EnumConst> {
 
-
-    public AreaAdapter(ArrayList<Area> items) {
+    public BookClassifyAdapter(ArrayList<EnumConst> items) {
         super(items);
     }
 
@@ -25,7 +24,7 @@ public class AreaAdapter extends MyBaseAdapter<Area> {
     public View mGetView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
         if(convertView==null){
-            convertView =View.inflate(parent.getContext(),R.layout.item_location,null);
+            convertView =View.inflate(parent.getContext(), R.layout.item_location,null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         }else {

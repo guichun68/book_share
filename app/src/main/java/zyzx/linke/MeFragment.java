@@ -53,7 +53,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private TextView tvUserName;//用户昵称（login_name）
     private Dialog dialog;
     private TextView tvCreditScore;
-    private int REQUEST_CODE_PERSONAL_ACT=0x17F;
+    private int REQUEST_CODE_PERSONAL_ACT = 0x17F;
 
     @Override
     protected View getView(LayoutInflater inflater, ViewGroup container) {
@@ -88,7 +88,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rl_scan_input:
                 gotoActivity(CaptureActivity.class);
                 break;
@@ -103,22 +103,22 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 gotoActivity(BorrowedInBookAct.class);
                 break;
             case R.id.rl_log_out:
-                ((HomeAct)getActivity()).logoutEaseMob();
+                ((HomeAct) getActivity()).logoutEaseMob();
                 PreferenceManager.getInstance().setAutoLoginFlag(false);
                 getActivity().finish();
                 gotoActivity(LoginAct.class);
                 break;
             case R.id.rl_check_update:
                 //showProgress("检查中…");
-                ((HomeAct)getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
+                ((HomeAct) getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
                     @Override
                     public void shouldUpdate(boolean shoudUpdate) {
                         dismissProgress();
-                        if(!shoudUpdate){
-                            showSnack(null,"已经是最新版本");
-                        }else{
+                        if (!shoudUpdate) {
+                            showSnack(null, "已经是最新版本");
+                        } else {
                             //do nothing, if app should update,the UpdateActivity will auto evoked.
-                            Log.i("zyzx","should update");
+                            Log.i("zyzx", "should update");
                         }
                     }
                 });
@@ -142,12 +142,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                         showProgress("请稍后…");
                         downloadFile();
                     }
-                },null);
+                }, null);
                 dialog.show();
                 break;
             case R.id.rl_top:
-                Intent in = new Intent(getActivity(),PersonalCenterAct.class);
-                startActivityForResult(in,REQUEST_CODE_PERSONAL_ACT);
+                Intent in = new Intent(getActivity(), PersonalCenterAct.class);
+                startActivityForResult(in, REQUEST_CODE_PERSONAL_ACT);
                 break;
         }
     }
@@ -158,44 +158,45 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult( Intent.createChooser(intent, "请选择Excel文件"), EXCEL_FILE_SELECT_CODE);
+            startActivityForResult(Intent.createChooser(intent, "请选择Excel文件"), EXCEL_FILE_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(mContext, "Please install a File Manager.",  Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
         }
     }
+
     /**
      * 下载导出的excle清单（由服务器生成excel，实际客户端为下载操作）
      */
     protected void downloadFile() {
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("uid",PreferenceManager.getInstance().getLastLoginUserUUId());
-        DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir,param, new DownloadUtil.OnDownloadListener() {
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("uid", PreferenceManager.getInstance().getLastLoginUserUUId());
+        DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir, param, new DownloadUtil.OnDownloadListener() {
             @Override
             public void onDownloadSuccess() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dismissProgress();
-                        if(dialog!=null){
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         String appPath = FileUtil.getExternalStoragePath();
-                        if(appPath==null){
-                            ToastUtil.show(mContext,"未检测到内存卡，导出失败！");
+                        if (appPath == null) {
+                            ToastUtil.show(mContext, "未检测到内存卡，导出失败！");
                             return;
                         }
-                        String filePath = appPath+"getSummary.action";
+                        String filePath = appPath + "getSummary.action";
                         File downloadFile = new File(filePath);
-                        File newFile = new File(appPath+"我的书单.xls");
-                        if(downloadFile.exists()){
-                            if(downloadFile.renameTo(newFile)){
-                                CustomProgressDialog.getPromptDialog(mContext,"已成功导出到:\n"+newFile.getAbsolutePath(),null).show();
+                        File newFile = new File(appPath + "我的书单.xls");
+                        if (downloadFile.exists()) {
+                            if (downloadFile.renameTo(newFile)) {
+                                CustomProgressDialog.getPromptDialog(mContext, "已成功导出到:\n" + newFile.getAbsolutePath(), null).show();
                             }
-                        }else{
-                            if(newFile.exists()){
+                        } else {
+                            if (newFile.exists()) {
                                 // 导出（下载）成功
-                                CustomProgressDialog.getPromptDialog(mContext,"已成功导出到:\n"+newFile.getAbsolutePath(),null).show();
-                            }else{
+                                CustomProgressDialog.getPromptDialog(mContext, "已成功导出到:\n" + newFile.getAbsolutePath(), null).show();
+                            } else {
                                 // 导出（下载）失败
                                 UIUtil.showToastSafe(R.string.err_request);
                             }
@@ -203,30 +204,32 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
             }
+
             @Override
-            public void onDownloading(long total,int progress) {
+            public void onDownloading(long total, int progress) {
 //                UIUtil.showTestLog("exportting……");
             }
+
             @Override
             public void onDownloadFailed() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dismissProgress();
-                        if(dialog!=null){
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         String message = "导出错误";
                         UIUtil.showToastSafe(message);
                     }
                 });
-
             }
+
         });
     }
 
 
-    public void showSnack(String btnText,String msg) {
+    public void showSnack(String btnText, String msg) {
         final Snackbar snackbar = Snackbar.make(mRootView.findViewById(R.id.civ), msg, Snackbar.LENGTH_LONG);
         snackbar.setAction(btnText, new View.OnClickListener() {
             @Override
@@ -240,52 +243,52 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if ((resultCode != RESULT_OK)){
+        if ((resultCode != RESULT_OK)) {
             UIUtil.showToastSafe("已取消选择");
             return;
         }
-        if(requestCode==EXCEL_FILE_SELECT_CODE){
+        if (requestCode == EXCEL_FILE_SELECT_CODE) {
             // Get the Uri of the selected file
             Uri uri = intent.getData();
             String path = FileUtil.getUriPath(mContext, uri);
             File file = null;
-            if(path!=null) {
+            if (path != null) {
                 file = new File(path);
             }
-            if(file == null){
+            if (file == null) {
                 UIUtil.showToastSafe("头像文件解析错误");
                 return;
             }
-            if(!(file.getName().endsWith(".xlsx") || file.getName().endsWith(".xls"))){
+            if (!(file.getName().endsWith(".xlsx") || file.getName().endsWith(".xls"))) {
                 UIUtil.showToastSafe("解析错误，文件格式有误");
-            }else{
-                if(file.exists()){
+            } else {
+                if (file.exists()) {
                     double length = file.length();
-                    if(length/1024/1024>2){//文件大于2M，过大
+                    if (length / 1024 / 1024 > 2) {//文件大于2M，过大
                         UIUtil.showToastSafe("文件过大，仅支持2M内文件导入");
-                    }else{
+                    } else {
                         uploadExcelFile(path);
                     }
-                }else{
+                } else {
                     UIUtil.showToastSafe("未能检测到该文件");
                 }
             }
-        }else if(requestCode==REQUEST_CODE_PERSONAL_ACT){
-            if(intent.getBooleanExtra(BundleFlag.SHOULD_REFRESH,false)){
+        } else if (requestCode == REQUEST_CODE_PERSONAL_ACT) {
+            if (intent.getBooleanExtra(BundleFlag.SHOULD_REFRESH, false)) {
                 refreshUserInfo();
             }
         }
     }
 
-    public void refreshUserInfo(){
+    public void refreshUserInfo() {
         tvUserName.setText(GlobalParams.getLastLoginUser().getLoginName());
         tvCreditScore.setText(String.valueOf(GlobalParams.getLastLoginUser().getCreditScore()));
-        if(!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())){
-            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).into((CircleImageView)mRootView.findViewById(R.id.civ));
+        if (!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())) {
+            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).into((CircleImageView) mRootView.findViewById(R.id.civ));
         }
     }
 
-    private void uploadExcelFile(String filePath){
+    private void uploadExcelFile(String filePath) {
         showDefProgress();
         getUserPresenter().uploadExcelFile(GlobalParams.getLastLoginUser().getUid(), filePath, new CallBack() {
             @Override
@@ -295,33 +298,32 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     public void run() {
                         dismissProgress();
                         final String json = (String) obj;
-                        if(StringUtil.isEmpty(json)){
+                        if (StringUtil.isEmpty(json)) {
                             UIUtil.showToastSafe("导入发生错误，请稍后再试！");
                             return;
                         }
                         JSONObject jsonObj = JSON.parseObject(json);
-                        int code = jsonObj.getInteger("code");
-                        switch (code){
+                        int code2 = jsonObj.getInteger("code");
+                        switch (code2) {
                             case 400:
-                                CustomProgressDialog.getPromptDialog(mContext,"文件为空,请重新选择文件",null).show();
+                                CustomProgressDialog.getPromptDialog(mContext, "文件为空,请重新选择文件", null).show();
                                 break;
                             case 500:
-                                CustomProgressDialog.getPromptDialog(mContext,"文件格式错误,目前仅支持Excel文件导入,请检查后重试!",null).show();
+                                CustomProgressDialog.getPromptDialog(mContext, "文件格式错误,目前仅支持Excel文件导入,请检查后重试!", null).show();
                                 break;
                             case 600:
-                                CustomProgressDialog.getPromptDialog(mContext,"导入错误，检测到不合模板规范的excel文档，请确保至少有“ISBN”和“书名”两列！",null).show();
+                                CustomProgressDialog.getPromptDialog(mContext, "导入错误，检测到不合模板规范的excel文档，请确保至少有“ISBN”和“书名”两列！", null).show();
                                 break;
                             case 700:
-                                CustomProgressDialog.getPromptDialog(mContext,"导入文档有误，请确保文档未损坏",null).show();
+                                CustomProgressDialog.getPromptDialog(mContext, "导入文档有误，请确保文档未损坏", null).show();
                                 break;
                             case 200:
-                                succDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "导入完毕,点击确定查看导入结果！", "确定", "取消",new DialogOnClickListener(json) ,null);
+                                succDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "导入完毕,点击确定查看导入结果！", "确定", "取消", new DialogOnClickListener(json), null);
                                 succDialog.show();
                                 break;
                         }
                     }
                 });
-
             }
 
             @Override
@@ -330,18 +332,22 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
+
     private Dialog succDialog;//导入成功dialog
-    private class DialogOnClickListener implements View.OnClickListener{
+
+    private class DialogOnClickListener implements View.OnClickListener {
         String json;
-        DialogOnClickListener(String json){
+
+        DialogOnClickListener(String json) {
             this.json = json;
         }
+
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            bundle.putString("json",json);
-            gotoActivity(ImportResultAct.class,bundle);
-            if(succDialog!=null)
+            bundle.putString("json", json);
+            gotoActivity(ImportResultAct.class, bundle);
+            if (succDialog != null)
                 succDialog.dismiss();
         }
     }

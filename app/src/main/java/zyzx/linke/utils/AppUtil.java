@@ -398,22 +398,30 @@ public class AppUtil {
 	 * @return
 	 */
 	public static String getMostDistinctPicUrl(BookDetail2 book) {
+		String url = null;
 		if(!StringUtil.isEmpty(book.getImages().getLarge())){
-			return book.getImages().getLarge();
-		}
+			url = book.getImages().getLarge();
+		}else
 		if(!StringUtil.isEmpty(book.getImage())){
-			return book.getImage();
-		}
+			url = book.getImage();
+		}else
 		if(!StringUtil.isEmpty(book.getImages().getMedium())){
-			return book.getImages().getMedium();
-		}
+			url =  book.getImages().getMedium();
+		}else
 		if(!StringUtil.isEmpty(book.getImage_medium())){
-			return book.getImage_medium();
-		}
+			url = book.getImage_medium();
+		}else
 		if(!StringUtil.isEmpty(book.getImages().getSmall())){
-			return book.getImages().getSmall();
+			url = book.getImages().getSmall();
 		}
-		return null;
+		if(url != null){
+			if(url.contains("http") || url.contains("HTTP")){
+
+			}else{
+				url = GlobalParams.BASE_URL+"/bookCover/"+url;
+			}
+		}
+		return url;
 	}
 	public static int getScreenWidth(Context ctx) {
 		WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
@@ -509,13 +517,16 @@ public class AppUtil {
 			mV.setPages(String.valueOf(jo.getInteger("pages")));
 			mV.setPrice(jo.getString("price"));
 			mV.setPubdateDateType(jo.getDate("pubdate"));
+			if(mV.getPubdateDateType()!=null)
 			mV.setPubdate(new SimpleDateFormat("yyyy-MM-dd").format(mV.getPubdateDateType()));
 			mV.setPublisher(jo.getString("publisher"));
 			Rating rate = new Rating();
 			rate.setAverage(jo.getDouble("rating_average"));
 			rate.setMax(jo.getDouble("rating_max"));
 			rate.setMin(jo.getDouble("rating_min"));
-			rate.setNumRaters(jo.getInteger("rating_numRaters"));
+			if(jo.getInteger("rating_numRaters")!=null){
+				rate.setNumRaters(jo.getInteger("rating_numRaters"));
+			}
 			mV.setRating(rate);
 			mV.setSubtitle(jo.getString("subtitle"));
 			mV.setSummary(jo.getString("summary"));
