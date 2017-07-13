@@ -50,12 +50,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private Toolbar mToolbar;
     private TextView tvInput;
 
-    // 快捷搜索词
-    private String[] mLetterStrs = {"常", "A", "B", "C", "D", "E", "F", "G",
-            "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-            "U", "V", "W", "X", "Y", "Z"};
-
-    private boolean isRefresh;//是否是下拉刷新，默认false
     private AllUserBooksListAdapter mAdapter;
 
     private String mCurrPro, mCurrCity, mCurrCounty;
@@ -245,14 +239,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
         //下拉刷新
-        isRefresh = true;
         mCurrentPageNum = 0;
         searchByLocal(mCurrentPageNum);
     }
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-        isRefresh = false;
         mCurrentPageNum++;
         searchByLocal(mCurrentPageNum);
     }

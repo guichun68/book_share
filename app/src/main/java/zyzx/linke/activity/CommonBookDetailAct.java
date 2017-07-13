@@ -13,12 +13,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
@@ -36,11 +36,9 @@ public class CommonBookDetailAct extends BaseActivity {
 
     private ImageView ivBookImage;
     private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
+    private TextView tvType;
     private BookDetail2 mBook;
-    private TextView tvSharer;//分享者
     private Integer friendUserId;//好友id
-    private Double longi,lati;//书籍位置
-    private boolean showExtraInfo;//是否显示分享者和地址信息（如果从好友页面过来则不显示这些信息，从首页过来则显示）
 
     @Override
     protected int getLayoutId() {
@@ -52,19 +50,19 @@ public class CommonBookDetailAct extends BaseActivity {
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);
-        tvSharer = (TextView) findViewById(R.id.tvSharer);
         tvPublisher = (TextView) findViewById(R.id.tv_book_publisher);
         tvPublishDate = (TextView) findViewById(R.id.tv_book_publish_date);
         tvTags = (TextView) findViewById(R.id.tv_book_tags);
         tvSummary = (TextView) findViewById(R.id.tv_summary);
         tvCatalog = (TextView) findViewById(R.id.tv_catalog);
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
+        tvType = (TextView) findViewById(R.id.tv_type);
         tvAdd2MyLib.setClickable(true);
         mTitleText.setText("图书详情");
         tvAdd2MyLib.setVisibility(View.INVISIBLE);
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
-        tvSharer.setOnClickListener(this);
+
     }
 
     String bookId;//添加地图成功后返回的bookId
@@ -109,14 +107,14 @@ public class CommonBookDetailAct extends BaseActivity {
                     }
                 });
                 break;
-            case R.id.tvSharer:
+           /* case R.id.tvSharer:
                 //进入好友详情页
                 Intent in = new Intent(this, FriendHomePageAct.class);
                 HashMap<String,String> uidMap = new HashMap<>();
                 uidMap.put("uid",friendUserId.toString());
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
-                break;
+                break;*/
         }
     }
 
@@ -152,22 +150,67 @@ public class CommonBookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         mBook = (BookDetail2)in.getSerializableExtra("book");
-        showExtraInfo = in.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
-
-        tvSharer.setText(in.getStringExtra(BundleFlag.SHARER));
-        longi = in.getDoubleExtra(BundleFlag.LONGITUDE,0);
-        lati = in.getDoubleExtra(BundleFlag.LATITUDE,0);
-
+        if(!StringUtil.isEmpty(mBook.getBookClassify())){
+            switch (mBook.getBookClassify()){
+                case Const.CLASSIFY_ZHONGKAO:
+                    tvType.setText("中考-手写资料");
+                    break;
+                case Const.CLASSIFY_GAOKAO:
+                    tvType.setText("高考-手写资料");
+                    break;
+                case Const.CLASSIFY_KAOYAN:
+                    tvType.setText("考研-手写资料");
+                    break;
+                case Const.CLASSIFY_ZIXUE:
+                    tvType.setText("自学考试-手写资料");
+                    break;
+                case Const.CLASSIFY_SIJI:
+                    tvType.setText("四级-手写资料");
+                    break;
+                case Const.CLASSIFY_LIUJI:
+                    tvType.setText("六级-手写资料");
+                    break;
+                case Const.CLASSIFY_GONGWUYUAN:
+                    tvType.setText("公务员-手写资料");
+                    break;
+                case Const.CLASSIFY_SIKAO:
+                    tvType.setText("司考-手写资料");
+                    break;
+                case Const.CLASSIFY_YIXUE:
+                    tvType.setText("医学-手写资料");
+                    break;
+                case Const.CLASSIFY_TUOFU:
+                    tvType.setText("托福-手写资料");
+                    break;
+                case Const.CLASSIFY_YASI:
+                    tvType.setText("雅思-手写资料");
+                    break;
+                case Const.CLASSIFY_GRE:
+                    tvType.setText("GRE-手写资料");
+                    break;
+                case Const.CLASSIFY_JLPT:
+                    tvType.setText("JLPT-手写资料");
+                    break;
+                case Const.CLASSIFY_XIAOYUZHONG:
+                    tvType.setText("小语种-手写资料");
+                    break;
+                case Const.CLASSIFY_BIJI:
+                    tvType.setText("课堂笔记-手写资料");
+                    break;
+                case Const.CLASSIFY_DAAN:
+                    tvType.setText("答案-手写资料");
+                    break;
+                case Const.CLASSIFY_QITA:
+                    tvType.setText("其他-手写资料");
+                    break;
+            }
+        }else{
+            tvType.setText("普通书籍");
+        }
 
         if(friendUserId==0){
             friendUserId=null;
-        }
-        if(longi.intValue()==0){
-            longi = null;
-        }
-        if(lati.intValue() ==0){
-            lati=null;
         }
 
         tvAdd2MyLib.setVisibility(View.INVISIBLE);

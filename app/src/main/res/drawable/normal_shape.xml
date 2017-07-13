@@ -20,7 +20,7 @@
         android:bottom="0.66dp"
         android:right="0.66dp">
         <shape>
-            <solid android:color="#ff8a49" />
+            <solid android:color="#FDE7C0" />
             <!-- 描边 -->
             <stroke android:width="0.33dp" android:color="#dedede" />
             <size android:width="@dimen/abc_progress_bar_height_material"

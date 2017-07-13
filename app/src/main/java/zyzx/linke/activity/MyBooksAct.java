@@ -40,7 +40,7 @@ import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/3/16.
- * Desc: 我的所有书籍列表页(除借入书籍外)
+ * Desc: 我的所有书籍列表页(除借入书籍外)--我的书架
  */
 
 public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener {
@@ -85,7 +85,6 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 pop.setOutsideTouchable(true);
                 pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 pop.setContentView(popView);
-
 
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
@@ -138,26 +137,48 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
      */
     private void setPopwinViewControls(final View popView, final MyBookDetailVO bookDetailVO, final int position) {
 
-        final TextView item1 = (TextView) popView.findViewById(R.id.tv_item1);
-        final TextView item2 = (TextView) popView.findViewById(R.id.tv_item2);
+        final TextView item1 = (TextView) popView.findViewById(R.id.tv_item1);//删除
+        final TextView item2 = (TextView) popView.findViewById(R.id.tv_item2);//分享
+        final TextView item3 = (TextView) popView.findViewById(R.id.tv_item3);//交换
         switch (bookDetailVO.getBookStatusId()) {
             case Const.BOOK_STATUS_ONSHELF://在书架上
-                item1.setText("从书架上移除");
-                item2.setText("在地图中分享");
+                item1.setText("删除此书");
+                item2.setText("分享");
+                item3.setText("交换");
                 item1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定要移除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.REMOVE_FROM_BOOKRACK), null);
                         mPromptDialog.show();
                     }
                 });
-                item2.setOnClickListener(new PopItemClickListener(bookDetailVO, position, PopItemClickListener.SHARE_ON_MAP));
+                item2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                        Bundle ex = new Bundle();
+                        ex.putSerializable("book",bookDetailVO);
+                        gotoActivity(ShareBookAct.class,false,ex);
+                    }
+                });
+                item3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UIUtil.showToastSafe("点击了交换");
+                    }
+                });
                 break;
-            case Const.BOOK_STATUS_SHARED://地图分享中。。。
-                item1.setText("取消分享");
-                item2.setText("取消分享并从书架删除");
+            case Const.BOOK_STATUS_EXCHANGING:
+                item1.setText("删除此书");
+                item2.setText("取消交换");
+                item3.setVisibility(View.GONE);
+                break;
+            case Const.BOOK_STATUS_SHARED://分享中。。。
+                item1.setText("删除此书");
+                item2.setText("取消分享");
+                item3.setVisibility(View.GONE);
                 item1.setOnClickListener(new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SHARE));
 
                 item2.setOnClickListener(new View.OnClickListener() {

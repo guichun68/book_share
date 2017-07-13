@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:background="@drawable/local_popup_bg"
+    android:background="@drawable/local_popup_bg2"
     android:orientation="vertical">
 
     <TextView
@@ -14,10 +14,10 @@
         android:layout_height="43dp"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
-        android:background="@drawable/slide_item_sel"
+        android:textColor="@color/slide_item_sel"
         android:gravity="center"
         android:text="删除"
-        android:textColor="@color/watermark_hint"
+        android:textStyle="bold"
         android:clickable="true"
         android:textSize="19sp" />
 
@@ -35,12 +35,32 @@
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
         android:paddingTop="@dimen/dp_5"
-        android:background="@drawable/slide_item_sel"
+        android:textColor="@color/slide_item_sel"
         android:paddingBottom="@dimen/dp_5"
         android:gravity="center"
         android:clickable="true"
-        android:textColor="@color/watermark_hint"
-        android:text="更改状态"
+        android:textStyle="bold"
+        android:text="分享"
+        android:textSize="19sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/watermark_hint"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+    <TextView
+        android:id="@+id/tv_item3"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:textColor="@color/slide_item_sel"
+        android:paddingBottom="@dimen/dp_5"
+        android:gravity="center"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="交换"
         android:textSize="19sp" />
 
 

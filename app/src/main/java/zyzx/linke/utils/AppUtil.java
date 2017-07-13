@@ -530,6 +530,7 @@ public class AppUtil {
 			mV.setRating(rate);
 			mV.setSubtitle(jo.getString("subtitle"));
 			mV.setSummary(jo.getString("summary"));
+			mV.setBookClassify(jo.getString("book_classify"));
 			mV.setTitle(jo.getString("title"));
 			List<String> tran = new ArrayList<>();
 			tran.add(jo.getString("translator"));

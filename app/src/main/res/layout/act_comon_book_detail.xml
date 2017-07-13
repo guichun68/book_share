@@ -38,6 +38,36 @@
                     android:layout_weight="3"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:id="@+id/ll_sharer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/tvSharerTip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:drawablePadding="10dp"
+                            android:layout_marginTop="10dp"
+                            android:drawableLeft="@drawable/shape_oval"
+                            android:maxLines="1"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold"
+                            android:text="类型:" />
+
+                        <TextView
+                            android:id="@+id/tv_type"
+                            style="@style/bookDetailStyle"
+                            android:drawableLeft="@color/transparent"
+                            tool:text="自学考试手写资料"
+                            android:singleLine="true"
+                            />
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/tv_book_title"
                         style="@style/bookDetailStyle"
@@ -65,41 +95,7 @@
                         android:maxLines="1"
                         tool:text="标签/模式/程序设dafdfdfddafdsafdsafdsafdsfdsafaf" />
 
-                    <LinearLayout
-                        android:id="@+id/ll_sharer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tvSharerTip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:drawablePadding="10dp"
-                            android:layout_marginTop="10dp"
-                            android:drawableLeft="@drawable/shape_oval"
-                            android:maxLines="1"
-                            android:textSize="@dimen/sp_16"
-                            android:textStyle="bold"
-                            android:text="分享者:" />
-
-                        <TextView
-                            android:id="@+id/tvSharer"
-                            android:background="@drawable/tangle_shape"
-                            android:layout_width="127dp"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:clickable="true"
-                            android:maxLines="1"
-                            android:layout_marginTop="10dp"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:textSize="@dimen/sp_16"
-                            android:gravity="bottom|center_horizontal"
-                            tool:text="蓝鲸一号" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
