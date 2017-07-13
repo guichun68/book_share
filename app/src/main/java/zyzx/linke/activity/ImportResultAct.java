@@ -17,7 +17,7 @@ import zyzx.linke.utils.StringUtil;
 
 /**
  * Created by austin on 2017/4/8.
- * Desc: 导入结果页
+ * Desc: excel导入结果页
  */
 
 public class ImportResultAct extends BaseActivity {

@@ -123,7 +123,7 @@
 
     <style name="star">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:text">*</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:textStyle">bold</item>

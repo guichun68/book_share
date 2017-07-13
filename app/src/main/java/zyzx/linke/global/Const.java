@@ -2,7 +2,6 @@ package zyzx.linke.global;
 
 import android.graphics.Color;
 
-import com.amap.api.services.core.LatLonPoint;
 
 /**
  * @since 3.3.0
@@ -96,7 +95,6 @@ public class Const {
 	public static final String MSG_FLAG_HEAD_URL="msg_flag_head_url";
 
 	public static final int AVATAR_SELECTION=0x38F;//头像选择
-	public static final LatLonPoint TianAnMenPoint = new LatLonPoint(39.906905, 116.397541);
 	public static final int PAGE_SIZE_MYBOOKS = 10;//我的所有书籍 页 每次刷新页面条目数量
 
 	//状态：在架

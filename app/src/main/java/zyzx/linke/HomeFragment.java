@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,20 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.activity.AreaSelAct;
-import zyzx.linke.activity.KeywordListActivity;
-import zyzx.linke.activity.MapActivity;
 import zyzx.linke.adapter.AllUserBooksListAdapter;
-import zyzx.linke.adapter.DistrictListAdapter;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.BundleResult;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.Area;
-import zyzx.linke.model.bean.City;
 import zyzx.linke.model.bean.IndexItem;
 import zyzx.linke.utils.CityUtil;
 import zyzx.linke.utils.UIUtil;
-import zyzx.linke.views.CityChoosePopupWindow;
 
 /**
  * 主页界面
@@ -50,7 +44,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private final int CITY_CHOOSE_REQUEST_CODE = 10;
     private final int POI_CHOOSE_REQUEST_CODE = 20;
     private String mKeywords = "";
-    private TextView mCurrCityDistrictTv;
 
     private AMapLocationClient mAMapLocationClient = null;
 
@@ -65,30 +58,10 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private boolean isRefresh;//是否是下拉刷新，默认false
     private AllUserBooksListAdapter mAdapter;
 
-    private CityChoosePopupWindow mPopupWindow;
     private String mCurrPro, mCurrCity, mCurrCounty;
     private int mCurrentPageNum = 0;
     private ArrayList<IndexItem> mListViewItems = new ArrayList<>();
 
-    private AdapterView.OnItemClickListener mGridViewItemListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                long arg3) {
-
-            mChosenDistrictIndex = arg2;
-            mCurrCounty = mDistrictsOfCurrentCity[arg2];
-            mCurrCityDistrictTv.setText(
-                    String.format(getResources().getString(R.string.address), getCurrentCity(), mCurrCounty));
-
-            mListViewItems.clear();
-            mAdapter.notifyDataSetChanged();
-            searchByLocal(0);
-            mPopupWindow.dismiss();
-        }
-    };
-    private String[] mDistrictsOfCurrentCity;
-    private int mChosenDistrictIndex = -1;
 
 
     public String getCurrentCity() {
@@ -122,7 +95,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     }
 
     private void setUpInteractiveControls() {
-        mCurrCityDistrictTv = (TextView) mRootView.findViewById(R.id.current_city_district_textview);
 
         mRootView.findViewById(R.id.ll_search).setOnClickListener(this);
         mRootView.findViewById(R.id.btn_area_choose).setOnClickListener(this);
@@ -157,14 +129,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         switch (v.getId()) {
             case R.id.btn_area_choose:
                 showAreaPopupWindow();
-                break;
-
-            case R.id.btn_map:
-                gotoMapActivity();
-                break;
-
-            case R.id.ll_search:
-                gotoKeywordInputActivity();
                 break;
         }
     }
@@ -201,28 +165,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
     }
 
-    private void updatePopupWindowData() {
-
-        mDistrictsOfCurrentCity = getDistrictsBasedonCityName(getCurrentCity());
-
-        mPopupWindow.getDistrictGridView().setAdapter(
-                new DistrictListAdapter(getContext(), mDistrictsOfCurrentCity,
-                        mChosenDistrictIndex));
-
-        mPopupWindow.getDistrictGridView().setOnItemClickListener(
-                mGridViewItemListener);
-
-        mPopupWindow.getCurrentCityTextView().setText(getCurrentCity());
-
-        mCurrCityDistrictTv.setText(getCurrentCity());
-    }
-
-
-    private void gotoMapActivity() {
-        Intent intent = new Intent(getContext(), MapActivity.class);
-//        intent.putParcelableArrayListExtra(BundleFlag.CLOUD_ITEM_LIST,mCoudItemList);
-        startActivity(intent);
-    }
 
     private HashMap<String, String[]> mDistrictsOfcityMap = new HashMap<>();
 
@@ -244,10 +186,6 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     }
 
 
-    private void gotoKeywordInputActivity() {
-        Intent intent = new Intent(getContext(), KeywordListActivity.class);
-        startActivityForResult(intent, POI_CHOOSE_REQUEST_CODE);
-    }
 
     /**
      * 方法必须重写
@@ -271,22 +209,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private void setCurrentCity(String mCurrentCity) {
         if (mCurrentCity == null)
             mCurrentCity = "北京";//"未能定位当前城市",默认北京
-        mCurrCityDistrictTv.setText(mCurrentCity);
         this.mCurrCity = mCurrentCity;
     }
 
 
-    private void setCity(City city) {
-        mChosenDistrictIndex = -1;
-        setCurrentCity(city.name.toString());
-        updatePopupWindowData();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mPopupWindow != null) {
-            mPopupWindow.dismiss();
-        }
         if (CITY_CHOOSE_REQUEST_CODE == requestCode
                 && resultCode == BundleResult.SUCCESS) {
             ArrayList<Area> areas = data.getParcelableArrayListExtra("areas");

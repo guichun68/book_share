@@ -20,8 +20,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -219,7 +217,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                     ResponseJson rj = new ResponseJson(json);
                                     if (rj.errorCode != null) {
                                         switch (rj.errorCode) {
-                                            case Const.SUCC_ERR_CODE:
+                                            case 1:
                                                 UIUtil.showToastSafe(rj.errorMsg);
                                                 mBooks.remove(bookDetailVO);
                                                 myBookAdapter.notifyDataSetChanged();
@@ -247,14 +245,6 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                             });
                         }
                     });
-                    break;
-                case SHARE_ON_MAP://地图中分享
-                    Intent in = new Intent(mContext, BookShareOnMapAct.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(BundleFlag.BOOK, bookDetailVO.getBook());
-                    in.putExtras(bundle);
-                    tempPosition = position;
-                    startActivityForResult(in, tempPosition);
                     break;
                 case CANCEL_SHARE://取消分享
                     showDefProgress();

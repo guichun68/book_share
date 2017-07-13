@@ -114,7 +114,6 @@
                 android:layout_gravity="end"
                 android:layout_marginRight="10dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/goto_map_status"
                 android:visibility="invisible" />
 
         </LinearLayout>

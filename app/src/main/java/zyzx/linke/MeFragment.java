@@ -109,7 +109,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 gotoActivity(LoginAct.class);
                 break;
             case R.id.rl_check_update:
-                //showProgress("检查中…");
+                showProgress("检查中…");
                 ((HomeAct) getActivity()).mBinder.callCheckUpdate(new UpdateService.CheckUpdateCallBack() {
                     @Override
                     public void shouldUpdate(boolean shoudUpdate) {

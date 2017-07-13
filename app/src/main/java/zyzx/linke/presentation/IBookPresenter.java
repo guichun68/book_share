@@ -1,14 +1,10 @@
 package zyzx.linke.presentation;
 
 import java.util.HashMap;
-import java.util.List;
 
 import zyzx.linke.base.IPresenter;
-import zyzx.linke.base.UpdateService;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
-import zyzx.linke.model.bean.RequestParamGetBookInfos;
-import zyzx.linke.model.bean.Tags;
 
 /**
  * Created by austin on 2017/2/17.
@@ -28,25 +24,6 @@ public abstract class IBookPresenter extends IPresenter {
      **/
     public abstract void addBook2MyLib(BookDetail2 mBook,Integer userId, CallBack viewCallBack);
 
-    /**
-     * 向高德地图中添加图书坐标
-     * @param bookId 指定图书
-     * @param userid 指定用户
-     * @param isSameBookNewPoint 如果服务器检测到用户分享过同名书籍了，是否继续增加地图分享点
-     * @param latitude 纬度
-     * @param longitude 经度
-     * @param viewCallBack 回调
-     */
-    public abstract void addBook2Map(BookDetail2 bookId, Integer userid, boolean isSameBookNewPoint, double latitude, double longitude, CallBack viewCallBack);
-
-    /**
-     * 查询指定位置为中心，方圆around范围内的所有的图书信息
-     * @param mLongti
-     * @param mLati
-     * @param around
-     * @param callBack
-     */
-    public abstract void getMapBookAllAround(double mLongti, double mLati, Integer around, CallBack callBack);
 
     /**
      * 获取用户信息和其下所有书籍
@@ -56,10 +33,6 @@ public abstract class IBookPresenter extends IPresenter {
      */
     public abstract void getUserBooks(String uid,final int pageNum,final CallBack viewCallBack);
 
-    /**
-     * 通过给定的bookId集合来批量获取这些书籍的详细信息
-     */
-    public abstract void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson, CallBack viewCallBack);
 
     /**
      * 上传图片

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.services.cloud.CloudItem;
 import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.activity.FriendHomePageAct;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -106,15 +104,14 @@ public class FriendListAdapter extends BaseAdapter {
                     //添加好友
                     UIUtil.showToastSafe("添加好友:"+ userVO.getLoginName());
                 }else{
-                    CloudItem item;//只是为了携带用户id到详情页
+//                    CloudItem item;//只是为了携带用户id到详情页
                     //进入好友详情页
-                    item = new CloudItem("无", Const.TianAnMenPoint,"无","");
+//                    item = new CloudItem("无", Const.TianAnMenPoint,"无","");
                     HashMap<String,String> uidMap = new HashMap<>();
                     uidMap.put("uid",String.valueOf(userVO.getUserid()));
-                    item.setCustomfield(uidMap);
+//                    item.setCustomfield(uidMap);
 
                     Intent in = new Intent(mContext,FriendHomePageAct.class);
-                    in.putExtra(BundleFlag.CLOUD_ITEM,item);
                     in.putExtra(BundleFlag.SHOWADDRESS,false);
                     mContext.startActivity(in);
                 }

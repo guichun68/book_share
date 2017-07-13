@@ -56,6 +56,8 @@ public class BookDetail2 implements Serializable{
 	//标记是否是来自豆瓣的数据
 	private boolean isFromDouban;
 
+	private String bookClassify;
+
 	public String getId() {
 		return id;
 	}
@@ -281,5 +283,11 @@ public class BookDetail2 implements Serializable{
 		this.isFromDouban = isFromDouban;
 	}
 
+	public String getBookClassify() {
+		return bookClassify;
+	}
 
+	public void setBookClassify(String bookClassify) {
+		this.bookClassify = bookClassify;
+	}
 }

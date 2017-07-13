@@ -3,14 +3,12 @@ package zyzx.linke.presentation.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import zyzx.linke.R;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
@@ -18,8 +16,6 @@ import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Page;
-import zyzx.linke.model.bean.QueryBookAroundMap;
-import zyzx.linke.model.bean.RequestParamGetBookInfos;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
@@ -94,61 +90,6 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
-    public void addBook2Map(final BookDetail2 bookDetail, final Integer userid, boolean isSameBookAdded2Map, final double latitude, final double longitude, final CallBack viewCallBack) {
-        // 首先查询用户在该点是否已经分享过图书了
-        final HashMap<String,Object> param = new HashMap<>();
-        param.put("key", Const.key);
-//        param.put("tableid",Const.mTableID);
-//        param.put("keywords","");
-        param.put("center",longitude+","+latitude);
-//        param.put("radius","0");
-//        param.put("filter","uid:"+userid+"");
-        param.put("user_id",String.valueOf(userid));
-        param.put("book_id",String.valueOf(bookDetail.getId()));
-        param.put("user_name",GlobalParams.getLastLoginUser().getLoginName());
-        if(StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())){
-            param.put("head_url",GlobalParams.urlDefHeadIcon);
-        }else{
-            param.put("head_url",GlobalParams.getLastLoginUser().getHeadIcon());
-        }
-
-        try {
-            getModel().post(GlobalParams.urlShareBook,param,viewCallBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(viewCallBack!=null){
-                viewCallBack.onFailure("访问服务器出错");
-            }
-        }
-    }
-
-    @Override
-    public void getMapBookAllAround(double mLongti, double mLati, Integer around, final CallBack callBack) {
-        HashMap<String,String> param = new HashMap<>();
-        param.put("key",Const.key);
-        param.put("tableid",Const.mTableID);
-        param.put("center",mLongti+","+mLati);
-        param.put("radius",GlobalParams.AROUND+"");
-
-        getModel().get(GlobalParams.urlQueryBookFromMapAround, param, new CallBack() {
-            @Override
-            public void onSuccess(Object obj, int... code) {
-                String json = (String) obj;
-                UIUtil.showTestLog("zyzx",json);
-                QueryBookAroundMap queriedBooks = JSON.parseObject(json, QueryBookAroundMap.class);
-                if(callBack!=null){
-                    callBack.onSuccess(queriedBooks);
-                }
-            }
-
-            @Override
-            public void onFailure(Object obj, int... code) {
-                UIUtil.showTestLog("zyzx_failure",obj.toString());
-            }
-        });
-    }
-
-    @Override
     public void getUserBooks(String uid, final int pageNum,final CallBack viewCallBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("uid",uid);
@@ -177,33 +118,6 @@ public class BookPresenter extends IBookPresenter {
         }
     }
 
-    @Override
-    public void getBookInfosByBookIds(List<RequestParamGetBookInfos> requestParamJson, final CallBack viewCallBack) {
-        String json = JSON.toJSONString(requestParamJson);
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("ids",json);
-        try {
-            getModel().post(GlobalParams.urlGetBooksByIds, param, new CallBack() {
-                @Override
-                public void onSuccess(Object obj, int... code) {
-                    if(obj.toString().toLowerCase().contains("</html>")){
-                        UIUtil.showToastSafe(R.string.network_error);
-                        onFailure(obj);
-                    }else if(viewCallBack!=null){
-                        viewCallBack.onSuccess(obj);
-                    }
-                }
-
-                @Override
-                public void onFailure(Object obj, int... code) {
-                        UIUtil.showTestLog("zyzx","access book interface failure.");
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-            UIUtil.showToastSafe("网络错误，请重试");
-        }
-    }
 
     @Override
     public void uploadBook(HashMap<String,Object> params, CallBack viewCallBack) {

@@ -18,7 +18,6 @@ import java.util.Map;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
-import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.ResponseJson;
@@ -113,9 +112,6 @@ public class ScanBookDetailAct extends BaseActivity {
                         dismissProgress();
                     }
                 });
-                break;
-            case R.id.rl_location://用户点击了"到这去"
-
                 break;
         }
     }

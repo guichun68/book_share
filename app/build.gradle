@@ -12,9 +12,9 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //为了开启Java8
-//        jackOptions{
-//            enabled true;
-//        }
+/*        jackOptions{
+            enabled true;
+        }*/
     }
 
     buildTypes {

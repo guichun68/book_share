@@ -67,63 +67,7 @@
             />
 </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_location"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        >
 
-        <TextView
-            android:id="@+id/detail_locaiotn_go"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/detail_offset_right"
-            android:layout_marginRight="@dimen/detail_offset_right"
-            android:text="@string/go_here"
-            android:textColor="@color/blue_cloud_scheme"
-            android:textSize="@dimen/identify_text_size" />
-
-        <View
-            android:id="@+id/divider_line"
-            android:layout_width="@dimen/divider_width"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/busroute_offset"
-            android:layout_marginRight="@dimen/busroute_offset"
-            android:layout_toLeftOf="@id/detail_locaiotn_go"
-            android:layout_toStartOf="@id/detail_locaiotn_go"
-            android:contentDescription="@string/app_name"
-            android:src="@color/black" />
-
-        <ImageView
-            android:id="@+id/detail_location_icon"
-            android:layout_width="@dimen/detail_phone_icon_size"
-            android:layout_height="@dimen/detail_phone_icon_size"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:contentDescription="@string/app_name"
-            android:src="@mipmap/location_icon" />
-
-        <TextView
-            android:id="@+id/detail_locaiotn_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/busroute_offset"
-            android:layout_marginEnd="@dimen/busroute_offset"
-            android:layout_marginLeft="@dimen/busroute_offset"
-            android:layout_marginRight="@dimen/busroute_offset"
-            android:layout_marginTop="@dimen/busroute_offset"
-            android:layout_toEndOf="@id/detail_location_icon"
-            android:layout_toLeftOf="@id/divider_line"
-            android:layout_toRightOf="@id/detail_location_icon"
-            android:layout_toStartOf="@id/divider_line"
-            android:textColor="@color/cloud_item_title"
-            android:textSize="@dimen/identify_text_size" />
-    </RelativeLayout>
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"

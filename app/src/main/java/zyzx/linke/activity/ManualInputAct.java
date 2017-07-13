@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -90,7 +89,8 @@ public class ManualInputAct extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position==1){
-                    gotoActivity(ManualPersonBookAct.class);
+                    Intent in = new Intent(ManualInputAct.this,ManualPersonBookAct.class);
+                    startActivityForResult(in,777);
                 }
             }
 
@@ -280,12 +280,13 @@ public class ManualInputAct extends BaseActivity {
                         Glide.with(this).load(targetUri).into(acivCover);
                     }
                 }
-            } else {
-                if (requestCode == Const.CAMERA_REQUEST_CODE) {
+            } else if (requestCode == Const.CAMERA_REQUEST_CODE) {
                     mCoverImagePath = capture.getmCurrentPhotoPath();
                     Glide.with(this).load(mCoverImagePath).into(acivCover);
-                }
             }
+        }else if(resultCode == 777){
+            //close curr act;
+            ManualInputAct.this.finish();
         }
     }
     private String bookId;//添加书库成功后返回的bookId
@@ -373,7 +374,7 @@ public class ManualInputAct extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BundleFlag.BOOK,mBook);
 
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
+//                gotoActivity(BookShareOnMapAct.class,true,bundle);
             }
         };
         myCancel = new View.OnClickListener() {
@@ -389,4 +390,12 @@ public class ManualInputAct extends BaseActivity {
         askDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(uimp!=null && uimp.isShowing()){
+            uimp.dismiss();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

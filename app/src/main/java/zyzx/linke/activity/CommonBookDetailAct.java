@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.amap.api.services.cloud.CloudItem;
-import com.amap.api.services.core.LatLonPoint;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +17,8 @@ import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BundleFlag;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.Tags;
@@ -41,11 +38,8 @@ public class CommonBookDetailAct extends BaseActivity {
     private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
     private BookDetail2 mBook;
     private TextView tvSharer;//分享者
-    private TextView tvLocation;//地址
-    private RelativeLayout rlLocation;
     private Integer friendUserId;//好友id
     private Double longi,lati;//书籍位置
-    private CloudItem item;
     private boolean showExtraInfo;//是否显示分享者和地址信息（如果从好友页面过来则不显示这些信息，从首页过来则显示）
 
     @Override
@@ -55,9 +49,7 @@ public class CommonBookDetailAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        rlLocation = (RelativeLayout) findViewById(R.id.rl_location);
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
-        tvLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);
         tvSharer = (TextView) findViewById(R.id.tvSharer);
@@ -73,7 +65,6 @@ public class CommonBookDetailAct extends BaseActivity {
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
         tvSharer.setOnClickListener(this);
-        rlLocation.setOnClickListener(this);
     }
 
     String bookId;//添加地图成功后返回的bookId
@@ -118,20 +109,11 @@ public class CommonBookDetailAct extends BaseActivity {
                     }
                 });
                 break;
-            case R.id.rl_location://用户点击了"到这去",导航用户所处位置
-                Intent intent = new Intent(this, RouteMapActivity.class);
-
-                intent.putExtra(BundleFlag.CLOUD_ITEM, item);
-                this.startActivity(intent);
-                break;
             case R.id.tvSharer:
                 //进入好友详情页
                 Intent in = new Intent(this, FriendHomePageAct.class);
                 HashMap<String,String> uidMap = new HashMap<>();
                 uidMap.put("uid",friendUserId.toString());
-                item.setCustomfield(uidMap);
-                in.putExtra(BundleFlag.CLOUD_ITEM,item);
-                in.putExtra(BundleFlag.ADDRESS,tvLocation.getText().toString());
                 in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(in);
                 break;
@@ -151,7 +133,6 @@ public class CommonBookDetailAct extends BaseActivity {
 //                bundle.putParcelable("book",mBook);
                 bundle.putSerializable(BundleFlag.BOOK,mBook);
 
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
             }
         };
         myCancel = new View.OnClickListener() {
@@ -164,25 +145,6 @@ public class CommonBookDetailAct extends BaseActivity {
         };
         askDialog =  CustomProgressDialog.getPromptDialog2Btn(this, "添加成功,是否在地图分享此书?", "分享", "不需要", myOk,myCancel);
 
-
-        /*AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("添加成功,是否在地图分享此书?");
-        dialog.setNegativeButton("分享", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("book",mBook);
-                gotoActivity(BookShareOnMapAct.class,true,bundle);
-            }
-        });
-        dialog.setPositiveButton("不需要", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });*/
         askDialog.show();
     }
 
@@ -191,15 +153,12 @@ public class CommonBookDetailAct extends BaseActivity {
         Intent in = getIntent();
         mBook = (BookDetail2)in.getSerializableExtra("book");
         showExtraInfo = in.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
-        tvLocation.setText(in.getStringExtra(BundleFlag.ADDRESS));
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
 
         tvSharer.setText(in.getStringExtra(BundleFlag.SHARER));
         longi = in.getDoubleExtra(BundleFlag.LONGITUDE,0);
         lati = in.getDoubleExtra(BundleFlag.LATITUDE,0);
 
-        LatLonPoint point = new LatLonPoint(lati,longi);
-        item = new CloudItem(in.getStringExtra(BundleFlag.ADDRESS),point,in.getStringExtra(BundleFlag.ADDRESS),"");
 
         if(friendUserId==0){
             friendUserId=null;
@@ -212,11 +171,6 @@ public class CommonBookDetailAct extends BaseActivity {
         }
 
         tvAdd2MyLib.setVisibility(View.INVISIBLE);
-        if(!showExtraInfo){
-            //不需要显示地址信息
-            findViewById(R.id.ll_sharer).setVisibility(View.GONE);
-            findViewById(R.id.rl_location).setVisibility(View.GONE);
-        }
         refreshBookInfo();
     }
 

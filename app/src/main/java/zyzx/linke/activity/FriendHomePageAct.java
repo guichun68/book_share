@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.amap.api.services.cloud.CloudItem;
-import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -47,13 +44,10 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     private PullToRefreshListView mPullRefreshListView;
 
     private BookAdapter mAdapter;
-    private CloudItem mCloudItem;
     private int pageNum = 0;
     private String mAddress;//中文地址描述
     private UserVO mUserVO;
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
-    private boolean showAddress;//是否显示地理位置信息
-    private RelativeLayout rlAddress;
 
     @Override
     protected int getLayoutId() {
@@ -66,16 +60,8 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);
         tvLoginname = (TextView) findViewById(R.id.tv_loginname);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
-        tvLocation = (TextView) findViewById(R.id.detail_locaiotn_des);
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
-        rlAddress = (RelativeLayout) findViewById(R.id.rl_location);
-        rlAddress.setOnClickListener(this);
 
-        if(showAddress){
-            rlAddress.setVisibility(View.VISIBLE);
-        }else{
-            rlAddress.setVisibility(View.GONE);
-        }
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         // Add an end-of-list listener
@@ -95,40 +81,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         if(headerClickable){
             ivHeadIcon.setOnClickListener(this);
         }
-        if(mCloudItem!=null){
-            tvLocation.setText(mAddress);
-        }
-        getUserPresenter().getUserInfo(mCloudItem.getCustomfield().get("uid"),new CallBack(){
-            @Override
-            public void onSuccess(Object obj, int... code) {
-                String userJson = (String) obj;
-                mUserVO = JSON.parseObject(userJson,UserVO.class);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvLoginname.setText(mUserVO !=null? mUserVO.getLoginName():"用户不存在");
-                        if(mUserVO !=null){
-                            if(!StringUtil.isEmpty(mUserVO.getSignature())){
-                                tvSignature.setText(mUserVO.getSignature());
-                            }else{
-                                tvSignature.setText(UIUtil.getString(R.string.nowordsig));
-                            }
-                        }
-                        if(!StringUtil.isEmpty(mUserVO.getHeadIcon())){
-                            Glide.with(mContext).load(mUserVO.getHeadIcon()).into(ivHeadIcon);
-                        }else{
-                            Glide.with(mContext).load(R.mipmap.person).asBitmap().into(ivHeadIcon) ;
-                        }
-                    }
-                });
-            }
 
-            @Override
-            public void onFailure(Object obj, int... code) {
-                UIUtil.showToastSafe("未能获取用户信息");
-            }
-        });
-        getBooks(mCloudItem.getCustomfield().get("uid"),0);
     }
 
 
@@ -137,15 +90,7 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         if (intent == null) {
             return;
         }
-        mCloudItem = intent.getParcelableExtra(BundleFlag.CLOUD_ITEM);
-        showAddress = intent.getBooleanExtra(BundleFlag.SHOWADDRESS,true);
-        headerClickable = intent.getBooleanExtra(BundleFlag.HEADCLICKABLE,true);
-        if(mCloudItem!=null){
-            mAddress = mCloudItem.getSnippet();
-            if(StringUtil.isEmpty(mAddress)){
-                mAddress = intent.getStringExtra(BundleFlag.ADDRESS);
-            }
-        }
+
     }
 
 
@@ -189,11 +134,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
     public void onClick(View view) {
         super.onClick(view);
         switch (view.getId()){
-            case R.id.rl_location://导航用户所处位置
-                Intent intent = new Intent(this, RouteMapActivity.class);
-                intent.putExtra(BundleFlag.CLOUD_ITEM, mCloudItem);
-                this.startActivity(intent);
-            break;
             case R.id.iv_icon:
                 if(mUserVO !=null&& mUserVO.getUserid()!=null){
                     if(String.valueOf(mUserVO.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
@@ -258,6 +198,6 @@ public class FriendHomePageAct extends BaseActivity implements PullToRefreshBase
         endLabels.setLoadingDrawable(getResources().getDrawable(
                 R.mipmap.publicloading));
         pageNum++;
-        getBooks(mCloudItem.getCustomfield().get("uid"),pageNum);
+//        getBooks(mCloudItem.getCustomfield().get("uid"),pageNum);
     }
 }

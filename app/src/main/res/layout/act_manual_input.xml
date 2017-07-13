@@ -30,7 +30,9 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="19sp" />
 
-                <TextView style="@style/star" />
+                <TextView style="@style/star"
+                    android:visibility="visible"
+                    android:gravity="center_vertical"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_book_classify"
@@ -54,7 +56,9 @@
                     android:text="@string/book_name"
                     android:textSize="19sp" />
 
-                <TextView style="@style/star" />
+                <TextView style="@style/star"
+                    android:visibility="visible"
+                    android:gravity="center_vertical"/>
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/acet_book_name"
