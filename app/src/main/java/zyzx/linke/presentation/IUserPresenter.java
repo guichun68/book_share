@@ -130,4 +130,11 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void saveUserInfo(UserVO user,CallBack callBack);
     //通过第三方账号登录系统
     public abstract void loginByThirdPlatform(String paraJSON,CallBack callBack);
+
+    /**
+     * 分享图书
+     * @param shareJson 分享json子串，包含所分享图书bean、分享方式、留言、所在城市 信息
+     * @param callBack
+     */
+    public abstract void shareBook(String shareJson, CallBack callBack);
 }

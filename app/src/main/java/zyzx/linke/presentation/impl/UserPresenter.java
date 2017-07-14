@@ -492,4 +492,18 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void shareBook(String shareJson, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("param",shareJson);
+        try {
+            getModel().post(GlobalParams.urlShareBook,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("访问出错，请稍后再试.");
+            }
+        }
+    }
 }

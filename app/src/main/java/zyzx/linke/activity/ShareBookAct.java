@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -18,6 +22,8 @@ import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleResult;
 import zyzx.linke.model.Area;
+import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -25,14 +31,21 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 图书分享
  */
 
-public class ShareBookAct extends BaseActivity  {
+public class ShareBookAct extends BaseActivity {
     private LocationSource.OnLocationChangedListener mLocationChangeListener;
     private String mCurrPro, mCurrCity, mCurrCounty;
-    private TextView tvPro,tvCity,tvCounty;
-    private Button btnLocation,btnManulSel;
-    private Button btnShare,btnCancel;
+    private TextView tvPro, tvCity, tvCounty;
+    private TextView btnLocation, btnManulSel;
+    private EditText etMsg;
+    private CheckBox cbShareTypeBorrow, cbShareTypeGive;
+    private Button btnShare, btnCancel;
     private AMapLocationClient locationClient = null;
-    private AMapLocationClientOption locationOption;
+    private BookDetail2 mBook;
+    private String userBookId;//user_books表主键
+    private int mShareType=2;//二进制含义：00 不出借，不赠送(不允许)；
+    //                                     01不出借，可赠送;
+    //                                     10可出借，不赠送；
+    //                                     11可出借，可赠送
 
     @Override
     protected int getLayoutId() {
@@ -46,18 +59,43 @@ public class ShareBookAct extends BaseActivity  {
         tvCounty = (TextView) findViewById(R.id.tv_county);
         btnShare = (Button) findViewById(R.id.btn_submit);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
-        btnLocation = (Button) findViewById(R.id.btn_location);
-        btnManulSel = (Button) findViewById(R.id.btn_sel_area);
+        btnLocation = (TextView) findViewById(R.id.btn_location);
+        btnManulSel = (TextView) findViewById(R.id.btn_sel_area);
+        cbShareTypeBorrow = (CheckBox) findViewById(R.id.cb_borrow);
+        cbShareTypeGive = (CheckBox) findViewById(R.id.cb_give);
+        etMsg = (EditText) findViewById(R.id.et_msg);
         btnLocation.setOnClickListener(this);
         btnManulSel.setOnClickListener(this);
-        btnShare .setOnClickListener(this);
+        btnShare.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+
+        cbShareTypeBorrow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mShareType = mShareType | 2;
+                }else{
+                    mShareType = mShareType & 1;
+                }
+            }
+        });
+        cbShareTypeGive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mShareType = mShareType | 1;
+                }else{
+                    mShareType = mShareType & 2;
+                }
+            }
+        });
+
 
         initLocation();
         startLocation();
     }
 
-    private void initLocation(){
+    private void initLocation() {
         //初始化client
         locationClient = new AMapLocationClient(this.getApplicationContext());
         //设置定位参数
@@ -68,15 +106,20 @@ public class ShareBookAct extends BaseActivity  {
 
     @Override
     protected void initData() {
-        mCurrPro = "北京";
-        mCurrCity = "海淀区";
+        mBook = getIntent().getParcelableExtra("book");
+        userBookId = getIntent().getStringExtra("userBookId");
+        mCurrPro = "北京市";
+        mCurrCity = "北京市";
+        mCurrCounty = "海淀区";
         refreshArea();
     }
+
     /**
      * 默认的定位参数
+     *
      * @since 2.8.0
      */
-    private AMapLocationClientOption getDefaultOption(){
+    private AMapLocationClientOption getDefaultOption() {
         AMapLocationClientOption mOption = new AMapLocationClientOption();
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
@@ -112,7 +155,7 @@ public class ShareBookAct extends BaseActivity  {
                     mCurrCity = loc.getCity();
                     mCurrCounty = loc.getDistrict();
                     refreshArea();
-                    UIUtil.showToastSafe("定位成功:"+mCurrPro+" "+mCurrCity+" "+mCurrCounty);
+//                    UIUtil.showToastSafe("定位成功:"+mCurrPro+" "+mCurrCity+" "+mCurrCounty);
                 }
             } else {
                 UIUtil.showTestLog("定位失败，loc is null");
@@ -123,19 +166,46 @@ public class ShareBookAct extends BaseActivity  {
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_location:
-                if(locationClient ==null){
+                if (locationClient == null) {
                     initLocation();
                 }
                 //手动定位
                 startLocation();
                 break;
             case R.id.btn_sel_area:
-                startActivityForResult(new Intent(mContext,AreaSelAct.class),777);
+                startActivityForResult(new Intent(mContext, AreaSelAct.class), 777);
                 break;
             case R.id.btn_submit:
-                UIUtil.showToastSafe("分享图书");
+                if (!cbShareTypeBorrow.isChecked() && !cbShareTypeGive.isChecked()) {
+                    UIUtil.showToastSafe("请至少选择一个分享方式");
+                    return;
+                }
+                //分享
+                JSONObject jobj = new JSONObject();
+//                String bookStr = JSONObject.toJSONString(mBook);
+                jobj.put("bookId", mBook.getId());
+                jobj.put("pro", mCurrPro);
+                jobj.put("city", mCurrCity);
+                jobj.put("county", mCurrCounty);
+                jobj.put("shareType",mShareType);
+                jobj.put("msg",etMsg.getText().toString());
+                jobj.put("userBookId",userBookId);
+                getUserPresenter().shareBook(jobj.toJSONString(),new CallBack(){
+
+                    @Override
+                    public void onSuccess(Object obj, int... code) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Object obj, int... code) {
+                        if(obj instanceof String){
+                            UIUtil.showToastSafe((String) obj);
+                        }
+                    }
+                });
                 break;
             case R.id.btn_cancel:
                 finish();
@@ -151,12 +221,18 @@ public class ShareBookAct extends BaseActivity  {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 777 && resultCode == BundleResult.SUCCESS){
+        if (requestCode == 777 && resultCode == BundleResult.SUCCESS) {
             //选择完地址的回调
             ArrayList<Area> areas = data.getParcelableArrayListExtra("areas");
-            UIUtil.showTestLog("AreaSelAct:",areas.get(0).toString());
-            UIUtil.showTestLog("AreaSelAct:",areas.get(1).toString());
-            UIUtil.showTestLog("AreaSelAct:",areas.get(2)!=null?areas.get(2).toString():"县为空！");
+            mCurrPro = areas.get(0).getName();
+            if (areas.get(2) == null) {
+                mCurrCity = mCurrPro;
+                mCurrCounty = areas.get(1).getName();
+            } else {
+                mCurrCity = areas.get(1).getName();
+                mCurrCounty = areas.get(2).getName();
+            }
+            refreshArea();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -185,14 +261,14 @@ public class ShareBookAct extends BaseActivity  {
     protected void onDestroy() {
         super.onDestroy();
         //销毁定位客户端
-        if(locationClient !=null){
+        if (locationClient != null) {
             locationClient.onDestroy();
             locationClient = null;
-            locationOption = null;
+//            locationOption = null;
         }
     }
 
-    private void startLocation(){
+    private void startLocation() {
 //        locationClient = new AMapLocationClient(this.getApplicationContext());
 //        locationClient.setLocationOption(getDefaultOption());
         // 启动定位

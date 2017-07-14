@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pop_layout2"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:background="@drawable/local_popup_bg2"
@@ -10,13 +10,13 @@
 
     <TextView
         android:id="@+id/tv_item1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="43dp"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
         android:textColor="@color/slide_item_sel"
         android:gravity="center"
-        android:text="删除"
+        android:text="删除dsadfadaafda"
         android:textStyle="bold"
         android:clickable="true"
         android:textSize="19sp" />

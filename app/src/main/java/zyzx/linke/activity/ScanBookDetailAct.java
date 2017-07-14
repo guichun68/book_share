@@ -123,7 +123,7 @@ public class ScanBookDetailAct extends BaseActivity {
     @Override
     protected void initData() {
         Intent in = getIntent();
-        mBook = (BookDetail2)in.getSerializableExtra("book");
+        mBook = (BookDetail2)in.getParcelableExtra("book");
         if(mBook!=null){
             Message msg = handler.obtainMessage();
             msg.obj = mBook;

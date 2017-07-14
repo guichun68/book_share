@@ -64,7 +64,7 @@ public class BookAdapter extends BaseAdapter{
                 Intent intent = new Intent(context,CommonBookDetailAct.class);
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",getItem(position));
-                bundle.putSerializable("book",getItem(position));
+                bundle.putParcelable("book",getItem(position));
                 intent.putExtra(BundleFlag.SHOWADDRESS,false);
 //                intent.putExtra("book",bundle);
                 intent.putExtras(bundle);

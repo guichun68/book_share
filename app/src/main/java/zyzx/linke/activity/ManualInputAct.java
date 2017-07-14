@@ -183,7 +183,7 @@ public class ManualInputAct extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(BundleFlag.BOOK, mBook);
+                            bundle.putParcelable(BundleFlag.BOOK, mBook);
                             gotoActivity(ScanBookDetailAct.class, true, bundle);
                         }
                     }).show();
@@ -372,7 +372,7 @@ public class ManualInputAct extends BaseActivity {
                 if(askDialog!=null)
                     askDialog.dismiss();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(BundleFlag.BOOK,mBook);
+                bundle.putParcelable(BundleFlag.BOOK,mBook);
 
 //                gotoActivity(BookShareOnMapAct.class,true,bundle);
             }

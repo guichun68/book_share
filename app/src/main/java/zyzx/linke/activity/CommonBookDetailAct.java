@@ -129,7 +129,7 @@ public class CommonBookDetailAct extends BaseActivity {
                     askDialog.dismiss();
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",mBook);
-                bundle.putSerializable(BundleFlag.BOOK,mBook);
+                bundle.putParcelable(BundleFlag.BOOK,mBook);
 
             }
         };
@@ -149,7 +149,7 @@ public class CommonBookDetailAct extends BaseActivity {
     @Override
     protected void initData() {
         Intent in = getIntent();
-        mBook = (BookDetail2)in.getSerializableExtra("book");
+        mBook = (BookDetail2)in.getParcelableExtra("book");
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
         if(!StringUtil.isEmpty(mBook.getBookClassify())){
             switch (mBook.getBookClassify()){

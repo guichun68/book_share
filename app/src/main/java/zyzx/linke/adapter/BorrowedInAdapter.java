@@ -15,7 +15,6 @@ import zyzx.linke.R;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.AppUtil;
-import zyzx.linke.utils.StringUtil;
 
 /**
  * Created by austin on 2017/3/16.
@@ -114,7 +113,7 @@ public class BorrowedInAdapter extends BaseAdapter {
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
                     break;
-                case Const.BOOK_STATUS_SHARED:
+                case Const.BOOK_STATUS_SHARED_BOWRROW:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.VISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);

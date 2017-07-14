@@ -41,6 +41,8 @@ public class GlobalParams {
 	public static String urlLogin = GlobalParams.BASE_URL+"/user/mobileSDK/login.action";
     //第三方账号登录
 	public static String urlthirdLogin = GlobalParams.BASE_URL+"/user/third_platform_login.action";
+	//分享图书
+	public static String urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
 
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 	public static String urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
@@ -102,10 +104,6 @@ public class GlobalParams {
 	 * 获取用户的所有书籍
 	 */
 	public static String urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
-	/**
-	 * 分享图书
-	 */
-	public static String urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
 	/**
 	 * 取消书籍分享
 	 */
@@ -182,7 +180,7 @@ public class GlobalParams {
 		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
-		urlShareBook = GlobalParams.BASE_URL+"/zyzx/shareBook.action";
+		urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";

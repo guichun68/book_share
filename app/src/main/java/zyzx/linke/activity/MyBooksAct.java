@@ -80,16 +80,25 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 View popView = View.inflate(mContext, R.layout.pop_modify_book, null);
                 setPopwinViewControls(popView, (MyBookDetailVO) parent.getItemAtPosition(position), position);
                 //测量布局的大小
-                popView.measure(0, 0);
-                pop = new PopupWindow(popView, popView.getMeasuredWidth(), popView.getMeasuredHeight(), true);
+                popView.measure(0, 0);view.getMeasuredHeight();
+                int popWidth = popView.getMeasuredWidth();
+                int popHeight = popView.getMeasuredHeight();
+//                pop = new PopupWindow(popView, popView.getMeasuredWidth(), popView.getMeasuredHeight(), true);
+                pop = new PopupWindow(popView);
+                // 加上这个popupwindow中的ListView才可以接收点击事件
+                pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+                pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+
                 pop.setOutsideTouchable(true);
                 pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 pop.setContentView(popView);
-
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
-                pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - pop.getWidth() / 2, location[1] + UIUtil.dip2px(10));
-
+                if(popHeight<view.getMeasuredHeight()){
+                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
+                }else{
+                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
+                }
                 AlphaAnimation aa = new AlphaAnimation(0.2f, 1.0f);
                 aa.setDuration(100);
                 ScaleAnimation sa = new ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -114,7 +123,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
                 Intent intent = new Intent(mContext, CommonBookDetailAct.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("book", myBookDetailVO.getBook());
+                bundle.putParcelable("book",myBookDetailVO.getBook());
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
@@ -159,7 +168,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     public void onClick(View v) {
                         pop.dismiss();
                         Bundle ex = new Bundle();
-                        ex.putSerializable("book",bookDetailVO);
+                        ex.putParcelable("book",bookDetailVO.getBook());
+                        ex.putString("userBookId",bookDetailVO.getUserBookId());
                         gotoActivity(ShareBookAct.class,false,ex);
                     }
                 });
@@ -175,7 +185,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 item2.setText("取消交换");
                 item3.setVisibility(View.GONE);
                 break;
-            case Const.BOOK_STATUS_SHARED://分享中。。。
+            case Const.BOOK_STATUS_SHARED_BOWRROW://分享中。。。
                 item1.setText("删除此书");
                 item2.setText("取消分享");
                 item3.setVisibility(View.GONE);

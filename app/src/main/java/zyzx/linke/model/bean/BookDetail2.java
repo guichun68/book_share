@@ -1,62 +1,140 @@
 package zyzx.linke.model.bean;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.List;
 
-public class BookDetail2 implements Serializable{
+public class BookDetail2 implements Parcelable{
+
 	private String id;
 	private String alt;
 	private String alt_title;
-
 	private List<String> author;
-
 	private String author_intro;
 
 	private String binding;
-
 	private String catalog;
-
 	private String image;
-
 	private Images images;
 	private String image_medium;
 
 	private String isbn10;
-
 	private String isbn13;
-
 	private String origin_title;
-
 	private String pages;
 
 	private String price;
-
 	private String pubdate;
 	private Date pubdateDateType;
-
 	private String publisher;
 
 	private Rating rating;
-
 	private Series series;
-
 	private String subtitle;
-
 	private String summary;
-
 	private List<Tags> tags;
 
 	private String title;
-
 	private List<String> translator;
 	private String douban_url;
-
 	private String url;
 	//标记是否是来自豆瓣的数据
 	private boolean isFromDouban;
-
 	private String bookClassify;
+
+	public BookDetail2(){
+
+	}
+
+	protected BookDetail2(Parcel in) {
+		id = in.readString();
+		alt = in.readString();
+		alt_title = in.readString();
+		author = in.createStringArrayList();
+		author_intro = in.readString();
+
+		binding = in.readString();
+		catalog = in.readString();
+		image = in.readString();
+		images = in.readParcelable(Images.class.getClassLoader());
+		image_medium = in.readString();
+
+		isbn10 = in.readString();
+		isbn13 = in.readString();
+		origin_title = in.readString();
+		pages = in.readString();
+
+		price = in.readString();
+		pubdate = in.readString();
+		pubdateDateType = new Date(in.readLong());
+		publisher = in.readString();
+
+		rating = in.readParcelable(Rating.class.getClassLoader());
+		series = in.readParcelable(Series.class.getClassLoader());
+		subtitle = in.readString();
+		summary = in.readString();
+		tags = in.createTypedArrayList(Tags.CREATOR);
+
+		title = in.readString();
+		translator = in.createStringArrayList();
+		douban_url = in.readString();
+		url = in.readString();
+
+		isFromDouban = in.readByte() != 0;
+		bookClassify = in.readString();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(alt);
+		dest.writeString(alt_title);
+		dest.writeStringList(author);
+		dest.writeString(author_intro);
+		dest.writeString(binding);
+		dest.writeString(catalog);
+		dest.writeString(image);
+		dest.writeParcelable(images, flags);
+		dest.writeString(image_medium);
+		dest.writeString(isbn10);
+		dest.writeString(isbn13);
+		dest.writeString(origin_title);
+		dest.writeString(pages);
+		dest.writeString(price);
+		dest.writeString(pubdate);
+		dest.writeLong(pubdateDateType!=null?pubdateDateType.getTime():0L);
+		dest.writeString(publisher);
+		dest.writeParcelable(rating, flags);
+		dest.writeParcelable(series,flags);
+		dest.writeString(subtitle);
+		dest.writeString(summary);
+		dest.writeTypedList(tags);
+		dest.writeString(title);
+		dest.writeStringList(translator);
+		dest.writeString(douban_url);
+		dest.writeString(url);
+		dest.writeByte((byte) (isFromDouban ? 1 : 0));
+		dest.writeString(bookClassify);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Creator<BookDetail2> CREATOR = new Creator<BookDetail2>() {
+		@Override
+		public BookDetail2 createFromParcel(Parcel in) {
+			return new BookDetail2(in);
+		}
+
+		@Override
+		public BookDetail2[] newArray(int size) {
+			return new BookDetail2[size];
+		}
+	};
 
 	public String getId() {
 		return id;
