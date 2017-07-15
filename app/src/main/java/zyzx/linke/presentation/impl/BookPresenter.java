@@ -171,10 +171,11 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
-    public void deleteUserBook(String userid, String b_id, CallBack callBack) {
+    public void deleteUserBook(String userid, String userBookId,String b_id, CallBack callBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("uid",userid);
         param.put("bid",b_id);
+        param.put("userBookId",userBookId);
         try {
             getModel().post(GlobalParams.urlDeleteUserBooks, param,callBack);
         } catch (IOException e) {
@@ -183,10 +184,9 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
-    public void cancelShare(Integer userBookId,Integer mapId,CallBack callBack) {
+    public void cancelShare(String userBookId,CallBack callBack) {
         HashMap<String,Object> param = new HashMap<>();
-        param.put("user_book_id",String.valueOf(userBookId));
-        param.put("map_id",String.valueOf(mapId));
+        param.put("userBookId",userBookId);
         try {
             getModel().post(GlobalParams.urlCancelShare,param,callBack);
         } catch (IOException e) {

@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
+import zyzx.linke.model.Area;
+import zyzx.linke.utils.StringUtil;
+
 /**
  * 我登记的书籍
  * @author Austin
@@ -16,6 +19,27 @@ public class MyBookDetailVO implements Parcelable{
 	private String bookStatusId;//书籍当前状态,从常量表取值（已记录到常量表）
 	private String userBookId;//在zyzx_usr_books表记录的id(主键)
 	private String relatedUserId;//关联到的用户，如图书状态为借入，则此处为从谁借入；如为借出，则表示借出给谁
+	private Integer shareAreaId;//分享者所在城市
+	private String shareMsg;//分享留言
+	private Integer shareType;//分享类型 （user_book表字段）
+
+	public void setUserBook(UserBooks ub){
+		if(ub != null){
+			if(!StringUtil.isEmpty(ub.getBookStatusId()))
+				this.bookStatusId = ub.getBookStatusId();
+			if(!StringUtil.isEmpty(ub.getBookId()))
+				this.userBookId = ub.getBookId();
+			if(!StringUtil.isEmpty(ub.getRelatedUserId()))
+				this.relatedUserId = ub.getRelatedUserId();
+			if(ub.getShareAreaId() != null)
+				this.shareAreaId = ub.getShareAreaId();
+			if(!StringUtil.isEmpty(ub.getShareMsg()))
+				this.shareMsg = ub.getShareMsg();
+			if(ub.getShareType() != null){
+				this.shareType = ub.getShareType();
+			}
+		}
+	}
 
 	public MyBookDetailVO(){}
 
@@ -24,6 +48,9 @@ public class MyBookDetailVO implements Parcelable{
 		bookStatusId = in.readString();
 		userBookId = in.readString();
 		relatedUserId = in.readString();
+		shareAreaId = in.readInt();
+		shareMsg = in.readString();
+		shareType = in.readInt();
 	}
 
 	@Override
@@ -32,6 +59,9 @@ public class MyBookDetailVO implements Parcelable{
 		dest.writeString(bookStatusId);
 		dest.writeString(userBookId);
 		dest.writeString(relatedUserId);
+		dest.writeInt(shareAreaId);
+		dest.writeString(shareMsg);
+		dest.writeInt(shareType);
 	}
 
 	@Override
@@ -81,5 +111,29 @@ public class MyBookDetailVO implements Parcelable{
 
 	public void setRelatedUserId(String relatedUserId) {
 		this.relatedUserId = relatedUserId;
+	}
+
+	public Integer getShareAreaId() {
+		return shareAreaId;
+	}
+
+	public void setShareAreaId(Integer shareAreaId) {
+		this.shareAreaId = shareAreaId;
+	}
+
+	public String getShareMsg() {
+		return shareMsg;
+	}
+
+	public void setShareMsg(String shareMsg) {
+		this.shareMsg = shareMsg;
+	}
+
+	public Integer getShareType() {
+		return shareType;
+	}
+
+	public void setShareType(Integer shareType) {
+		this.shareType = shareType;
 	}
 }

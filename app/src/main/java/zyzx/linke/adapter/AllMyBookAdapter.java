@@ -113,7 +113,7 @@ public class AllMyBookAdapter extends BaseAdapter {
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
                     break;
-                case Const.BOOK_STATUS_SHARED_BOWRROW:
+                case Const.BOOK_STATUS_SHARED:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.VISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);

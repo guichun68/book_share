@@ -68,6 +68,12 @@ public abstract class BaseParentActivity extends CheckPermissionsActivity{
             finish();
         }
     }
+    public  void gotoActivityForResult(Class<?> clz,int requestCode,Bundle ex) {
+        Intent intent=new Intent(this, clz);
+        if(ex!=null)
+            intent.putExtras(ex);
+        startActivityForResult(intent,requestCode);
+    }
 
     @Override
     protected void onDestroy() {

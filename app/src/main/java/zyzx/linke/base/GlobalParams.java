@@ -107,7 +107,7 @@ public class GlobalParams {
 	/**
 	 * 取消书籍分享
 	 */
-	public static String urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";
+	public static String urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
 	/**
 	 * 取消分享并从书架删除
 	 */
@@ -181,7 +181,7 @@ public class GlobalParams {
 		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
-		urlCancelShare = GlobalParams.BASE_URL+"/zyzx/cancelShareBook.action";
+		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";

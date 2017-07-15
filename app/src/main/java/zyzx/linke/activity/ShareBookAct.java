@@ -9,12 +9,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.LocationSource;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,8 @@ import zyzx.linke.global.BundleResult;
 import zyzx.linke.model.Area;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.ResponseJson;
+import zyzx.linke.model.bean.UserBooks;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -32,7 +34,6 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class ShareBookAct extends BaseActivity {
-    private LocationSource.OnLocationChangedListener mLocationChangeListener;
     private String mCurrPro, mCurrCity, mCurrCounty;
     private TextView tvPro, tvCity, tvCounty;
     private TextView btnLocation, btnManulSel;
@@ -41,6 +42,7 @@ public class ShareBookAct extends BaseActivity {
     private Button btnShare, btnCancel;
     private AMapLocationClient locationClient = null;
     private BookDetail2 mBook;
+    private int bookIndex;//暂存当前书籍在我的所有书籍列表的索引，以便分享成功后根据其notify listView
     private String userBookId;//user_books表主键
     private int mShareType=2;//二进制含义：00 不出借，不赠送(不允许)；
     //                                     01不出借，可赠送;
@@ -107,6 +109,7 @@ public class ShareBookAct extends BaseActivity {
     @Override
     protected void initData() {
         mBook = getIntent().getParcelableExtra("book");
+        bookIndex = getIntent().getIntExtra("bookIndex",-1);
         userBookId = getIntent().getStringExtra("userBookId");
         mCurrPro = "北京市";
         mCurrCity = "北京市";
@@ -141,6 +144,7 @@ public class ShareBookAct extends BaseActivity {
     AMapLocationListener locationListener = new AMapLocationListener() {
         @Override
         public void onLocationChanged(AMapLocation loc) {
+            dismissProgress();
             if (null != loc) {
                 //解析定位结果
                 String result = UIUtil.getLocationStr(loc);
@@ -171,6 +175,7 @@ public class ShareBookAct extends BaseActivity {
                 if (locationClient == null) {
                     initLocation();
                 }
+                showDefProgress();
                 //手动定位
                 startLocation();
                 break;
@@ -192,15 +197,38 @@ public class ShareBookAct extends BaseActivity {
                 jobj.put("shareType",mShareType);
                 jobj.put("msg",etMsg.getText().toString());
                 jobj.put("userBookId",userBookId);
+                showDefProgress();
                 getUserPresenter().shareBook(jobj.toJSONString(),new CallBack(){
 
                     @Override
                     public void onSuccess(Object obj, int... code) {
-
+                        dismissProgress();
+                        if(obj!=null){
+                            String json = (String) obj;
+                            ResponseJson rj = new ResponseJson(json);
+                            if(rj.errorCode==1){
+                                if(rj.data==null || rj.data.isEmpty()){
+                                    UIUtil.showToastSafe("分享出错");
+                                    return;
+                                }
+                                UserBooks ub = JSON.parseObject(JSONObject.parseObject((String)((JSONObject)rj.data.get(0)).get("userBook")).get("ub").toString(),UserBooks.class);
+                                UIUtil.showToastSafe("分享成功");
+                                Intent intent = new Intent();
+                                intent.putExtra("bookIndex",bookIndex);
+                                intent.putExtra("userBook",ub);
+                                setResult(888,intent);
+                                finish();
+                            }else{
+                                UIUtil.showToastSafe(rj.errorMsg);
+                            }
+                        }else{
+                            UIUtil.showToastSafe("未能分享成功");
+                        }
                     }
 
                     @Override
                     public void onFailure(Object obj, int... code) {
+                        dismissProgress();
                         if(obj instanceof String){
                             UIUtil.showToastSafe((String) obj);
                         }

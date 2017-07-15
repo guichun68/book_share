@@ -46,16 +46,17 @@ public abstract class IBookPresenter extends IPresenter {
     /**
      * 用户删除图书
      * @param userid
+     * @param userBookId userBook表主键
      * @param bid
      * @param callBack
      */
-    public abstract void deleteUserBook(String userid, String bid, CallBack callBack);
+    public abstract void deleteUserBook(String userid,String userBookId, String bid, CallBack callBack);
 
     /**
      * 取消书籍分享
      * @param userBookId 用户书籍关系表（zyzx_user_books）id
      */
-    public abstract void cancelShare(Integer userBookId,Integer mapId,CallBack callBack);
+    public abstract void cancelShare(String userBookId,CallBack callBack);
 
     /**
      * 取消分享并从书架删除

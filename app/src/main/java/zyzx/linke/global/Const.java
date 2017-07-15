@@ -36,10 +36,8 @@ public class Const {
 
 	//状态：在架
 	public static final String BOOK_STATUS_ONSHELF="2308b2e0-3df2-11e7-84d2-005056c00001";
-	//分享中-可借
-	public static final String BOOK_STATUS_SHARED_BOWRROW ="29890cac-3df2-11e7-84d2-005056c00001";
-	//分享中-可赠送
-	public static final String BOOK_STATUS_SHARED_PRESENTED="18a71da3-6845-11e7-8b76-68f72877da0a";
+	//分享中
+	public static final String BOOK_STATUS_SHARED ="29890cac-3df2-11e7-84d2-005056c00001";
 	//已借出
 	public static final String BOOK_STATUS_LOANED="5c79df56-5f9c-11e7-bccd-00163e062b56";
 	//已借入
