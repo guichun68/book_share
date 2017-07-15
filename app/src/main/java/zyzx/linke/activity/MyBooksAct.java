@@ -124,9 +124,9 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     return;
                 }
                 MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
-                Intent intent = new Intent(mContext, CommonBookDetailAct.class);
+                Intent intent = new Intent(mContext, BookDetailAct.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("book",myBookDetailVO.getBook());
+                bundle.putParcelable("book",myBookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
@@ -434,5 +434,14 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         if (pop != null) {
             pop.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(pop!=null && pop.isShowing()){
+            pop.dismiss();
+            return;
+        }
+        super.onBackPressed();
     }
 }

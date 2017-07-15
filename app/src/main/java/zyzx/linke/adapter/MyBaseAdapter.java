@@ -1,5 +1,6 @@
 package zyzx.linke.adapter;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,9 +13,15 @@ import java.util.ArrayList;
 
 public abstract class MyBaseAdapter<T> extends BaseAdapter {
 
+    protected Context context;
     private ArrayList<T> items;
 
     MyBaseAdapter(ArrayList<T> items){
+        this.items = items;
+    }
+
+    MyBaseAdapter(Context context,ArrayList<T> items){
+        this.context = context;
         this.items = items;
     }
 

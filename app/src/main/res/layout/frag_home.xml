@@ -6,8 +6,9 @@
     android:layout_height="match_parent">
 
     <include
+        android:id="@+id/title_bar"
         layout="@layout/title_bar"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbar"
@@ -17,7 +18,8 @@
         android:background="@color/title"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:visibility="gone">
         <!--自定义标题栏内容-->
         <LinearLayout
             android:id="@+id/rl_title_bar"
@@ -43,68 +45,6 @@
                     android:textSize="@dimen/textsize_noData_text" />
             </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/btn_area_choose2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/current_city_district_textview2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_city"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/detail_size_img_des" />
-
-                <ImageView
-                    android:id="@+id/up_down_arrow2"
-                    android:layout_width="@dimen/busroute_offset"
-                    android:layout_height="@dimen/busroute_offset"
-                    android:layout_marginLeft="@dimen/index_offset"
-                    android:layout_marginStart="@dimen/index_offset"
-                    android:background="@mipmap/arrow_up_white"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_search"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/index_input_height"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="20dp"
-                android:layout_weight="2"
-                android:background="@drawable/search_bar_blue"
-                android:gravity="center_vertical"
-                android:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/detail_img_offset_top"
-                    android:layout_marginStart="@dimen/detail_img_offset_top"
-                    android:background="@mipmap/search_icon_white"
-                    android:contentDescription="@string/app_name" />
-
-                <TextView
-                    android:id="@+id/tv_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/index_offset"
-                    android:layout_marginStart="@dimen/index_offset"
-                    android:background="@android:color/transparent"
-                    android:focusable="false"
-                    android:hint="@string/edittext_hint"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/watermark_hint"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
             <ImageView
                 android:id="@+id/btn_map"
                 android:layout_width="@dimen/index_map_width"
@@ -124,7 +64,7 @@
         android:id="@+id/pull_refresh_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_toolbar"
+        android:layout_below="@id/title_bar"
         android:cacheColorHint="@color/transparent"
         android:divider="@color/bg_divider_line"
         android:dividerHeight="@dimen/divider_width"

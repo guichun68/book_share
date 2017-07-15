@@ -43,6 +43,8 @@ public class GlobalParams {
 	public static String urlthirdLogin = GlobalParams.BASE_URL+"/user/third_platform_login.action";
 	//分享图书
 	public static String urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
+	//得到所有共享的书籍
+	public static String urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 	public static String urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
@@ -64,6 +66,7 @@ public class GlobalParams {
 	 * 得到图书分类，如考研、中考等
 	 */
 	public static String urlGetBookClassify = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getBookClassify&page.pageSize=30&page.curPage=1";
+	public static String urlGetAreaById = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getArea&page.searchValue.id=#&page.pageSize=30&page.curPage=1";
 	public static String downloadFileName = "";
 	//保存用户信息
 	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
@@ -116,6 +119,8 @@ public class GlobalParams {
 	 * 获取我登录的所有书籍(借入的除外)
 	 */
 	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
+	//获得我分享的所有书籍
+	public static String urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 	/**
 	 * 获取用户签名
 	 */
@@ -179,8 +184,10 @@ public class GlobalParams {
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
+		urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
+		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
@@ -203,6 +210,7 @@ public class GlobalParams {
 		urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 		urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
 		urlGetBookClassify = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getBookClassify&page.pageSize=30&page.curPage=1";
+		urlGetAreaById = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getArea&page.searchValue.id=#&page.pageSize=30&page.curPage=1";
 		urlAddManualBook2Lib = GlobalParams.BASE_URL+"/user/mobileSDK/uploadManualBook.action";
 	}
 

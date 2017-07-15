@@ -13,6 +13,17 @@
         android:src="@mipmap/arrow_left_backbtn_white"
         android:contentDescription="@null"
         />
+    <TextView
+        android:id="@+id/tvLeftTip"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:text="海淀区"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:textSize="19sp"
+        android:maxLength="10"
+        android:textColor="@color/white"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/title_text"

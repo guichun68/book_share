@@ -112,8 +112,43 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 />
+            <LinearLayout
+                android:id="@+id/ll_share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="12dp"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/tv_book_status"
+                    style="@style/bookDetailStyle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tool:text="状态: 分享中" />
 
+                <TextView
+                    android:id="@+id/tv_share_type"
+                    style="@style/bookDetailStyle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tool:text="分享类型: 可借阅" />
+
+                <TextView
+                    android:id="@+id/tv_area"
+                    style="@style/bookDetailStyle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tool:text="所在地区: 山东省济南市章丘市" />
+
+                <TextView
+                    android:id="@+id/tv_msg"
+                    style="@style/bookDetailStyle"
+                    android:ellipsize="end"
+                    android:maxLines="10"
+                    tool:text="分享留言: 个人书籍，仅供借阅大风大第三方大的大多少发多少放到" />
+
+            </LinearLayout>
 
             <TextView
                 style="@style/bookDetailStyle"

@@ -137,4 +137,10 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void shareBook(String shareJson, CallBack callBack);
+
+    //根据zyzx_area ID 获取 记录
+    public abstract void getSharerArea(Integer shareAreaId, CallBack callBack);
+
+    //获取指定城市所有的分享的书籍
+    public abstract void getAllShareBooks(String pro,String city,String county,int pageNo,CallBack callBack);
 }

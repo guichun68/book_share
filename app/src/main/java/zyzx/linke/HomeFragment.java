@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -26,14 +25,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.activity.AreaSelAct;
-import zyzx.linke.adapter.AllUserBooksListAdapter;
+import zyzx.linke.adapter.BookVOAdapter;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.BundleResult;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.Area;
-import zyzx.linke.model.bean.IndexItem;
+import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.DefindResponseJson;
+import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CityUtil;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -48,13 +51,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     private AMapLocationClient mAMapLocationClient = null;
 
     private Toolbar mToolbar;
-    private TextView tvInput;
-
-    private AllUserBooksListAdapter mAdapter;
-
+    private boolean isRefresh = true;//是否是刷新行为,默认刷新
+    private BookVOAdapter mAdapter;
+    private PullToRefreshListView mPullRefreshListView;
     private String mCurrPro, mCurrCity, mCurrCounty;
-    private int mCurrentPageNum = 0;
-    private ArrayList<IndexItem> mListViewItems = new ArrayList<>();
+    private int mCurrentPageNum = 1;
+    private ArrayList<MyBookDetailVO> mListViewItems = new ArrayList<>();
 
 
 
@@ -69,7 +71,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
     @Override
     public void initView() {
-        tvInput = (TextView) mRootView.findViewById(R.id.tv_input);
+        mBackBtn.setVisibility(View.GONE);
+        mTvLeftTip.setVisibility(View.VISIBLE);
+        mTvLeftTip.setClickable(true);
+        mTitleText.setText("分享中心");
+        mTvLeftTip.setText("城市选择");
+        mTvLeftTip.setOnClickListener(this);
         mToolbar = (Toolbar) mRootView.findViewById(R.id.id_toolbar);
         // 设置显示Toolbar
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
@@ -90,13 +97,8 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
     private void setUpInteractiveControls() {
 
-        mRootView.findViewById(R.id.ll_search).setOnClickListener(this);
-        mRootView.findViewById(R.id.btn_area_choose).setOnClickListener(this);
-
-        mRootView.findViewById(R.id.btn_map).setOnClickListener(this);
-
         // Set a listener to be invoked when the list should be refreshed.
-        PullToRefreshListView mPullRefreshListView = (PullToRefreshListView) mRootView.findViewById(R.id.pull_refresh_list);
+        mPullRefreshListView = (PullToRefreshListView) mRootView.findViewById(R.id.pull_refresh_list);
         mPullRefreshListView.setOnRefreshListener(this);
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(false, true);
@@ -112,7 +114,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         ListView actualListView = mPullRefreshListView.getRefreshableView();
         // Need to use the Actual ListView when registering for Context Menu
         registerForContextMenu(actualListView);
-        mAdapter = new AllUserBooksListAdapter(getContext(), mListViewItems);
+        mAdapter = new BookVOAdapter(getContext(), mListViewItems);
         // You can also just use setListAdapter(mAdapter) or
         // mPullRefreshListView.setAdapter(mAdapter)
         actualListView.setAdapter(mAdapter);
@@ -121,7 +123,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_area_choose:
+            case R.id.tvLeftTip:
                 showAreaPopupWindow();
                 break;
         }
@@ -155,8 +157,71 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
      * @param pagenum pageNO
      */
     private void searchByLocal(int pagenum) {
+        showDefProgress();
         Log.e(TAG, "在城市(" + mCurrCity + "->"+ mCurrCounty +") 查找第" + pagenum + "页的所有书籍信息--待完善");
+        getUserPresenter().getAllShareBooks(mCurrPro, mCurrCity, mCurrCounty, pagenum, new CallBack() {
+            @Override
+            public void onSuccess(final Object obj, int... code) {
+                UIUtil.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullRefreshListView.onRefreshComplete();
+                        dismissProgress();
+                        String response = (String) obj;
+                        if(StringUtil.isEmpty(response)){
+                            UIUtil.showToastSafe("访问出错");
+                            return;
+                        }
+                        DefindResponseJson drj = new DefindResponseJson(response);
+                        switch (drj.errorCode){
+                            case 0:
+                                UIUtil.showToastSafe("访问出错");
+                                break;
+                            case 1:
+                                List list = drj.data.getItems();
+                                ArrayList<MyBookDetailVO> books = AppUtil.getBookDetailVOs(list);
+                                if(isRefresh){
+                                    mListViewItems.clear();
+                                    mListViewItems.addAll(books);
+                                    mCurrentPageNum = 1;
+                                    UIUtil.showToastSafe("刷新成功");
+                                }else{
+                                    mListViewItems.addAll(books);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            case 2:
+                                UIUtil.showToastSafe("没有更多数据了");
+                                if(isRefresh){
+                                    mCurrentPageNum = 1;
+                                }else{
+                                    mCurrentPageNum--;
+                                }
+                                break;
+                        }
+                    }
+                });
+            }
 
+            @Override
+            public void onFailure(final Object obj, int... code) {
+                UIUtil.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isRefresh){
+                            mCurrentPageNum=1;
+                        }else{
+                            mCurrentPageNum--;
+                        }
+                        dismissProgress();
+                        mPullRefreshListView.onRefreshComplete();
+                        if(obj instanceof String){
+                            UIUtil.showToastSafe((String) obj);
+                        }
+                    }
+                });
+            }
+        });
     }
 
 
@@ -212,12 +277,18 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         if (CITY_CHOOSE_REQUEST_CODE == requestCode
                 && resultCode == BundleResult.SUCCESS) {
             ArrayList<Area> areas = data.getParcelableArrayListExtra("areas");
-            UIUtil.showTestLog("AreaSelAct:",areas.get(0).toString());
-            UIUtil.showTestLog("AreaSelAct:",areas.get(1).toString());
-            UIUtil.showTestLog("AreaSelAct:",areas.get(2)!=null?areas.get(2).toString():"县为空！");
+            mCurrPro = areas.get(0).getName();
+            mCurrCity = areas.get(1).getName();
+            if(areas.get(2) != null){
+                mCurrCounty = areas.get(2).getName();
+            }else{
+                mCurrCounty = areas.get(1).getName();
+            }
+            mTvLeftTip.setText(mCurrCounty);
             mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
-            searchByLocal(0);
+            mCurrentPageNum = 1;
+            searchByLocal(mCurrentPageNum);
             return;
         }
 
@@ -228,8 +299,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
             mKeywords = selectedItem;
             mListViewItems.clear();
             mAdapter.notifyDataSetChanged();
-            searchByLocal(0);
-            tvInput.setText(selectedItem);
+            searchByLocal(1);
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -239,12 +309,14 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
         //下拉刷新
-        mCurrentPageNum = 0;
+        isRefresh = true;
+        mCurrentPageNum = 1;
         searchByLocal(mCurrentPageNum);
     }
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+        isRefresh = false;
         mCurrentPageNum++;
         searchByLocal(mCurrentPageNum);
     }
@@ -255,20 +327,21 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         stopLocation();
         if (location == null) {
             // 如果没有地理位置数据返回，则进行默认的搜索
-            searchDefault(0);
+            searchDefault(1);
             return;
         }
         if (location.getErrorCode() != AMapLocation.LOCATION_SUCCESS) {
             UIUtil.showToastSafe(R.string.locate_fail);
-            searchDefault(0);
+            searchDefault(1);
             return;
         } else {
             mCurrPro = location.getProvince();
             mCurrCity = location.getCity();
             mCurrCounty = location.getDistrict();
+            mTvLeftTip.setText(mCurrCounty);
             // 并且设置当前的城市
             setCurrentCity(location.getCity());
-            searchByLocal(0);
+            searchByLocal(1);
         }
     }
 

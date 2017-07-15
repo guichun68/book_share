@@ -63,7 +63,7 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
                 MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
                 Intent intent = new Intent(mContext, CommonBookDetailAct.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("book", myBookDetailVO.getBook());
+                bundle.putParcelable("book", myBookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);

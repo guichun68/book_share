@@ -42,6 +42,7 @@ public abstract class IBookPresenter extends IPresenter {
     public abstract void uploadBook(HashMap<String, Object> params, CallBack viewCallBack);
 
     public abstract void getMyBooks(String uid, int pageNum, CallBack viewCallBack);
+    public abstract void getMySharedBooks(String uid, int pageNum, CallBack viewCallBack);
 
     /**
      * 用户删除图书

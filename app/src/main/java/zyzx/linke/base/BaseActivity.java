@@ -83,7 +83,7 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
      */
     protected void showDefProgress(){
         if(mProgressDialog == null){
-            mProgressDialog = CustomProgressDialog.getNewProgressBar(mContext,"处理中……");
+            mProgressDialog = CustomProgressDialog.getNewProgressBar(mContext,"请稍后……");
         }
         mProgressDialog.show();
     }

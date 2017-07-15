@@ -489,7 +489,7 @@ public class AppUtil {
 			mV.setPubdateDateType(jo.getDate("CREATE_DATE"));
 			mV.setAlt(jo.getString("alt"));
 			mV.setTitle(jo.getString("alt_title"));
-			String authors = jo.getString("author_name");
+			String authors = jo.getString("a_name");
 			String[] auArr = {};
 			if(authors!=null)
 			{
@@ -532,11 +532,16 @@ public class AppUtil {
 			mV.setSummary(jo.getString("summary"));
 			mV.setBookClassify(jo.getString("book_classify"));
 			mV.setTitle(jo.getString("title"));
+
 			List<String> tran = new ArrayList<>();
 			tran.add(jo.getString("translator"));
 			mV.setTranslator(tran);
 			mBV.setUserBookId(jo.getString("user_book_id"));
 			mBV.setBook(mV);
+			mBV.setShareType(jo.getInteger("share_type"));
+			mBV.setShareMsg(jo.getString("share_msg"));
+			mBV.setShareAreaId(jo.getInteger("share_area_id"));
+			mBV.setRelatedUserId(jo.getString("related_user_id"));
 			mBvos.add(mBV);
 		}
 		return mBvos;

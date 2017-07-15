@@ -28,6 +28,7 @@ import zyzx.linke.activity.ImportResultAct;
 import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
+import zyzx.linke.activity.MyShareBooksAct;
 import zyzx.linke.activity.PersonalCenterAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.GlobalParams;
@@ -69,6 +70,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         mRootView.findViewById(R.id.rl_all_checkin).setOnClickListener(this);
         mRootView.findViewById(R.id.rl_borrow_in).setOnClickListener(this);
         mRootView.findViewById(R.id.rl_scan_input).setOnClickListener(this);//扫描
+        mRootView.findViewById(R.id.rl_my_share).setOnClickListener(this);//我的分享
         mRootView.findViewById(R.id.rl_manual_input).setOnClickListener(this);//手动录入
         mRootView.findViewById(R.id.rl_log_out).setOnClickListener(this);//注销登录
         mRootView.findViewById(R.id.rl_check_update).setOnClickListener(this);//注销登录
@@ -95,7 +97,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.rl_manual_input:
                 gotoActivity(ManualInputAct.class);
                 break;
-
+            case R.id.rl_my_share:
+                gotoActivity(MyShareBooksAct.class);
+                break;
             case R.id.rl_all_checkin://我的所有书
                 gotoActivity(MyBooksAct.class);
                 break;

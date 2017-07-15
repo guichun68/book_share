@@ -26,7 +26,7 @@ public abstract class BaseFragment extends Fragment{
     private Dialog mProgressDialog,mProDialogWithTip,mToastDialog;
 
     protected Context mContext;
-    protected TextView mTitleText;
+    protected TextView mTitleText,mTvLeftTip;
     protected ImageView mBackBtn;
     protected ImageView mRightBtn;
     protected View mRootView;
@@ -57,6 +57,7 @@ public abstract class BaseFragment extends Fragment{
     protected void initTitleBar() {
 //        Log.e("initTitleBar:",this.toString());
         mTitleText = (TextView) mRootView.findViewById(R.id.title_text);
+        mTvLeftTip = (TextView) mRootView.findViewById(R.id.tvLeftTip);
         mBackBtn = (ImageView)mRootView. findViewById(R.id.back_img);
         mRightBtn = (ImageView)mRootView. findViewById(R.id.right_img);
        /* try{
@@ -126,4 +127,6 @@ public abstract class BaseFragment extends Fragment{
             intent.putExtras(ex);
         startActivity(intent);
     }
+
+
 }

@@ -59,9 +59,9 @@ public class MyBookDetailVO implements Parcelable{
 		dest.writeString(bookStatusId);
 		dest.writeString(userBookId);
 		dest.writeString(relatedUserId);
-		dest.writeInt(shareAreaId);
+		dest.writeInt(shareAreaId==null?-1:shareAreaId);
 		dest.writeString(shareMsg);
-		dest.writeInt(shareType);
+		dest.writeInt(shareType==null?-1:shareType);
 	}
 
 	@Override

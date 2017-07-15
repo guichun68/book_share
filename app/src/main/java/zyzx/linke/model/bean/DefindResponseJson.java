@@ -16,6 +16,8 @@ public class DefindResponseJson {
     public Integer errorCode;
     public String errorMsg;
 
+    public DefindResponseJson(){}
+
     public DefindResponseJson(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         errorCode = jsonObject.getInteger("errorCode");

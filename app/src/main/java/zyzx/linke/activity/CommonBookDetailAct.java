@@ -21,6 +21,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Tags;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
@@ -38,6 +39,7 @@ public class CommonBookDetailAct extends BaseActivity {
     private TextView tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags, tvSummary,tvCatalog,tvAdd2MyLib;
     private TextView tvType;
     private BookDetail2 mBook;
+    private MyBookDetailVO myBookDetailVO;
     private Integer friendUserId;//好友id
 
     @Override
@@ -107,14 +109,6 @@ public class CommonBookDetailAct extends BaseActivity {
                     }
                 });
                 break;
-           /* case R.id.tvSharer:
-                //进入好友详情页
-                Intent in = new Intent(this, FriendHomePageAct.class);
-                HashMap<String,String> uidMap = new HashMap<>();
-                uidMap.put("uid",friendUserId.toString());
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(in);
-                break;*/
         }
     }
 
@@ -149,7 +143,8 @@ public class CommonBookDetailAct extends BaseActivity {
     @Override
     protected void initData() {
         Intent in = getIntent();
-        mBook = (BookDetail2)in.getParcelableExtra("book");
+        myBookDetailVO = in.getParcelableExtra("book");
+        mBook = myBookDetailVO.getBook();
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
         if(!StringUtil.isEmpty(mBook.getBookClassify())){
             switch (mBook.getBookClassify()){

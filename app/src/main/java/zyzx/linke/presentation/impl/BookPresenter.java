@@ -171,6 +171,45 @@ public class BookPresenter extends IBookPresenter {
     }
 
     @Override
+    public void getMySharedBooks(String uid, int pageNum, final CallBack viewCallBack) {
+        String url = GlobalParams.urlGetMyShareBooks.replace("{uid}",uid);
+        url = url.replace("{pageSize}",String.valueOf(Const.PAGE_SIZE_MYBOOKS));
+        url = url.replace("{curPage}",String.valueOf(pageNum));
+        try {
+            getModel().get(url, null, new CallBack() {
+                @Override
+                public void onSuccess(Object obj, int... code) {
+                    String json = (String) obj;
+                    if(StringUtil.isEmpty(json)){
+                        if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                        return;
+                    }
+                    DefindResponseJson drj = new DefindResponseJson(json);
+                    if(drj.errorCode!=null) {
+                        if(drj.errorCode!=1 && viewCallBack!=null){
+                                viewCallBack.onFailure(drj.errorMsg);
+                        }
+                        if(drj.errorCode==1){//成功获取
+                            Page page = drj.data;
+                            List<JSONObject> items = page.getItems();
+                            ArrayList<MyBookDetailVO> myBooks = AppUtil.getBookDetailVOs(items);
+                            if(viewCallBack!=null)viewCallBack.onSuccess(myBooks);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Object obj, int... code) {
+                    if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+        }
+    }
+
+    @Override
     public void deleteUserBook(String userid, String userBookId,String b_id, CallBack callBack) {
         HashMap<String,Object> param = new HashMap<>();
         param.put("uid",userid);

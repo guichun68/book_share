@@ -53,6 +53,10 @@ public class UserPresenter extends IUserPresenter {
                @Override
                public void onSuccess(Object obj, int... code) {
                    String response = (String)obj;
+                   if(StringUtil.isEmpty(response)){
+                       Log.e("failure","登录失败");
+                       return;
+                   }
                    ResponseJson rj = new ResponseJson(response);
                    if(rj.errorCode == 1){
                        //登录成功
@@ -503,6 +507,45 @@ public class UserPresenter extends IUserPresenter {
             e.printStackTrace();
             if(callBack!=null){
                 callBack.onFailure("访问出错，请稍后再试.");
+            }
+        }
+    }
+
+    @Override
+    public void getSharerArea(Integer shareAreaId, final CallBack viewCallBack) {
+        String url = GlobalParams.urlGetAreaById.replace("#",shareAreaId+"");
+        getModel().get(url, null, new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                if(obj != null){
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(obj);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                UIUtil.showTestLog("zyzx",obj.toString());
+                if(viewCallBack!=null) {
+                    viewCallBack.onFailure("未能获取地理信息");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getAllShareBooks(String pro, String city, String county, int pageNo, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("pro",pro);
+        param.put("city",city);
+        param.put("county",county);
+        param.put("pageNo",pageNo+"");
+        try{
+            getModel().post(GlobalParams.urlGetSharedBooks,param,callBack);
+        }catch (Exception e){
+            if(callBack!=null){
+                callBack.onFailure("访问出错");
             }
         }
     }
