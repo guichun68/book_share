@@ -233,9 +233,9 @@ public class AreaSelAct extends BaseActivity {
         UserDao dao = UserDao.getInstance(mContext);
         provinces = dao.queryAllPro();
 
-        proAdapter = new AreaAdapter(provinces,mContext);
-        cityAdapter = new AreaAdapter(cities,mContext);
-        countyAdapter = new AreaAdapter(counties,mContext);
+        proAdapter = new AreaAdapter(provinces);
+        cityAdapter = new AreaAdapter(cities);
+        countyAdapter = new AreaAdapter(counties);
 
         spProvince.setAdapter(proAdapter);
         spCity.setAdapter(cityAdapter);

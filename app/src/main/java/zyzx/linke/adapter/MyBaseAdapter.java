@@ -13,15 +13,9 @@ import java.util.ArrayList;
 
 public abstract class MyBaseAdapter<T> extends BaseAdapter {
 
-    protected Context context;
     private ArrayList<T> items;
 
     MyBaseAdapter(ArrayList<T> items){
-        this.items = items;
-    }
-
-    MyBaseAdapter(Context context,ArrayList<T> items){
-        this.context = context;
         this.items = items;
     }
 

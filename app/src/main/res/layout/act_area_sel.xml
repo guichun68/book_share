@@ -14,7 +14,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/white"
          >
 
         <LinearLayout
@@ -95,6 +94,7 @@
             android:layout_below="@id/sel"
             android:orientation="vertical"
             android:paddingLeft="10dp"
+            android:background="@color/white"
             android:paddingRight="10dp" >
 
             <TableLayout
