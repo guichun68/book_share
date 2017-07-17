@@ -39,7 +39,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/ll_sharer"
+                        android:id="@+id/ll_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -118,14 +118,48 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginLeft="12dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
+                <Button
+                    android:id="@+id/btn_beg_borrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="求借求赠送"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_sharer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+                        <TextView
+                            android:id="@+id/tv_sharer_tip"
+                            style="@style/bookDetailStyle"
+                            android:layout_width="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="分享者: " />
+
+                    <Button
+                        android:id="@+id/btn_sharer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        tool:text="王者风范" />
+                </LinearLayout>
                 <TextView
                     android:id="@+id/tv_book_status"
                     style="@style/bookDetailStyle"
                     android:ellipsize="end"
                     android:maxLines="1"
                     tool:text="状态: 分享中" />
+
 
                 <TextView
                     android:id="@+id/tv_share_type"

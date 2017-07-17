@@ -16,6 +16,7 @@ import zyzx.linke.utils.StringUtil;
 public class MyBookDetailVO implements Parcelable{
 	private BookDetail2 book;
 
+	private String uid;//
 	private String bookStatusId;//书籍当前状态,从常量表取值（已记录到常量表）
 	private String userBookId;//在zyzx_usr_books表记录的id(主键)
 	private String relatedUserId;//关联到的用户，如图书状态为借入，则此处为从谁借入；如为借出，则表示借出给谁
@@ -25,6 +26,8 @@ public class MyBookDetailVO implements Parcelable{
 
 	public void setUserBook(UserBooks ub){
 		if(ub != null){
+			if(!StringUtil.isEmpty(ub.getUserId()))
+				this.uid = ub.getUserId();
 			if(!StringUtil.isEmpty(ub.getBookStatusId()))
 				this.bookStatusId = ub.getBookStatusId();
 			if(!StringUtil.isEmpty(ub.getBookId()))
@@ -51,6 +54,7 @@ public class MyBookDetailVO implements Parcelable{
 		shareAreaId = in.readInt();
 		shareMsg = in.readString();
 		shareType = in.readInt();
+		uid = in.readString();
 	}
 
 	@Override
@@ -62,6 +66,7 @@ public class MyBookDetailVO implements Parcelable{
 		dest.writeInt(shareAreaId==null?-1:shareAreaId);
 		dest.writeString(shareMsg);
 		dest.writeInt(shareType==null?-1:shareType);
+		dest.writeString(uid);
 	}
 
 	@Override
@@ -84,7 +89,15 @@ public class MyBookDetailVO implements Parcelable{
 	public BookDetail2 getBook() {
 		return book;
 	}
-	
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
 	public void setBook(BookDetail2 book) {
 		this.book = book;
 	}

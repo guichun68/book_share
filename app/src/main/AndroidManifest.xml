@@ -88,12 +88,12 @@
         </activity>
 
         <!--微信分享回调 -->
-        <activity
+        <!--<activity
             android:name=".wxapi.WXEntryActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <!-- SharedSDK END ***************************************************-->
 
 
@@ -102,7 +102,7 @@
             android:value="b9660f04c7b88af227816af318d88ccf" />
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.SplashAct" android:screenOrientation="portrait">
+        <activity android:name=".activity.LoginAct" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -110,7 +110,7 @@
         </activity>
 
 
-        <activity android:name=".activity.LoginAct" android:screenOrientation="portrait"/>
+        <!--<activity android:name=".activity.LoginAct" android:screenOrientation="portrait"/>-->
         <activity android:name=".activity.SMSLoginAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.AboutUsAct" android:screenOrientation="portrait"/>
         <activity android:name=".activity.RegisterAct" android:screenOrientation="portrait"/>
@@ -134,6 +134,10 @@
             />
         <activity
             android:name=".activity.ManualPersonBookAct"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.ShareBookDetailAct"
             android:screenOrientation="portrait"
             />
 

@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.util.EMLog;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.AppManager;
 import zyzx.linke.activity.LoginAct;
+import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.utils.PreferenceManager;
 
 /**
@@ -40,11 +40,11 @@ public class ErrActivity extends BaseActivity {
 	private boolean isCurrentAccountRemoved = false;
 
 	private int getExceptionMessageId(String exceptionType) {
-		if(exceptionType.equals(EaseConstant.ACCOUNT_CONFLICT)) {
+		if(exceptionType.equals(MyEaseConstant.ACCOUNT_CONFLICT)) {
 			return R.string.connect_conflict;
-		} else if (exceptionType.equals(EaseConstant.ACCOUNT_REMOVED)) {
+		} else if (exceptionType.equals(MyEaseConstant.ACCOUNT_REMOVED)) {
 			return R.string.em_user_remove;
-		} else if (exceptionType.equals(EaseConstant.ACCOUNT_FORBIDDEN)) {
+		} else if (exceptionType.equals(MyEaseConstant.ACCOUNT_FORBIDDEN)) {
 			return R.string.user_forbidden;
 		}
 		return R.string.Network_error;

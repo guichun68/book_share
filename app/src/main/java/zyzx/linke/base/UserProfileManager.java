@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.base.EaseUIHelper.DataSyncListener;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.StringUtil;
 
 public class UserProfileManager {
 
@@ -78,7 +80,7 @@ public class UserProfileManager {
 			return;
 		}
 		isSyncingContactInfosWithServer = true;
-		GlobalParams.getUserPresenter().getAllMyFriends(new EMValueCallBack<List<EaseUser>>() {
+		GlobalParams.getUserPresenter().getAllMyContacts(new EMValueCallBack<List<EaseUser>>() {
 			@Override
 			public void onSuccess(List<EaseUser> easeUsers) {
 				isSyncingContactInfosWithServer = false;
@@ -126,7 +128,11 @@ public class UserProfileManager {
 			currentUser = new EaseUser(username);
 			String nick = PreferenceManager.getInstance().getCurrentUserNick();
 			currentUser.setNickname((nick != null) ? nick : username);
-			currentUser.setAvatar(PreferenceManager.getInstance().getCurrentUserAvatar());
+			String avatorUrl = PreferenceManager.getInstance().getCurrentUserAvatar();
+			if(!StringUtil.isEmpty(avatorUrl)){
+				avatorUrl = GlobalParams.BASE_URL+GlobalParams.AvatarDirName+avatorUrl;
+			}
+			currentUser.setAvatar(avatorUrl);
 		}
 		return currentUser;
 	}

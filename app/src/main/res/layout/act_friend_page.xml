@@ -33,6 +33,15 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/iv_icon"/>
 
+        <Button
+            android:id="@+id/btn_send_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发消息"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
+
         <TextView
             android:id="@+id/tv_sign_tip"
             android:layout_width="wrap_content"
@@ -78,27 +87,165 @@
         android:layout_marginRight="10dp" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:background="@color/item_press"
-        android:text="TA分享的书籍："/>
+        android:padding="10dp"
+        android:text="基本资料：" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pull_refresh_list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@color/bg_divider_line"
-        android:dividerHeight="@dimen/divider_width"
-        android:fadingEdge="none"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true"
-        android:smoothScrollbar="true"
-        ptr:ptrDrawable="@mipmap/publicloading"
+        android:layout_height="35dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
-        ptr:ptrHeaderTextColor="@color/blue_cloud_scheme" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="所在城市:"
+            android:gravity="center_vertical"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            tool:text="山东省青岛市黄岛区"
+            style="@style/user_info.small"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="生日:"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            style="@style/user_info"/>
+
+        <TextView
+            android:id="@+id/tv_birthday"
+            tool:text="1991.10.12"
+            style="@style/user_info.small"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="性别:"
+            android:gravity="center_vertical"
+            style="@style/user_info" />
+
+        <TextView
+            android:id="@+id/tv_gender"
+            style="@style/user_info.small"
+            tool:text="男"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="学校:"
+            android:gravity="center_vertical"
+            style="@style/user_info" />
+
+        <TextView
+            android:id="@+id/tv_school"
+            style="@style/user_info.small"
+            tool:text="北京大学"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="院系:" />
+
+        <TextView
+            android:id="@+id/tv_department"
+            style="@style/user_info.small"
+            tool:text="社会科学与人文学院" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="学历:" />
+
+        <TextView
+            android:id="@+id/tv_diploma"
+            style="@style/user_info.small"
+            android:text="@string/not_fill" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="内心独白:" />
+
+        <TextView
+            android:id="@+id/tv_soliloquy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            tool:text="我叫***，今年 27 岁。1997 年 7 月我从**师范学校艺师美术专业计划内自费毕业。由于从 9 7 年起国家不再对自费生包分配，使我与“太阳底下最光辉的职业”失之交臂。幸好，当时河西 马厂完小师资不足，经人介绍，我在该完小担任了一年的临时代课教师。回想起那段时光真是既 甜蜜又美好，虽然代课工资很低，但听着同学们围在身旁“老师”、“老师”的叫个不停，看着 那一双双充满信任的眼睛， 那一张张稚气的小脸， 生活中的所有不快都顿时烟消云散了。 我原想， 即使不能转正，只要学校需要，就是当一辈子代课教师我也心甘情愿。不料，1998 年起国家开 始清退临时工和代课教师，接到了学校的口头通知后，我怀着恋恋不舍的心情，悄悄地离开了学校。"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:maxLines="30"
+            android:ellipsize="end"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
 
 </LinearLayout>

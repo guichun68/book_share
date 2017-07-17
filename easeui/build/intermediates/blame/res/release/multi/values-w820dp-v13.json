@@ -11,7 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "E:\\workspace\\linke\\easeui\\res\\values-w820dp\\ease_dimens.xml",
+                    "file": "E:\\workspace\\linke\\easeui\\src\\main\\res\\values-w820dp\\ease_dimens.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,

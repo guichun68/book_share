@@ -19,7 +19,10 @@ import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.List;
 import java.util.Map;
+
+import zyzx.linke.model.easedomain.RobotUser;
 //环信 相关userdao
+
 public class HXUserDao {
 	public static final String TABLE_NAME = "uers";
 	public static final String COLUMN_NAME_ID = "username";
@@ -41,54 +44,60 @@ public class HXUserDao {
 
 	/**
 	 * save contact list
-	 * 
+	 *
 	 * @param contactList
 	 */
 	public void saveContactList(List<EaseUser> contactList) {
-	    DemoDBManager.getInstance().saveContactList(contactList);
+		HXDBManager.getInstance().saveContactList(contactList);
 	}
 
 	/**
 	 * get contact list
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, EaseUser> getContactList() {
-		
-	    return DemoDBManager.getInstance().getContactList();
+
+		return HXDBManager.getInstance().getContactList();
 	}
-	
+
 	/**
 	 * delete a contact
 	 * @param username
 	 */
 	public void deleteContact(String username){
-	    DemoDBManager.getInstance().deleteContact(username);
+		HXDBManager.getInstance().deleteContact(username);
 	}
-	
+
 	/**
 	 * save a contact
 	 * @param user
 	 */
 	public void saveContact(EaseUser user){
-	    DemoDBManager.getInstance().saveContact(user);
+		HXDBManager.getInstance().saveContact(user);
 	}
-	
-	public void setDisabledGroups(List<String> groups){
-	    DemoDBManager.getInstance().setDisabledGroups(groups);
-    }
-    
-    public List<String> getDisabledGroups(){
-        return DemoDBManager.getInstance().getDisabledGroups();
-    }
-    
-    public void setDisabledIds(List<String> ids){
-        DemoDBManager.getInstance().setDisabledIds(ids);
-    }
-    
-    public List<String> getDisabledIds(){
-        return DemoDBManager.getInstance().getDisabledIds();
-    }
-    
 
+	public void setDisabledGroups(List<String> groups){
+		HXDBManager.getInstance().setDisabledGroups(groups);
+	}
+
+	public List<String>  getDisabledGroups(){
+		return HXDBManager.getInstance().getDisabledGroups();
+	}
+
+	public void setDisabledIds(List<String> ids){
+		HXDBManager.getInstance().setDisabledIds(ids);
+	}
+
+	public List<String> getDisabledIds(){
+		return HXDBManager.getInstance().getDisabledIds();
+	}
+
+	public Map<String, RobotUser> getRobotUser(){
+		return HXDBManager.getInstance().getRobotList();
+	}
+
+	public void saveRobotUser(List<RobotUser> robotList){
+		HXDBManager.getInstance().saveRobotList(robotList);
+	}
 }

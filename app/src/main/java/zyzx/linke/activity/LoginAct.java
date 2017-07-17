@@ -27,21 +27,13 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.HashMap;
-import java.util.Map;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.BeanFactoryUtil;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
-import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.ColoredSnackbar;
@@ -98,7 +90,7 @@ public class LoginAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        ShareSDK.initSDK(mContext);
+//        ShareSDK.initSDK(mContext);
 
         mTitleText.setText("用户登录");
         mBackBtn.setVisibility(View.INVISIBLE);
@@ -131,7 +123,7 @@ public class LoginAct extends BaseActivity {
 
     @Override
     protected void initData() {
-        aetLoginName.setText(PreferenceManager.getInstance().getLastLoginUserNick());
+        aetLoginName.setText(PreferenceManager.getInstance().getCurrentUserNick());
         aetPsw.setText(PreferenceManager.getInstance().getCurrentUserPsw());
         if (PreferenceManager.getInstance().getAutoLoginFlag()) {
             (findViewById(R.id.btn_login)).performClick();
@@ -188,19 +180,19 @@ public class LoginAct extends BaseActivity {
                 break;
             case R.id.iv_qq://qq账号登录
 //                UIUtil.showToastSafe("QQ登录实现中，敬请期待…");
-                loginByThirdPlatform(QQ.NAME);
+//                loginByThirdPlatform(QQ.NAME);
                 break;
             case R.id.iv_wechat://微信登录
 //                UIUtil.showToastSafe("微信登录实现中，敬请期待…");
-                loginByThirdPlatform(Wechat.NAME);
+//                loginByThirdPlatform(Wechat.NAME);
                 break;
             case R.id.iv_sina://新浪微博账号登录
-                loginByThirdPlatform(SinaWeibo.NAME);
+//                loginByThirdPlatform(SinaWeibo.NAME);
                 break;
         }
     }
 
-    public void loginByThirdPlatform(String platformName) {
+ /*   public void loginByThirdPlatform(String platformName) {
         showProgress("请稍后……");
         Platform platform = ShareSDK.getPlatform(platformName);
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
@@ -242,7 +234,7 @@ public class LoginAct extends BaseActivity {
         //移除授权
         //weibo.removeAccount(true);
     }
-
+*/
     /**
      * 登录环信
      */
@@ -413,10 +405,10 @@ public class LoginAct extends BaseActivity {
 //                finish();
                 AppManager.getAppManager().finishAllActivity();
 //                System.exit(0);
-                Platform platf = ShareSDK.getPlatform(Wechat.NAME);
+                /*Platform platf = ShareSDK.getPlatform(Wechat.NAME);
                 if (platf.isAuthValid()) {
                     platf.removeAccount(true);
-                }
+                }*/
             }
             return true;
         }

@@ -9,14 +9,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-//import com.hyphenate.chat.EMClient;
-//import com.hyphenate.chat.EMOptions;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.Iterator;
 import java.util.List;
 
-import cn.sharesdk.framework.ShareSDK;
+import zyzx.linke.ShareModel;
+
+//import com.hyphenate.chat.EMClient;
+//import com.hyphenate.chat.EMOptions;
+
 
 
 /**
@@ -30,7 +32,7 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
     /**
      * 全局Context，原理是因为Application类是应用最先运行的，所以在我们的代码调用时，该值已经被赋值过了
      */
-    private static Context mInstance;
+    private static BaseApplication mInstance;
     /**
      * 主线程ID
      */
@@ -48,7 +50,9 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
      */
     private static Looper mMainLooper;
 
-
+    public static BaseApplication getInstance() {
+        return mInstance;
+    }
 
     @Override
     public void onCreate() {
@@ -190,7 +194,7 @@ public class BaseApplication extends  android.support.multidex.MultiDexApplicati
      */
     public void exitApp(Context context) {
         try {
-            EaseUIHelper.getInstance().logoutEaseMob();
+            EaseUIHelper.getInstance().logout(false,null);
             ActivityManager activityMgr = (ActivityManager) context
                     .getSystemService(Context.ACTIVITY_SERVICE);
             activityMgr.killBackgroundProcesses(context.getPackageName());

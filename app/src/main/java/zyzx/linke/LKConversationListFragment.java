@@ -24,7 +24,7 @@ import zyzx.linke.utils.UIUtil;
 
 
 /**
- * 消息界面
+ * 会话界面
  */
 public class LKConversationListFragment extends BaseFragment {
 
@@ -41,6 +41,7 @@ public class LKConversationListFragment extends BaseFragment {
         mBackBtn.setVisibility(View.GONE);
         mConversationListFrag = new EaseConversationListFragment();
         mConversationListFrag.setConversationListItemClickListener(new EaseConversationListFragment.EaseConversationListItemClickListener() {
+
 
             @Override
             public void onListItemClicked(EMConversation conversation) {
@@ -84,7 +85,7 @@ public class LKConversationListFragment extends BaseFragment {
             }
 
             @Override
-            public void onListItemLongClickedListener(EMConversation conversation) {
+            public void onListItemLongClicked(EMConversation conversation) {
                 showDelOrBlacklistDialog(conversation);
             }
         });

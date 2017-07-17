@@ -418,7 +418,7 @@ public class AppUtil {
 			if(url.contains("http") || url.contains("HTTP")){
 
 			}else{
-				url = GlobalParams.BASE_URL+"/bookCover/"+url;
+				url = GlobalParams.BASE_URL+GlobalParams.BookCoverDirName+url;
 			}
 		}
 		return url;
@@ -542,8 +542,25 @@ public class AppUtil {
 			mBV.setShareMsg(jo.getString("share_msg"));
 			mBV.setShareAreaId(jo.getInteger("share_area_id"));
 			mBV.setRelatedUserId(jo.getString("related_user_id"));
+			mBV.setUid(jo.getString("user_id"));
 			mBvos.add(mBV);
 		}
 		return mBvos;
     }
+
+	public static String getDiplomaName(Integer diplomaId) {
+		if(diplomaId!=null){
+			switch (diplomaId){
+				case 0:return null;
+				case 1:return ("小学");
+				case 2:return ("初中");
+				case 3:return ("高中");
+				case 4:return ("专科");
+				case 5:return ("本科");
+				case 6:return ("硕士研究生");
+				case 7:return ("博士研究生");
+			}
+		}
+		return null;
+	}
 }

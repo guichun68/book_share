@@ -18,8 +18,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import zyzx.linke.model.bean.InviteMessage;
-
+import zyzx.linke.model.easedomain.InviteMessage;
 
 public class InviteMessgeDao {
 	static final String TABLE_NAME = "new_friends_msgs";
@@ -27,54 +26,54 @@ public class InviteMessgeDao {
 	static final String COLUMN_NAME_FROM = "username";
 	static final String COLUMN_NAME_GROUP_ID = "groupid";
 	static final String COLUMN_NAME_GROUP_Name = "groupname";
-	
+
 	static final String COLUMN_NAME_TIME = "time";
 	static final String COLUMN_NAME_REASON = "reason";
 	public static final String COLUMN_NAME_STATUS = "status";
 	static final String COLUMN_NAME_ISINVITEFROMME = "isInviteFromMe";
 	static final String COLUMN_NAME_GROUPINVITER = "groupinviter";
-	
+
 	static final String COLUMN_NAME_UNREAD_MSG_COUNT = "unreadMsgCount";
-	
-		
+
+
 	public InviteMessgeDao(Context context){
 	}
-	
+
 	/**
 	 * save message
 	 * @param message
 	 * @return  return cursor of the message
 	 */
 	public Integer saveMessage(InviteMessage message){
-		return DemoDBManager.getInstance().saveMessage(message);
+		return HXDBManager.getInstance().saveMessage(message);
 	}
-	
+
 	/**
 	 * update message
 	 * @param msgId
 	 * @param values
 	 */
 	public void updateMessage(int msgId,ContentValues values){
-	    DemoDBManager.getInstance().updateMessage(msgId, values);
+		HXDBManager.getInstance().updateMessage(msgId, values);
 	}
-	
+
 	/**
 	 * get messges
 	 * @return
 	 */
 	public List<InviteMessage> getMessagesList(){
-		return DemoDBManager.getInstance().getMessagesList();
+		return HXDBManager.getInstance().getMessagesList();
 	}
-	
+
 	public void deleteMessage(String from){
-	    DemoDBManager.getInstance().deleteMessage(from);
+		HXDBManager.getInstance().deleteMessage(from);
 	}
-	
+
 	public int getUnreadMessagesCount(){
-	    return DemoDBManager.getInstance().getUnreadNotifyCount();
+		return HXDBManager.getInstance().getUnreadNotifyCount();
 	}
-	
+
 	public void saveUnreadMessageCount(int count){
-	    DemoDBManager.getInstance().setUnreadNotifyCount(count);
+		HXDBManager.getInstance().setUnreadNotifyCount(count);
 	}
 }

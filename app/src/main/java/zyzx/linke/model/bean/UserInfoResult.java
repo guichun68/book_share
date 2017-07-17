@@ -117,6 +117,9 @@ public class UserInfoResult {
             private String real_name;
             private Integer city_id;
             private String bak4;
+            private String pro;
+            private String city;
+            private String county;
             private Date birthday;
 
             private String last_login_time;
@@ -162,6 +165,30 @@ public class UserInfoResult {
 
             public void setLast_login_time(String last_login_time) {
                 this.last_login_time = last_login_time;
+            }
+
+            public String getPro() {
+                return pro;
+            }
+
+            public void setPro(String pro) {
+                this.pro = pro;
+            }
+
+            public String getCity() {
+                return city;
+            }
+
+            public void setCity(String city) {
+                this.city = city;
+            }
+
+            public String getCounty() {
+                return county;
+            }
+
+            public void setCounty(String county) {
+                this.county = county;
             }
 
             public void setCity_id(Integer city_id) {

@@ -473,10 +473,11 @@ public class EditUserInfoAct extends BaseActivity {
                         if (uv.getDepartment().equals(rawUV.getDepartment()))
                             if (uv.getDiplomaId().intValue() == rawUV.getDiplomaId().intValue())
                                 if (uv.getSoliloquy().equals(rawUV.getSoliloquy()))
-                                    if (uv.getBirthday() != null && rawUV.getBirthday() != null)
-                                        if (uv.getBirthday().equals(rawUV.getBirthday()))
+                                    if ((uv.getBirthday()!=null&&rawUV.getBirthday()!=null)||(uv.getBirthday() == null && rawUV.getBirthday() == null))
+                                        if ((uv.getBirthday()!=null && rawUV.getBirthday()!=null)&&(uv.getBirthday().equals(rawUV.getBirthday())))
                                             return null;
-
+                                        else if(uv.getBirthday()==null && rawUV.getBirthday()==null)
+                                            return null;
 
         UserVO usv = (UserVO) rawUV.clone();
         if (saveCounty != null) {

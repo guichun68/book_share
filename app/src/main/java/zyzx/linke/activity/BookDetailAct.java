@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,13 +22,11 @@ import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
-import zyzx.linke.model.Area;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Tags;
-import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
@@ -48,6 +47,8 @@ public class BookDetailAct extends BaseActivity {
     private MyBookDetailVO mBookVo;
     private Integer friendUserId;//好友id
     private TextView tvBookStatus,tvArea,tvMsg;
+    private Button btnSharer;
+    private Button btnBegBorrow;//求借
 
     @Override
     protected int getLayoutId() {
@@ -63,9 +64,11 @@ public class BookDetailAct extends BaseActivity {
         tvPublishDate = (TextView) findViewById(R.id.tv_book_publish_date);
         tvTags = (TextView) findViewById(R.id.tv_book_tags);
         tvSummary = (TextView) findViewById(R.id.tv_summary);
+        btnBegBorrow = (Button) findViewById(R.id.btn_beg_borrow);
         tvCatalog = (TextView) findViewById(R.id.tv_catalog);
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
         llShare = (LinearLayout) findViewById(R.id.ll_share);
+        btnSharer = (Button) findViewById(R.id.btn_sharer);
         tvBookStatus = (TextView) findViewById(R.id.tv_book_status);
         tvArea = (TextView) findViewById(R.id.tv_area);
         tvMsg = (TextView) findViewById(R.id.tv_msg);
@@ -77,8 +80,8 @@ public class BookDetailAct extends BaseActivity {
         tvAdd2MyLib.setVisibility(View.INVISIBLE);
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
-
-
+        btnBegBorrow.setOnClickListener(this);
+        btnSharer.setOnClickListener(this);
     }
 
     String bookId;//添加地图成功后返回的bookId
@@ -122,6 +125,9 @@ public class BookDetailAct extends BaseActivity {
                         dismissProgress();
                     }
                 });
+                break;
+            case R.id.btn_beg_borrow://求借
+
                 break;
         }
     }
@@ -195,6 +201,11 @@ public class BookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         mBookVo = in.getParcelableExtra("book");
+        int from = in.getIntExtra("from",0);
+        if(from == Const.FROM_HOME_FRAG){
+            btnBegBorrow.setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_sharer).setVisibility(View.VISIBLE);
+        }
         mBook = mBookVo.getBook();
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
         refreshShareView();

@@ -70,7 +70,7 @@ public class ManualInputAct extends BaseActivity {
     @Override
     protected void initView(Bundle saveInstanceState) {
         mItems = UIUtil.getStringArray(R.array.bookType);
-        adapter = new ArrayAdapter<String>(this,R.layout.item_location, mItems);
+        adapter = new ArrayAdapter<>(this,R.layout.item_book_classify, mItems);
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);
         acetBookName = (AppCompatEditText) findViewById(R.id.acet_book_name);
         acetISBN = (AppCompatEditText) findViewById(R.id.acet_isbn);

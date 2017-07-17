@@ -1,24 +1,27 @@
 package zyzx.linke.model.bean;
 
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserVO implements Serializable, Cloneable{
+public class UserVO implements Serializable,Cloneable{
 	
 	private String genderName;
 	private String url;
 	private String provinceName;
 	private String cityName;
+
 	private String countyName;
 	private String diplomaName;//学历
-
 	private String uid;//uuid
 	private Integer userid;//环信用
 	private String loginName;
+
 	private String mobilePhone;
 	private String address;
 	private String password;
 	private Integer gender;
+
 	private String hobby;
 	private String email;
 	private String realName;
@@ -28,10 +31,12 @@ public class UserVO implements Serializable, Cloneable{
 	private String signature;
 	private String headIcon;//头像地址
 	private String bak4;//勿删，目前已用作返回给会话页面的用户信息时的code使用
+
 	private Date birthday;
 	private String school;
 	private int errorCode;//只在Server中用于Dao层判断查询成功否
 	private String department;//院系
+
 	private Integer diplomaId;//学历
 	private String soliloquy;//内心独白
 	private Integer creditScore;//信用积分
@@ -45,6 +50,7 @@ public class UserVO implements Serializable, Cloneable{
 		this.loginName = loginName;
 		this.headIcon = headIcon;
 	}
+
 
 	public String getUid() {
 		return uid;

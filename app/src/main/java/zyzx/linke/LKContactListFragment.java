@@ -50,7 +50,7 @@ public class LKContactListFragment extends BaseFragment {
     //获取并刷新联系人列表
     private void refreshContacts() {
         showProgress("请稍后…");
-        getUserPresenter().getAllMyFriends(new EMValueCallBack<List<EaseUser>>() {
+        getUserPresenter().getAllMyContacts(new EMValueCallBack<List<EaseUser>>() {
             @Override
             public void onSuccess(final List<EaseUser> easeUsers) {
                 dismissProgress();
@@ -65,6 +65,7 @@ public class LKContactListFragment extends BaseFragment {
                         //需要设置联系人列表才能启动fragment
                         mContactListFrag.setContactsMap(contacts);
                         //设置item点击事件
+
                         mContactListFrag.setContactListItemClickListener(new EaseContactListFragment.EaseContactListItemClickListener() {
 
                             @Override

@@ -31,6 +31,7 @@ import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.activity.MyShareBooksAct;
 import zyzx.linke.activity.PersonalCenterAct;
 import zyzx.linke.base.BaseFragment;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.global.BundleFlag;
@@ -107,7 +108,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 gotoActivity(BorrowedInBookAct.class);
                 break;
             case R.id.rl_log_out:
-                ((HomeAct) getActivity()).logoutEaseMob();
+                EaseUIHelper.getInstance().logout(false,null);
                 PreferenceManager.getInstance().setAutoLoginFlag(false);
                 getActivity().finish();
                 gotoActivity(LoginAct.class);

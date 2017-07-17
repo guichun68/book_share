@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +38,7 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.ImageUtils;
@@ -131,7 +133,7 @@ public class PersonalCenterAct extends BaseActivity {
             Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
         }
         showDefProgress();
-        getUserPresenter().getUserInfo(String.valueOf(mUser.getUserid()), new CallBack() {
+        getUserPresenter().getUserInfoByUid(String.valueOf(mUser.getUid()), new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
@@ -143,30 +145,34 @@ public class PersonalCenterAct extends BaseActivity {
                 }
                 if(ui.getErrorCode().equals("1")){
                     mUser = GlobalParams.getLastLoginUser();
-                    mUser.setLoginName(ui.getData().getItems().get(0).getLogin_name());
-                    mUser.setMobilePhone(ui.getData().getItems().get(0).getMobile_phone());
-                    mUser.setAddress(ui.getData().getItems().get(0).getAddress());
-                    mUser.setPassword(ui.getData().getItems().get(0).getPassword());
-
-                    String genderStr = ui.getData().getItems().get(0).getGender();
+                    UserInfoResult.DataEntity.ItemsEntity ie = ui.getData().getItems().get(0);
+                    mUser.setLoginName(ie.getLogin_name());
+                    mUser.setMobilePhone(ie.getMobile_phone());
+                    mUser.setAddress(ie.getAddress());
+                    mUser.setPassword(ie.getPassword());
+                    mUser.setProvinceName(ie.getPro());
+                    mUser.setCityName(ie.getCity());
+                    mUser.setCountyName(ie.getCounty());
+                    String genderStr = ie.getGender();
                     Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
                     mUser.setGender(gender);
-                    mUser.setHobby(ui.getData().getItems().get(0).getHobby());
-                    mUser.setEmail(ui.getData().getItems().get(0).getEmail());
-                    mUser.setRealName(ui.getData().getItems().get(0).getReal_name());
-                    mUser.setCityId(ui.getData().getItems().get(0).getCity_id());
-                    mUser.setLastLoginTime(ui.getData().getItems().get(0).getLast_login_time());
+                    mUser.setHobby(ie.getHobby());
+                    mUser.setEmail(ie.getEmail());
+                    mUser.setRealName(ie.getReal_name());
+                    mUser.setCityId(ie.getCity_id());
+                    mUser.setLastLoginTime(ie.getLast_login_time());
 
-                    mUser.setSignature(ui.getData().getItems().get(0).getSignature());
-//                  mUser.setHeadIcon(ui.getData().getItems().get(0).getHead_icon());
-                    mUser.setBak4(ui.getData().getItems().get(0).getBak4());
-                    mUser.setBirthday(ui.getData().getItems().get(0).getBirthday());
-                    mUser.setSchool(ui.getData().getItems().get(0).getSchool());
-                    mUser.setDepartment(ui.getData().getItems().get(0).getDepartment());
-                    mUser.setDiplomaId(ui.getData().getItems().get(0).getDiploma_id());
-                    mUser.setSoliloquy(ui.getData().getItems().get(0).getSoliloquy());
-                    mUser.setCreditScore(ui.getData().getItems().get(0).getCredit_score());
-                    mUser.setFromSystem(ui.getData().getItems().get(0).getFrom_system());
+                    mUser.setSignature(ie.getSignature());
+//                  mUser.setHeadIcon(ie.getHead_icon());
+                    mUser.setBak4(ie.getBak4());
+                    mUser.setBirthday(ie.getBirthday());
+                    mUser.setSchool(ie.getSchool());
+                    mUser.setDepartment(ie.getDepartment());
+                    mUser.setDiplomaId(ie.getDiploma_id());
+                    mUser.setDiplomaName(AppUtil.getDiplomaName(mUser.getDiplomaId()));
+                    mUser.setSoliloquy(ie.getSoliloquy());
+                    mUser.setCreditScore(ie.getCredit_score());
+                    mUser.setFromSystem(ie.getFrom_system());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

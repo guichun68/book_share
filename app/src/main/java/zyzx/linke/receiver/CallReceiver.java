@@ -17,6 +17,7 @@ package zyzx.linke.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
 import com.hyphenate.util.EMLog;
 
 import zyzx.linke.base.EaseUIHelper;
@@ -25,7 +26,6 @@ public class CallReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-
 		if(!EaseUIHelper.getInstance().isLoggedIn())
 		    return;
 		//username

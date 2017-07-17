@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import zyzx.linke.R;
 import zyzx.linke.activity.BookDetailAct;
 import zyzx.linke.activity.CommonBookDetailAct;
+import zyzx.linke.activity.ShareBookDetailAct;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.AppUtil;
@@ -64,10 +66,11 @@ public class BookVOAdapter extends BaseAdapter{
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,BookDetailAct.class);
+                Intent intent = new Intent(context, ShareBookDetailAct.class);
                 Bundle bundle = new Bundle();
 //                bundle.putParcelable("book",getItem(position));
                 bundle.putParcelable("book",getItem(position));
+                bundle.putInt("from", Const.FROM_HOME_FRAG);
                 intent.putExtra(BundleFlag.SHOWADDRESS,false);
 //                intent.putExtra("book",bundle);
                 intent.putExtras(bundle);

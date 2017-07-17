@@ -25,7 +25,6 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseConstant;
 
 import java.io.File;
 import java.util.List;
@@ -42,6 +41,7 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.base.UpdateService;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.Const;
+import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -67,7 +67,7 @@ public class HomeAct extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         //make sure activity will not in background if user is logged into another device or removed
-        if (savedInstanceState != null && savedInstanceState.getBoolean(EaseConstant.ACCOUNT_REMOVED, false)) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(MyEaseConstant.ACCOUNT_REMOVED, false)) {
             EaseUIHelper.getInstance().logout(false,null);
             finish();
             startActivity(new Intent(this, LoginAct.class));
@@ -132,9 +132,9 @@ public class HomeAct extends BaseActivity {
         mMessageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addCategory(getPackageName());
-        filter.addAction(EaseConstant.ACCOUNT_CONFLICT);
-        filter.addAction(EaseConstant.ACCOUNT_FORBIDDEN);
-        filter.addAction(EaseConstant.ACCOUNT_REMOVED);
+        filter.addAction(MyEaseConstant.ACCOUNT_CONFLICT);
+        filter.addAction(MyEaseConstant.ACCOUNT_FORBIDDEN);
+        filter.addAction(MyEaseConstant.ACCOUNT_REMOVED);
         filter.addAction(Const.ONCLICK);
         registerReceiver(mMessageReceiver, filter);
         checkUpdate();
@@ -159,33 +159,13 @@ public class HomeAct extends BaseActivity {
             } else {
 //                MobclickAgent.onKillProcess(mContext);
 //                finish();
-                logoutEaseMob();
+                EaseUIHelper.getInstance().logout(false,null);
                 AppManager.getAppManager().finishAllActivity();
 //                System.exit(0);
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-    /**
-     * 注销环信登录
-     */
-    public void logoutEaseMob() {
-        EMClient.getInstance().logout(true, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                UIUtil.print("已注销EASEMob");
-//                gotoActivity(LoginAct.class,true);
-            }
-            @Override
-            public void onError(int i, String s) {
-//                UIUtil.showToastSafe("注销失败，请稍后重试！");
-                UIUtil.showTestLog("zyzx","环信注销登录失败："+i+s);
-            }
-            @Override
-            public void onProgress(int i, String s) {
-            }
-        });
     }
 
     EMMessageListener messageListener = new EMMessageListener() {
@@ -337,12 +317,12 @@ public class HomeAct extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(EaseConstant.ACCOUNT_CONFLICT)){
-                gotoErrAct(EaseConstant.ACCOUNT_CONFLICT);
-            }else if(action.equals(EaseConstant.ACCOUNT_FORBIDDEN)){
-                gotoErrAct(EaseConstant.ACCOUNT_FORBIDDEN);
-            }else if(action.equals(EaseConstant.ACCOUNT_REMOVED)){
-                gotoErrAct(EaseConstant.ACCOUNT_REMOVED);
+            if(action.equals(MyEaseConstant.ACCOUNT_CONFLICT)){
+                gotoErrAct(MyEaseConstant.ACCOUNT_CONFLICT);
+            }else if(action.equals(MyEaseConstant.ACCOUNT_FORBIDDEN)){
+                gotoErrAct(MyEaseConstant.ACCOUNT_FORBIDDEN);
+            }else if(action.equals(MyEaseConstant.ACCOUNT_REMOVED)){
+                gotoErrAct(MyEaseConstant.ACCOUNT_REMOVED);
             }else if(action.equals(Const.ONCLICK)){
                 Intent inten = new Intent();
                 inten.setAction("android.intent.action.VIEW");

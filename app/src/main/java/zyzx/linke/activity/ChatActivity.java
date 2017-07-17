@@ -26,7 +26,7 @@ import zyzx.linke.utils.PreferenceManager;
  * Desc: 聊天界面
  */
 
-public class ChatActivity  extends BaseActivity{
+public class ChatActivity extends BaseActivity{
     EaseChatFragment mChatFrag;
     public static ChatActivity activityInstance;
     String chatUserId, loginName;
@@ -55,8 +55,10 @@ public class ChatActivity  extends BaseActivity{
         getSupportFragmentManager().beginTransaction().add(R.id.content,mChatFrag,"chat").commit();
     }
 
+
+
     private void registListener() {
-        mChatFrag.setChatFragmentListener(new EaseChatFragment.EaseChatFragmentHelper() {
+        mChatFrag.setChatFragmentHelper(new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
             public void onSetMessageAttributes(EMMessage message) {
                 //设置消息扩展属性
@@ -124,6 +126,7 @@ public class ChatActivity  extends BaseActivity{
                 return null;
             }
         });
+
 
         mChatFrag.setLocationClickListener(new EaseChatFragment.LocationClickListener() {
             @Override

@@ -184,7 +184,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                                     mListViewItems.clear();
                                     mListViewItems.addAll(books);
                                     mCurrentPageNum = 1;
-                                    UIUtil.showToastSafe("刷新成功");
+                                    UIUtil.showToastSafe("已刷新");
                                 }else{
                                     mListViewItems.addAll(books);
                                 }

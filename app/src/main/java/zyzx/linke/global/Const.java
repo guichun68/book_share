@@ -34,6 +34,8 @@ public class Const {
 	public static final int AVATAR_SELECTION=0x38F;//头像选择
 	public static final int PAGE_SIZE_MYBOOKS = 10;//我的所有书籍 页 每次刷新页面条目数量
 
+	public static final int FROM_HOME_FRAG = 0x1754A;
+
 	//状态：在架
 	public static final String BOOK_STATUS_ONSHELF="2308b2e0-3df2-11e7-84d2-005056c00001";
 	//分享中
@@ -63,5 +65,9 @@ public class Const {
 	public static final String CLASSIFY_BIJI ="d444e6d8-6493-11e7-b86c-68f72877da0a";//课堂笔记
 	public static final String CLASSIFY_DAAN ="d9057ccf-6493-11e7-b86c-68f72877da0a";//答案
 	public static final String CLASSIFY_QITA ="de18452c-6493-11e7-b86c-68f72877da0a";//	其他
+
+	//扩展消息用key (必须跟easeUI库中的EaseConstant中相关变量一致)
+	public static final String EXTRA_AVATAR = "avator";
+	public static final String EXTRA_NICKNAME = "nick";
 
 }

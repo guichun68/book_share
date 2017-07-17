@@ -51,8 +51,11 @@ public class PreferenceManager {
 	private static String KEY_SETTING_CONTACT_SYNCED = "KEY_SETTING_CONTACT_SYNCED";
 	private static String KEY_SETTING_BALCKLIST_SYNCED = "KEY_SETTING_BALCKLIST_SYNCED";
 
+	//环信 id
 	private static String KEY_CURRENTUSER_USERNAME = "KEY_CURRENTUSER_USERNAME";
+	//环信 昵称（相当于local：loginName）
 	private static String KEY_CURRENTUSER_NICK = "KEY_CURRENTUSER_NICK";
+	//
 	private static String KEY_CURRENTUSER_AVATAR = "KEY_CURRENTUSER_AVATAR";
 
 	private static String KEY_REST_SERVER = "KEY_REST_SERVER";
@@ -68,7 +71,7 @@ public class PreferenceManager {
 	private static String KEY_CALL_BACK_CAMERA_RESOLUTION = "KEY_CALL_BACK_CAMERA_RESOLUTION";
 	private static String KEY_CALL_FRONT_CAMERA_RESOLUTION = "KEY_FRONT_CAMERA_RESOLUTIOIN";
 	private static String KEY_CALL_FIX_SAMPLE_RATE = "KEY_CALL_FIX_SAMPLE_RATE";
-	private static String KEY_LAST_LOGIN_USER_NICK = "KEY_LAST_LOGIN_USER_NICK";
+//	private static String KEY_LAST_LOGIN_USER_NICK = "KEY_LAST_LOGIN_USER_NICK";
 	private static String KEY_LAST_LOGIN_USER_ID = "KEY_LAST_LOGIN_USER_ID";
 	private static String KEY_LAST_LOGIN_USER_UUID = "KEY_LAST_LOGIN_USER_UUID";
 	private static String KEY_LAST_LOGIN_USER_HSH = "KEY_LAST_LOGIN_USER_HSH";
@@ -118,6 +121,11 @@ public class PreferenceManager {
 		}
 
 		return mPreferencemManager;
+	}
+
+	public void setCurrentUserName(String username){
+		editor.putString(KEY_CURRENTUSER_USERNAME, username);
+		editor.apply();
 	}
 
 	public void setSettingMsgNotification(boolean paramBoolean) {
@@ -238,9 +246,6 @@ public class PreferenceManager {
 	public void setCurrentUserNick(String nick) {
 		editor.putString(KEY_CURRENTUSER_NICK, nick).commit();
 	}
-	public void setLastLoginUserNick(String nick) {
-		editor.putString(KEY_LAST_LOGIN_USER_NICK, nick).commit();
-	}
 
 	public void setCurrentUserAvatar(String avatar) {
 		editor.putString(KEY_CURRENTUSER_AVATAR, avatar);
@@ -257,9 +262,7 @@ public class PreferenceManager {
 	public String getCurrentUserPsw() {
 		return mSharedPreferences.getString(KEY_CURR_USER_PSW, null);
 	}
-	public String getLastLoginUserNick() {
-		return mSharedPreferences.getString(KEY_LAST_LOGIN_USER_NICK, null);
-	}
+
 
 	public UserVO getLastLoginUser(){
 		UserVO u = new UserVO();
@@ -269,7 +272,7 @@ public class PreferenceManager {
 			return null;
 		}
 		int value;
-		u.setLoginName(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_NICK,""));
+		u.setLoginName(mSharedPreferences.getString(KEY_CURRENTUSER_NICK,""));
 		u.setMobilePhone(mSharedPreferences.getString(KEY_MOBILE_PHONE,""));
 		u.setAddress(mSharedPreferences.getString(KEY_ADDRESS,""));
 		u.setPassword(mSharedPreferences.getString(KEY_LAST_LOGIN_USER_HSH,""));
@@ -311,7 +314,7 @@ public class PreferenceManager {
 	}
 	public void saveLastLoginUser(UserVO u){
 		if(u==null){
-			editor.remove(KEY_LAST_LOGIN_USER_NICK);
+			editor.remove(KEY_CURRENTUSER_NICK);
 			editor.remove(KEY_LAST_LOGIN_USER_ID);
 			editor.remove(KEY_LAST_LOGIN_USER_UUID);
 			editor.remove(KEY_MOBILE_PHONE);
@@ -338,7 +341,7 @@ public class PreferenceManager {
 			editor.commit();
 			return;
 		}
-		editor.putString(KEY_LAST_LOGIN_USER_NICK, u.getLoginName());
+		editor.putString(KEY_CURRENTUSER_NICK,u.getLoginName());
 		if(u.getUserid()!=null){
 			editor.putInt(KEY_LAST_LOGIN_USER_ID,u.getUserid());
 		}

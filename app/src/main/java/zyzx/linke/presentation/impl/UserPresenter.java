@@ -177,8 +177,8 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getUserInfo(String userid, final CallBack viewCallBack) {
-        String url = GlobalParams.urlGetUserInfo.replace("#",userid);
+    public void getUserInfoByUserId(String userid, final CallBack viewCallBack) {
+        String url = GlobalParams.urlGetUserInfoByUid.replace("#",userid);
         getModel().get(url, null, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
@@ -192,6 +192,28 @@ public class UserPresenter extends IUserPresenter {
             @Override
             public void onFailure(Object obj, int... code) {
                 UIUtil.showTestLog("zyzx",obj.toString());
+                if(viewCallBack!=null) {
+                    viewCallBack.onFailure("未能获取用户信息");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getUserInfoByUid(String uid, final CallBack viewCallBack) {
+        String url = GlobalParams.urlGetUserInfoByUid.replace("#",uid);
+        getModel().get(url, null, new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                if(obj != null){
+                    if(viewCallBack!=null){
+                        viewCallBack.onSuccess(obj);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
                 if(viewCallBack!=null) {
                     viewCallBack.onFailure("未能获取用户信息");
                 }
@@ -246,7 +268,7 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void getAllMyFriends(final EMValueCallBack<List<EaseUser>> callBack) {
+    public void getAllMyContacts(final EMValueCallBack<List<EaseUser>> callBack) {
         HashMap<String,Object> param = getParam();
         param.put("user_id", EMClient.getInstance().getCurrentUser());
         try {

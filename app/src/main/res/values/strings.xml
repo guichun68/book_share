@@ -258,6 +258,7 @@
     <string name="connect_conflict">同一帐号已在其他设备登录</string>
     <string name="contact_way">联系方式</string>
     <string name="not_fill">未填写</string>
+    <string name="emojicon_test_name">Test</string>
 
     <string-array name="bookType">
         <item>普通书籍</item>

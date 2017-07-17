@@ -101,6 +101,10 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
         mProgressDialogWithTip.show();
     }
 
+    protected void dismissProgresSingle(){
+        CustomProgressDialog.dismissDialog(mProgressDialogWithTip);
+    }
+
 
     protected void dismissProgress(){
         CustomProgressDialog.dismissDialog(mProgressDialog);

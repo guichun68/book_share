@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="59dp"
-     android:id="@+id/list_itease_layout"
-     android:background="#fff"
-    android:gravity="center_vertical" >
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/list_itease_layout"
+    android:background="#fff"
+    android:gravity="center_vertical">
 
     <RelativeLayout
         android:id="@+id/avatar_container"
@@ -12,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true" >
 
-      <ImageView
+      <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
@@ -42,7 +43,8 @@
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/avatar_container"
         android:textColor="@color/list_itease_primary_color"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tool:text="王者荣耀"/>
 
     <TextView
         android:id="@+id/time"

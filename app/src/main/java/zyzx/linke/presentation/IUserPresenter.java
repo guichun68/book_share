@@ -41,11 +41,18 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void regist(String userName, String psw, String phone,CallBack viewCallBack);
 
     /**
-     * 获取用户信息
-     * @param userId
+     * 根据环信userId获取用户信息
+     * @param userId 环信用userId
      * @param callBack
      */
-    public abstract void getUserInfo(String userId, CallBack callBack);
+    public abstract void getUserInfoByUserId(String userId, CallBack callBack);
+
+    /**
+     * 根据uid获取用户信息
+     * @param uid user's uuid
+     * @param callBack
+     */
+    public abstract void getUserInfoByUid(String uid, CallBack callBack);
     /**
      * 上传头像
      */
@@ -67,10 +74,10 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
 
     /**
-     * 得到当前登录用户的所有好友
+     * 得到当前登录用户的所有联系人
      * @param callBack
      */
-    public abstract void getAllMyFriends(EMValueCallBack<List<EaseUser>> callBack);
+    public abstract void getAllMyContacts(EMValueCallBack<List<EaseUser>> callBack);
 
     /**
      * 删除指定好友（联系人）
