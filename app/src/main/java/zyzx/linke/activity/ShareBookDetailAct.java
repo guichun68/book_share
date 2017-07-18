@@ -119,43 +119,18 @@ public class ShareBookDetailAct extends BaseActivity {
                 UIUtil.showToastSafe("未能获取书友信息，请返回重试！");
                 return;
             }
-            //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
-            EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            String content = "【系统消息】用户“"+GlobalParams.getLastLoginUser().getLoginName()+"”对您分享的书籍《"+mBook.getTitle()+"》非常感兴趣，"+btnBegBorrow.getText().toString()+",\n点此消息可快速回复。";
-            EMTextMessageBody txtBody = new EMTextMessageBody(content);
-            message.addBody(txtBody);
-            // 增加自己特定的属性，目前SDK支持int、boolean、String这三种属性，可以设置多个扩展属性
-            message.setAttribute("uid", mFriend.getUid());
-            message.setAttribute("userId", mFriend.getUserid());
-            message.setAttribute("bookId",mBook.getId());
+            getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),GlobalParams.getLastLoginUser(),mFriend.getUserid(),mBook,new CallBack(){
 
-            message.setAttribute(Const.EXTRA_AVATAR,mFriend.getHeadIcon());
-            message.setAttribute(Const.EXTRA_NICKNAME,GlobalParams.getLastLoginUser().getLoginName());
-
-            message.setFrom(BeanFactoryUtil.properties.getProperty("SystemId"));
-            message.setTo(mFriend.getUserid()+"");
-            showDefProgress();
-            CustomProgressDialog.dismissDialog(begDialog);
-            message.setMessageStatusCallback(new EMCallBack() {
                 @Override
-                public void onSuccess() {
-                    dismissProgress();
-                    UIUtil.showToastSafe("发送成功");
+                public void onSuccess(Object obj, int... code) {
+                    //TODO  success
                 }
 
                 @Override
-                public void onError(int i, String s) {
-                    dismissProgress();
-                    UIUtil.showToastSafe("未能成功发送");
-                }
+                public void onFailure(Object obj, int... code) {
 
-                @Override
-                public void onProgress(int i, String s) {
                 }
             });
-            //发送消息
-            EMClient.getInstance().chatManager().sendMessage(message);
-
         }
     }
 

@@ -15,7 +15,7 @@ import zyzx.linke.model.easedomain.RobotUser;
 import zyzx.linke.utils.PreferenceManager;
 
 public class ShareModel {
-    HXUserDao dao = null;
+//    HXUserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
 
@@ -25,19 +25,16 @@ public class ShareModel {
     }
     
     public boolean saveContactList(List<EaseUser> contactList) {
-        HXUserDao dao = new HXUserDao(context);
-        dao.saveContactList(contactList);
+        HXUserDao.getInstance().saveContactList(contactList);
         return true;
     }
 
     public Map<String, EaseUser> getContactList() {
-        HXUserDao dao = new HXUserDao(context);
-        return dao.getContactList();
+        return HXUserDao.getInstance().getContactList();
     }
     
     public void saveContact(EaseUser user){
-        HXUserDao dao = new HXUserDao(context);
-        dao.saveContact(user);
+        HXUserDao.getInstance().saveContact(user);
     }
     
     /**
@@ -53,13 +50,11 @@ public class ShareModel {
     }
     
     public Map<String, RobotUser> getRobotList(){
-        HXUserDao dao = new HXUserDao(context);
-        return dao.getRobotUser();
+        return HXUserDao.getInstance().getRobotUser();
     }
 
     public boolean saveRobotList(List<RobotUser> robotList){
-        HXUserDao dao = new HXUserDao(context);
-        dao.saveRobotUser(robotList);
+        HXUserDao.getInstance().saveRobotUser(robotList);
         return true;
     }
     
@@ -129,10 +124,7 @@ public class ShareModel {
 
 
     public void setDisabledGroups(List<String> groups){
-        if(dao == null){
-            dao = new HXUserDao(context);
-        }
-        
+
         List<String> list = new ArrayList<String>();
         list.addAll(groups);
         for(int i = 0; i < list.size(); i++){
@@ -141,20 +133,16 @@ public class ShareModel {
                 i--;
             }
         }
-
-        dao.setDisabledGroups(list);
+        HXUserDao.getInstance().setDisabledGroups(list);
         valueCache.put(Key.DisabledGroups, list);
     }
     
     public List<String> getDisabledGroups(){
         Object val = valueCache.get(Key.DisabledGroups);
 
-        if(dao == null){
-            dao = new HXUserDao(context);
-        }
-        
+
         if(val == null){
-            val = dao.getDisabledGroups();
+            val = HXUserDao.getInstance().getDisabledGroups();
             valueCache.put(Key.DisabledGroups, val);
         }
 
@@ -163,23 +151,16 @@ public class ShareModel {
     }
     
     public void setDisabledIds(List<String> ids){
-        if(dao == null){
-            dao = new HXUserDao(context);
-        }
-        
-        dao.setDisabledIds(ids);
+
+        HXUserDao.getInstance().setDisabledIds(ids);
         valueCache.put(Key.DisabledIds, ids);
     }
     
     public List<String> getDisabledIds(){
         Object val = valueCache.get(Key.DisabledIds);
         
-        if(dao == null){
-            dao = new HXUserDao(context);
-        }
-
         if(val == null){
-            val = dao.getDisabledIds();
+            val = HXUserDao.getInstance().getDisabledIds();
             valueCache.put(Key.DisabledIds, val);
         }
 

@@ -32,7 +32,10 @@ public class EaseConstant {
     public static final String EXTRA_CHAT_TYPE = "chatType";
     public static final String EXTRA_USER_ID = "userId";
 
-    //扩展消息用key
+    //扩展消息用key(必须跟主app中的Const类中同名变量值一致)
     public static final String EXTRA_AVATAR = "avator";
     public static final String EXTRA_NICKNAME = "nick";
+
+    //需要跟主项目一致
+    public static String BASE_URL = "http://192.168.1.25";
 }

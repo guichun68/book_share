@@ -69,5 +69,9 @@ public class Const {
 	//扩展消息用key (必须跟easeUI库中的EaseConstant中相关变量一致)
 	public static final String EXTRA_AVATAR = "avator";
 	public static final String EXTRA_NICKNAME = "nick";
+	public static final String EXTRA_BOOKID = "bid";
+	public static final String EXTRA_UID = "uid";
+	public static final String EXTRA_USERID = "userId";//环信id
+	public static final String EXTRA_SHARE_BEG = "sharebeg";//针对“分享”的书籍的求借消息标识
 
 }

@@ -11,6 +11,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 
 import java.util.HashMap;
@@ -18,8 +19,10 @@ import java.util.HashMap;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/3/27.
@@ -108,6 +111,17 @@ public class ChatActivity extends BaseActivity{
                     gotoActivity(EaseGaodeMapAct.class,false,bundle);
                     return true;
                 }
+                if(message.getType() == EMMessage.Type.TXT){
+                    try {
+                        if(message.getBooleanAttribute(Const.EXTRA_SHARE_BEG))
+                        {
+
+                        }
+                    } catch (HyphenateException e) {
+                        UIUtil.showTestLog("normalMsg");
+                    }
+                }
+
                 return false;
             }
 

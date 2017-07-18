@@ -8,6 +8,7 @@ import java.util.List;
 
 import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.FeedBack;
 import zyzx.linke.model.bean.UserVO;
 
@@ -150,4 +151,7 @@ public abstract class IUserPresenter extends IPresenter{
 
     //获取指定城市所有的分享的书籍
     public abstract void getAllShareBooks(String pro,String city,String county,int pageNo,CallBack callBack);
+
+    //发送求借求赠送消息
+    public abstract void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack);
 }

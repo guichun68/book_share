@@ -9,17 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
+
+import java.util.Map;
 
 import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.activity.HomeAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.UserVO;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 
@@ -29,7 +32,6 @@ import zyzx.linke.utils.UIUtil;
 public class LKConversationListFragment extends BaseFragment {
 
     private EaseConversationListFragment mConversationListFrag;
-    private UserVO mUserVO;
     @Override
     protected View getView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.frag_msg,container,false);
@@ -44,33 +46,26 @@ public class LKConversationListFragment extends BaseFragment {
 
 
             @Override
-            public void onListItemClicked(EMConversation conversation) {
+            public void onListItemClicked(final EMConversation conversation) {
                 showProgress("请稍后……");
                 getUserPresenter().getUserInfoInConversation(conversation.conversationId(),new CallBack(){
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        String userJson = (String) obj;
-                        mUserVO = JSON.parseObject(userJson,UserVO.class);
-                        if(mUserVO ==null){
-                           UIUtil.showToastSafe("未查询到用户信息,请稍后重试。");
+                        DefindResponseJson drj;
+                        if(obj == null || StringUtil.isEmpty((String)obj)){
+                            UIUtil.showToastSafe("未能获取用户信息");
                             return;
                         }
-                        if(mUserVO.getBak4().equals("500")){
-                            UIUtil.showToastSafe(R.string.error_chat);
+                        drj = new DefindResponseJson((String)obj);
+                        if(drj.data.getItems()==null || drj.data.getItems().isEmpty()){
+                            UIUtil.showToastSafe("未能获取用户信息");
                             return;
                         }
-                        if(mUserVO.getBak4().equals("400")){
-                            UIUtil.showToastSafe("未查询到用户信息,请稍后重试");
-                            return;
-                        }
-                        if(!mUserVO.getBak4().equals("200")){
-                            UIUtil.showToastSafe("请求出错，请稍后重试");
-                            return;
-                        }
+                        String loginName = (String) ((Map)drj.data.getItems().get(0)).get("login_name");
                         Intent in = new Intent(getActivity(),ChatActivity.class);
-                        in.putExtra(BundleFlag.LOGIN_NAME, mUserVO.getLoginName());
-                        in.putExtra(BundleFlag.UID,String.valueOf(mUserVO.getUserid()));
+                        in.putExtra(BundleFlag.LOGIN_NAME,loginName);
+                        in.putExtra(BundleFlag.UID,conversation.conversationId());
                         startActivity(in);
                     }
 
@@ -78,7 +73,6 @@ public class LKConversationListFragment extends BaseFragment {
                     public void onFailure(Object obj, int... code) {
                         dismissProgress();
                         UIUtil.showToastSafe("未能获取用户信息");
-
                     }
                 });
 
@@ -89,7 +83,6 @@ public class LKConversationListFragment extends BaseFragment {
                 showDelOrBlacklistDialog(conversation);
             }
         });
-
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content,mConversationListFrag).commit();
     }
 

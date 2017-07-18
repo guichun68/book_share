@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -34,6 +35,8 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DateUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +58,7 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
     protected int primarySize;
     protected int secondarySize;
     protected float timeSize;
+
 
     public EaseConversationAdapter(Context context, int resource,
                                    List<EMConversation> objects) {
@@ -124,14 +128,8 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
             holder.motioned.setVisibility(View.GONE);
         }else {
-//            EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-//            EaseUserUtils.setUserNick(username, holder.name);
-            Glide.with(getContext()).load("http://192.168.1.24/headIcon/9bd7245c919440fe9c51413b8700de19.jpeg").into(holder.avatar);
-            try {
-                holder.name.setText(getItem(position).getLastMessage().getStringAttribute(EaseConstant.EXTRA_NICKNAME));
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-            }
+            EaseUserUtils.setConversationPageUserAvatar(getContext(), getItem(position), holder.avatar);
+            EaseUserUtils.setConversationPageUserNick(getItem(position), holder.name);
             holder.motioned.setVisibility(View.GONE);
         }
 

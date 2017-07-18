@@ -30,8 +30,7 @@ public class EaseConversationList extends ListView{
     protected EaseConversationAdapter adapter;
     protected List<EMConversation> conversations = new ArrayList<EMConversation>();
     protected List<EMConversation> passedListRef = null;
-    
-    
+
     public EaseConversationList(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);

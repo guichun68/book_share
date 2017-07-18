@@ -24,6 +24,7 @@ import zyzx.linke.model.easedomain.RobotUser;
 //环信 相关userdao
 
 public class HXUserDao {
+	private static HXUserDao instance;
 	public static final String TABLE_NAME = "uers";
 	public static final String COLUMN_NAME_ID = "username";
 	public static final String COLUMN_NAME_NICK = "nick";
@@ -38,8 +39,14 @@ public class HXUserDao {
 	public static final String ROBOT_COLUMN_NAME_NICK = "nick";
 	public static final String ROBOT_COLUMN_NAME_AVATAR = "avatar";
 
+	public static HXUserDao getInstance(){
+		if(instance==null){
+			instance = new HXUserDao();
+		}
+		return instance;
+	}
 
-	public HXUserDao(Context context) {
+	private HXUserDao() {
 	}
 
 	/**

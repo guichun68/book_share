@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -56,6 +58,7 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.db.HXDBManager;
 import zyzx.linke.db.HXUserDao;
 import zyzx.linke.db.InviteMessgeDao;
+import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.easedomain.EmojiconExampleGroupData;
 import zyzx.linke.model.easedomain.InviteMessage;
@@ -63,6 +66,7 @@ import zyzx.linke.model.easedomain.InviteMessage.InviteMesageStatus;
 import zyzx.linke.model.easedomain.RobotUser;
 import zyzx.linke.receiver.CallReceiver;
 import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.StringUtil;
 
 //import com.hyphenate.chatuidemo.db.DemoDBManager;
 //import com.hyphenate.chatuidemo.db.InviteMessgeDao;
@@ -140,7 +144,7 @@ public class EaseUIHelper {
     private CallReceiver callReceiver;
 
     private InviteMessgeDao inviteMessgeDao;
-    private HXUserDao userDao;
+//    private HXUserDao hxUserDao;
 
     private LocalBroadcastManager broadcastManager;
 
@@ -356,6 +360,33 @@ public class EaseUIHelper {
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
             }
+
+            @Override
+            public EaseUser getUserFromConversation(EMConversation conversation) {
+                EaseUser user = null;
+                try {
+                    StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
+                    String headIcon = (conversation.getLastMessage().getStringAttribute(Const.EXTRA_AVATAR));
+                    String nickName = conversation.getLastMessage().getStringAttribute(Const.EXTRA_NICKNAME);
+                    user = new EaseUser(conversation.conversationId());
+                    if(!StringUtil.isEmpty(headIcon)){
+                        if(!headIcon.contains("http")){
+                            headIconSB.append(GlobalParams.AvatarDirName).append(headIcon);
+                            user.setAvatar(headIconSB.toString());
+                        }
+                        else{
+                            user.setAvatar(headIcon);
+                        }
+                    }else{
+                        user.setAvatar(null);
+                    }
+                    user.setNickname(nickName);
+                    HXUserDao.getInstance().saveContact(user);
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+                return user;
+            }
         });
 
         //set options
@@ -562,7 +593,7 @@ public class EaseUIHelper {
 
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
-        userDao = new HXUserDao(appContext);
+//        hxUserDao = HXUserDao.getInstance();
     }
 
     /**
@@ -825,7 +856,7 @@ public class EaseUIHelper {
             EaseUser user = new EaseUser(username);
 
             if (!localUsers.containsKey(username)) {
-                userDao.saveContact(user);
+                HXUserDao.getInstance().saveContact(user);
             }
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
@@ -837,7 +868,7 @@ public class EaseUIHelper {
         public void onContactDeleted(String username) {
             Map<String, EaseUser> localUsers = EaseUIHelper.getInstance().getContactList();
             localUsers.remove(username);
-            userDao.deleteContact(username);
+            HXUserDao.getInstance().deleteContact(username);
             inviteMessgeDao.deleteMessage(username);
 
             EMClient.getInstance().chatManager().deleteConversation(username, false);
@@ -1087,7 +1118,6 @@ public class EaseUIHelper {
         contactList.put(user.getUsername(), user);
         shareModel.saveContact(user);
     }
-
     /**
      * get contact list
      *
@@ -1096,8 +1126,9 @@ public class EaseUIHelper {
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
             contactList = shareModel.getContactList();
+        }else if(contactList != null && contactList.isEmpty()){
+            contactList = shareModel.getContactList();
         }
-
         // return a empty non-null object to avoid app crash
         if(contactList == null){
             return new Hashtable<String, EaseUser>();
@@ -1275,8 +1306,8 @@ public class EaseUIHelper {
      * @param users
      */
     public void saveContactList(List<EaseUser> users){
-        HXUserDao dao = new HXUserDao(appContext);
-        dao.saveContactList(users);
+//        HXUserDao dao = new HXUserDao(appContext);
+        HXUserDao.getInstance().saveContactList(users);
     }
 
     public void noitifyGroupSyncListeners(boolean success){
@@ -1316,9 +1347,9 @@ public class EaseUIHelper {
                     getContactList().clear();
                     getContactList().putAll(userlist);
                     // save the contact list to database
-                    HXUserDao dao = new HXUserDao(appContext);
+//                    HXUserDao dao = new HXUserDao(appContext);
                     List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
-                    dao.saveContactList(users);
+                    HXUserDao.getInstance().saveContactList(users);
 
                     shareModel.setContactSynced(true);
                     EMLog.d(TAG, "set contact syn status to true");

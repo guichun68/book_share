@@ -19,6 +19,7 @@ import zyzx.linke.R;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.FeedBack;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
@@ -373,17 +374,8 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getUserInfoInConversation(String userId, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
-        param.put("friend_id",userId);
-        try {
-            getModel().post(GlobalParams.urlGetUserInfoInConversation,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("未能获取用户信息");
-            }
-            e.printStackTrace();
-        }
+       String url = GlobalParams.urlGetUserInfoByUserId.replace("#",userId);
+       getModel().get(url,null,callBack);
     }
 
     @Override
@@ -568,6 +560,28 @@ public class UserPresenter extends IUserPresenter {
         }catch (Exception e){
             if(callBack!=null){
                 callBack.onFailure("访问出错");
+            }
+        }
+    }
+
+    @Override
+    public void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("userId",String.valueOf(user.getUserid()));
+        param.put("relUserId",String.valueOf(relUserId));
+        param.put("bookId",book.getId());
+        param.put("bookTitle",book.getTitle());
+        param.put("shareType",shareType+"");
+
+        param.put("uid",user.getUid());
+        param.put("headIcon",user.getHeadIcon());
+        param.put("nickName",user.getLoginName());
+        try {
+            getModel().post(GlobalParams.urlSendBegMsg,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("请求出错.");
             }
         }
     }

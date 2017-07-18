@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
@@ -258,6 +259,8 @@ public final class EaseUI {
          * @return
          */
         EaseUser getUser(String username);
+
+        EaseUser getUserFromConversation(EMConversation conversation);
     }
     
     /**

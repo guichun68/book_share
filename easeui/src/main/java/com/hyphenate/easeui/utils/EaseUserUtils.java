@@ -1,11 +1,14 @@
 package com.hyphenate.easeui.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
@@ -30,7 +33,13 @@ public class EaseUserUtils {
         
         return null;
     }
-    
+
+    public static EaseUser getUserInfoFromConversation(EMConversation conversation){
+        if(userProvider != null)
+            return userProvider.getUserFromConversation(conversation);
+        return null;
+    }
+
     /**
      * set user avatar
      * @param username
@@ -49,7 +58,33 @@ public class EaseUserUtils {
             Glide.with(context).load(R.drawable.ease_default_avatar).into(imageView);
         }
     }
-    
+
+    public static void setConversationPageUserAvatar(Context context, EMConversation conversation, ImageView imageView){
+        EaseUser user = getUserInfoFromConversation(conversation);
+        if(user != null && user.getAvatar() != null){
+            try {
+                if(!TextUtils.isEmpty(user.getAvatar())){
+                    Glide.with(context).load(user.getAvatar()).into(imageView);
+                }
+            } catch (Exception e) {
+                //use default avatar
+                Glide.with(context).load(user.getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ease_default_avatar).into(imageView);
+            }
+        }else{
+            Glide.with(context).load(R.drawable.ease_default_avatar).into(imageView);
+        }
+    }
+    public static void setConversationPageUserNick(EMConversation conversation,TextView textView){
+        if(textView != null){
+            EaseUser user = getUserInfoFromConversation(conversation);
+            if(user != null && user.getNick() != null){
+                textView.setText(user.getNick());
+            }else{
+                textView.setText(conversation.conversationId());
+            }
+        }
+    }
+
     /**
      * set user's nickname
      */
