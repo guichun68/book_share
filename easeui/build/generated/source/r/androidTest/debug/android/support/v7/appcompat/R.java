@@ -254,28 +254,28 @@ public final class R {
         public static final int abc_config_showMenuShortcutsWhenKeyboardPresent = 0x7f080004;
     }
     public static final class color {
-        public static final int abc_background_cache_hint_selector_material_dark = 0x7f090065;
-        public static final int abc_background_cache_hint_selector_material_light = 0x7f090066;
-        public static final int abc_btn_colored_borderless_text_material = 0x7f090067;
-        public static final int abc_color_highlight_material = 0x7f090068;
+        public static final int abc_background_cache_hint_selector_material_dark = 0x7f090066;
+        public static final int abc_background_cache_hint_selector_material_light = 0x7f090067;
+        public static final int abc_btn_colored_borderless_text_material = 0x7f090068;
+        public static final int abc_color_highlight_material = 0x7f090069;
         public static final int abc_input_method_navigation_guard = 0x7f090000;
-        public static final int abc_primary_text_disable_only_material_dark = 0x7f090069;
-        public static final int abc_primary_text_disable_only_material_light = 0x7f09006a;
-        public static final int abc_primary_text_material_dark = 0x7f09006b;
-        public static final int abc_primary_text_material_light = 0x7f09006c;
-        public static final int abc_search_url_text = 0x7f09006d;
+        public static final int abc_primary_text_disable_only_material_dark = 0x7f09006a;
+        public static final int abc_primary_text_disable_only_material_light = 0x7f09006b;
+        public static final int abc_primary_text_material_dark = 0x7f09006c;
+        public static final int abc_primary_text_material_light = 0x7f09006d;
+        public static final int abc_search_url_text = 0x7f09006e;
         public static final int abc_search_url_text_normal = 0x7f090001;
         public static final int abc_search_url_text_pressed = 0x7f090002;
         public static final int abc_search_url_text_selected = 0x7f090003;
-        public static final int abc_secondary_text_material_dark = 0x7f09006e;
-        public static final int abc_secondary_text_material_light = 0x7f09006f;
-        public static final int abc_tint_btn_checkable = 0x7f090070;
-        public static final int abc_tint_default = 0x7f090071;
-        public static final int abc_tint_edittext = 0x7f090072;
-        public static final int abc_tint_seek_thumb = 0x7f090073;
-        public static final int abc_tint_spinner = 0x7f090074;
-        public static final int abc_tint_switch_thumb = 0x7f090075;
-        public static final int abc_tint_switch_track = 0x7f090076;
+        public static final int abc_secondary_text_material_dark = 0x7f09006f;
+        public static final int abc_secondary_text_material_light = 0x7f090070;
+        public static final int abc_tint_btn_checkable = 0x7f090071;
+        public static final int abc_tint_default = 0x7f090072;
+        public static final int abc_tint_edittext = 0x7f090073;
+        public static final int abc_tint_seek_thumb = 0x7f090074;
+        public static final int abc_tint_spinner = 0x7f090075;
+        public static final int abc_tint_switch_thumb = 0x7f090076;
+        public static final int abc_tint_switch_track = 0x7f090077;
         public static final int accent_material_dark = 0x7f090004;
         public static final int accent_material_light = 0x7f090005;
         public static final int background_floating_material_dark = 0x7f090006;
@@ -328,8 +328,8 @@ public final class R {
         public static final int secondary_text_disabled_material_light = 0x7f09005e;
         public static final int switch_thumb_disabled_material_dark = 0x7f09005f;
         public static final int switch_thumb_disabled_material_light = 0x7f090060;
-        public static final int switch_thumb_material_dark = 0x7f090077;
-        public static final int switch_thumb_material_light = 0x7f090078;
+        public static final int switch_thumb_material_dark = 0x7f090078;
+        public static final int switch_thumb_material_light = 0x7f090079;
         public static final int switch_thumb_normal_material_dark = 0x7f090061;
         public static final int switch_thumb_normal_material_light = 0x7f090062;
     }
@@ -499,7 +499,7 @@ public final class R {
         public static final int abc_textfield_search_default_mtrl_alpha = 0x7f020050;
         public static final int abc_textfield_search_material = 0x7f020051;
         public static final int abc_vector_test = 0x7f020052;
-        public static final int notification_template_icon_bg = 0x7f0200fa;
+        public static final int notification_template_icon_bg = 0x7f0200fb;
     }
     public static final class id {
         public static final int action0 = 0x7f0a00ba;

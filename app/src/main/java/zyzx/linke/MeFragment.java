@@ -28,6 +28,7 @@ import zyzx.linke.activity.ImportResultAct;
 import zyzx.linke.activity.LoginAct;
 import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
+import zyzx.linke.activity.MyBorrowBegsAct;
 import zyzx.linke.activity.MyShareBooksAct;
 import zyzx.linke.activity.PersonalCenterAct;
 import zyzx.linke.base.BaseFragment;
@@ -80,6 +81,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         mRootView.findViewById(R.id.rl_feedback).setOnClickListener(this);//修改密码
         mRootView.findViewById(R.id.rl_export).setOnClickListener(this);//导出
         mRootView.findViewById(R.id.rl_import).setOnClickListener(this);//导入
+        mRootView.findViewById(R.id.rl_my_borrow_beg).setOnClickListener(this);//导入
+
         intiData();
     }
 
@@ -139,6 +142,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.rl_import:
                 showFileChooser();
+                break;
+            case R.id.rl_my_borrow_beg:
+                gotoActivity(MyBorrowBegsAct.class);
                 break;
             case R.id.rl_export://导出excel
                 dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, UIUtil.getString(R.string.export_tip), UIUtil.getString(R.string.confirm), UIUtil.getString(R.string.cancel), new View.OnClickListener() {

@@ -240,6 +240,10 @@
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_record_animate_11.png"
     },
     {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\arrow_left_backbtn_white.png",
+        "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\arrow_left_backbtn_white.png"
+    },
+    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_appitem_del_btn_pressed.png",
         "source": "E:\\workspace\\linke\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ease_appitem_del_btn_pressed.png"
     },

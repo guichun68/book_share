@@ -119,16 +119,43 @@ public class ShareBookDetailAct extends BaseActivity {
                 UIUtil.showToastSafe("未能获取书友信息，请返回重试！");
                 return;
             }
+            showDefProgress();
             getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),GlobalParams.getLastLoginUser(),mFriend.getUserid(),mBook,new CallBack(){
 
                 @Override
                 public void onSuccess(Object obj, int... code) {
-                    //TODO  success
+                    dismissProgress();
+                    begDialog.dismiss();
+                    String json = (String) obj;
+                    if(json == null){
+                        UIUtil.showToastSafe("发送失败");
+                        return;
+                    }
+                    DefindResponseJson drj = new DefindResponseJson(json);
+                    if(drj.errorCode==null){
+                        UIUtil.showToastSafe("发送失败,errCode=null");
+                        return;
+                    }
+                    switch (drj.errorCode){
+                        case 0:
+                            UIUtil.showToastSafe("发送失败！");
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            UIUtil.showToastSafe(drj.errorMsg);
+                            break;
+                        default:
+                            UIUtil.showToastSafe("未知错误！");
+                    }
                 }
 
                 @Override
                 public void onFailure(Object obj, int... code) {
-
+                    dismissProgress();
+                    UIUtil.showToastSafe("发送失败，请稍后再试");
+                    begDialog.dismiss();
                 }
             });
         }

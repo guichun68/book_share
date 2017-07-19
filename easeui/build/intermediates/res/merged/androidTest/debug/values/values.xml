@@ -108,6 +108,7 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <color name="top_bar_bg">#CCFFC046</color>
     <color name="top_bar_normal_bg">#00acff</color>
     <color name="voip_interface_text_color">#bababa</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode">

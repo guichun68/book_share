@@ -46,7 +46,7 @@ public class GlobalParams {
 	public static String urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
 	//得到所有共享的书籍
 	public static String urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
-	public static String urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendBegMsg.action";
+	public static String urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 	public static String urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
 	/**
@@ -191,7 +191,7 @@ public class GlobalParams {
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
-		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendBegMsg.action";
+		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";

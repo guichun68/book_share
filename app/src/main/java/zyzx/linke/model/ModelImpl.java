@@ -302,7 +302,7 @@ public class ModelImpl implements IModel {
                 .addInterceptor(new ReceivedCookiesInterceptor())
                 .addInterceptor(new AddCookiesInterceptor())
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
                 .build();
 
         FormBody.Builder builder = new FormBody.Builder();
