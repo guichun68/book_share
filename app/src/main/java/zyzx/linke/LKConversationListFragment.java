@@ -19,6 +19,7 @@ import zyzx.linke.activity.ChatActivity;
 import zyzx.linke.activity.HomeAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.UserVO;
@@ -80,7 +81,9 @@ public class LKConversationListFragment extends BaseFragment {
 
             @Override
             public void onListItemLongClicked(EMConversation conversation) {
-                showDelOrBlacklistDialog(conversation);
+                if(!conversation.conversationId().equals(Const.ADMIN_USERID)){
+                    showDelOrBlacklistDialog(conversation);
+                }
             }
         });
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.content,mConversationListFrag).commit();

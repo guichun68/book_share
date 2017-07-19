@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.EaseUI;
@@ -27,9 +28,9 @@ public class EaseUserUtils {
      * @param username
      * @return
      */
-    public static EaseUser getUserInfo(String username){
+    public static EaseUser getUserInfo(EMMessage message,String username){
         if(userProvider != null)
-            return userProvider.getUser(username);
+            return userProvider.getUser(message,username);
         
         return null;
     }
@@ -44,8 +45,8 @@ public class EaseUserUtils {
      * set user avatar
      * @param username
      */
-    public static void setUserAvatar(Context context, String username, ImageView imageView){
-    	EaseUser user = getUserInfo(username);
+    public static void setUserAvatar(Context context, EMMessage message,String username, ImageView imageView){
+    	EaseUser user = getUserInfo(message,username);
         if(user != null && user.getAvatar() != null){
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
@@ -90,7 +91,7 @@ public class EaseUserUtils {
      */
     public static void setUserNick(String username,TextView textView){
         if(textView != null){
-        	EaseUser user = getUserInfo(username);
+        	EaseUser user = getUserInfo(null,username);
         	if(user != null && user.getNick() != null){
         		textView.setText(user.getNick());
         	}else{

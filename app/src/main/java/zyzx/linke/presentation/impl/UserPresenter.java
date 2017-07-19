@@ -585,4 +585,19 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void getAllBorrowBegs(Integer userId,int pageNo,CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("userId",userId+"");
+        param.put("pageNo",pageNo+"");
+        try {
+            getModel().post(GlobalParams.urlGetBookBorrowBegs,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("获取出错！");
+            }
+        }
+    }
 }

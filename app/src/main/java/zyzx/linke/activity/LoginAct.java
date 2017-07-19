@@ -243,34 +243,17 @@ public class LoginAct extends BaseActivity {
             @Override
             public void onSuccess() {
                 dismissProgress();
-                PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
-                //记录用户名和uid
-//                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
-                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHeadIcon());
-
-                if (cbAutoLogin.isChecked()) {
-                    PreferenceManager.getInstance().setAutoLoginFlag(true);
-                }
-                //保证进入主页面后本地会话和群组都 load 完毕。
-                EMClient.getInstance().chatManager().loadAllConversations();
-                EMClient.getInstance().groupManager().loadAllGroups();
-                //一并将登录成功的user信息缓存到sqlite
-                //先查询sqlite，如果本地没有记录，再添加，如果有记录，则直接更新
-                UserVO u = UserDao.getInstance(mContext).queryUserByUid(GlobalParams.getLastLoginUser().getUserid());
-                if (u != null) {
-                    UserDao.getInstance(mContext).updateUser(GlobalParams.getLastLoginUser());
-                } else {
-                    UserDao.getInstance(mContext).add(GlobalParams.getLastLoginUser());
-                }
-//                gotoActivity(IndexActivity2.class,true);
-                gotoActivity(HomeAct.class, true);
+                loginSucc();
             }
 
             @Override
             public void onError(int i, String s) {
                 dismissProgress();
                 UIUtil.showToastSafe(s);
-                UIUtil.showTestLog("zyzx", "登录失败:" + i + s);
+                if(s.equals("User is already login") && i==200){
+                    loginSucc();
+                }
+                UIUtil.showTestLog("zyzx", "登录onError日志:" + i + s);
             }
 
             @Override
@@ -278,6 +261,30 @@ public class LoginAct extends BaseActivity {
 
             }
         });
+    }
+
+    private void loginSucc(){
+        PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
+        //记录用户名和uid
+//                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
+        EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHeadIcon());
+
+        if (cbAutoLogin.isChecked()) {
+            PreferenceManager.getInstance().setAutoLoginFlag(true);
+        }
+        //保证进入主页面后本地会话和群组都 load 完毕。
+        EMClient.getInstance().chatManager().loadAllConversations();
+        EMClient.getInstance().groupManager().loadAllGroups();
+        //一并将登录成功的user信息缓存到sqlite
+        //先查询sqlite，如果本地没有记录，再添加，如果有记录，则直接更新
+        UserVO u = UserDao.getInstance(mContext).queryUserByUid(GlobalParams.getLastLoginUser().getUserid());
+        if (u != null) {
+            UserDao.getInstance(mContext).updateUser(GlobalParams.getLastLoginUser());
+        } else {
+            UserDao.getInstance(mContext).add(GlobalParams.getLastLoginUser());
+        }
+//                gotoActivity(IndexActivity2.class,true);
+        gotoActivity(HomeAct.class, true);
     }
 
     @Override

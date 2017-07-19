@@ -136,7 +136,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         // hold to record voice
         //noinspection ConstantConditions
         voiceRecorderView = (EaseVoiceRecorderView) getView().findViewById(R.id.voice_recorder);
-
+        if(toChatUsername.equals(EaseConstant.ADMIN_USERID)){
+            titleBar.getRightLayout().setVisibility(View.GONE);
+        }
         // message list layout
         messageList = (EaseChatMessageList) getView().findViewById(R.id.message_list);
         if(chatType != EaseConstant.CHATTYPE_SINGLE)
@@ -186,8 +188,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         titleBar.setTitle(toChatUsername);
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             // set title
-            if(EaseUserUtils.getUserInfo(toChatUsername) != null){
-                EaseUser user = EaseUserUtils.getUserInfo(toChatUsername);
+            if(EaseUserUtils.getUserInfo(null,toChatUsername) != null){
+                EaseUser user = EaseUserUtils.getUserInfo(null,toChatUsername);
                 if (user != null) {
                     titleBar.setTitle(user.getNick());
                 }
@@ -227,7 +229,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             @Override
             public void onClick(View v) {
                 if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-                    emptyHistory();
+                    if(!conversation.conversationId().equals(EaseConstant.ADMIN_USERID)){
+                        emptyHistory();
+                    }else{
+                        if(adminListener != null){
+                            adminListener.onAdminConversationDelListener(conversation.getAllMessages());
+                        }
+                    }
                 } else {
                     toGroupDetails();
                 }
@@ -242,7 +250,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             forwardMessage(forward_msg_id);
         }
     }
-    
+    OnAdminConversationDelListener adminListener;
+    public void setAdminListener(OnAdminConversationDelListener listener){
+        this.adminListener = listener;
+    }
+    public interface OnAdminConversationDelListener{
+        void onAdminConversationDelListener(List<EMMessage> msgs);
+    }
     /**
      * register extend menu, item id need > 3 if you override this method and keep exist item
      */
@@ -676,7 +690,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             return;
         }
         EaseAtMessageHelper.get().addAtUser(username);
-        EaseUser user = EaseUserUtils.getUserInfo(username);
+        EaseUser user = EaseUserUtils.getUserInfo(null,username);
         if (user != null){
             username = user.getNick();
         }

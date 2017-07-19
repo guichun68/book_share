@@ -7,10 +7,20 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import zyzx.linke.R;
+import zyzx.linke.adapter.MyBookBorrowBegAdp;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.BorrowFlow;
+import zyzx.linke.model.bean.BorrowFlowVO;
+import zyzx.linke.model.bean.ResponseJson;
+import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * Created by austin on 2017/7/18.
@@ -19,7 +29,9 @@ import zyzx.linke.model.CallBack;
 public class MyBorrowBegsAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener {
     private PullToRefreshListView mPullRefreshListView;
     private int mPageNum = 1;
+    private ArrayList<BorrowFlowVO> mBorrows = new ArrayList<>();
     private boolean isLoadingMore;//是否是加载更多的动作
+    private MyBookBorrowBegAdp mBorrowAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -35,20 +47,21 @@ public class MyBorrowBegsAct extends BaseActivity implements PullToRefreshBase.O
         ListView actualListView = mPullRefreshListView.getRefreshableView();
         // Need to use the Actual ListView when registering for Context Menu
         registerForContextMenu(actualListView);
+        mBorrowAdapter = new MyBookBorrowBegAdp(mBorrows);
+        mPullRefreshListView.setAdapter(mBorrowAdapter);
     }
 
     @Override
     protected void initData() {
-
+        showDefProgress();
+        getBorrowBegs(1);
     }
 
     /**
      * 获取我的所有借书请求
-     * @param uid     user's uuid
-     * @param pageNum pageNo
      */
-    private void getBooks(String uid, int pageNum) {
-        getBookPresenter().getAllBorrowBegs(uid, pageNum, new CallBack() {
+    private void getBorrowBegs(int pageNo) {
+        getUserPresenter().getAllBorrowBegs(GlobalParams.getLastLoginUser().getUserid(),pageNo,new CallBack() {
             @Override
             public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
@@ -57,17 +70,36 @@ public class MyBorrowBegsAct extends BaseActivity implements PullToRefreshBase.O
                         dismissProgress();
                         mPullRefreshListView.onRefreshComplete();
                         mPullRefreshListView.clearAnimation();
-                        ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
-                        if (books == null || books.isEmpty()) {
-                            UIUtil.showToastSafe("没有更多书籍了!");
-                            if (isLoadingMore) {
-                                mPageNum--;
-                                if (mPageNum < 0) mPageNum = 0;
-                                isLoadingMore = false;
+                        String json = (String)obj;
+                        if(StringUtil.isEmpty(json)){
+                            UIUtil.showToastSafe("获取失败");
+                            return;
+                        }
+                        ResponseJson rj = new ResponseJson(json);
+                        if(rj.errorCode==null || rj.errorCode==0){
+                            UIUtil.showToastSafe("获取失败");
+                            return;
+                        }
+                        if(rj.errorCode == 1){
+                            List<BorrowFlowVO> bos = AppUtil.getBorrowBegs(rj.data);
+                            if(bos == null || bos.isEmpty()){
+                                UIUtil.showToastSafe("没有更多记录了");
+                                if(isLoadingMore){
+                                    mPageNum --;
+                                    if(mPageNum<0)mPageNum = 0;
+                                    isLoadingMore = false;
+                                }
+                            }else{
+                                if(isLoadingMore){
+                                    mBorrows.addAll(bos);
+                                }else{
+                                    mBorrows.clear();
+                                    mBorrows.addAll(bos);
+                                }
+                                mBorrowAdapter.notifyDataSetChanged();
                             }
-                        } else {
-                            mBooks.addAll(books);
-                            myBookAdapter.notifyDataSetChanged();
+                        }else{
+                            UIUtil.showToastSafe(rj.errorMsg);
                         }
                     }
                 });
@@ -107,6 +139,6 @@ public class MyBorrowBegsAct extends BaseActivity implements PullToRefreshBase.O
                 R.mipmap.publicloading));
         mPageNum++;
         isLoadingMore = true;
-        getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
+        getBorrowBegs( mPageNum);
     }
 }

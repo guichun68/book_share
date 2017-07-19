@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
@@ -29,6 +30,8 @@ import java.util.Locale;
 
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.BorrowFlow;
+import zyzx.linke.model.bean.BorrowFlowVO;
 import zyzx.linke.model.bean.Images;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Rating;
@@ -547,6 +550,30 @@ public class AppUtil {
 		}
 		return mBvos;
     }
+
+    public static ArrayList<BorrowFlowVO> getBorrowBegs(JSONArray items){
+		ArrayList<BorrowFlowVO> result = new ArrayList<>();
+		for (int i = 0;i<items.size();i++){
+			BorrowFlowVO bfVO = new BorrowFlowVO();
+			JSONObject jo = (JSONObject) items.get(i);
+			BorrowFlow bf = new BorrowFlow();
+			bf.setMsg(jo.getString("msg"));
+			bf.setBid(jo.getString("bid"));
+			bf.setCreateDate(jo.getDate("CREATE_DATE"));
+			bf.setFlowId(jo.getString("flow_id"));
+			bf.setRelUid(jo.getInteger("rel_uid"));
+			bf.setStatus(jo.getString("status"));
+			bf.setId(jo.getString("id"));
+			bf.setUid(jo.getInteger("uid"));
+
+			bfVO.setRelUserLoginName(jo.getString("login_name"));
+			bfVO.setBookName(jo.getString("title"));
+			bfVO.setRelUid(jo.getString("relId"));
+			bfVO.setBorrowFlow(bf);
+			result.add(bfVO);
+		}
+		return result;
+	}
 
 	public static String getDiplomaName(Integer diplomaId) {
 		if(diplomaId!=null){

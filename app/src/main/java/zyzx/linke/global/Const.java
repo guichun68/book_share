@@ -72,6 +72,9 @@ public class Const {
 	public static final String EXTRA_BOOKID = "bid";
 	public static final String EXTRA_UID = "uid";
 	public static final String EXTRA_USERID = "userId";//环信id
-	public static final String EXTRA_SHARE_BEG = "sharebeg";//针对“分享”的书籍的求借消息标识
+	//同APP主项目Const类中同名变量一致
+	public static final String ADMIN_USERID = "1053";//系统 用户的环信id
+	public static final String EXTRA_SHARE_TYPE = "bookShareType";
+
 
 }

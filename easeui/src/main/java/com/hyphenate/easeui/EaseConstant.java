@@ -38,4 +38,6 @@ public class EaseConstant {
 
     //需要跟主项目一致
     public static String BASE_URL = "http://192.168.1.25";
+    //同APP主项目Const类中同名变量一致
+    public static String ADMIN_USERID="1053";
 }

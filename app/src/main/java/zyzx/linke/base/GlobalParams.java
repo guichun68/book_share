@@ -127,6 +127,7 @@ public class GlobalParams {
 	 * 获取用户签名
 	 */
 	public static String urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
+	public static String urlGetBookBorrowBegs = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBorrowBegs.action";
 	/**
 	 *通过给定的bookId集合来批量获取这些书籍的详细信息
 	 */
@@ -186,6 +187,7 @@ public class GlobalParams {
 		urlUploadBook = GlobalParams.BASE_URL+"/zyzx/uploadbook.action";
 		urlUploadHeadIcon = GlobalParams.BASE_URL+"/user/mobileSDK/uploadHeadIcon.action";
 		urlSetUserSig = GlobalParams.BASE_URL+"/user/mobileSDK/setUserSig.action";
+		urlGetBookBorrowBegs = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBorrowBegs.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";

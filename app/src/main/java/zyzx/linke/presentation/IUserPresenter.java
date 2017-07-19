@@ -154,4 +154,6 @@ public abstract class IUserPresenter extends IPresenter{
 
     //发送求借求赠送消息
     public abstract void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack);
+
+    public abstract void getAllBorrowBegs(Integer userId,int pageNo,CallBack callBack);
 }

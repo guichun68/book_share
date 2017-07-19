@@ -357,8 +357,8 @@ public class EaseUIHelper {
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
 
             @Override
-            public EaseUser getUser(String username) {
-                return getUserInfo(username);
+            public EaseUser getUser(EMMessage message,String username) {
+                return getUserInfo(message,username);
             }
 
             @Override
@@ -366,8 +366,8 @@ public class EaseUIHelper {
                 EaseUser user = null;
                 try {
                     StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
-                    String headIcon = (conversation.getLastMessage().getStringAttribute(Const.EXTRA_AVATAR));
-                    String nickName = conversation.getLastMessage().getStringAttribute(Const.EXTRA_NICKNAME);
+                    String headIcon = (conversation.getLatestMessageFromOthers().getStringAttribute(Const.EXTRA_AVATAR));
+                    String nickName = conversation.getLatestMessageFromOthers().getStringAttribute(Const.EXTRA_NICKNAME);
                     user = new EaseUser(conversation.conversationId());
                     if(!StringUtil.isEmpty(headIcon)){
                         if(!headIcon.contains("http")){
@@ -476,7 +476,7 @@ public class EaseUIHelper {
                 if(message.getType() == Type.TXT){
                     ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
                 }
-                EaseUser user = getUserInfo(message.getFrom());
+                EaseUser user = getUserInfo(message,message.getFrom());
                 if(user != null){
                     if(EaseAtMessageHelper.get().isAtMeMsg(message)){
                         return String.format(appContext.getString(R.string.at_your_in_group), user.getNick());
@@ -948,7 +948,7 @@ public class EaseUIHelper {
         appContext.startActivity(intent);
     }
 
-    private EaseUser getUserInfo(String username){
+    private EaseUser getUserInfo(EMMessage message,String username){
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
@@ -958,7 +958,29 @@ public class EaseUIHelper {
         if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
         }
-
+        if(user == null && message != null){
+            try {
+                StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
+                String headIcon = (message.getStringAttribute(Const.EXTRA_AVATAR));
+                String nickName = message.getStringAttribute(Const.EXTRA_NICKNAME);
+                user = new EaseUser(message.getFrom());
+                if(!StringUtil.isEmpty(headIcon)){
+                    if(!headIcon.contains("http")){
+                        headIconSB.append(GlobalParams.AvatarDirName).append(headIcon);
+                        user.setAvatar(headIconSB.toString());
+                    }
+                    else{
+                        user.setAvatar(headIcon);
+                    }
+                }else{
+                    user.setAvatar(null);
+                }
+                user.setNickname(nickName);
+                HXUserDao.getInstance().saveContact(user);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+        }
         // if user is not in your contacts, set inital letter for him/her
         if(user == null){
             user = new EaseUser(username);

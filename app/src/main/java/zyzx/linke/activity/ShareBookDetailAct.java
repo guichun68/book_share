@@ -117,6 +117,12 @@ public class ShareBookDetailAct extends BaseActivity {
         public void onClick(View v) {
             if(StringUtil.isEmpty(mFriend.getUid()) || null==mFriend.getUserid()){
                 UIUtil.showToastSafe("未能获取书友信息，请返回重试！");
+                begDialog.dismiss();
+                return;
+            }
+            if(GlobalParams.getLastLoginUser().getUid().equals(mFriend.getUid())){
+                UIUtil.showToastSafe("无须借阅自己的书籍");
+                begDialog.dismiss();
                 return;
             }
             showDefProgress();

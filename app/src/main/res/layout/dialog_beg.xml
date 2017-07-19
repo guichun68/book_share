@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_allyuanjiao"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="提示"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="同意否"
+        android:orientation="horizontal">
+
+
+        <RadioButton
+            android:id="@+id/rb_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="同意" />
+
+        <RadioButton
+            android:id="@+id/rb_refuse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="拒绝" />
+    </RadioGroup>
+
+    <View style="@style/line" />
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/ll_return"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="4dp"
+                android:text="最迟还书日期:"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/tv_expire_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingRight="5dp"
+                android:text="请选择"
+                android:textColor="@color/blue_cloud_scheme"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+        <View style="@style/graly_line" />
+
+        <LinearLayout
+            android:id="@+id/ll_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="约见时间:"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/tv_metting_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingRight="5dp"
+                android:text="请选择"
+                android:textColor="@color/blue_cloud_scheme"
+                android:textSize="19sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="日"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/tv_metting_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingRight="5dp"
+                android:text="请选择"
+                android:textColor="@color/blue_cloud_scheme"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+        <View
+            style="@style/graly_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="约见地点:"
+                android:textSize="19sp" />
+
+            <TextView
+                android:id="@+id/tv_sel_area"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="20dp"
+                android:text="地图选点"
+                android:clickable="true"
+                android:textColor="@color/blue_cloud_scheme"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_meet_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:maxLines="5"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp"
+            tool:text="北京中关村科技大街108号" />
+
+
+        <TextView
+            android:id="@+id/dialog_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dip"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="3"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="19sp"
+            android:visibility="gone"
+            tool:text="确定要添加《你好的我的dadadafd士大夫撒都是垃圾范德萨对了撒就范德萨范德萨疯掉了卡萨解放东路撒酒疯大是咖啡的三的》这本书么？" />
+
+        <View style="@style/line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_refuse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:text="理由:"
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/et_refuse_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:maxLines="5"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:textSize="17sp"
+            tool:text="北京中关村科技大街108号" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sel2"
+            android:text="@string/confirm"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/update_press" />
+
+        <Button
+            android:id="@+id/dialog_btn2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sel2"
+            android:text="@string/cancel"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            android:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>

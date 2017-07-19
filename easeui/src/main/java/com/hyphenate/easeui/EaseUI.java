@@ -258,7 +258,7 @@ public final class EaseUI {
          * @param username
          * @return
          */
-        EaseUser getUser(String username);
+        EaseUser getUser(EMMessage message,String username);
 
         EaseUser getUserFromConversation(EMConversation conversation);
     }
