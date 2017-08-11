@@ -590,4 +590,22 @@ public class AppUtil {
 		}
 		return null;
 	}
+
+	public static String getShareDes(int shareType){
+		String result = "";
+		switch (shareType){
+			case 1:
+				result=("赠送");
+				break;
+			case 2:
+				result=("借阅");
+				break;
+			case 3:
+				result=("赠送或借阅");
+				break;
+			default:
+				result=("借阅");
+		}
+		return result;
+	}
 }

@@ -180,7 +180,7 @@ public class GlobalParams {
 		urlAddBook2MyLib = GlobalParams.BASE_URL+"/user/mobileSDK/addBook2Lib.action";
 //		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 		urlGetUserInfoByUserId = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
-		urlGetUserInfoByUid = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfoByUid&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
+		urlGetUserInfoByUid = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfoByUid&page.searchValue.uid=#&page.pageSize=1&page.curPage=1";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";

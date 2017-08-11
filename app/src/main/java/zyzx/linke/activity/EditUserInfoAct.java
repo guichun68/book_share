@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,140 +67,161 @@ public class EditUserInfoAct extends BaseActivity {
     private Area savePro, saveCity, saveCounty;//最终要保存的省市县
     private UserVO rawUV;//保存原始的用户资料以便最后保存时对比
 
-    private Handler mHandler = new Handler() {
+    private static class MyHandler extends Handler{
+        WeakReference<EditUserInfoAct> mActivity;
+        MyHandler(EditUserInfoAct act){
+            this.mActivity = new WeakReference<EditUserInfoAct>(act);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            CustomProgressDialog.dismissDialog(progress);
-            switch (msg.what) {
-                case GET_CITIES:
-                    List<Area> areas = new ArrayList<>();
-                    if (msg.obj != null) {
-                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj : areasJSON) {
-                            Area a = new Area();
-                            a.setName(jobj.getString("name"));
-                            a.setAreacode(jobj.getString("areaCode"));
-                            a.setDepth(jobj.getInteger("depth"));
-                            a.setId(jobj.getInteger("id"));
-                            a.setParentid(jobj.getInteger("parentId"));
-                            a.setZipcode(jobj.getString("zipCode"));
-                            areas.add(a);
-                        }
-                    }
-                    cities.clear();
-                    if (!areas.isEmpty()) {
-                        cities.addAll(areas);
-                        spCity.setSelection(0);
-                    }
-                    cityAdapter.notifyDataSetChanged();
-                    Area tempCity = cities.isEmpty() ? null : cities.get(0);
-                    if (tempCity == null) {
-                        saveCity = null;
-                        tvCity.setText("");
-                    } else {
-                        saveCity = tempCity;
-                        tvCity.setText(saveCity.getName());
-                        // 获取city下面的所有县
-                        progress.show();
-                        getUserPresenter().getSubArea(saveCity.getId(), HOLD_FLAG_COUNTY, new AreaCallBack());
-                    }
-                    break;
-                case GET_COUNTIES:
-                    List<Area> areas1 = new ArrayList<>();
-                    if (msg.obj != null) {
-                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj : areasJSON) {
-                            Area a = new Area();
-                            a.setName(jobj.getString("name"));
-                            a.setAreacode(jobj.getString("areaCode"));
-                            a.setDepth(jobj.getInteger("depth"));
-                            a.setId(jobj.getInteger("id"));
-                            a.setParentid(jobj.getInteger("parentId"));
-                            a.setZipcode(jobj.getString("zipCode"));
-                            areas1.add(a);
-                        }
-                    }
-                    counties.clear();
-                    if (!areas1.isEmpty()) {
-                        counties.addAll(areas1);
-                        spCounty.setSelection(0);
-                    }
-                    countyAdapter.notifyDataSetChanged();
-                    Area tempCounty = counties.isEmpty() ? null : counties.get(0);
+            EditUserInfoAct act = mActivity==null?null:mActivity.get();
+            if(act == null || act.isFinishing()){
+                return;
+            }
+            act.myHandleMessage(msg);
+        }
+    }
 
-                    if (tempCounty == null) {
-                        saveCounty = null;
-                        tvCounty.setText("");
-                    } else {
-                        saveCounty = tempCounty;
-                        tvCounty.setText(saveCounty.getName());
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
+    private void myHandleMessage(Message msg){
+        CustomProgressDialog.dismissDialog(progress);
+        switch (msg.what) {
+            case GET_CITIES:
+                List<Area> areas = new ArrayList<>();
+                if (msg.obj != null) {
+                    List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                    for (JSONObject jobj : areasJSON) {
+                        Area a = new Area();
+                        a.setName(jobj.getString("name"));
+                        a.setAreacode(jobj.getString("areaCode"));
+                        a.setDepth(jobj.getInteger("depth"));
+                        a.setId(jobj.getInteger("id"));
+                        a.setParentid(jobj.getInteger("parentId"));
+                        a.setZipcode(jobj.getString("zipCode"));
+                        areas.add(a);
                     }
-                    break;
-                case INIT_CITY://初始化页面时不修改 顶部地区显示,显示用户未修改之前的选择地区
-                    //显示所在的地级市
-                    String json2 = "";
-                    List<Area> areas2 = new ArrayList<>();
-                    if (msg.obj != null) {
-                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj : areasJSON) {
-                            Area a = new Area();
-                            a.setName(jobj.getString("name"));
-                            a.setAreacode(jobj.getString("areaCode"));
-                            a.setDepth(jobj.getInteger("depth"));
-                            a.setId(jobj.getInteger("id"));
-                            a.setParentid(jobj.getInteger("parentId"));
-                            a.setZipcode(jobj.getString("zipCode"));
-                            areas2.add(a);
-                        }
+                }
+                cities.clear();
+                if (!areas.isEmpty()) {
+                    cities.addAll(areas);
+                    spCity.setSelection(0);
+                }
+                cityAdapter.notifyDataSetChanged();
+                Area tempCity = cities.isEmpty() ? null : cities.get(0);
+                if (tempCity == null) {
+                    saveCity = null;
+                    tvCity.setText("");
+                } else {
+                    saveCity = tempCity;
+                    tvCity.setText(saveCity.getName());
+                    // 获取city下面的所有县
+                    progress.show();
+                    getUserPresenter().getSubArea(saveCity.getId(), HOLD_FLAG_COUNTY, new AreaCallBack());
+                }
+                break;
+            case GET_COUNTIES:
+                List<Area> areas1 = new ArrayList<>();
+                if (msg.obj != null) {
+                    List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                    for (JSONObject jobj : areasJSON) {
+                        Area a = new Area();
+                        a.setName(jobj.getString("name"));
+                        a.setAreacode(jobj.getString("areaCode"));
+                        a.setDepth(jobj.getInteger("depth"));
+                        a.setId(jobj.getInteger("id"));
+                        a.setParentid(jobj.getInteger("parentId"));
+                        a.setZipcode(jobj.getString("zipCode"));
+                        areas1.add(a);
                     }
-                    cities.clear();
-                    if (!areas2.isEmpty()) {
-                        cities.addAll(areas2);
-                        for (int i = 0; i < cities.size(); i++) {
-                            if (cities.get(i).getName().equals(mUser.getCityName())) {
-                                spCity.setSelection(cities.indexOf(cities.get(i)));
-                                break;
-                            }
-                        }
+                }
+                counties.clear();
+                if (!areas1.isEmpty()) {
+                    counties.addAll(areas1);
+                    spCounty.setSelection(0);
+                }
+                countyAdapter.notifyDataSetChanged();
+                Area tempCounty = counties.isEmpty() ? null : counties.get(0);
+
+                if (tempCounty == null) {
+                    saveCounty = null;
+                    tvCounty.setText("");
+                } else {
+                    saveCounty = tempCounty;
+                    tvCounty.setText(saveCounty.getName());
+                }
+                break;
+            case INIT_CITY://初始化页面时不修改 顶部地区显示,显示用户未修改之前的选择地区
+                //显示所在的地级市
+                String json2 = "";
+                List<Area> areas2 = new ArrayList<>();
+                if (msg.obj != null) {
+                    List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                    for (JSONObject jobj : areasJSON) {
+                        Area a = new Area();
+                        a.setName(jobj.getString("name"));
+                        a.setAreacode(jobj.getString("areaCode"));
+                        a.setDepth(jobj.getInteger("depth"));
+                        a.setId(jobj.getInteger("id"));
+                        a.setParentid(jobj.getInteger("parentId"));
+                        a.setZipcode(jobj.getString("zipCode"));
+                        areas2.add(a);
                     }
-                    cityAdapter.notifyDataSetChanged();
-                    break;
-                case INIT_COUNTY:
-                    //显示所在的县
-                    String json3 = "";
-                    List<Area> areas3 = new ArrayList<>();
-                    if (msg.obj != null) {
-                        List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
-                        for (JSONObject jobj : areasJSON) {
-                            Area a = new Area();
-                            a.setName(jobj.getString("name"));
-                            a.setAreacode(jobj.getString("areaCode"));
-                            a.setDepth(jobj.getInteger("depth"));
-                            a.setId(jobj.getInteger("id"));
-                            a.setParentid(jobj.getInteger("parentId"));
-                            a.setZipcode(jobj.getString("zipCode"));
-                            areas3.add(a);
-                        }
-                    }
-                    counties.clear();
-                    counties.addAll(areas3);
-                    for (int i = 0; i < counties.size(); i++) {
-                        if (counties.get(i).getName().equals(mUser.getCountyName())) {
-                            spCounty.setSelection(counties.indexOf(counties.get(i)));
+                }
+                cities.clear();
+                if (!areas2.isEmpty()) {
+                    cities.addAll(areas2);
+                    for (int i = 0; i < cities.size(); i++) {
+                        if (cities.get(i).getName().equals(mUser.getCityName())) {
+                            spCity.setSelection(cities.indexOf(cities.get(i)));
                             break;
                         }
                     }
-                    countyAdapter.notifyDataSetChanged();
-                    isFirstComeIn = false;
-                    break;
-                case GET_AREA_ERROR:
-                    if (msg.obj != null) {
-                        UIUtil.showToastSafe((String) msg.obj);
+                }
+                cityAdapter.notifyDataSetChanged();
+                break;
+            case INIT_COUNTY:
+                //显示所在的县
+                String json3 = "";
+                List<Area> areas3 = new ArrayList<>();
+                if (msg.obj != null) {
+                    List<JSONObject> areasJSON = (List<JSONObject>) msg.obj;
+                    for (JSONObject jobj : areasJSON) {
+                        Area a = new Area();
+                        a.setName(jobj.getString("name"));
+                        a.setAreacode(jobj.getString("areaCode"));
+                        a.setDepth(jobj.getInteger("depth"));
+                        a.setId(jobj.getInteger("id"));
+                        a.setParentid(jobj.getInteger("parentId"));
+                        a.setZipcode(jobj.getString("zipCode"));
+                        areas3.add(a);
                     }
-                    break;
-            }
+                }
+                counties.clear();
+                counties.addAll(areas3);
+                for (int i = 0; i < counties.size(); i++) {
+                    if (counties.get(i).getName().equals(mUser.getCountyName())) {
+                        spCounty.setSelection(counties.indexOf(counties.get(i)));
+                        break;
+                    }
+                }
+                countyAdapter.notifyDataSetChanged();
+                isFirstComeIn = false;
+                break;
+            case GET_AREA_ERROR:
+                if (msg.obj != null) {
+                    UIUtil.showToastSafe((String) msg.obj);
+                }
+                break;
         }
-    };
+    }
+
+    private Handler mHandler = new MyHandler(this);
 
     @Override
     protected int getLayoutId() {

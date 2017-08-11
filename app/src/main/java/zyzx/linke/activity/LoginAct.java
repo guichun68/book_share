@@ -26,6 +26,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import zyzx.linke.R;
@@ -53,35 +54,55 @@ public class LoginAct extends BaseActivity {
     private final int WHAT_ERROR = 0x7CF;
 
 
-    private Handler mHandler = new Handler(){
+    private static class MyHandler extends Handler{
+        WeakReference<LoginAct> mActivity;
+        MyHandler(LoginAct activity){
+            this.mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
-                case WHAT_ERROR:
-                    UIUtil.showToastSafe("登录出错");
-                    break;
-                case WHAT_THRID_PLAT_FORM:
-                    HashMap<String,Object> res = (HashMap<String, Object>) msg.obj;
-                    if(res==null){
-                        UIUtil.showToastSafe("授权出错");
-                        return;
+            if (mActivity.get() == null) {
+                return;
+            }
+            mActivity.get().myHandleMessage(msg);
+        }
+    }
+
+    public void myHandleMessage(Message msg){
+        switch (msg.what){
+            case WHAT_ERROR:
+                UIUtil.showToastSafe("登录出错");
+                break;
+            case WHAT_THRID_PLAT_FORM:
+                HashMap<String,Object> res = (HashMap<String, Object>) msg.obj;
+                if(res==null){
+                    UIUtil.showToastSafe("授权出错");
+                    return;
+                }
+
+                getUserPresenter().loginByThirdPlatform(JSON.toJSONString(res), new CallBack() {
+                    @Override
+                    public void onSuccess(Object obj, int... code) {
+
                     }
 
-                    getUserPresenter().loginByThirdPlatform(JSON.toJSONString(res), new CallBack() {
-                        @Override
-                        public void onSuccess(Object obj, int... code) {
+                    @Override
+                    public void onFailure(Object obj, int... code) {
 
-                        }
-
-                        @Override
-                        public void onFailure(Object obj, int... code) {
-
-                        }
-                    });
-                    break;
-            }
+                    }
+                });
+                break;
         }
-    };
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
+    private Handler mHandler = new MyHandler(this);
 
     @Override
     protected int getLayoutId() {

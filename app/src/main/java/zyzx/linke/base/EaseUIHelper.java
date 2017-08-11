@@ -952,31 +952,41 @@ public class EaseUIHelper {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
-        if(username.equals(EMClient.getInstance().getCurrentUser()))
-            return getUserProfileManager().getCurrentUserInfo();
-        user = getContactList().get(username);
-        if(user == null && getRobotList() != null){
-            user = getRobotList().get(username);
+        if(username.equals(EMClient.getInstance().getCurrentUser())){
+            user=new EaseUser(username);
+            user.setAvatar(PreferenceManager.getInstance().getCurrentUserAvatar());
+            user.setNickname(PreferenceManager.getInstance().getCurrentUserNick());
+            return user;
+//            return getUserProfileManager().getCurrentUserInfo();
         }
+        user = getContactList().get(username);
+        /*if(user == null && getRobotList() != null){
+            user = getRobotList().get(username);
+        }*/
         if(user == null && message != null){
             try {
                 StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
                 String headIcon = (message.getStringAttribute(Const.EXTRA_AVATAR));
                 String nickName = message.getStringAttribute(Const.EXTRA_NICKNAME);
                 user = new EaseUser(message.getFrom());
+                EaseUser saveDBUser = new EaseUser(message.getFrom());
                 if(!StringUtil.isEmpty(headIcon)){
                     if(!headIcon.contains("http")){
                         headIconSB.append(GlobalParams.AvatarDirName).append(headIcon);
                         user.setAvatar(headIconSB.toString());
+                        saveDBUser.setAvatar(StringUtil.getExtraName(headIcon));
                     }
                     else{
                         user.setAvatar(headIcon);
+                        saveDBUser.setAvatar(headIcon);
                     }
                 }else{
                     user.setAvatar(null);
                 }
                 user.setNickname(nickName);
-                HXUserDao.getInstance().saveContact(user);
+                saveDBUser.setNickname(nickName);
+                HXUserDao.getInstance().saveContact(saveDBUser);
+                EaseCommonUtils.setUserInitialLetter(user);
             } catch (HyphenateException e) {
                 e.printStackTrace();
             }

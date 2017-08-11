@@ -98,7 +98,7 @@ public class UpdateService extends Service implements CallBack {
 	public void onFailure(Object obj, int... code) {
 		GlobalParams.isCheckedUpdate = true;
 		if(obj instanceof String){
-			UIUtil.showToastSafe((Integer) obj);
+			UIUtil.showToastSafe((String) obj);
 		}
 	}
 

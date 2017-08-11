@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import zyzx.linke.utils.UIUtil;
 
 public class ScanBookDetailAct extends BaseActivity {
     private static final int BOOKWHAT = 200, BOOKNOTGET = 400;
-    private BookHandler handler = new BookHandler();
+    private BookHandler handler = new BookHandler(this);
 
     private ImageView ivBookImage;
     private TextView tvTitle, tvAuthor, tvPublisher, tvPublishDate, tvTags, tvSummary, tvCatalog, tvAdd2MyLib;
@@ -157,71 +158,90 @@ public class ScanBookDetailAct extends BaseActivity {
             }
         });
     }
+    private Dialog prompt;
+    private void myHandleMessage(Message msg){
 
-    class BookHandler extends Handler {
-        private Dialog prompt;
+        dismissProgress();
+        switch (msg.what) {
+            case BOOKNOTGET:
+                if (prompt == null) {
+                    prompt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
+                }
+                prompt.show();
+                break;
+
+            case BOOKWHAT://成功获取图书信息
+                mBook = (BookDetail2) msg.obj;
+                //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
+                String imageUrl = AppUtil.getMostDistinctPicUrl(mBook);
+                if(imageUrl!=null){
+                    Glide.with(mContext).load(imageUrl).into(ivBookImage);
+                }
+                tvTitle.setText(mBook.getTitle());
+                StringBuilder sb = new StringBuilder();
+                for (String author : mBook.getAuthor()) {
+                    sb.append(author).append(";");
+                }
+                if (sb.length() > 0) {
+                    sb.deleteCharAt(sb.length() - 1);
+                }
+                tvAuthor.setText(sb);
+                tvPublisher.setText(mBook.getPublisher());
+                if(mBook.getPubdateDateType()!=null){
+                    tvPublishDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType()));
+                }else{
+                    tvPublishDate.setVisibility(View.GONE);
+                }
+                if (mBook.getTags() != null) {
+                    for (Tags tag : mBook.getTags()) {
+                        tvTags.append(tag.getName() + ";");
+                    }
+                }
+                if (StringUtil.isEmpty(mBook.getSummary())) {
+                    tvSummary.setText("无");
+                } else {
+                    tvSummary.setText(mBook.getSummary());
+                }
+                if (StringUtil.isEmpty(mBook.getCatalog())) {
+                    tvCatalog.setText("无");
+                } else {
+                    tvCatalog.setText(mBook.getCatalog());
+                }
+                break;
+
+        }
+    }
+
+    class PromptDialogClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            CustomProgressDialog.dismissDialog(prompt);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
+    private static class BookHandler extends Handler {
+
+        WeakReference<ScanBookDetailAct> mActivity;
+
+        BookHandler(ScanBookDetailAct act){
+            this.mActivity = new WeakReference<>(act);
+        }
 
         @Override
         public void handleMessage(Message msg) {
-            dismissProgress();
-            switch (msg.what) {
-                case BOOKNOTGET:
-                    if (prompt == null) {
-                        prompt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
-                    }
-                    prompt.show();
-                    break;
-
-                case BOOKWHAT://成功获取图书信息
-                    mBook = (BookDetail2) msg.obj;
-                    //tvTitle,tvAuthor,tvPublisher,tvPublishDate,tvTags,tvSummary,tvCatalog;
-                    String imageUrl = AppUtil.getMostDistinctPicUrl(mBook);
-                    if(imageUrl!=null){
-                        Glide.with(mContext).load(imageUrl).into(ivBookImage);
-                    }
-                    tvTitle.setText(mBook.getTitle());
-                    StringBuilder sb = new StringBuilder();
-                    for (String author : mBook.getAuthor()) {
-                        sb.append(author).append(";");
-                    }
-                    if (sb.length() > 0) {
-                        sb.deleteCharAt(sb.length() - 1);
-                    }
-                    tvAuthor.setText(sb);
-                    tvPublisher.setText(mBook.getPublisher());
-                    if(mBook.getPubdateDateType()!=null){
-                        tvPublishDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType()));
-                    }else{
-                        tvPublishDate.setVisibility(View.GONE);
-                    }
-                    if (mBook.getTags() != null) {
-                        for (Tags tag : mBook.getTags()) {
-                            tvTags.append(tag.getName() + ";");
-                        }
-                    }
-                    if (StringUtil.isEmpty(mBook.getSummary())) {
-                        tvSummary.setText("无");
-                    } else {
-                        tvSummary.setText(mBook.getSummary());
-                    }
-                    if (StringUtil.isEmpty(mBook.getCatalog())) {
-                        tvCatalog.setText("无");
-                    } else {
-                        tvCatalog.setText(mBook.getCatalog());
-                    }
-                    break;
-
+            ScanBookDetailAct act = mActivity == null?null:mActivity.get();
+            if(act == null || act.isFinishing()){
+                return;
             }
-
-        }
-
-        class PromptDialogClickListener implements View.OnClickListener {
-
-            @Override
-            public void onClick(View v) {
-                CustomProgressDialog.dismissDialog(prompt);
-                finish();
-            }
+            act.myHandleMessage(msg);
         }
     }
 

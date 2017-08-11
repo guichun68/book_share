@@ -1,13 +1,12 @@
 package zyzx.linke.activity;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -21,8 +20,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMLocationMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
@@ -38,7 +42,10 @@ import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.runtimepermissions.PermissionsManager;
+import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.PreferenceManager;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -46,7 +53,7 @@ import zyzx.linke.utils.UIUtil;
  * Desc: 聊天界面
  */
 
-public class ChatActivity extends BaseActivity{
+public class ChatActivity extends BaseActivity {
     EaseChatFragment mChatFrag;
     public static ChatActivity activityInstance;
     String chatUserId, loginName;
@@ -55,6 +62,9 @@ public class ChatActivity extends BaseActivity{
     private TextView tvMettingTime;//会面时间
     private TextView tvExpireDateTip;//借书截止时间
     private Date mExpireDate;
+    private EditText etMettingAddress;
+    private double latitude, longitude;//见面地点
+    private final int CODE_SEL_ADDRESS_ON_MAP = 777;
 
     @Override
     protected int getLayoutId() {
@@ -82,10 +92,11 @@ public class ChatActivity extends BaseActivity{
             }
         });*/
         registListener();
-        getSupportFragmentManager().beginTransaction().add(R.id.content,mChatFrag,"chat").commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.content, mChatFrag, "chat").commit();
     }
 
-    private Dialog begDialg;
+    private android.support.v7.app.AlertDialog begDialg;
+
     private void registListener() {
         mChatFrag.setChatFragmentHelper(new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
@@ -94,7 +105,7 @@ public class ChatActivity extends BaseActivity{
                 // 通过扩展属性，将userAvatar和userName发送出去。
                 String userAvatar = PreferenceManager.getInstance().getCurrentUserAvatar();
                 if (!TextUtils.isEmpty(userAvatar)) {
-                    message.setAttribute(Const.EXTRA_AVATAR, userAvatar);
+                    message.setAttribute(Const.EXTRA_AVATAR, StringUtil.getExtraName(userAvatar));
                 }
                 String userNickName = PreferenceManager.getInstance().getCurrentUserNick();
                 if (!TextUtils.isEmpty(userNickName)) {
@@ -111,12 +122,12 @@ public class ChatActivity extends BaseActivity{
             public void onAvatarClick(String username) {
 //                CloudItem item=new CloudItem("无", Const.TianAnMenPoint,"无","");//只是为了携带用户id到详情页
                 //进入好友详情页
-                HashMap<String,String> uidMap = new HashMap<>();
-                uidMap.put("uid",username);
+                HashMap<String, String> uidMap = new HashMap<>();
+                uidMap.put("uid", username);
 //                item.setCustomfield(uidMap);
-                Intent in = new Intent(mContext,FriendHomePageAct.class);
-                in.putExtra(BundleFlag.SHOWADDRESS,false);
-                in.putExtra(BundleFlag.HEADCLICKABLE,false);
+                Intent in = new Intent(mContext, FriendHomePageAct.class);
+                in.putExtra(BundleFlag.SHOWADDRESS, false);
+                in.putExtra(BundleFlag.HEADCLICKABLE, false);
                 mContext.startActivity(in);
             }
 
@@ -126,19 +137,18 @@ public class ChatActivity extends BaseActivity{
 
             @Override
             public boolean onMessageBubbleClick(EMMessage message) {
-                if(message.getType()==EMMessage.Type.LOCATION){
-                    EMLocationMessageBody locBody=(EMLocationMessageBody) message.getBody();
+                if (message.getType() == EMMessage.Type.LOCATION) {
+                    EMLocationMessageBody locBody = (EMLocationMessageBody) message.getBody();
                     Bundle bundle = new Bundle();
-                    bundle.putString("address",locBody.getAddress());
-                    bundle.putDouble("latitude",locBody.getLatitude());
-                    bundle.putDouble("longitude",locBody.getLongitude());
-                    gotoActivity(EaseGaodeMapAct.class,false,bundle);
+                    bundle.putString("address", locBody.getAddress());
+                    bundle.putDouble("latitude", locBody.getLatitude());
+                    bundle.putDouble("longitude", locBody.getLongitude());
+                    gotoActivity(EaseGaodeMapAct.class, false, bundle);
                     return true;
                 }
-                if(message.getType() == EMMessage.Type.TXT){
+                if (message.getType() == EMMessage.Type.TXT) {
                     try {
                         int shareType = message.getIntAttribute(Const.EXTRA_SHARE_TYPE);
-//                        begDialg = CustomProgressDialog.getPromptDialog2Btn(mContext,"提示","确定","取消",new OnBegDialogClickListener(shareType),null);
                         showBegDialog(shareType);
                     } catch (HyphenateException e) {
                         UIUtil.showTestLog("normalMsg");
@@ -182,22 +192,22 @@ public class ChatActivity extends BaseActivity{
         view.findViewById(R.id.tv_sel_area).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                gotoActivityForResult(SelAddresOnMapAct.class, CODE_SEL_ADDRESS_ON_MAP, null);
             }
         });
         tvMettingTime = (TextView) view.findViewById(R.id.tv_metting_time);
         tvMettingDate = (TextView) view.findViewById(R.id.tv_metting_date);
         tvExpireDateTip = (TextView) view.findViewById(R.id.tv_expire_date);
         final LinearLayout llReturn = (LinearLayout) view.findViewById(R.id.ll_return);
-        EditText etRefuseReson,etMettingAddress;
+        final EditText etRefuseReson;
         etRefuseReson = (EditText) view.findViewById(R.id.et_refuse_reason);
         etMettingAddress = (EditText) view.findViewById(R.id.et_meet_place);
         Button okBtn = (Button) view.findViewById(R.id.dialog_btn);
         Button cancelBtn = (Button) view.findViewById(R.id.dialog_btn2);
         final LinearLayout llMain = (LinearLayout) view.findViewById(R.id.ll_main);
         final LinearLayout llRefuse = (LinearLayout) view.findViewById(R.id.ll_refuse);
-        llMain.setVisibility(View.GONE);
-        llRefuse.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.VISIBLE);
+        llRefuse.setVisibility(View.GONE);
 
         tvMettingDate.setClickable(true);
         tvMettingTime.setClickable(true);
@@ -206,9 +216,9 @@ public class ChatActivity extends BaseActivity{
         rbAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                llMain.setVisibility(isChecked?View.VISIBLE:View.GONE);
-                llRefuse.setVisibility(isChecked?View.GONE:View.VISIBLE);
-                switch (shareType){
+                llMain.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                llRefuse.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                switch (shareType) {
                     case 0:
                     case 1:
                     case 3:
@@ -230,7 +240,7 @@ public class ChatActivity extends BaseActivity{
         tvMettingTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showTimeDialog(tvMettingTime);
             }
         });
         tvExpireDateTip.setOnClickListener(new View.OnClickListener() {
@@ -240,12 +250,94 @@ public class ChatActivity extends BaseActivity{
                 showDateDialog(tvExpireDateTip);
             }
         });
-        final AlertDialog dialog2 = adb.create();
-        dialog2.setView(view, 0, 0, 0, 0);
+        begDialg = adb.create();
+        begDialg.setView(view, 0, 0, 0, 0);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(rbRefuse.isChecked()){
+                if (rbRefuse.isChecked()) {
+                    //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
+                    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+
+                    String refuseReson = etRefuseReson.getText().toString();
+                    StringBuilder content = new StringBuilder();
+                    if(StringUtil.isEmpty(refuseReson)){
+                        content.append("不好意思，本书暂不方便"+ AppUtil.getShareDes(shareType)+",请见谅！");
+                    }else{
+                        content.append(refuseReson);
+                    }
+                    content.append("\n(请求已拒绝！系统代发消息)");
+                    EMTextMessageBody txtBody = new EMTextMessageBody(content.toString());
+                    message.addBody(txtBody);
+
+                    message.setFrom(EMClient.getInstance().getCurrentUser());
+                    message.setTo(chatUserId);
+                    showDefProgress();
+                    message.setMessageStatusCallback(new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            dismissProgress();
+                            UIUtil.showToastSafe("已回绝！");
+                            mChatFrag.onResume();
+                            begDialg.dismiss();
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+                            dismissProgress();
+                            UIUtil.showToastSafe("未能成功发送");
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {}
+                    });
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+                }else{
+                    if(llReturn.getVisibility()==View.VISIBLE){
+                        if(tvExpireDateTip.getText().toString().equals("请选择")){
+                            UIUtil.showToastSafe("请输入还书日期");
+                            return;
+                        }
+                    }
+                    if(tvMettingDate.getText().toString().equals("请选择") || tvMettingTime.getText().toString().equals("请选择")){
+                        UIUtil.showToastSafe("请输入约见时间");
+                        return;
+                    }
+                    if(StringUtil.isEmpty(etMettingAddress.getText().toString())){
+                        UIUtil.showToastSafe("请输入约见地点");
+                        etMettingAddress.setError("请输入约见地点");
+                        return;
+                    }
+                    EMConversation conversation = EMClient.getInstance().chatManager().getConversation(chatUserId);
+                    //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
+                    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                    StringBuilder content = new StringBuilder("好的，约定事宜：\n最迟还书日期：");
+                    content.append(tvExpireDateTip.getText().toString()).append("\n");
+                    content.append("约见时间：").append(tvMettingDate.getText().toString()).append("日").append(tvMettingTime.getText().toString()).append("\n");
+                    content.append("约见地点:").append(etMettingAddress.getText().toString()).append("。\n");
+                    content.append("(系统代发消息,点击可快速回复)");
+
+                    EMMessageBody txtBody = new EMTextMessageBody(content.toString());
+                    message.addBody(txtBody);
+
+                    message.setFrom(EMClient.getInstance().getCurrentUser());
+                    message.setTo(chatUserId);
+                    conversation.appendMessage(message);
+                    showDefProgress();
+                    message.setMessageStatusCallback(new MyEMCallBack(true,"回复成功"));
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+                    if(longitude != 0 && latitude !=0){
+                        EMMessage locMsg = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
+                        locMsg.setChatType(EMMessage.ChatType.Chat);
+                        EMLocationMessageBody locBody = new EMLocationMessageBody(etMettingAddress.getText().toString(), latitude, longitude);
+                        locMsg.addBody(locBody);
+                        locMsg.setTo(chatUserId);
+                        conversation.appendMessage(locMsg);
+                        locMsg.setMessageStatusCallback(new MyEMCallBack(true,null));
+                        EMClient.getInstance().chatManager().sendMessage(locMsg);
+                    }
 
                 }
             }
@@ -253,12 +345,43 @@ public class ChatActivity extends BaseActivity{
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog2.dismiss();
+                begDialg.dismiss();
             }
         });
-        dialog2.setCanceledOnTouchOutside(false);
-        dialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog2.show();
+
+        begDialg.setCanceledOnTouchOutside(false);
+        begDialg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        begDialg.show();
+    }
+    class MyEMCallBack implements EMCallBack{
+        boolean refreshList;
+        String succMsg;
+        public MyEMCallBack(boolean refreshList,String succMsg){
+            this.refreshList = refreshList;
+            this.succMsg = succMsg;
+        }
+        @Override
+        public void onSuccess() {
+            dismissProgress();
+            if(begDialg!=null){
+                begDialg.dismiss();
+            }
+            if(refreshList){
+                mChatFrag.onResume();
+            }
+            if(!TextUtils.isEmpty(succMsg)){
+                UIUtil.showToastSafe(succMsg);
+            }
+        }
+
+        @Override
+        public void onError(int i, String s) {
+            dismissProgress();
+            UIUtil.showToastSafe("发送失败");
+        }
+
+        @Override
+        public void onProgress(int i, String s) {}
     }
     private Calendar mettingDate = Calendar.getInstance();
     private Calendar mettingTime = Calendar.getInstance();
@@ -267,34 +390,35 @@ public class ChatActivity extends BaseActivity{
         new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mettingDate.set(Calendar.YEAR,year);
-                mettingDate.set(Calendar.MONTH,monthOfYear);
-                mettingDate.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                mettingDate.set(Calendar.YEAR, year);
+                mettingDate.set(Calendar.MONTH, monthOfYear);
+                mettingDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 tipView.setText(new StringBuffer(DateFormat.format("yyyy-MM-dd", mettingDate)).toString());
             }
         }, mettingDate.get(Calendar.YEAR), mettingDate.get(Calendar.MONTH), mettingDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void showTimeDialog(final TextView tipView){
+    private void showTimeDialog(final TextView tipView) {
         new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                mettingTime.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                mettingTime.set(Calendar.MINUTE,minute);
+                mettingTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                mettingTime.set(Calendar.MINUTE, minute);
                 tipView.setText(new StringBuilder(DateFormat.format("HH:mm", mettingTime)));
             }
-        }, mettingTime.get(Calendar.HOUR_OF_DAY), mettingTime.get(Calendar.MINUTE),true).show();
+        }, mettingTime.get(Calendar.HOUR_OF_DAY), mettingTime.get(Calendar.MINUTE), true).show();
     }
 
-    class OnBegDialogClickListener implements View.OnClickListener{
+    class OnBegDialogClickListener implements View.OnClickListener {
         int shareType;
-        OnBegDialogClickListener(int shareType){
+
+        OnBegDialogClickListener(int shareType) {
             this.shareType = shareType;
         }
 
         @Override
         public void onClick(View v) {
-            switch (shareType){
+            switch (shareType) {
                 case 1:
 
                     break;
@@ -311,6 +435,7 @@ public class ChatActivity extends BaseActivity{
     @Override
     protected void initData() {
     }
+
 
     @Override
     protected void onDestroy() {
@@ -340,18 +465,29 @@ public class ChatActivity extends BaseActivity{
         }
     }
 
-    public String getToChaUserLoginName(){
+    public String getToChaUserLoginName() {
         return loginName;
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                                     @NonNull int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mChatFrag.onActivityResult(requestCode,resultCode,data);
+        mChatFrag.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 888 && requestCode == CODE_SEL_ADDRESS_ON_MAP && data != null) {
+            String address = data.getStringExtra("address");
+            latitude = data.getDoubleExtra("lat", 0);
+            longitude = data.getDoubleExtra("long", 0);
+            if (begDialg != null && begDialg.isShowing()) {
+                if (etMettingAddress != null) {
+                    etMettingAddress.setText(address);
+                }
+            }
+        }
     }
 }

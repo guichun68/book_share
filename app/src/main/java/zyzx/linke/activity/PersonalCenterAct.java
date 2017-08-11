@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,8 +25,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;

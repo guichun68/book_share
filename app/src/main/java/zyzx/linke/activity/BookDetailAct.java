@@ -47,7 +47,7 @@ public class BookDetailAct extends BaseActivity {
     private MyBookDetailVO mBookVo;
     private Integer friendUserId;//好友id
     private TextView tvBookStatus,tvArea,tvMsg;
-    private Button btnSharer;
+//    private Button btnSharer;
     private Button btnBegBorrow;//求借
 
     @Override
@@ -68,7 +68,8 @@ public class BookDetailAct extends BaseActivity {
         tvCatalog = (TextView) findViewById(R.id.tv_catalog);
         tvAdd2MyLib = (TextView) findViewById(R.id.tv_add_mylib);
         llShare = (LinearLayout) findViewById(R.id.ll_share);
-        btnSharer = (Button) findViewById(R.id.btn_sharer);
+//        btnSharer = (Button) findViewById(R.id.btn_sharer);
+        findViewById(R.id.ll_sharer).setVisibility(View.GONE);
         tvBookStatus = (TextView) findViewById(R.id.tv_book_status);
         tvArea = (TextView) findViewById(R.id.tv_area);
         tvMsg = (TextView) findViewById(R.id.tv_msg);
@@ -81,7 +82,7 @@ public class BookDetailAct extends BaseActivity {
         tvAdd2MyLib.setText("添加");
         tvAdd2MyLib.setOnClickListener(this);
         btnBegBorrow.setOnClickListener(this);
-        btnSharer.setOnClickListener(this);
+//        btnSharer.setOnClickListener(this);
     }
 
     String bookId;//添加地图成功后返回的bookId

@@ -20,6 +20,8 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
 import zyzx.linke.R;
@@ -78,7 +80,8 @@ public class EaseGaodeMapAct extends BaseActivity implements LocationSource, AMa
 
     @Override
     protected void initData() {
-
+        LatLng latLng = new LatLng(latitude,longitude);
+        Marker marker = mAMap.addMarker(new MarkerOptions().position(latLng).title("位置").snippet(address));
     }
 
     /**
@@ -171,6 +174,9 @@ public class EaseGaodeMapAct extends BaseActivity implements LocationSource, AMa
 
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
+        if(!isNeedLoc){
+            return;
+        }
         dismissProgress();
         if (mListener != null && amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {/*amapLocation.getCity();*/
@@ -196,6 +202,7 @@ public class EaseGaodeMapAct extends BaseActivity implements LocationSource, AMa
                     Toast.makeText(this,"未能获取位置,请重新定位",Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 Intent intent = this.getIntent();
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);

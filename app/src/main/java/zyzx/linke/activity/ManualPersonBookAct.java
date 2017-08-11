@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,41 +60,56 @@ public class ManualPersonBookAct extends BaseActivity{
     private BookDetail2 mBook;
     private Dialog dialog;
 
-    private Handler mHandler = new Handler(){
+    private static class MyHandler extends Handler {
+        private final WeakReference<ManualPersonBookAct> mActivity;
+
+        private MyHandler(ManualPersonBookAct activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            dismissProgress();
-            switch (msg.what) {
-                case 1://成功
-                    String responseJson = (String) msg.obj;
-                    ResponseJson rj = new ResponseJson(responseJson);
-                    if (rj.errorCode != null) {
-                        switch (rj.errorCode) {
-                            case 1:
-                                bookId = (String) ((Map) rj.data.get(0)).get("bookId");
-                                mBook.setId(bookId);
-                                UIUtil.showToastSafe("添加成功");
-                                dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "添加成功，继续添加？", "完成", "继续", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        setResult(777);
-                                        ManualPersonBookAct.this.finish();
-                                    }
-                                }, null);
-                                dialog.show();
-                                break;
-                            default:
-                                UIUtil.showToastSafe(rj.errorMsg);
-                                break;
-                        }
-                    }
-                    break;
-                case 2://失败
-                    UIUtil.showToastSafe("上传失败");
-                    break;
+            if (mActivity.get() == null) {
+                return;
             }
-    }};
+            mActivity.get().myHandleMessage(msg);
+        }
+    }
 
+    private final Handler mHandler = new MyHandler(this);
+
+    private void myHandleMessage(Message msg) {
+        dismissProgress();
+        switch (msg.what) {
+            case 1://成功
+                String responseJson = (String) msg.obj;
+                ResponseJson rj = new ResponseJson(responseJson);
+                if (rj.errorCode != null) {
+                    switch (rj.errorCode) {
+                        case 1:
+                            bookId = (String) ((Map) rj.data.get(0)).get("bookId");
+                            mBook.setId(bookId);
+                            UIUtil.showToastSafe("添加成功");
+                            dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "添加成功，继续添加？", "完成", "继续", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    setResult(777);
+                                    ManualPersonBookAct.this.finish();
+                                }
+                            }, null);
+                            dialog.show();
+                            break;
+                        default:
+                            UIUtil.showToastSafe(rj.errorMsg);
+                            break;
+                    }
+                }
+                break;
+            case 2://失败
+                UIUtil.showToastSafe("上传失败");
+                break;
+        }
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.act_manual_input2;
@@ -119,6 +135,8 @@ public class ManualPersonBookAct extends BaseActivity{
         if(dialog != null && dialog.isShowing()){
             dialog.dismiss();
         }
+        //  If null, all callbacks and messages will be removed.
+        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 

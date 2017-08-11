@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,7 @@ import zyzx.linke.views.UserInfoImagePOP;
  */
 
 public class ManualInputAct extends BaseActivity {
-    private BookHandler handler = new BookHandler();
+    private BookHandler mHandler = new BookHandler(this);
     private static final int BOOKWHAT = 200, BOOKNOTGET = 400;
     private TextView tvSave;
     private AppCompatEditText acetBookName,acetISBN,acetAuthor,acetPublisher,acetIntro;
@@ -140,21 +141,21 @@ public class ManualInputAct extends BaseActivity {
                 dismissProgress();
                 if (obj == null) {
                     //"未能在豆瓣获取书籍信息"
-                    handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                    mHandler.sendMessage(Message.obtain(mHandler, BOOKNOTGET));
                     return;
                 }
                 BookDetail2 book = (BookDetail2) obj;
-                Message msg = handler.obtainMessage();
+                Message msg = mHandler.obtainMessage();
                 msg.obj = book;
                 msg.what = BOOKWHAT;
-                handler.sendMessage(msg);
+                mHandler.sendMessage(msg);
             }
 
             @Override
             public void onFailure(Object obj, int... code) {
                 dismissProgress();
                 UIUtil.showTestLog("zyzx failure", (String) obj);
-                handler.sendMessage(Message.obtain(handler, BOOKNOTGET));
+                mHandler.sendMessage(Message.obtain(mHandler, BOOKNOTGET));
             }
         });
 
@@ -166,30 +167,49 @@ public class ManualInputAct extends BaseActivity {
         spBookClassify.setSelection(0);
     }
 
-    class BookHandler extends Handler {
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
+    private void myHandleMessage(Message msg){
+        dismissProgress();
+        switch (msg.what) {
+            case BOOKNOTGET:
+                //未能在豆瓣获取该图书，决定将书籍添加到本地数据库
+                saveBook();
+                break;
+
+            case BOOKWHAT://成功获取图书信息
+                mBook = (BookDetail2) msg.obj;
+                CustomProgressDialog.getPromptDialog(mContext, "根据提供的ISBN查找到该书籍详情,点击确定为您跳转到详情页,确认后可添加到书架。", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(BundleFlag.BOOK, mBook);
+                        gotoActivity(ScanBookDetailAct.class, true, bundle);
+                    }
+                }).show();
+                break;
+
+        }
+    }
+    
+    private static class BookHandler extends Handler {
+        WeakReference<ManualInputAct> mActivity;
+
+        BookHandler(ManualInputAct act){
+            this.mActivity = new WeakReference<>(act);
+        }
 
         @Override
         public void handleMessage(Message msg) {
-            dismissProgress();
-            switch (msg.what) {
-                case BOOKNOTGET:
-                    //未能在豆瓣获取该图书，决定将书籍添加到本地数据库
-                    saveBook();
-                    break;
-
-                case BOOKWHAT://成功获取图书信息
-                    mBook = (BookDetail2) msg.obj;
-                    CustomProgressDialog.getPromptDialog(mContext, "根据提供的ISBN查找到该书籍详情,点击确定为您跳转到详情页,确认后可添加到书架。", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(BundleFlag.BOOK, mBook);
-                            gotoActivity(ScanBookDetailAct.class, true, bundle);
-                        }
-                    }).show();
-                    break;
-
+            ManualInputAct act = mActivity==null?null:mActivity.get();
+            if(act == null || act.isFinishing()){
+                return;
             }
+            mActivity.get().myHandleMessage(msg);
         }
     }
 
