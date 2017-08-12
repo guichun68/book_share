@@ -14,7 +14,8 @@
 
     <include
         android:id="@+id/search_bar_view"
-        layout="@layout/ease_search_bar_with_padding" />
+        layout="@layout/ease_search_bar_with_padding"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/content_container"

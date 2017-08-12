@@ -1,11 +1,11 @@
 [
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_row_sent_picture.xml",
-        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\layout\\ease_row_sent_picture.xml"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_row_received_location.xml",
         "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\layout\\ease_row_received_location.xml"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_row_sent_picture.xml",
+        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\layout\\ease_row_sent_picture.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_icon.xml",
