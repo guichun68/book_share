@@ -4,6 +4,8 @@ package zyzx.linke.model.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import zyzx.linke.utils.StringUtil;
+
 public class UserVO implements Serializable,Cloneable{
 	
 	private String genderName;

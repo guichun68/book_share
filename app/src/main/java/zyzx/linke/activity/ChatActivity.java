@@ -28,6 +28,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
@@ -40,10 +41,9 @@ import java.util.HashMap;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
-import zyzx.linke.global.Const;
+import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.AppUtil;
-import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -105,11 +105,11 @@ public class ChatActivity extends BaseActivity {
                 // 通过扩展属性，将userAvatar和userName发送出去。
                 String userAvatar = PreferenceManager.getInstance().getCurrentUserAvatar();
                 if (!TextUtils.isEmpty(userAvatar)) {
-                    message.setAttribute(Const.EXTRA_AVATAR, StringUtil.getExtraName(userAvatar));
+                    message.setAttribute(MyEaseConstant.EXTRA_FROM_AVATAR, StringUtil.getExtraName(userAvatar));
                 }
                 String userNickName = PreferenceManager.getInstance().getCurrentUserNick();
                 if (!TextUtils.isEmpty(userNickName)) {
-                    message.setAttribute(Const.EXTRA_NICKNAME, userNickName);
+                    message.setAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME, userNickName);
                 }
             }
 
@@ -148,8 +148,14 @@ public class ChatActivity extends BaseActivity {
                 }
                 if (message.getType() == EMMessage.Type.TXT) {
                     try {
-                        int shareType = message.getIntAttribute(Const.EXTRA_SHARE_TYPE);
-                        showBegDialog(shareType);
+                        Integer shareType = message.getIntAttribute(MyEaseConstant.EXTRA_SHARE_TYPE);
+                        if(shareType != null && shareType !=0){
+                            if(message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
+                                UIUtil.showToastSafe("无须回复自己发送的消息.");
+                            }else{
+                                showBegDialog(shareType);
+                            }
+                        }
                     } catch (HyphenateException e) {
                         UIUtil.showTestLog("normalMsg");
                     }

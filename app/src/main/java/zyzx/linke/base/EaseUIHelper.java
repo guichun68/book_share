@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -58,7 +57,6 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.db.HXDBManager;
 import zyzx.linke.db.HXUserDao;
 import zyzx.linke.db.InviteMessgeDao;
-import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.easedomain.EmojiconExampleGroupData;
 import zyzx.linke.model.easedomain.InviteMessage;
@@ -366,8 +364,14 @@ public class EaseUIHelper {
                 EaseUser user = null;
                 try {
                     StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
-                    String headIcon = (conversation.getLatestMessageFromOthers().getStringAttribute(Const.EXTRA_AVATAR));
-                    String nickName = conversation.getLatestMessageFromOthers().getStringAttribute(Const.EXTRA_NICKNAME);
+                    String headIcon,nickName;
+                    if(conversation.getLatestMessageFromOthers()==null){
+                        headIcon = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_AVATAR);
+                        nickName = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_NICKNAME);
+                    }else{
+                        headIcon = (conversation.getLatestMessageFromOthers().getStringAttribute(MyEaseConstant.EXTRA_FROM_AVATAR));
+                        nickName = conversation.getLatestMessageFromOthers().getStringAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME);
+                    }
                     user = new EaseUser(conversation.conversationId());
                     if(!StringUtil.isEmpty(headIcon)){
                         if(!headIcon.contains("http")){
@@ -966,8 +970,8 @@ public class EaseUIHelper {
         if(user == null && message != null){
             try {
                 StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
-                String headIcon = (message.getStringAttribute(Const.EXTRA_AVATAR));
-                String nickName = message.getStringAttribute(Const.EXTRA_NICKNAME);
+                String headIcon = (message.getStringAttribute(MyEaseConstant.EXTRA_FROM_AVATAR));
+                String nickName = message.getStringAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME);
                 user = new EaseUser(message.getFrom());
                 EaseUser saveDBUser = new EaseUser(message.getFrom());
                 if(!StringUtil.isEmpty(headIcon)){

@@ -143,6 +143,10 @@
             android:name=".activity.ShareBookDetailAct"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".activity.SelAddresOnMapAct"
+            android:screenOrientation="portrait"
+            />
 
         <activity
             android:name=".activity.FriendSearch"

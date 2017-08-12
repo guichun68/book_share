@@ -20,6 +20,7 @@ import zyzx.linke.activity.HomeAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
+import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.utils.StringUtil;
@@ -80,7 +81,7 @@ public class LKConversationListFragment extends BaseFragment {
 
             @Override
             public void onListItemLongClicked(EMConversation conversation) {
-                if(!conversation.conversationId().equals(Const.ADMIN_USERID)){
+                if(!conversation.conversationId().equals(MyEaseConstant.ADMIN_USERID)){
                     showDelOrBlacklistDialog(conversation);
                 }
             }

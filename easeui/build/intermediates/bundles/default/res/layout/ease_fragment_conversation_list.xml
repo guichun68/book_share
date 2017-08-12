@@ -13,7 +13,8 @@
 	    hyphenate:titleBarTitle="@string/session"
 	    />
     
-    <include layout="@layout/ease_search_bar" />
+    <include layout="@layout/ease_search_bar"
+		android:visibility="gone"/>
     
     <FrameLayout
         android:layout_width="match_parent"

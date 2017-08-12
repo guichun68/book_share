@@ -66,15 +66,7 @@ public class Const {
 	public static final String CLASSIFY_DAAN ="d9057ccf-6493-11e7-b86c-68f72877da0a";//答案
 	public static final String CLASSIFY_QITA ="de18452c-6493-11e7-b86c-68f72877da0a";//	其他
 
-	//扩展消息用key (必须跟easeUI库中的EaseConstant中相关变量一致)
-	public static final String EXTRA_AVATAR = "avator";
-	public static final String EXTRA_NICKNAME = "nick";
-	public static final String EXTRA_BOOKID = "bid";
-	public static final String EXTRA_UID = "uid";
-	public static final String EXTRA_USERID = "userId";//环信id
-	//同APP主项目Const类中同名变量一致
-	public static final String ADMIN_USERID = "1053";//系统 用户的环信id
-	public static final String EXTRA_SHARE_TYPE = "bookShareType";
+
 
 
 }

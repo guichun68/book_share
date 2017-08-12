@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 
@@ -23,10 +21,10 @@ import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.base.BeanFactoryUtil;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
+import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.DefindResponseJson;
@@ -66,6 +64,7 @@ public class ShareBookDetailAct extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
+        ivBookImage.setOnClickListener(this);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);
         tvPublisher = (TextView) findViewById(R.id.tv_book_publisher);
@@ -102,6 +101,8 @@ public class ShareBookDetailAct extends BaseActivity {
                 ex.putSerializable("user",mFriend);
                 gotoActivity(FriendHomePageAct.class,false,ex);
                 break;
+            case R.id.iv_book_image:
+                break;
         }
     }
 
@@ -126,45 +127,95 @@ public class ShareBookDetailAct extends BaseActivity {
                 return;
             }
             showDefProgress();
-            getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),GlobalParams.getLastLoginUser(),mFriend.getUserid(),mBook,new CallBack(){
-
-                @Override
-                public void onSuccess(Object obj, int... code) {
-                    dismissProgress();
-                    begDialog.dismiss();
-                    String json = (String) obj;
-                    if(json == null){
-                        UIUtil.showToastSafe("发送失败");
-                        return;
-                    }
-                    DefindResponseJson drj = new DefindResponseJson(json);
-                    if(drj.errorCode==null){
-                        UIUtil.showToastSafe("发送失败,errCode=null");
-                        return;
-                    }
-                    switch (drj.errorCode){
-                        case 0:
-                            UIUtil.showToastSafe("发送失败！");
-                            break;
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            UIUtil.showToastSafe(drj.errorMsg);
-                            break;
-                        default:
-                            UIUtil.showToastSafe("未知错误！");
-                    }
-                }
-
-                @Override
-                public void onFailure(Object obj, int... code) {
-                    dismissProgress();
-                    UIUtil.showToastSafe("发送失败，请稍后再试");
-                    begDialog.dismiss();
-                }
-            });
+            sendBegMsg();
         }
+    }
+
+    public void sendBegMsg(){
+        //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
+        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+        String content = "【系统代发消息，点此可快速回复】亲爱的书友您好，我对您分享的书籍《"+mBook.getTitle()+"》非常感兴趣，"+btnBegBorrow.getText().toString()+"。";
+        EMTextMessageBody txtBody = new EMTextMessageBody(content);
+        message.addBody(txtBody);
+        // 增加自己特定的属性，目前SDK支持int、boolean、String这三种属性，可以设置多个扩展属性
+        message.setAttribute(MyEaseConstant.EXTRA_UID, GlobalParams.getLastLoginUser().getUid());
+        message.setAttribute(MyEaseConstant.EXTRA_USERID,  GlobalParams.getLastLoginUser().getUserid());
+        message.setAttribute(MyEaseConstant.EXTRA_BOOKID,mBook.getId());
+        message.setAttribute(MyEaseConstant.EXTRA_BOOKTITLE,mBook.getTitle());
+        message.setAttribute(MyEaseConstant.EXTRA_SHARE_TYPE,mBookVo.getShareType()+"");
+
+        message.setAttribute(MyEaseConstant.EXTRA_FROM_AVATAR,GlobalParams.getLastLoginUser().getHeadIcon());
+        message.setAttribute(MyEaseConstant.EXTRA_TO_AVATAR,mFriend.getHeadIcon());
+        message.setAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME,GlobalParams.getLastLoginUser().getLoginName());
+        message.setAttribute(MyEaseConstant.EXTRA_TO_NICKNAME,mFriend.getLoginName());
+
+        message.setFrom(GlobalParams.getLastLoginUser().getUserid()+"");
+        message.setTo(mFriend.getUserid()+"");
+        showDefProgress();
+        CustomProgressDialog.dismissDialog(begDialog);
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+//                dismissProgress();
+                uploadBegRecord();
+                UIUtil.showToastSafe("发送成功");
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                dismissProgress();
+                UIUtil.showToastSafe("发送失败");
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+            }
+        });
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+    }
+
+    //上传请求记录到服务器，保存到server DB
+    private void uploadBegRecord(){
+        getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),GlobalParams.getLastLoginUser(),mFriend.getUserid(),mBook,new CallBack(){
+
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                dismissProgress();
+                begDialog.dismiss();
+                String json = (String) obj;
+                if(json == null){
+                    UIUtil.showToastSafe("发送失败");
+                    return;
+                }
+                DefindResponseJson drj = new DefindResponseJson(json);
+                if(drj.errorCode==null){
+                    UIUtil.showToastSafe("发送失败,errCode=null");
+                    return;
+                }
+                switch (drj.errorCode){
+                    case 0:
+                        UIUtil.showToastSafe("发送失败！");
+                        break;
+                    case 1://已经发送过请求了
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        UIUtil.showToastSafe(drj.errorMsg);
+                        break;
+                    default:
+                        UIUtil.showToastSafe("未知错误！");
+                }
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                dismissProgress();
+                UIUtil.showToastSafe("发送失败，请稍后再试");
+                begDialog.dismiss();
+            }
+        });
     }
 
     View.OnClickListener myOk;
