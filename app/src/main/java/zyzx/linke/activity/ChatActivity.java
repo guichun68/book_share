@@ -28,11 +28,9 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EasyUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +39,7 @@ import java.util.HashMap;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.AppUtil;
@@ -95,12 +94,13 @@ public class ChatActivity extends BaseActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.content, mChatFrag, "chat").commit();
     }
 
-    private android.support.v7.app.AlertDialog begDialg;
+    private android.support.v7.app.AlertDialog begReplyDialg,borrowerReplyDialog;
 
     private void registListener() {
         mChatFrag.setChatFragmentHelper(new EaseChatFragment.EaseChatFragmentHelper() {
             @Override
             public void onSetMessageAttributes(EMMessage message) {
+
                 //设置消息扩展属性
                 // 通过扩展属性，将userAvatar和userName发送出去。
                 String userAvatar = PreferenceManager.getInstance().getCurrentUserAvatar();
@@ -149,11 +149,19 @@ public class ChatActivity extends BaseActivity {
                 if (message.getType() == EMMessage.Type.TXT) {
                     try {
                         Integer shareType = message.getIntAttribute(MyEaseConstant.EXTRA_SHARE_TYPE);
-                        if(shareType != null && shareType !=0){
-                            if(message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
+                        if (shareType != 0) {
+                            if (message.getFrom().equals(EMClient.getInstance().getCurrentUser())) {
                                 UIUtil.showToastSafe("无须回复自己发送的消息.");
-                            }else{
-                                showBegDialog(shareType);
+                            } else {
+                                Boolean begAgree = null;
+                                try{
+                                    begAgree = message.getBooleanAttribute(MyEaseConstant.EXTRA_BEG_AGREE);
+                                    if(begAgree)//确定是针对借阅约见事宜的回复
+                                    {showReplyDialog(message);}
+                                }catch (HyphenateException e) {
+                                    UIUtil.showTestLog("normalMsg");
+                                    showBegDialog(message);//回复借阅者第一次请求
+                                }
                             }
                         }
                     } catch (HyphenateException e) {
@@ -184,13 +192,105 @@ public class ChatActivity extends BaseActivity {
         mChatFrag.setLocationClickListener(new EaseChatFragment.LocationClickListener() {
             @Override
             public void onLocationClicked() {
-                startActivityForResult(new Intent(mContext, EaseGaodeMapAct.class), REQUEST_CODE_MAP);
+                startActivityForResult(new Intent(ChatActivity.this, EaseGaodeMapAct.class), REQUEST_CODE_MAP);
             }
         });
     }
 
-    private void showBegDialog(final int shareType) {
-        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
+    private void showReplyDialog(final EMMessage message){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dialog_beg_reply, null);
+        final EditText refuseReson = (EditText) view.findViewById(R.id.et_refuse_reason);
+        RadioButton rbAgree = (RadioButton) view.findViewById(R.id.rb_agreement);
+        final RadioButton rbRefuse = (RadioButton) view.findViewById(R.id.rb_refuse);
+        Button okBtn = (Button) view.findViewById(R.id.dialog_btn);
+        Button cancelBtn = (Button) view.findViewById(R.id.dialog_btn2);
+        final TextView tvRefuse = (TextView) view.findViewById(R.id.tv_refuse);
+        rbAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                tvRefuse.setText(isChecked?"附加留言":"原因说明");
+            }
+        });
+        borrowerReplyDialog = adb.create();
+        borrowerReplyDialog.setView(view, 0, 0, 0, 0);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                borrowerReplyDialog.dismiss();
+            }
+        });
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rbRefuse.isChecked()) {
+                    if(StringUtil.isEmpty(refuseReson.getText().toString())){
+                        UIUtil.showToastSafe("请填入原因.");
+                        return;
+                    }
+                    String msgContent = "【系统代发消息，您建议的约见时间或地点不太方便】\n原因说明:";
+                    msgContent = msgContent+refuseReson.getText().toString();
+
+                    //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
+                    EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                    EMTextMessageBody txtBody = new EMTextMessageBody(msgContent);
+                    msg.addBody(txtBody);
+
+                    msg.setFrom(EMClient.getInstance().getCurrentUser());
+                    msg.setTo(chatUserId);
+                    showDefProgress();
+                    try {
+                        String bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
+                        msg.setMessageStatusCallback(new MyEMCallBack(true,"已回复", Const.BORROW_BORROWER_REPLY_REFUSE,bookId));
+                        mChatFrag.sendMessage(msg);
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();dismissProgress();
+                        UIUtil.showToastSafe("解析消息失败，未能成功发送");
+                    }
+                }else{
+                    String msgContent;
+                    if(!StringUtil.isEmpty(refuseReson.getText().toString())){
+                        msgContent = "【系统代发消息，我已接受您的约见提议】\n";
+                        msgContent = msgContent+"留言："+refuseReson.getText().toString();
+                    }else{
+                        msgContent = "【系统代发消息，我已接受您的约见提议，我们不见不散！】\n";
+                    }
+//                    msgContent = msgContent+refuseReson.getText().toString();
+                    //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
+                    EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                    EMTextMessageBody txtBody = new EMTextMessageBody(msgContent);
+                    msg.addBody(txtBody);
+                    msg.setFrom(EMClient.getInstance().getCurrentUser());
+                    msg.setTo(chatUserId);
+                    showDefProgress();
+                    try {
+                        String bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
+                        msg.setMessageStatusCallback(new MyEMCallBack(true,"已回复", Const.BORROW_BORROWER_REPLY_AGREE,bookId));
+                        mChatFrag.sendMessage(msg);
+                    } catch (HyphenateException e) {
+                        dismissProgress();
+                        e.printStackTrace();
+                        UIUtil.showToastSafe("解析消息失败，未能成功发送");
+                    }
+                }
+            }
+        });
+        borrowerReplyDialog.setCanceledOnTouchOutside(false);
+        borrowerReplyDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        borrowerReplyDialog.show();
+    }
+
+    private void showBegDialog(final EMMessage message) {
+        Integer shareType = 0;
+        String bookId = "";
+        try {
+            shareType = message.getIntAttribute(MyEaseConstant.EXTRA_SHARE_TYPE);
+            bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog_beg, null);
         RadioButton rbAgree = (RadioButton) view.findViewById(R.id.rb_agreement);
@@ -219,12 +319,13 @@ public class ChatActivity extends BaseActivity {
         tvMettingTime.setClickable(true);
         tvExpireDateTip.setClickable(true);
 
+        final Integer finalShareType = shareType;
         rbAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 llMain.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 llRefuse.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                switch (shareType) {
+                switch (finalShareType) {
                     case 0:
                     case 1:
                     case 3:
@@ -256,61 +357,45 @@ public class ChatActivity extends BaseActivity {
                 showDateDialog(tvExpireDateTip);
             }
         });
-        begDialg = adb.create();
-        begDialg.setView(view, 0, 0, 0, 0);
+        begReplyDialg = adb.create();
+        begReplyDialg.setView(view, 0, 0, 0, 0);
+        final String finalBookId = bookId;
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (rbRefuse.isChecked()) {
                     //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
-                    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+                    EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
 
                     String refuseReson = etRefuseReson.getText().toString();
-                    StringBuilder content = new StringBuilder();
-                    if(StringUtil.isEmpty(refuseReson)){
-                        content.append("不好意思，本书暂不方便"+ AppUtil.getShareDes(shareType)+",请见谅！");
-                    }else{
-                        content.append(refuseReson);
+                    StringBuilder content = new StringBuilder("【系统代发消息, 请求已被拒绝】\n");
+                    if (StringUtil.isEmpty(refuseReson)) {
+                        content.append("不好意思，本书暂不方便" + AppUtil.getShareDes(finalShareType) + ",请见谅！");
+                    } else {
+                        content.append("留言:"+refuseReson);
                     }
-                    content.append("\n(请求已拒绝！系统代发消息)");
+//                    content.append("\n(请求已拒绝！系统代发消息)");
                     EMTextMessageBody txtBody = new EMTextMessageBody(content.toString());
-                    message.addBody(txtBody);
+                    msg.addBody(txtBody);
 
-                    message.setFrom(EMClient.getInstance().getCurrentUser());
-                    message.setTo(chatUserId);
+                    msg.setFrom(EMClient.getInstance().getCurrentUser());
+                    msg.setTo(chatUserId);
                     showDefProgress();
-                    message.setMessageStatusCallback(new EMCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            dismissProgress();
-                            UIUtil.showToastSafe("已回绝！");
-                            mChatFrag.onResume();
-                            begDialg.dismiss();
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-                            dismissProgress();
-                            UIUtil.showToastSafe("未能成功发送");
-                        }
-
-                        @Override
-                        public void onProgress(int i, String s) {}
-                    });
+                    msg.setMessageStatusCallback(new MyEMCallBack(true,"已回绝", Const.BORROW_OWNER_REJECT,finalBookId));
                     //发送消息
-                    EMClient.getInstance().chatManager().sendMessage(message);
-                }else{
-                    if(llReturn.getVisibility()==View.VISIBLE){
-                        if(tvExpireDateTip.getText().toString().equals("请选择")){
+                    mChatFrag.sendMessage(msg);
+                } else {
+                    if (llReturn.getVisibility() == View.VISIBLE) {
+                        if (tvExpireDateTip.getText().toString().equals("请选择")) {
                             UIUtil.showToastSafe("请输入还书日期");
                             return;
                         }
                     }
-                    if(tvMettingDate.getText().toString().equals("请选择") || tvMettingTime.getText().toString().equals("请选择")){
+                    if (tvMettingDate.getText().toString().equals("请选择") || tvMettingTime.getText().toString().equals("请选择")) {
                         UIUtil.showToastSafe("请输入约见时间");
                         return;
                     }
-                    if(StringUtil.isEmpty(etMettingAddress.getText().toString())){
+                    if (StringUtil.isEmpty(etMettingAddress.getText().toString())) {
                         UIUtil.showToastSafe("请输入约见地点");
                         etMettingAddress.setError("请输入约见地点");
                         return;
@@ -318,31 +403,37 @@ public class ChatActivity extends BaseActivity {
                     EMConversation conversation = EMClient.getInstance().chatManager().getConversation(chatUserId);
                     //这里是扩展自文本消息，如果这个自定义的消息需要用到语音或者图片等，可以扩展自语音、图片消息，亦或是位置消息。
                     EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-                    StringBuilder content = new StringBuilder("好的，约定事宜：\n最迟还书日期：");
+                    StringBuilder content = new StringBuilder("【系统代发消息,点击可快速回复】\n好的，以下约定事宜你看是否合适：\n最迟还书日期：");
                     content.append(tvExpireDateTip.getText().toString()).append("\n");
                     content.append("约见时间：").append(tvMettingDate.getText().toString()).append("日").append(tvMettingTime.getText().toString()).append("\n");
                     content.append("约见地点:").append(etMettingAddress.getText().toString()).append("。\n");
-                    content.append("(系统代发消息,点击可快速回复)");
 
                     EMMessageBody txtBody = new EMTextMessageBody(content.toString());
                     message.addBody(txtBody);
-
+                    message.setAttribute(MyEaseConstant.EXTRA_SHARE_TYPE, finalShareType + "");
+                    message.setAttribute(MyEaseConstant.EXTRA_BEG_AGREE, true);
+                    message.setAttribute(MyEaseConstant.EXTRA_BOOKID,finalBookId);
                     message.setFrom(EMClient.getInstance().getCurrentUser());
                     message.setTo(chatUserId);
+
                     conversation.appendMessage(message);
                     showDefProgress();
-                    message.setMessageStatusCallback(new MyEMCallBack(true,"回复成功"));
+                    message.setMessageStatusCallback(new MyEMCallBack(true, "回复成功",Const.BORROW_OWNER_AGREE,finalBookId));
                     //发送消息
-                    EMClient.getInstance().chatManager().sendMessage(message);
-                    if(longitude != 0 && latitude !=0){
+                    mChatFrag.sendMessage(message);
+//                    EMClient.getInstance().chatManager().sendMessage(message);
+                    if (longitude != 0 && latitude != 0) {
                         EMMessage locMsg = EMMessage.createSendMessage(EMMessage.Type.LOCATION);
                         locMsg.setChatType(EMMessage.ChatType.Chat);
                         EMLocationMessageBody locBody = new EMLocationMessageBody(etMettingAddress.getText().toString(), latitude, longitude);
                         locMsg.addBody(locBody);
                         locMsg.setTo(chatUserId);
                         conversation.appendMessage(locMsg);
-                        locMsg.setMessageStatusCallback(new MyEMCallBack(true,null));
-                        EMClient.getInstance().chatManager().sendMessage(locMsg);
+                        locMsg.setMessageStatusCallback(new MyEMCallBack(true, null,0,null));
+//                        EMClient.getInstance().chatManager().sendMessage(locMsg);
+                        mChatFrag.sendMessage(locMsg);
+                        longitude=0;
+                        latitude=0;
                     }
 
                 }
@@ -351,32 +442,45 @@ public class ChatActivity extends BaseActivity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                begDialg.dismiss();
+                begReplyDialg.dismiss();
             }
         });
 
-        begDialg.setCanceledOnTouchOutside(false);
-        begDialg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        begDialg.show();
+        begReplyDialg.setCanceledOnTouchOutside(false);
+        begReplyDialg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        begReplyDialg.show();
     }
-    class MyEMCallBack implements EMCallBack{
-        boolean refreshList;
-        String succMsg;
-        public MyEMCallBack(boolean refreshList,String succMsg){
+
+    private class MyEMCallBack implements EMCallBack {
+        private boolean refreshList;
+        private String succMsg;
+        private int borrowFlowStatus;
+        private String bookId;
+
+        public MyEMCallBack(boolean refreshList, String succMsg,int borrowFlowStatus,String bookId) {
             this.refreshList = refreshList;
             this.succMsg = succMsg;
+            this.borrowFlowStatus = borrowFlowStatus;
+            this.bookId = bookId;
         }
+
         @Override
         public void onSuccess() {
             dismissProgress();
-            if(begDialg!=null){
-                begDialg.dismiss();
+            if (begReplyDialg != null && begReplyDialg.isShowing()) {
+                begReplyDialg.dismiss();
             }
-            if(refreshList){
+            if(borrowerReplyDialog != null && borrowerReplyDialog.isShowing()){
+                borrowerReplyDialog.dismiss();
+            }
+            if (refreshList) {
                 mChatFrag.onResume();
             }
-            if(!TextUtils.isEmpty(succMsg)){
+            if (!TextUtils.isEmpty(succMsg)) {
                 UIUtil.showToastSafe(succMsg);
+            }
+            if(borrowFlowStatus!=0){
+                getUserPresenter().setBorrowFlowstatus(EMClient.getInstance().getCurrentUser(),chatUserId,bookId,borrowFlowStatus,null);
             }
         }
 
@@ -387,8 +491,10 @@ public class ChatActivity extends BaseActivity {
         }
 
         @Override
-        public void onProgress(int i, String s) {}
+        public void onProgress(int i, String s) {
+        }
     }
+
     private Calendar mettingDate = Calendar.getInstance();
     private Calendar mettingTime = Calendar.getInstance();
 
@@ -442,6 +548,16 @@ public class ChatActivity extends BaseActivity {
     protected void initData() {
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back_img:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -465,10 +581,10 @@ public class ChatActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         mChatFrag.onBackPressed();
-        if (EasyUtils.isSingleActivity(this)) {
+        /*if (EasyUtils.isSingleActivity(this)) {
             Intent intent = new Intent(this, HomeAct.class);
             startActivity(intent);
-        }
+        }*/
     }
 
     public String getToChaUserLoginName() {
@@ -489,11 +605,13 @@ public class ChatActivity extends BaseActivity {
             String address = data.getStringExtra("address");
             latitude = data.getDoubleExtra("lat", 0);
             longitude = data.getDoubleExtra("long", 0);
-            if (begDialg != null && begDialg.isShowing()) {
+            if (begReplyDialg != null && begReplyDialg.isShowing()) {
                 if (etMettingAddress != null) {
                     etMettingAddress.setText(address);
                 }
             }
         }
     }
+
+
 }

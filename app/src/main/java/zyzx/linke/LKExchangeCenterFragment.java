@@ -3,10 +3,12 @@ package zyzx.linke;
 
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,9 @@ import zyzx.linke.activity.BookExchangePage;
 import zyzx.linke.activity.SkillExchangePage;
 import zyzx.linke.adapter.ExchangeCenterVPAdapter;
 import zyzx.linke.base.BaseFragment;
+import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.BaseExchangePager;
 
 /**
@@ -36,6 +41,12 @@ public class LKExchangeCenterFragment extends BaseFragment implements View.OnCli
     public void initView() {
         mTitleText.setText(R.string.tab_exchange_market);
         mTabLayout = (TabLayout) mRootView.findViewById(R.id.tabLayout);
+        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerPadding(UIUtil.dip2px(25));
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.vertical_divider));
+
         mTabLayout.addTab(mTabLayout.newTab().setText("书籍交换"));
         mTabLayout.addTab(mTabLayout.newTab().setText("技能交换"));
 

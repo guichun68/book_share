@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
+            android:textColor="@color/black"
             android:text="同意" />
 
         <RadioButton
@@ -40,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/black"
             android:text="拒绝" />
     </RadioGroup>
 
@@ -67,6 +69,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="4dp"
                 android:text="最迟还书日期:"
+                android:textColor="@color/backgroud_black"
                 android:textSize="19sp" />
 
             <TextView
@@ -98,6 +101,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="约见时间:"
+                android:textColor="@color/backgroud_black"
                 android:textSize="19sp" />
 
             <TextView
@@ -146,6 +150,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="约见地点:"
+                android:textColor="@color/backgroud_black"
                 android:textSize="19sp" />
 
             <TextView
@@ -171,6 +176,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="5dp"
             android:textSize="17sp"
+            android:textColor="@color/black"
             tool:text="北京中关村科技大街108号" />
 
 
@@ -205,6 +211,7 @@
             android:paddingRight="10dp"
             android:paddingTop="15dp"
             android:text="理由:"
+            android:textColor="@color/backgroud_black"
             android:textSize="19sp" />
 
         <EditText
@@ -216,6 +223,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="5dp"
             android:textSize="17sp"
+            android:textColor="@color/black"
             tool:text="北京中关村科技大街108号" />
     </LinearLayout>
 

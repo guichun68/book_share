@@ -63,6 +63,7 @@ import zyzx.linke.model.easedomain.InviteMessage;
 import zyzx.linke.model.easedomain.InviteMessage.InviteMesageStatus;
 import zyzx.linke.model.easedomain.RobotUser;
 import zyzx.linke.receiver.CallReceiver;
+import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 
@@ -999,6 +1000,9 @@ public class EaseUIHelper {
         if(user == null){
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
+        }
+        if(user.getAvatar()!=null && !user.getAvatar().contains("http")){
+            user.setAvatar(GlobalParams.BASE_URL+ BeanFactoryUtil.properties.getProperty("AvatarDirName")+ user.getAvatar());
         }
         return user;
     }

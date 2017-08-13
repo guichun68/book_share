@@ -156,4 +156,19 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack);
 
     public abstract void getAllBorrowBegs(Integer userId,int pageNo,CallBack callBack);
+
+    /**
+     * 设置借阅流状态
+     * @param currentUser 书籍所有人
+     * @param chatUserId  借阅人
+     * @param bookId 书籍id
+     * @param status 状态：<br/>
+     *                          &#9; 1 借阅者-请求已发送     <br/>
+     *                          &#9; 2 所有者-请求已同意    <br/>
+     *                          &#9; 3 所有者-请求已被拒绝   <br/>
+     *                          &#9; 4 借阅者-约会已同意    <br/>
+     *                          &#9; 5 借阅者-约会已同意
+     * @param callBack 回调
+     */
+    public abstract void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId,int status,CallBack callBack);
 }

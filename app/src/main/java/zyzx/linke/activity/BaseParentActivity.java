@@ -25,7 +25,7 @@ public abstract class BaseParentActivity extends CheckPermissionsActivity{
         AppManager.getAppManager().addActivity(this);
 
         mInflater = getLayoutInflater();
-        mContext = this;
+        mContext = this.getApplicationContext();
         initView(savedInstanceState);
         initData();
         checkNetwork();

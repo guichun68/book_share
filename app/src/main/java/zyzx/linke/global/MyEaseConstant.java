@@ -31,4 +31,5 @@ public class MyEaseConstant extends EaseConstant{
     //同APP主项目Const类中同名变量一致
     public static final String ADMIN_USERID = "1053";//系统 用户的环信id
     public static final String EXTRA_SHARE_TYPE = "bookShareType";
+    public static final String EXTRA_BEG_AGREE = "beg_agree";
 }

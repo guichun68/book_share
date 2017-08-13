@@ -600,4 +600,21 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId, int status, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("userId",currentUser);
+        param.put("relUid",chatUserId);
+        param.put("bid",bookId);
+        param.put("status",status+"");
+        try {
+            getModel().post(GlobalParams.urlSetFollowStauts,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("更改状态出错");
+            }
+        }
+    }
 }

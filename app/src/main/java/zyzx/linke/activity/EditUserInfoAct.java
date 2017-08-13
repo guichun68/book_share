@@ -231,7 +231,7 @@ public class EditUserInfoAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        progress = CustomProgressDialog.getNewProgressBarNoTip(mContext);
+        progress = CustomProgressDialog.getNewProgressBarNoTip(this);
         mUser = GlobalParams.getLastLoginUser();
         mTitleText.setText("基本资料编辑");
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);

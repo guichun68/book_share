@@ -774,7 +774,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
     
     
-    protected void sendMessage(EMMessage message){
+    public void sendMessage(EMMessage message){
         if (message == null) {
             return;
         }

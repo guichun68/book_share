@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.hyphenate.util.NetUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -253,6 +254,10 @@ public class PersonalCenterAct extends BaseActivity {
                 showModifySignatureDialog();
                 break;
             case R.id.iv_edit:
+                if(!NetUtils.hasNetwork(this)){
+                    UIUtil.showToastSafe(R.string.network_error);
+                    return;
+                }
                 Intent intent = new Intent(mContext,EditUserInfoAct.class);
                 startActivityForResult(intent,EDIT_USERINFO_CODE);
                 break;

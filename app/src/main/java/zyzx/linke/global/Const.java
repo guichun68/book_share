@@ -66,7 +66,12 @@ public class Const {
 	public static final String CLASSIFY_DAAN ="d9057ccf-6493-11e7-b86c-68f72877da0a";//答案
 	public static final String CLASSIFY_QITA ="de18452c-6493-11e7-b86c-68f72877da0a";//	其他
 
-
+	//借书流程的各个状态名称
+	public static final int BORROW_BORROWER_SENDED = 1;			//"借阅者-请求已发送";
+	public static final int BORROW_OWNER_AGREE = 	2;			//"所有者-请求已同意";
+	public static final int BORROW_OWNER_REJECT= 	3;			//"所有者-请求已拒绝";
+	public static final int BORROW_BORROWER_REPLY_AGREE  =4; //"借阅者-约会已同意";
+	public static final int BORROW_BORROWER_REPLY_REFUSE =5; //"借阅者-约会已拒绝";
 
 
 }

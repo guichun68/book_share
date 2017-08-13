@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import zyzx.linke.model.easedomain.RobotUser;
+import zyzx.linke.utils.StringUtil;
 //环信 相关userdao
 
 public class HXUserDao {
@@ -64,7 +65,6 @@ public class HXUserDao {
 	 * @return
 	 */
 	public Map<String, EaseUser> getContactList() {
-
 		return HXDBManager.getInstance().getContactList();
 	}
 
@@ -81,7 +81,14 @@ public class HXUserDao {
 	 * @param user
 	 */
 	public void saveContact(EaseUser user){
-		HXDBManager.getInstance().saveContact(user);
+		if(user.getAvatar()!=null && user.getAvatar().contains("http")){
+			EaseUser uTemp = new EaseUser(user.getUsername());
+			uTemp.setNickname(user.getNickname());
+			uTemp.setAvatar(StringUtil.getExtraName(user.getAvatar()));
+			HXDBManager.getInstance().saveContact(uTemp);
+		}else{
+			HXDBManager.getInstance().saveContact(user);
+		}
 	}
 
 	public void setDisabledGroups(List<String> groups){
