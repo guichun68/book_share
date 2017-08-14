@@ -1,5 +1,7 @@
 package zyzx.linke.presentation;
 
+import android.support.v7.widget.AppCompatEditText;
+
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.easeui.domain.EaseUser;
 
@@ -171,4 +173,14 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack 回调
      */
     public abstract void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId,int status,CallBack callBack);
+
+    /**
+     * 图书交换
+     * @param bookId
+     * @param bookTitle
+     * @param bookAuthor
+     * @param msg
+     * @param callBack
+     */
+    public abstract void swapBook(String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack);
 }

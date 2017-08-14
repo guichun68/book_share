@@ -22,7 +22,7 @@
         android:headerDividersEnabled="true"
         android:smoothScrollbar="true"
         ptr:ptrDrawable="@mipmap/publicloading"
-        ptr:ptrHeaderTextColor="@color/blue_cloud_scheme" />
+        ptr:ptrHeaderTextColor="@color/title_color" />
 
 
 </LinearLayout>

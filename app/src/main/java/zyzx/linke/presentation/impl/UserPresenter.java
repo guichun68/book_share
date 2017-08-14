@@ -1,5 +1,6 @@
 package zyzx.linke.presentation.impl;
 
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -614,6 +615,23 @@ public class UserPresenter extends IUserPresenter {
             e.printStackTrace();
             if(callBack!=null){
                 callBack.onFailure("更改状态出错");
+            }
+        }
+    }
+
+    @Override
+    public void swapBook(String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("bookId",bookId);
+        param.put("bookTitle",StringUtil.isEmpty(bookTitle)?"":bookTitle);
+        param.put("bookAuthor",StringUtil.isEmpty(bookAuthor)?"":bookAuthor);
+        param.put("msg",StringUtil.isEmpty(msg)?"":msg);
+        try {
+            getModel().post(GlobalParams.urlSwapBook,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("访问出错");
             }
         }
     }

@@ -1,20 +1,27 @@
 package zyzx.linke.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -35,10 +42,12 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserBooks;
 import zyzx.linke.utils.CustomProgressDialog;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -55,6 +64,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
     private PopupWindow pop;
     private int mWindowWidth;
     private boolean isLoadingMore;//是否是加载更多的动作
+    private Activity act;
+    private AlertDialog mDialogExchange;
 
     @Override
     protected int getLayoutId() {
@@ -63,6 +74,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        act = this;
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -124,12 +136,12 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     return;
                 }
                 MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
-                Intent intent = new Intent(mContext, BookDetailAct.class);
+                Intent intent = new Intent(MyBooksAct.this, BookDetailAct.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("book",myBookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                MyBooksAct.this.startActivity(intent);
             }
         });
 
@@ -161,7 +173,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
                     }
@@ -180,7 +192,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 item3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        UIUtil.showToastSafe("点击了交换");
+                        pop.dismiss();
+                        showExchangeDialog(bookDetailVO.getBook().getId(),position);
                     }
                 });
                 break;
@@ -198,7 +211,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
 
@@ -208,7 +221,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SHARE), null);
                         mPromptDialog.show();
 
@@ -219,6 +232,77 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
 
                 break;
         }
+    }
+
+    private void showExchangeDialog(final String bookId, final int position) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) MyBooksAct.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dialog_exchange, null);
+        final AppCompatEditText etBookTitle = (AppCompatEditText) view.findViewById(R.id.acet_title);
+        final AppCompatEditText etBookAuthor = (AppCompatEditText) view.findViewById(R.id.acet_author);
+        final EditText etMsg = (EditText) view.findViewById(R.id.acet_msg);
+        Button btnOK = (Button) view.findViewById(R.id.dialog_btn);
+        Button btnCancel = (Button) view.findViewById(R.id.dialog_btn2);
+        mDialogExchange = adb.create();
+        mDialogExchange.setView(view, 0, 0, 0, 0);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(StringUtil.isEmpty(etBookTitle.getText().toString())){
+                    etBookTitle.setError("请输入书名");
+                    UIUtil.showToastSafe("请输入书名");
+                    return;
+                }
+                String bookTitle = etBookTitle.getText().toString();
+                String bookAuthor = etBookAuthor.getText().toString();
+                String msg = etMsg.getText().toString();
+                showDefProgress();
+                getUserPresenter().swapBook(bookId,bookTitle,bookAuthor,msg,new CallBack(){
+
+                    @Override
+                    public void onSuccess(Object obj, int... code) {
+                        mDialogExchange.dismiss();
+                        dismissProgress();
+                        String response = (String) obj;
+                        if(StringUtil.isEmpty(response)){
+                            UIUtil.showToastSafe("访问出错");
+                            return;
+                        }
+                        DefindResponseJson drj = new DefindResponseJson(response);
+                        switch (drj.errorCode) {
+                            case 2:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mBooks.get(position).setBookStatusId(Const.BOOK_STATUS_EXCHANGING);
+                                        myBookAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                                break;
+                            case 3:
+                                UIUtil.showToastSafe("状态修改失败");
+                                break;
+                            default:
+                                UIUtil.showToastSafe("访问出错");
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object obj, int... code) {
+                        dismissProgress();
+                        UIUtil.showToastSafe("访问出错");
+                    }
+                });
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialogExchange.dismiss();
+            }
+        });
+        mDialogExchange.show();
     }
 
     private class PopItemClickListener implements View.OnClickListener {

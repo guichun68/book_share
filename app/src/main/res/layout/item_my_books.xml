@@ -63,6 +63,7 @@
             android:layout_marginTop="5dp"
             android:drawablePadding="5dp"
             android:layout_marginBottom="5dp"
+            android:textColor="@color/bg_gray2"
             android:drawableLeft="@drawable/press_shape"
             android:textSize="16sp"/>
 
@@ -75,6 +76,7 @@
             android:drawablePadding="5dp"
             android:layout_marginTop="5dp"
             android:maxLines="1"
+            android:textColor="@color/bg_gray2"
             android:drawableLeft="@drawable/press_shape"
             android:textSize="16sp"/>
 
@@ -87,6 +89,7 @@
             android:maxLines="3"
             android:drawableLeft="@drawable/press_shape"
             android:ellipsize="end"
+            android:textColor="@color/bg_gray2"
             tool:text="这是一部讲述民国历史的记录书籍，书中从各个角度阐述了旧中国由一个任人宰割的社会年代逐渐变成一个半殖民地，有到现代化改革的历程。"
             />
 

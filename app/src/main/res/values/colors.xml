@@ -18,6 +18,7 @@
     <color name="common_black_color2">#AA333333</color>
     <color name="black">#000000</color>
     <color name="bg_gray">#D6D0D0</color>
+    <color name="bg_gray2">#5D5D5D</color>
     <color name="ver_line">#fff2f2f2</color>
     <color name="ver_line2">#e5e5e5</color>
     <color name="gary">#898989</color>

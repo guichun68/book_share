@@ -129,7 +129,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                 bundle.putParcelable("book",myBookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                MyShareBooksAct.this.startActivity(intent);
             }
         });
 
@@ -160,7 +160,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyShareBooksAct.this, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
                     }
@@ -197,7 +197,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyShareBooksAct.this, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
 
@@ -207,7 +207,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyShareBooksAct.this, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SHARE), null);
                         mPromptDialog.show();
 
