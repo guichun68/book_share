@@ -16,7 +16,6 @@ public class UserBooks implements Parcelable {
     private String bookStatusId;
 
     private String relatedUserId;
-    private Integer mapId;
     private String shareMsg;
     private Integer shareType;
     private Integer shareAreaId;
@@ -31,7 +30,6 @@ public class UserBooks implements Parcelable {
         bookStatusId = in.readString();
 
         relatedUserId = in.readString();
-        mapId = in.readInt();
         shareMsg = in.readString();
         shareType = in.readInt();
         shareAreaId = in.readInt();
@@ -44,7 +42,6 @@ public class UserBooks implements Parcelable {
         dest.writeString(bookId);
         dest.writeString(bookStatusId);
         dest.writeString(relatedUserId);
-        dest.writeInt(mapId!=null?mapId:-1);
         dest.writeString(shareMsg);
         dest.writeInt(shareType!=null?shareType:-1);
         dest.writeInt(shareAreaId!=null?shareAreaId:-1);
@@ -97,14 +94,6 @@ public class UserBooks implements Parcelable {
 
     public void setRelatedUserId(String relatedUserId) {
         this.relatedUserId = relatedUserId;
-    }
-
-    public Integer getMapId() {
-        return mapId;
-    }
-
-    public void setMapId(Integer mapId) {
-        this.mapId = mapId;
     }
 
     public Date getCreateDate() {

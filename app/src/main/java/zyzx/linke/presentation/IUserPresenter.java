@@ -176,11 +176,20 @@ public abstract class IUserPresenter extends IPresenter{
 
     /**
      * 图书交换
+     * @param userBookid
      * @param bookId
      * @param bookTitle
      * @param bookAuthor
      * @param msg
      * @param callBack
      */
-    public abstract void swapBook(String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack);
+    public abstract void swapBook(String userBookid,String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack);
+
+    /**
+     * 取消书籍交换
+     * @param userBookId
+     * @param swapId
+     * @param callBack
+     */
+    public abstract void cancelSwapBook(String userBookId, String swapId, CallBack callBack);
 }

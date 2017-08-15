@@ -193,13 +193,22 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        showExchangeDialog(bookDetailVO.getBook().getId(),position);
+                        showExchangeDialog(bookDetailVO.getBook().getId(),bookDetailVO.getUserBookId(),position);
                     }
                 });
                 break;
             case Const.BOOK_STATUS_EXCHANGING:
                 item1.setText("删除此书");
                 item2.setText("取消交换");
+                item2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定要取消交换《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                                new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SWAP_BOOK), null);
+                        mPromptDialog.show();
+                    }
+                });
                 item3.setVisibility(View.GONE);
                 break;
             case Const.BOOK_STATUS_SHARED://分享中。。。
@@ -234,13 +243,13 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         }
     }
 
-    private void showExchangeDialog(final String bookId, final int position) {
+    private void showExchangeDialog(final String bookId, final String userBookId,final int position) {
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) MyBooksAct.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog_exchange, null);
         final AppCompatEditText etBookTitle = (AppCompatEditText) view.findViewById(R.id.acet_title);
         final AppCompatEditText etBookAuthor = (AppCompatEditText) view.findViewById(R.id.acet_author);
-        final EditText etMsg = (EditText) view.findViewById(R.id.acet_msg);
+        final AppCompatEditText etMsg = (AppCompatEditText) view.findViewById(R.id.acet_msg);
         Button btnOK = (Button) view.findViewById(R.id.dialog_btn);
         Button btnCancel = (Button) view.findViewById(R.id.dialog_btn2);
         mDialogExchange = adb.create();
@@ -257,7 +266,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                 String bookAuthor = etBookAuthor.getText().toString();
                 String msg = etMsg.getText().toString();
                 showDefProgress();
-                getUserPresenter().swapBook(bookId,bookTitle,bookAuthor,msg,new CallBack(){
+                getUserPresenter().swapBook(userBookId,bookId,bookTitle,bookAuthor,msg,new CallBack(){
 
                     @Override
                     public void onSuccess(Object obj, int... code) {
@@ -274,7 +283,8 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mBooks.get(position).setBookStatusId(Const.BOOK_STATUS_EXCHANGING);
+                                        UIUtil.showToastSafe("交换设置成功");
+                                        mBooks.get(position-1).setBookStatusId(Const.BOOK_STATUS_EXCHANGING);
                                         myBookAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -305,11 +315,27 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
         mDialogExchange.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        if(mDialogExchange!=null && mDialogExchange.isShowing()){
+            mDialogExchange.dismiss();
+        }
+        if(mPromptDialog!=null && mPromptDialog.isShowing()){
+            mPromptDialog.dismiss();
+        }
+        if (pop != null && pop.isShowing()) {
+            pop.dismiss();
+            return;
+        }
+        super.onDestroy();
+    }
+
     private class PopItemClickListener implements View.OnClickListener {
         private int operId;
         private MyBookDetailVO bookDetailVO;
         private static final int DELETE = 0;//从书架删除（无论之前什么状态）
         private static final int CANCEL_SHARE = 1;//取消分享
+        private static final int CANCEL_SWAP_BOOK = 2;//取消图书交换
         private int position;//在listView中的位置索引
 
         /**
@@ -374,7 +400,6 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                     break;
                 case CANCEL_SHARE://取消分享
                     showDefProgress();
-                    pop.dismiss();
                     getBookPresenter().cancelShare(bookDetailVO.getUserBookId(),new CallBack(){
                         @Override
                         public void onSuccess(Object obj, int... code) {
@@ -412,6 +437,46 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                             if(obj instanceof String){
                                 UIUtil.showToastSafe((String) obj);
                             }dismissProgress();
+                        }
+                    });
+                    break;
+
+                case CANCEL_SWAP_BOOK:
+                    showDefProgress();
+                    getUserPresenter().cancelSwapBook(bookDetailVO.getUserBookId(),bookDetailVO.getSwapId(),new CallBack(){
+                        @Override
+                        public void onSuccess(Object obj, int... code) {
+                            dismissProgress();
+                            String response = (String) obj;
+                            if(StringUtil.isEmpty(response)){
+                                UIUtil.showToastSafe("访问出错");
+                                return;
+                            }
+                            DefindResponseJson drj = new DefindResponseJson(response);
+                            switch (drj.errorCode) {
+                                case 2:
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            UIUtil.showToastSafe("已取消交换");
+                                            mBooks.get(position-1).setBookStatusId(Const.BOOK_STATUS_ONSHELF);
+                                            myBookAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                    break;
+                                case 3:
+                                    UIUtil.showToastSafe("状态修改失败");
+                                    break;
+                                default:
+                                    UIUtil.showToastSafe("访问出错");
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object obj, int... code) {
+                            dismissProgress();
+                            UIUtil.showToastSafe("状态修改失败-访问出错");
                         }
                     });
                     break;

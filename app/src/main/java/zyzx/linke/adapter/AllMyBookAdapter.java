@@ -83,7 +83,7 @@ public class AllMyBookAdapter extends BaseAdapter {
     class MyBookViewHolder {
         private final View root;
         //三种不同状态：在库、已分享、已借出
-        private final ImageView ivInStock,ivSharing,ivBorrowedOut,ivBorrowedIn;
+        private final ImageView ivInStock,ivSharing,ivBorrowedOut,ivBorrowedIn,ivExchanging;
         private final ImageView ivCover;//图书封面
         private final TextView tvBookName;
         private final TextView tvAuthor;
@@ -96,6 +96,7 @@ public class AllMyBookAdapter extends BaseAdapter {
             this.ivSharing = (ImageView) root.findViewById(R.id.iv_corner_sharing);
             this.ivBorrowedOut = (ImageView) root.findViewById(R.id.iv_corner_borrowed);
             this.ivBorrowedIn = (ImageView) root.findViewById(R.id.iv_corner_borrowed_in);
+            this.ivExchanging = (ImageView) root.findViewById(R.id.iv_corner_exchanging);
             this.tvBookName = (TextView) root.findViewById(R.id.tv_book_name);
             this.tvAuthor = (TextView) root.findViewById(R.id.tv_author);
             this.tvIntro = (TextView) root.findViewById(R.id.tv_intro);
@@ -107,29 +108,41 @@ public class AllMyBookAdapter extends BaseAdapter {
          */
         public void refreshBookState(String state){
             switch (state){
+
                 case Const.BOOK_STATUS_ONSHELF:
                     this.ivInStock.setVisibility(View.VISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
+                    this.ivExchanging.setVisibility(View.INVISIBLE);
                     break;
                 case Const.BOOK_STATUS_SHARED:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.VISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
+                    this.ivExchanging.setVisibility(View.INVISIBLE);
                     break;
                 case Const.BOOK_STATUS_LOANED:
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
                     this.ivBorrowedOut.setVisibility(View.VISIBLE);
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);
+                    this.ivExchanging.setVisibility(View.INVISIBLE);
                     break;
                 case Const.BOOK_STATUS_BORROWED:
                     this.ivBorrowedIn.setVisibility(View.VISIBLE);
                     this.ivInStock.setVisibility(View.INVISIBLE);
                     this.ivSharing.setVisibility(View.INVISIBLE);
                     this.ivBorrowedOut.setVisibility(View.INVISIBLE);
+                    this.ivExchanging.setVisibility(View.INVISIBLE);
+                    break;
+                case Const.BOOK_STATUS_EXCHANGING:
+                    this.ivBorrowedIn.setVisibility(View.VISIBLE);
+                    this.ivInStock.setVisibility(View.INVISIBLE);
+                    this.ivSharing.setVisibility(View.INVISIBLE);
+                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
+                    this.ivExchanging.setVisibility(View.VISIBLE);
                     break;
                 default:
                     this.ivBorrowedIn.setVisibility(View.INVISIBLE);

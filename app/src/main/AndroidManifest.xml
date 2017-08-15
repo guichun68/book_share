@@ -116,7 +116,7 @@
         <activity android:name=".activity.RegisterAct" android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.MyBooksAct"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
 
         <activity

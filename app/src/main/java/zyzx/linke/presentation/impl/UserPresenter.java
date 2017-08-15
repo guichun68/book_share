@@ -620,8 +620,9 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void swapBook(String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack) {
+    public void swapBook(String userBookId,String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack) {
         HashMap<String,Object> param = getParam();
+        param.put("userBookId",userBookId);
         param.put("bookId",bookId);
         param.put("bookTitle",StringUtil.isEmpty(bookTitle)?"":bookTitle);
         param.put("bookAuthor",StringUtil.isEmpty(bookAuthor)?"":bookAuthor);
@@ -635,4 +636,21 @@ public class UserPresenter extends IUserPresenter {
             }
         }
     }
+
+    @Override
+    public void cancelSwapBook(String userBookId,String swapId,CallBack callBack) {
+        HashMap<String,Object> param = getParam();
+        param.put("userBookId",userBookId);
+        param.put("swapId",swapId);
+        try {
+            getModel().post(GlobalParams.urlCancelSwapBook,param,callBack);
+        } catch (IOException e) {
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure("访问出错");
+            }
+        }
+    }
+
+
 }

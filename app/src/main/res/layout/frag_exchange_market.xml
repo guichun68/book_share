@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium.Inverse"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/backgroud_black"
+        app:tabIndicatorColor="@color/white"
+        app:tabTextColor="@color/common_black_color2"
         android:background="@color/title"
         app:tabGravity="fill"
         app:tabMode="fixed"/>

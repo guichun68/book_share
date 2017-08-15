@@ -23,6 +23,7 @@ public class MyBookDetailVO implements Parcelable{
 	private Integer shareAreaId;//分享者所在城市
 	private String shareMsg;//分享留言
 	private Integer shareType;//分享类型 （user_book表字段）
+	private String swapId;
 
 	public void setUserBook(UserBooks ub){
 		if(ub != null){
@@ -55,6 +56,7 @@ public class MyBookDetailVO implements Parcelable{
 		shareMsg = in.readString();
 		shareType = in.readInt();
 		uid = in.readString();
+		swapId = in.readString();
 	}
 
 	@Override
@@ -67,6 +69,7 @@ public class MyBookDetailVO implements Parcelable{
 		dest.writeString(shareMsg);
 		dest.writeInt(shareType==null?-1:shareType);
 		dest.writeString(uid);
+		dest.writeString(swapId);
 	}
 
 	@Override
@@ -148,5 +151,13 @@ public class MyBookDetailVO implements Parcelable{
 
 	public void setShareType(Integer shareType) {
 		this.shareType = shareType;
+	}
+
+	public String getSwapId() {
+		return swapId;
+	}
+
+	public void setSwapId(String swapId) {
+		this.swapId = swapId;
 	}
 }

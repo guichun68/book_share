@@ -130,6 +130,7 @@ public class GlobalParams {
 	public static String urlGetBookBorrowBegs = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBorrowBegs.action";
 	public static String urlSetFollowStauts = GlobalParams.BASE_URL+"/user/mobileSDK/setFollowStatus.action";
 	public static String urlSwapBook = GlobalParams.BASE_URL+"/user/mobileSDK/swapBook.action";
+	public static String urlCancelSwapBook = GlobalParams.BASE_URL+"/user/mobileSDK/cancelSwapBook.action";
 	/**
 	 *通过给定的bookId集合来批量获取这些书籍的详细信息
 	 */
@@ -192,6 +193,7 @@ public class GlobalParams {
 		urlGetBookBorrowBegs = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBorrowBegs.action";
 		urlSetFollowStauts = GlobalParams.BASE_URL+"/user/mobileSDK/setFollowStatus.action";
 		urlSwapBook = GlobalParams.BASE_URL+"/user/mobileSDK/swapBook.action";
+		urlCancelSwapBook = GlobalParams.BASE_URL+"/user/mobileSDK/cancelSwapBook.action";
 		urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";

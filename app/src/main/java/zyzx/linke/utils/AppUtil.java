@@ -546,6 +546,7 @@ public class AppUtil {
 			mBV.setShareAreaId(jo.getInteger("share_area_id"));
 			mBV.setRelatedUserId(jo.getString("related_user_id"));
 			mBV.setUid(jo.getString("user_id"));
+			mBV.setSwapId(jo.getString("swap_book_id"));
 			mBvos.add(mBV);
 		}
 		return mBvos;

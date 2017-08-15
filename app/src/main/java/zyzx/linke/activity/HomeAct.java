@@ -30,7 +30,7 @@ import java.util.List;
 
 import zyzx.linke.HomeFragment;
 import zyzx.linke.LKConversationListFragment;
-import zyzx.linke.LKExchangeCenterFragment;
+import zyzx.linke.LKSwapCenterFrg;
 import zyzx.linke.MeFragment;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -50,7 +50,7 @@ public class HomeAct extends BaseActivity {
     private LayoutInflater layoutInflater;
     private boolean isFirstStartApp = true;//flag,一开始启动App时不检查更新(在首页加载完图书信息后更新),只为了绑定binder，使其不为空
     private FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKExchangeCenterFragment.class,MeFragment.class};
+    private final Class fragmentArray[] = {HomeFragment.class,LKConversationListFragment.class, LKSwapCenterFrg.class,MeFragment.class};
     private int mTitleArray[] = {R.string.tab_homepage, R.string.tab_mesg, R.string.tab_exchange_market,R.string.tab_personal};
 //    private int mImageViewArray[] = {R.mipmap.home, R.mipmap.conversation,R.mipmap.contact_list,R.mipmap.personal};
     //    private String mTextviewArray[] = {"contact", "conversation", "setting"};
