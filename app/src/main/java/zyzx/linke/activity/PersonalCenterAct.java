@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -190,10 +189,10 @@ public class PersonalCenterAct extends BaseActivity {
     }
 
     private void showModifySignatureDialog() {
-        AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
-        final View dialogView = View.inflate(mContext,R.layout.dialog_modify_signature,null);
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        final View dialogView = View.inflate(this,R.layout.dialog_modify_signature,null);
         adb.setView(dialogView);
-        final Dialog dialog = adb.create();//.show();
+        final AlertDialog dialog = adb.create();//.show();
         dialogView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +207,7 @@ public class PersonalCenterAct extends BaseActivity {
                     public void onSuccess(Object obj, int... code) {
                         String json = (String) obj;
                         ResponseJson rj = new ResponseJson(json);
-                        if(rj.errorCode==null || rj.errorCode!=0 ) {
+                        if(rj.errorCode==null || ResponseJson.NO_DATA == rj.errorCode ) {
                             UIUtil.showToastSafe("设置出错");
                             return;
                         }

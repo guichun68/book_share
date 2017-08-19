@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 第一层  上部和左部偏移一定距离-->
+    <item
+        android:left="2.66dp"
+        android:top="2.66dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/blue_cloud_scheme" />
+            <!-- 描边 -->
+            <stroke
+                android:width="5dp"
+                android:color="@color/blue" />
+            <corners android:radius="20dp"/>
+            <size android:width="@dimen/abc_progress_bar_height_material"
+                android:height="@dimen/abc_progress_bar_height_material"/>
+        </shape>
+    </item>
+    <!-- 第二层 下部和有部偏移一定距离-->
+    <item
+        android:bottom="2dp"
+        android:right="2dp">
+        <shape>
+            <solid android:color="@color/blue_cloud_scheme" />
+            <!-- 描边 -->
+            <stroke android:width="0.33dp" android:color="#dedede" />
+            <size android:width="@dimen/abc_progress_bar_height_material"
+                android:height="@dimen/abc_progress_bar_height_material"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+</layer-list>

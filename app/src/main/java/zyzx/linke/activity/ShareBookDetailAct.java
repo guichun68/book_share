@@ -184,13 +184,9 @@ public class ShareBookDetailAct extends BaseActivity {
                 dismissProgress();
                 begDialog.dismiss();
                 String json = (String) obj;
-                if(json == null){
-                    UIUtil.showToastSafe("发送失败");
-                    return;
-                }
                 DefindResponseJson drj = new DefindResponseJson(json);
-                if(drj.errorCode==null){
-                    UIUtil.showToastSafe("发送失败,errCode=null");
+                if(DefindResponseJson.NO_DATA == drj.errorCode){
+                    UIUtil.showToastSafe("发送失败");
                     return;
                 }
                 switch (drj.errorCode){
@@ -205,7 +201,7 @@ public class ShareBookDetailAct extends BaseActivity {
                         UIUtil.showToastSafe(drj.errorMsg);
                         break;
                     default:
-                        UIUtil.showToastSafe("未知错误！");
+                        UIUtil.showToastSafe("发送失败，错误-2");
                 }
             }
 

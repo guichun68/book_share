@@ -68,6 +68,7 @@ public class GlobalParams {
 	 */
 	public static String urlGetBookClassify = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getBookClassify&page.pageSize=30&page.curPage=1";
 	public static String urlGetAreaById = GlobalParams.BASE_URL+"/getMySql/getSqlByCodeWithNoLogin.action?page.searchValue.queryId=getArea&page.searchValue.id=#&page.pageSize=30&page.curPage=1";
+
 	public static String downloadFileName = "";
 	//保存用户信息
 	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
@@ -140,6 +141,11 @@ public class GlobalParams {
 	 */
 	public static String urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
 
+	public static String urlGetSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBooks.action";
+	public static String urlGetSwapBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBookInfo.action";
+
+	public static String urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
+
 	/**
 	 * 注册
 	 */
@@ -203,6 +209,9 @@ public class GlobalParams {
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
 		urlCancelShareAndDelBook = GlobalParams.BASE_URL+"/zyzx/cancelShareAndDelBook.action";
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
+		urlGetSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBooks.action";
+		urlGetSwapBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBookInfo.action";
+		urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";

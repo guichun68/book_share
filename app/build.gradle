@@ -94,4 +94,6 @@ dependencies {
     //    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
     compile project(':easeui')
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    compile 'com.zhy:base-adapter:3.0.3'
 }

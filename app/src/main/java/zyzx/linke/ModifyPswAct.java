@@ -55,12 +55,11 @@ public class ModifyPswAct extends BaseActivity {
                             public void onSuccess(final Object obj, final int... code) {
                                 dismissProgress();
                                 final String json = (String) obj;
-                                if(StringUtil.isEmpty(json)){
+                                final ResponseJson rj = new ResponseJson((String)obj);
+                                if(rj.errorCode == ResponseJson.NO_DATA){
                                     UIUtil.showToastSafe("修改失败，请稍后再试！");
                                     return;
                                 }
-                                final ResponseJson rj = new ResponseJson((String)obj);
-
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

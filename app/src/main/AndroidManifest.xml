@@ -140,6 +140,10 @@
             android:name=".activity.ManualPersonBookAct"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.BookSwapAct"
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".activity.ShareBookDetailAct"
             android:screenOrientation="portrait"
@@ -231,6 +235,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.PersonalCenterAct"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
 
         <service android:name="zyzx.linke.base.UpdateService"/>

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import zyzx.linke.views.BaseExchangePager;
+import zyzx.linke.base.BaseSwapPager;
 
 /**
  * Created by Austin on 2015/6/29.
@@ -14,10 +14,10 @@ import zyzx.linke.views.BaseExchangePager;
  */
 public class ExchangeCenterVPAdapter extends PagerAdapter {
 
-  ArrayList<BaseExchangePager> pagers;
+  ArrayList<BaseSwapPager> pagers;
   String []titles;
 
-  public ExchangeCenterVPAdapter(ArrayList<BaseExchangePager> pagers,String[] titles){
+  public ExchangeCenterVPAdapter(ArrayList<BaseSwapPager> pagers, String[] titles){
     this.pagers = pagers;
     this.titles = titles;
   }

@@ -1,6 +1,6 @@
 package zyzx.linke.presentation;
 
-import java.util.HashMap;
+import android.util.ArrayMap;
 
 import zyzx.linke.base.IPresenter;
 import zyzx.linke.model.CallBack;
@@ -39,7 +39,7 @@ public abstract class IBookPresenter extends IPresenter {
      * @param
      * @param
      */
-    public abstract void uploadBook(HashMap<String, Object> params, CallBack viewCallBack);
+    public abstract void uploadBook(ArrayMap<String, Object> params, CallBack viewCallBack);
 
     public abstract void getMyBooks(String uid, int pageNum, CallBack viewCallBack);
     public abstract void getMySharedBooks(String uid, int pageNum, CallBack viewCallBack);
@@ -85,4 +85,21 @@ public abstract class IBookPresenter extends IPresenter {
 
     //得到用户发布的图书资料分类，如 考研、中考、高考
     public abstract void getBookClassify(CallBack callBack);
+
+    /**
+     * 得到交换状态中的书籍
+     * @param pageNum
+     * @param viewCallBack
+     */
+    public abstract void getSwapBooks(int pageNum, CallBack viewCallBack);
+
+    /**
+     * 获取待交换图书详情
+     * @param userBookId zyzx_user_books表主键
+     * @param viewCallBack
+     */
+    public abstract void getSwapBookInfo(String userBookId, CallBack viewCallBack);
+
+    //获取指定页码的交换中的技能（们）
+    public abstract void getSwapSkills(int pageNum, CallBack callBack);
 }

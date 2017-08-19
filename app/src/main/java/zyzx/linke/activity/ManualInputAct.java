@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,7 +25,6 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import zyzx.linke.R;
@@ -312,7 +312,7 @@ public class ManualInputAct extends BaseActivity {
     private String bookId;//添加书库成功后返回的bookId
     public void saveBook() {
         mBook = new BookDetail2();
-        HashMap<String,Object> params = new HashMap<>();
+        ArrayMap<String,Object> params = new ArrayMap<>();
         mBook.setTitle(acetBookName.getText().toString().trim());
         String isbn = acetISBN.getText().toString();
         if(!StringUtil.isEmpty(isbn)){
@@ -347,7 +347,7 @@ public class ManualInputAct extends BaseActivity {
                 dismissProgress();
                 String responseJson = (String) obj;
                 ResponseJson rj = new ResponseJson(responseJson);
-                if(rj.errorCode!=null) {
+                if(rj.errorCode!=ResponseJson.NO_DATA) {
                     switch (rj.errorCode) {
                         case 1:
                             bookId = (String) ((Map) rj.data.get(0)).get("bookId");

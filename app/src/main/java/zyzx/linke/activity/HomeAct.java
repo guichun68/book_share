@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -144,7 +145,6 @@ public class HomeAct extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     private long exitTime = 0;
     @Override

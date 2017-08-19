@@ -1,9 +1,10 @@
 package zyzx.linke.model;
 
+import android.util.ArrayMap;
+
 import com.hyphenate.EMValueCallBack;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by austin on 2017/2/17.
@@ -11,13 +12,13 @@ import java.util.HashMap;
  */
 
 public interface IModel {
-    void post(String url, HashMap<String,Object> param,CallBack callBack)throws IOException;
-    void post(String url, HashMap<String,Object> param,EMValueCallBack callBack)throws IOException;
+    void post(String url, ArrayMap<String,Object> param, CallBack callBack)throws IOException;
+    void post(String url, ArrayMap<String,Object> param,EMValueCallBack callBack)throws IOException;
 
-    void get(String url,HashMap<String,String> param,CallBack callBack);
+    void get(String url,ArrayMap<String,String> param,CallBack callBack);
     //上传文件及参数
-    void sendMultipart(String url, HashMap<String, Object> param, final CallBack callBack);
+    void sendMultipart(String url, ArrayMap<String, Object> param, final CallBack callBack);
 
     //带有图片参数的请求
-    void uploadMultiFile(String url, HashMap<String,Object> param,  CallBack callBack) throws IOException;
+    void uploadMultiFile(String url, ArrayMap<String,Object> param,  CallBack callBack) throws IOException;
 }

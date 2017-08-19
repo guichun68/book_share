@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -44,7 +45,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -63,24 +63,8 @@ import zyzx.linke.model.easedomain.InviteMessage;
 import zyzx.linke.model.easedomain.InviteMessage.InviteMesageStatus;
 import zyzx.linke.model.easedomain.RobotUser;
 import zyzx.linke.receiver.CallReceiver;
-import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
-
-//import com.hyphenate.chatuidemo.db.DemoDBManager;
-//import com.hyphenate.chatuidemo.db.InviteMessgeDao;
-//import com.hyphenate.chatuidemo.db.HXUserDao;
-//import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
-//import com.hyphenate.chatuidemo.domain.InviteMessage;
-//import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
-//import com.hyphenate.chatuidemo.domain.RobotUser;
-//import com.hyphenate.chatuidemo.parse.UserProfileManager;
-//import com.hyphenate.chatuidemo.receiver.CallReceiver;
-//import com.hyphenate.chatuidemo.ui.ChatActivity;
-//import com.hyphenate.chatuidemo.ui.MainActivity;
-//import com.hyphenate.chatuidemo.ui.VideoCallActivity;
-//import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
-//import com.hyphenate.chatuidemo.utils.PreferenceManager;
 
 public class EaseUIHelper {
     /**
@@ -857,7 +841,7 @@ public class EaseUIHelper {
         public void onContactAdded(String username) {
             // save contact
             Map<String, EaseUser> localUsers = getContactList();
-            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
+            Map<String, EaseUser> toAddUsers = new ArrayMap<String, EaseUser>();
             EaseUser user = new EaseUser(username);
 
             if (!localUsers.containsKey(username)) {
@@ -1377,7 +1361,7 @@ public class EaseUIHelper {
                         return;
                     }
 
-                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                    Map<String, EaseUser> userlist = new ArrayMap<String, EaseUser>();
                     for (String username : usernames) {
                         EaseUser user = new EaseUser(username);
                         EaseCommonUtils.setUserInitialLetter(user);

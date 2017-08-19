@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,6 @@ import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -122,7 +122,7 @@ public class ChatActivity extends BaseActivity {
             public void onAvatarClick(String username) {
 //                CloudItem item=new CloudItem("无", Const.TianAnMenPoint,"无","");//只是为了携带用户id到详情页
                 //进入好友详情页
-                HashMap<String, String> uidMap = new HashMap<>();
+                ArrayMap<String, String> uidMap = new ArrayMap<>();
                 uidMap.put("uid", username);
 //                item.setCustomfield(uidMap);
                 Intent in = new Intent(mContext, FriendHomePageAct.class);

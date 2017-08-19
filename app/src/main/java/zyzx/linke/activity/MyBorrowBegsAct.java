@@ -71,12 +71,8 @@ public class MyBorrowBegsAct extends BaseActivity implements PullToRefreshBase.O
                         mPullRefreshListView.onRefreshComplete();
                         mPullRefreshListView.clearAnimation();
                         String json = (String)obj;
-                        if(StringUtil.isEmpty(json)){
-                            UIUtil.showToastSafe("获取失败");
-                            return;
-                        }
                         ResponseJson rj = new ResponseJson(json);
-                        if(rj.errorCode==null || rj.errorCode==0){
+                        if(rj.errorCode == ResponseJson.NO_DATA){
                             UIUtil.showToastSafe("获取失败");
                             return;
                         }

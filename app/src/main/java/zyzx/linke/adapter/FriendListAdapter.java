@@ -2,6 +2,7 @@ package zyzx.linke.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.ArrayMap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.R;
@@ -107,7 +107,7 @@ public class FriendListAdapter extends BaseAdapter {
 //                    CloudItem item;//只是为了携带用户id到详情页
                     //进入好友详情页
 //                    item = new CloudItem("无", Const.TianAnMenPoint,"无","");
-                    HashMap<String,String> uidMap = new HashMap<>();
+                    ArrayMap<String,String> uidMap = new ArrayMap<>();
                     uidMap.put("uid",String.valueOf(userVO.getUserid()));
 //                    item.setCustomfield(uidMap);
 

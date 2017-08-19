@@ -3,9 +3,11 @@ package zyzx.linke.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.chat.EMClient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ import java.util.ArrayList;
 import zyzx.linke.R;
 import zyzx.linke.adapter.BookAdapter;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
 
 /**
@@ -39,6 +43,7 @@ public class FriendHomePageAct extends BaseActivity {
     private int pageNum = 0;
     private String mAddress;//中文地址描述
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
+    private Button btnSendMsg;
 
     @Override
     protected int getLayoutId() {
@@ -52,6 +57,8 @@ public class FriendHomePageAct extends BaseActivity {
         ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);
         tvLoginname = (TextView) findViewById(R.id.tv_loginname);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
+        btnSendMsg = (Button) findViewById(R.id.btn_send_msg);
+        btnSendMsg.setOnClickListener(this);
     }
 
     @Override
@@ -67,7 +74,7 @@ public class FriendHomePageAct extends BaseActivity {
         if (intent == null) {
             return;
         }
-        mUser = (UserVO) intent.getSerializableExtra("user");
+        mUser = (UserVO) intent.getSerializableExtra(BundleFlag.FLAG_USER);
         refreshUI();
     }
 
@@ -77,6 +84,16 @@ public class FriendHomePageAct extends BaseActivity {
         super.onClick(view);
         switch (view.getId()){
             case R.id.iv_icon:
+                break;
+            case R.id.btn_send_msg:
+                if(mUser.getUserid().equals(EMClient.getInstance().getCurrentUser())){
+                    UIUtil.showToastSafe("无需同自己聊天");
+                    return;
+                }
+                Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
+                in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                in.putExtra(BundleFlag.LOGIN_NAME, mUser.getLoginName());
+                startActivity(in);
                 break;
         }
     }

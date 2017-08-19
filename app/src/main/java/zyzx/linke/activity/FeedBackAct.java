@@ -94,23 +94,22 @@ public class FeedBackAct extends BaseActivity{
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
                         String json = (String) obj;
-                        if(TextUtils.isEmpty(json)){
+                        ResponseJson rj = new ResponseJson(json);
+                        if(rj.errorCode == ResponseJson.NO_DATA){
                             UIUtil.showToastSafe("未能成功提交，请稍后重试!");
                             return;
                         }
-                        ResponseJson rj = new ResponseJson(json);
-                        if(rj.errorCode!=null){
-                            switch (rj.errorCode){
-                                case 0://失败
-                                    UIUtil.showToastSafe("未能成功提交，请稍后重试!");
-                                    break;
-                                case 1:
-                                    UIUtil.showToastSafe("提交成功，谢谢反馈！");
-                                    finish();
-                                    break;
-                            }
-                        }else{
-                            UIUtil.showToastSafe("未能成功提交，请稍后重试!");
+                        switch (rj.errorCode){
+                            case 0://失败
+                                UIUtil.showToastSafe("未能成功提交，请稍后重试!");
+                                break;
+                            case 1:
+                                UIUtil.showToastSafe("提交成功，谢谢反馈！");
+                                finish();
+                                break;
+                            default:
+                                UIUtil.showToastSafe("未能成功提交，请稍后重试!");
+                                break;
                         }
                     }
 

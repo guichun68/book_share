@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +84,7 @@ public class ManualPersonBookAct extends BaseActivity{
             case 1://成功
                 String responseJson = (String) msg.obj;
                 ResponseJson rj = new ResponseJson(responseJson);
-                if (rj.errorCode != null) {
+                if (rj.errorCode != null && rj.errorCode != ResponseJson.NO_DATA) {
                     switch (rj.errorCode) {
                         case 1:
                             bookId = (String) ((Map) rj.data.get(0)).get("bookId");
@@ -149,11 +149,11 @@ public class ManualPersonBookAct extends BaseActivity{
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
                 String json = (String) obj;
-                if(StringUtil.isEmpty(json)){
+                DefindResponseJson drj = new DefindResponseJson(json);
+                if(drj.errorCode == DefindResponseJson.NO_DATA){
                     UIUtil.showToastSafe("未能获取分类信息，请返回重试");
                     return;
                 }
-                DefindResponseJson drj = new DefindResponseJson(json);
                 mClassifys.clear();
                 switch (drj.errorCode){
                     case 1:
@@ -226,7 +226,7 @@ public class ManualPersonBookAct extends BaseActivity{
     private String bookId;//添加书库成功后返回的bookId
     public void saveBook() {
         mBook = new BookDetail2();
-        HashMap<String,Object> params = new HashMap<>();
+        ArrayMap<String,Object> params = new ArrayMap<>();
         mBook.setTitle(mMaterialTitle.getText().toString().trim());
         mBook.setBookClassify(((EnumConst)spBookClassify.getSelectedItem()).getId());
         if(!StringUtil.isEmpty(mIntro.getText().toString())){

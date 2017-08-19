@@ -450,25 +450,22 @@ public class EditUserInfoAct extends BaseActivity {
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
                 String json = (String) obj;
-                if (StringUtil.isEmpty(json)) {
+                ResponseJson rj = new ResponseJson(json);
+                if (rj.errorCode == ResponseJson.NO_DATA) {
                     UIUtil.showToastSafe("保存失败，请检查网络");
                     return;
                 }
-                ResponseJson rj = new ResponseJson(json);
-                if (rj.errorCode != null) {
-                    switch (rj.errorCode) {
-                        case Const.SUCC_ERR_CODE:
-                            UIUtil.showToastSafe("保存成功");
-                            GlobalParams.saveUser(usvo);
-                            setResult(RESULT_OK); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
-                            finish();//此处一定要调用finish()方法
-                            break;
-                        default:
-                            UIUtil.showToastSafe("保存失败,code=" + rj.errorCode);
-                            break;
-                    }
-                } else {
-                    UIUtil.showToastSafe("保存失败code=null");
+
+                switch (rj.errorCode) {
+                    case Const.SUCC_ERR_CODE:
+                        UIUtil.showToastSafe("保存成功");
+                        GlobalParams.saveUser(usvo);
+                        setResult(RESULT_OK); //intent为A传来的带有Bundle的intent，当然也可以自己定义新的Bundle
+                        finish();//此处一定要调用finish()方法
+                        break;
+                    default:
+                        UIUtil.showToastSafe("保存失败,code=" + rj.errorCode);
+                        break;
                 }
             }
 
@@ -552,7 +549,7 @@ public class EditUserInfoAct extends BaseActivity {
             setResult(RESULT_OK);
             finish();
         } else {//做了修改，提示是否保存
-            prompt = CustomProgressDialog.getPromptDialog2Btn(mContext, "是否保存更改", "保存", "放弃", new PromptClickListener(1, usvo), new PromptClickListener(0, null));
+            prompt = CustomProgressDialog.getPromptDialog2Btn(this, "是否保存更改", "保存", "放弃", new PromptClickListener(1, usvo), new PromptClickListener(0, null));
             prompt.show();
         }
 
@@ -589,7 +586,7 @@ public class EditUserInfoAct extends BaseActivity {
             Message msg = mHandler.obtainMessage();
             String jsonTemp = (String) obj;
             ResponseJson rj = new ResponseJson(jsonTemp);
-            if (rj.errorCode != 0 || rj.data == null) {
+            if (rj.errorCode == ResponseJson.NO_DATA || rj.data == null) {
                 msg.what = GET_AREA_ERROR;
                 msg.obj = "访问出错 code=" + rj.errorCode;
                 mHandler.sendMessage(msg);

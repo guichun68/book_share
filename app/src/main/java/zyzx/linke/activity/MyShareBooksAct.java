@@ -256,7 +256,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                                     }
                                     String json = (String) obj;
                                     ResponseJson rj = new ResponseJson(json);
-                                    if (rj.errorCode != null) {
+                                    if (rj.errorCode != null && rj.errorCode != ResponseJson.NO_DATA) {
                                         switch (rj.errorCode) {
                                             case 1://成功
                                                 UIUtil.showToastSafe(rj.errorMsg);
@@ -299,7 +299,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                             }
                             String json = (String) obj;
                             final ResponseJson rj = new ResponseJson(json);
-                            if (rj.errorCode != null) {
+                            if (rj.errorCode != null && rj.errorCode != ResponseJson.NO_DATA) {
                                 switch (rj.errorCode) {
                                     case 1://成功
                                         runOnUiThread(new Runnable() {

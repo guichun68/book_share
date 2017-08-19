@@ -1,11 +1,8 @@
 package zyzx.linke.presentation;
 
-import android.support.v7.widget.AppCompatEditText;
-
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.easeui.domain.EaseUser;
 
-import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.base.IPresenter;

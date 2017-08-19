@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="25dp">
+
+    <View
+        style="@style/line"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/load_progress"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            android:indeterminateDrawable="@drawable/progress_drawable"
+            />
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/load_progress"
+            android:gravity="center_vertical"
+            android:text="正在努力加载中..."
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/cloud_item_title"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

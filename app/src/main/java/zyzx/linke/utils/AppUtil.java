@@ -35,6 +35,8 @@ import zyzx.linke.model.bean.BorrowFlowVO;
 import zyzx.linke.model.bean.Images;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Rating;
+import zyzx.linke.model.bean.SwapBookVO;
+import zyzx.linke.model.bean.SwapSkillVo;
 import zyzx.linke.model.bean.TelephonyManagerInfo;
 
 public class AppUtil {
@@ -575,6 +577,42 @@ public class AppUtil {
 		}
 		return result;
 	}
+
+	public static ArrayList<SwapBookVO> getSwapBooks(JSONArray items) {
+		ArrayList<SwapBookVO> result = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			SwapBookVO sbVO = new SwapBookVO();
+			JSONObject jo = (JSONObject) items.get(i);
+			sbVO.setUserBookId(jo.getString("userBookId"));
+			sbVO.setUserId(jo.getString("userId"));
+			sbVO.setBookTitle(jo.getString("bookTitle"));
+			sbVO.setBookImageLarge(jo.getString("bookImageLarge"));
+			sbVO.setSwapId(jo.getString("swapId"));
+			sbVO.setSwapBookTitle(jo.getString("swapBookTitle"));
+			sbVO.setSwapBookAuthor(jo.getString("swapBookAuthor"));
+			sbVO.setSwapMsg(jo.getString("swapMsg"));
+			sbVO.setBookAuthor(jo.getString("bookAuthor"));
+			result.add(sbVO);
+		}
+		return result;
+	}
+
+	public static ArrayList<SwapSkillVo> getSwapSkills(List<JSONObject> items) {
+		ArrayList<SwapSkillVo> result = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			SwapSkillVo sbVO = new SwapSkillVo();
+			JSONObject jo = items.get(i);
+			sbVO.setHeadIcon(jo.getString("headIcon"));
+			sbVO.setSwapSkillId(jo.getString("swapSkillId"));
+			sbVO.setSkillTitle(jo.getString("skillTitle"));
+			sbVO.setUid(jo.getString("uid"));
+			sbVO.setSkillHaveName(jo.getString("skillHaveName"));
+			sbVO.setSkillWantName(jo.getString("skillWantName"));
+			result.add(sbVO);
+		}
+		return result;
+	}
+
 
 	public static String getDiplomaName(Integer diplomaId) {
 		if(diplomaId!=null){

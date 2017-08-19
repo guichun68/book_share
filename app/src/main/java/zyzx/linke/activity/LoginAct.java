@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.ArrayMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -75,7 +75,7 @@ public class LoginAct extends BaseActivity {
                 UIUtil.showToastSafe("登录出错");
                 break;
             case WHAT_THRID_PLAT_FORM:
-                HashMap<String,Object> res = (HashMap<String, Object>) msg.obj;
+                ArrayMap<String,Object> res = (ArrayMap<String, Object>) msg.obj;
                 if(res==null){
                     UIUtil.showToastSafe("授权出错");
                     return;
@@ -305,7 +305,10 @@ public class LoginAct extends BaseActivity {
             UserDao.getInstance(mContext).add(GlobalParams.getLastLoginUser());
         }
 //                gotoActivity(IndexActivity2.class,true);
-        gotoActivity(HomeAct.class, true);
+//        gotoActivity(HomeAct.class, true);
+        Intent in = new Intent(this,HomeAct.class);
+        startActivity(in);
+        finish();
     }
 
     @Override

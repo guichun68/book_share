@@ -3,6 +3,7 @@ package zyzx.linke;
 
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ import zyzx.linke.utils.UIUtil;
  */
 public class LKContactListFragment extends BaseFragment {
     private EaseContactListFragment mContactListFrag;
-    Map<String, EaseUser> contacts = new HashMap<>();
+    Map<String, EaseUser> contacts = new ArrayMap<>();
 
     @Override
     protected View getView(LayoutInflater inflater, ViewGroup container) {

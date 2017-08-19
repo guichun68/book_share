@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import zyzx.linke.activity.AreaSelAct;
@@ -168,11 +168,11 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
                         mPullRefreshListView.onRefreshComplete();
                         dismissProgress();
                         String response = (String) obj;
-                        if(StringUtil.isEmpty(response)){
+                        DefindResponseJson drj = new DefindResponseJson(response);
+                        if(DefindResponseJson.NO_DATA == drj.errorCode ){
                             UIUtil.showToastSafe("访问出错");
                             return;
                         }
-                        DefindResponseJson drj = new DefindResponseJson(response);
                         switch (drj.errorCode){
                             case 0:
                                 UIUtil.showToastSafe("访问出错");
@@ -225,7 +225,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
     }
 
 
-    private HashMap<String, String[]> mDistrictsOfcityMap = new HashMap<>();
+    private ArrayMap<String, String[]> mDistrictsOfcityMap = new ArrayMap<>();
 
     /**
      * @param city city

@@ -15,10 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium.Inverse"
+        android:background="@color/title"
         app:tabSelectedTextColor="@color/white"
         app:tabIndicatorColor="@color/white"
         app:tabTextColor="@color/common_black_color2"
-        android:background="@color/title"
         app:tabGravity="fill"
         app:tabMode="fixed"/>
 

@@ -1,9 +1,9 @@
 package zyzx.linke.model.bean;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
-import org.json.JSONArray;
 
 /**
  * Created by austin on 2017/7/3.
@@ -15,10 +15,15 @@ public class DefindResponseJson {
     public Page data;
     public Integer errorCode;
     public String errorMsg;
+    public static final int NO_DATA = -1;
 
     public DefindResponseJson(){}
 
     public DefindResponseJson(String json) {
+        if(TextUtils.isEmpty(json)){
+            this.errorCode = NO_DATA;
+            return;
+        }
         JSONObject jsonObject = JSON.parseObject(json);
         errorCode = jsonObject.getInteger("errorCode");
         errorMsg = jsonObject.getString("errorMsg");

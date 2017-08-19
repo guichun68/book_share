@@ -1,18 +1,15 @@
 package zyzx.linke.model;
 
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.hyphenate.EMValueCallBack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -95,7 +92,7 @@ public class ModelImpl implements IModel {
 
 
     @Override
-    public void post(String url, HashMap<String, Object> param, final EMValueCallBack callBack) throws IOException {
+    public void post(String url, ArrayMap<String, Object> param, final EMValueCallBack callBack) throws IOException {
         FormBody.Builder fb = new FormBody.Builder();
         Request request;
         if(param != null){
@@ -139,7 +136,7 @@ public class ModelImpl implements IModel {
     }
 
     @Override
-    public void get(String url, HashMap<String, String> param, final CallBack callBack) {
+    public void get(String url, ArrayMap<String, String> param, final CallBack callBack) {
 
         Request.Builder builder = new Request.Builder();
         StringBuilder sb = new StringBuilder("?");
@@ -184,7 +181,7 @@ public class ModelImpl implements IModel {
         });
     }
 
-    public void uploadMultiFile(String url, HashMap<String,Object> param, final CallBack callBack)throws IOException {
+    public void uploadMultiFile(String url, ArrayMap<String,Object> param, final CallBack callBack)throws IOException {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         for (String key : param.keySet()) {
             Object object = param.get(key);
@@ -238,7 +235,7 @@ public class ModelImpl implements IModel {
     /**
      * 上传文件及参数
      */
-    public void sendMultipart(String url, HashMap<String, Object> param, final CallBack callBack){
+    public void sendMultipart(String url, ArrayMap<String, Object> param, final CallBack callBack){
         MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
         File imageFile = null;
         MultipartBody.Builder mbody=new MultipartBody.Builder().setType(MultipartBody.FORM);
@@ -296,7 +293,7 @@ public class ModelImpl implements IModel {
     }
 
 
-    public void post(String url, HashMap<String,Object> param, final CallBack callBack) {
+    public void post(String url, ArrayMap<String,Object> param, final CallBack callBack) {
 
         mClient = new OkHttpClient.Builder()
                 .addInterceptor(new ReceivedCookiesInterceptor())

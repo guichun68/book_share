@@ -1,12 +1,12 @@
 package zyzx.linke;
 
 import android.content.Context;
+import android.util.ArrayMap;
 
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import zyzx.linke.utils.PreferenceManager;
 public class ShareModel {
 //    HXUserDao dao = null;
     protected Context context = null;
-    protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
+    protected Map<Key,Object> valueCache = new ArrayMap<Key,Object>();
 
     public ShareModel(Context ctx){
         context = ctx;

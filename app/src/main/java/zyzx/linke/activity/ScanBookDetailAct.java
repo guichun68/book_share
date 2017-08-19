@@ -92,7 +92,7 @@ public class ScanBookDetailAct extends BaseActivity {
                         dismissProgress();
                         String responseJson = (String) obj;
                         ResponseJson rj = new ResponseJson(responseJson);
-                        if(rj.errorCode!=null) {
+                        if(rj.errorCode!=null && rj.errorCode != ResponseJson.NO_DATA) {
                             switch (rj.errorCode) {
                                 case 1:
                                     bookId = (String) ((Map) rj.data.get(0)).get("bookId");

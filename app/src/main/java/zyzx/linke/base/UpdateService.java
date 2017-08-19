@@ -50,15 +50,9 @@ public class UpdateService extends Service implements CallBack {
 	public void onSuccess(Object obj, int... code) {
 		String response = (String) obj;
 		GlobalParams.isCheckedUpdate = true;
-		if(StringUtil.isEmpty(response)){
-			UIUtil.showTestLog("未能获取最新版本");
-			UIUtil.showToastSafe("检查更新失败");
-			return;
-		}
 		ResponseJson rj = new ResponseJson(response);
-
-		if(rj.errorCode==null){
-			UIUtil.print("未能获取最新版本2");
+		if(rj.errorCode == ResponseJson.NO_DATA){
+			UIUtil.showTestLog("未能获取最新版本");
 			UIUtil.showToastSafe("检查更新失败");
 			return;
 		}

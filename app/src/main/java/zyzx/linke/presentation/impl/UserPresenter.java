@@ -1,6 +1,6 @@
 package zyzx.linke.presentation.impl;
 
-import android.support.v7.widget.AppCompatEditText;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -12,7 +12,6 @@ import com.hyphenate.easeui.domain.EaseUser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,147 +34,135 @@ import zyzx.linke.utils.UIUtil;
  */
 
 public class UserPresenter extends IUserPresenter {
-    private HashMap<String,Object> mParam;
-    private HashMap<String,Object> getParam(){
+    private ArrayMap<String,Object> mParam;
+    private ArrayMap<String,Object> getParam(){
         if(mParam==null){
-            mParam = new HashMap<>();
+            mParam = new ArrayMap<>();
         }
         mParam.clear();
         return mParam;
     }
 
     @Override
-    public void loginByLoginName(String login_name, String password, final CallBack viewCallBack) {
-//        Log.e("zzyy",login_name+"-->");
-        HashMap<String,Object> param = getParam();
-        param.put("loginName",login_name);
-        param.put("password",password);
-        try {
-           getModel().post(GlobalParams.urlLogin, param, new CallBack() {
-               @Override
-               public void onSuccess(Object obj, int... code) {
-                   String response = (String)obj;
-                   if(StringUtil.isEmpty(response)){
-                       Log.e("failure","登录失败");
-                       return;
-                   }
-                   ResponseJson rj = new ResponseJson(response);
-                   if(rj.errorCode == 1){
-                       //登录成功
-                       UserVO u = new UserVO();
-                       Iterator<Object> it = rj.data.iterator();
-                       while(it.hasNext()){
-                           JSONObject jo = (JSONObject) it.next();
-                           u.setErrorCode(rj.errorCode);
-                           u.setCreditScore(jo.getInteger("credit_socre"));
-                           u.setLoginName(jo.getString("loginName"));
-                           String tempUrl = jo.getString("photo");
-                           String headUrl = null;
-                           if(!StringUtil.isEmpty(tempUrl))
-                               headUrl= GlobalParams.BASE_URL+GlobalParams.AvatarDirName+tempUrl;
-                           u.setHeadIcon(headUrl);
-                           u.setSignature(jo.getString("sig"));
-                           u.setPassword(jo.getString("psw"));
-                           u.setRealName(jo.getString("realName"));
-                           u.setUrl(jo.getString("url"));
-                           u.setUserid(jo.getInteger("userid"));
-                           u.setUid(jo.getString("uid"));
-                       }
-                       GlobalParams.saveUser(u);
-                       if(viewCallBack!=null){
-                           viewCallBack.onSuccess(true);
-                       }
-                   }else if(rj.errorCode==0){
-                       Log.e("failure","登录失败");
-                       if(viewCallBack!=null) {
-                           viewCallBack.onFailure(rj.errorMsg);
-                       }
-                   }else if(viewCallBack!=null){
-                           viewCallBack.onFailure("登录错误" );
-                   }
-               }
+    public void loginByLoginName(String loginName, String password, final CallBack viewCallBack) {
+        getDataWithPost(new CallBack() {
+                            @Override
+                            public void onSuccess(Object obj, int... code) {
+                                String response = (String)obj;
+                                ResponseJson rj = new ResponseJson(response);
+                                if(ResponseJson.NO_DATA == rj.errorCode){
+                                    Log.e("failure","登录失败");
+                                    return;
+                                }
+                                switch (rj.errorCode){
+                                    case 1:
+                                        //登录成功
+                                        UserVO u = new UserVO();
+                                        Iterator<Object> it = rj.data.iterator();
+                                        while(it.hasNext()){
+                                            JSONObject jo = (JSONObject) it.next();
+                                            u.setErrorCode(rj.errorCode);
+                                            u.setCreditScore(jo.getInteger("credit_socre"));
+                                            u.setLoginName(jo.getString("loginName"));
+                                            String tempUrl = jo.getString("photo");
+                                            String headUrl = null;
+                                            if(!StringUtil.isEmpty(tempUrl))
+                                                headUrl= GlobalParams.BASE_URL+GlobalParams.AvatarDirName+tempUrl;
+                                            u.setHeadIcon(headUrl);
+                                            u.setSignature(jo.getString("sig"));
+                                            u.setPassword(jo.getString("psw"));
+                                            u.setRealName(jo.getString("realName"));
+                                            u.setUrl(jo.getString("url"));
+                                            u.setUserid(jo.getInteger("userid"));
+                                            u.setUid(jo.getString("uid"));
+                                        }
+                                        GlobalParams.saveUser(u);
+                                        if(viewCallBack!=null){
+                                            viewCallBack.onSuccess(true);
+                                        }
+                                        break;
 
-               @Override
-               public void onFailure(Object obj, int... code) {
-                   if(viewCallBack!=null){
-                       viewCallBack.onFailure("连接服务器失败,请检查网络连接");
-                   }
-               }
-           });
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(viewCallBack!=null){
-                viewCallBack.onFailure("请求出错，请稍后重试！");
-            }
-        }
+                                    case 0:
+                                        Log.e("failure","登录失败");
+                                        if(viewCallBack!=null) {
+                                            viewCallBack.onFailure(rj.errorMsg);
+                                        }
+                                        break;
+                                    default:
+                                        if(viewCallBack!=null){
+                                            viewCallBack.onFailure("登录错误" );
+                                        }
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Object obj, int... code) {
+                                if(viewCallBack!=null){
+                                    viewCallBack.onFailure("连接服务器失败,请检查网络连接");
+                                }
+                            }
+                        },GlobalParams.urlLogin,"请求出错，请稍后重试！",
+                new String[]{"loginName","password"},
+                loginName,password);
     }
 
     @Override
     public void sendLoginSMSVerifyCode(String phone,final CallBack viewCallBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("phone",phone);
-        try {
-            getModel().post(GlobalParams.urlSmsLogin, param, new CallBack() {
-                @Override
-                public void onSuccess(Object obj, int... code) {
-                    String response = (String)obj;
-                    JSONObject jsonObject = JSON.parseObject(response);
-                    int code2 = jsonObject.getInteger("code");
-                    if(code2 == 200){
-                        GlobalParams.gVerifyCode = jsonObject.getInteger("verifyCode");
-                        UserVO userVO = jsonObject.getObject("user",UserVO.class);
-                        PreferenceManager.getInstance().saveLastLoginUser(userVO);
-                    }else{
-                        GlobalParams.gVerifyCode = 0;
-                    }
-                    if(viewCallBack!=null){
-                        viewCallBack.onSuccess(code);
-                    }
-                }
+        getDataWithPost(new CallBack() {
+                            @Override
+                            public void onSuccess(Object obj, int... code) {
+                                String response = (String)obj;
+                                JSONObject jsonObject = JSON.parseObject(response);
+                                int code2 = jsonObject.getInteger("code");
+                                if(code2 == 200){
+                                    GlobalParams.gVerifyCode = jsonObject.getInteger("verifyCode");
+                                    UserVO userVO = jsonObject.getObject("user",UserVO.class);
+                                    PreferenceManager.getInstance().saveLastLoginUser(userVO);
+                                }else{
+                                    GlobalParams.gVerifyCode = 0;
+                                }
+                                if(viewCallBack!=null){
+                                    viewCallBack.onSuccess(code);
+                                }
+                            }
 
-                @Override
-                public void onFailure(Object obj, int... code) {
-                    UIUtil.showTestLog("zyzx","beijing");
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                            @Override
+                            public void onFailure(Object obj, int... code) {
+                                UIUtil.showTestLog("zyzx","beijing");
+                            }
+                        },GlobalParams.urlSmsLogin,"发送失败",
+                new String[]{"phone"},
+                phone);
     }
 
     @Override
     public void regist(String userName, String psw, String phone, final CallBack viewCallBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("loginName",userName);
-        param.put("password",psw);
-        param.put("phone",phone);
-        try {
-            getModel().post(GlobalParams.urlRegist, param, new CallBack() {
-                @Override
-                public void onSuccess(Object obj, int... code) {
-                    String response = (String)obj;
-                    ResponseJson rj = new ResponseJson(response);
-                    if(rj.errorCode == 0){
-                        if(viewCallBack!=null){
-                            viewCallBack.onSuccess(rj.errorCode);
-                        }
-                    }else{
-                        if(viewCallBack !=null){
-                            viewCallBack.onFailure(rj.errorMsg,rj.errorCode);
-                        }
-                    }
-                }
+        getDataWithPost(new CallBack() {
+                            @Override
+                            public void onSuccess(Object obj, int... code) {
+                                String response = (String)obj;
+                                ResponseJson rj = new ResponseJson(response);
+                                if(rj.errorCode == 0 ){
+                                    if(viewCallBack!=null){
+                                        viewCallBack.onSuccess(rj.errorCode);
+                                    }
+                                }else{
+                                    if(viewCallBack !=null){
+                                        viewCallBack.onFailure(rj.errorMsg,rj.errorCode);
+                                    }
+                                }
+                            }
 
-                @Override
-                public void onFailure(Object obj, int... code) {
-                    if(viewCallBack!=null){
-                        viewCallBack.onFailure(UIUtil.getString(R.string.network_error));
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                            @Override
+                            public void onFailure(Object obj, int... code) {
+                                if(viewCallBack!=null){
+                                    viewCallBack.onFailure(UIUtil.getString(R.string.network_error));
+                                }
+                            }
+                        },GlobalParams.urlRegist,"操作失败",
+                new String[]{"loginName","password","phone"},
+                userName,psw,phone);
     }
 
     @Override
@@ -225,7 +212,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void uploadHeadIcon(Integer userId,String imagePath, CallBack viewCallBack) {
-        HashMap<String, Object> params = getParam();
+        ArrayMap<String, Object> params = getParam();
         params.put("img", new File(imagePath));
         params.put("user_id", userId);
         try {
@@ -240,38 +227,21 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void mofiySignature(Integer userid, String sig, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("user_id",userid+"");
-        param.put("sig",sig);//个性签名
-        try {
-            getModel().post(GlobalParams.urlSetUserSig,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("设置失败");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlSetUserSig,"设置失败!",
+                new String[]{"user_id","sig"},
+                userid,sig);
     }
 
     @Override
     public void searchFriend(String keyWord, int pageNum,CallBack viewCallBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("key_word",keyWord);
-        param.put("page_num",String.valueOf(pageNum));
-        try {
-            getModel().post(GlobalParams.urlSearchFriend,param,viewCallBack);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(viewCallBack!=null){
-                viewCallBack.onFailure("查找失败");
-            }
-        }
+        getDataWithPost(viewCallBack,GlobalParams.urlSearchFriend,"查找失败!",
+                new String[]{"key_word","page_num"},
+                keyWord,pageNum);
     }
 
     @Override
     public void getAllMyContacts(final EMValueCallBack<List<EaseUser>> callBack) {
-        HashMap<String,Object> param = getParam();
+        ArrayMap<String,Object> param = getParam();
         param.put("user_id", EMClient.getInstance().getCurrentUser());
         try {
             getModel().post(GlobalParams.urlGetFriends, param, new CallBack() {
@@ -314,63 +284,30 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void delFriend(Integer friendUserId,CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("owner_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
-        param.put("friend_id",String.valueOf(friendUserId));
-        try {
-            getModel().post(GlobalParams.urlDelFriend,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("删除失败!");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlDelFriend,"删除失败!",
+                new String[]{"owner_id","friend_id"},
+                GlobalParams.getLastLoginUser().getUserid(),friendUserId);
     }
 
     @Override
     public void addBlackList(String userId, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("from_user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
-        param.put("to_user_id",userId);
-        try {
-            getModel().post(GlobalParams.urlAddBlackList,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("添加失败");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlAddBlackList,"添加失败!",
+                new String[]{"from_user_id","to_user_id"},
+                GlobalParams.getLastLoginUser().getUserid(),userId);
     }
 
     @Override
-    public void checkIfInBlackList(Integer userid, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
-        param.put("friend_id",String.valueOf(userid));
-
-        try {
-            getModel().post(GlobalParams.urlCheckIfIMInBlackList,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("检查失败");
-            }
-            e.printStackTrace();
-        }
+    public void checkIfInBlackList(Integer userId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlCheckIfIMInBlackList,"检查失败!",
+                new String[]{"user_id","friend_id"},
+                GlobalParams.getLastLoginUser().getUserid(),userId);
     }
 
     @Override
     public void addFriend(Integer userid, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("user_id",String.valueOf(GlobalParams.getLastLoginUser().getUserid()));
-        param.put("friend_id",String.valueOf(userid));
-        try {
-            getModel().post(GlobalParams.urlAddFriend,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("添加失败");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlAddFriend,"添加失败!",
+                new String[]{"user_id","friend_id"},
+                GlobalParams.getLastLoginUser().getUserid(),userid);
     }
 
     @Override
@@ -381,82 +318,42 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void sendForgetPswSMSVerifyCode(String phone, CallBack viewCallBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("phone",phone);
-        try {
-            getModel().post(GlobalParams.urlForgetPSWSms,param,viewCallBack);
-        } catch (IOException e) {
-            if(viewCallBack!=null){
-                viewCallBack.onFailure("验证码发送失败");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(viewCallBack,GlobalParams.urlForgetPSWSms,"验证码发送失败!",
+                new String[]{"phone"},
+                phone);
     }
 
     @Override
     public void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack) {
-        HashMap<String, Object> param = getParam();
-        param.put("verify_code", verifyCode);
-        param.put("verify_type", String.valueOf(type));
-        param.put("user_id", String.valueOf(userId));
-        try {
-            getModel().post(GlobalParams.urlVerifySMSCode, param, callBack);
-        } catch (IOException e) {
-            if (callBack != null) {
-                callBack.onFailure("请求失败，请稍后重试!");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlVerifySMSCode,"请求失败，请稍后重试!",
+                new String[]{"verify_code","verify_type","user_id"},
+                verifyCode,type,userId);
     }
 
     @Override
     public void resetPsw(String userId,String newPsw, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("new_psw",newPsw);
-        param.put("user_id",String.valueOf(userId));
-        try {
-            getModel().post(GlobalParams.urlResetPsw,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("请求失败，请稍后重试!");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlResetPsw,"请求失败，请稍后重试!",
+                new String[]{"new_psw","user_id"},
+                newPsw,userId);
     }
 
     @Override
     public void modifyPsw(String uid, String oldPsw, String newPsw, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("uid",uid);
-        param.put("old_psw",oldPsw);
-        param.put("new_psw",newPsw);
-        try {
-            getModel().post(GlobalParams.urlModifyPsw,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure(UIUtil.getString(R.string.err_request));
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlModifyPsw,UIUtil.getString(R.string.err_request),
+                new String[]{"uid","old_psw","new_psw"},
+                uid,oldPsw,newPsw);
     }
 
     @Override
     public void feedBack(FeedBack mFeedBack, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("content",JSON.toJSONString(mFeedBack));
-        try {
-            getModel().post(GlobalParams.urlFeedBack,param,callBack);
-        } catch (IOException e) {
-            if(callBack!=null){
-                callBack.onFailure("提交失败，请重试！");
-            }
-            e.printStackTrace();
-        }
+        getDataWithPost(callBack,GlobalParams.urlFeedBack,"提交失败，请重试！",
+                new String[]{"content"},
+                JSON.toJSONString(mFeedBack));
     }
 
     @Override
     public void uploadExcelFile(String userId, String filePath, CallBack viewCallBack) {
-        HashMap<String,Object> params = getParam();
+        ArrayMap<String,Object> params = getParam();
         params.put("file",new File(filePath));
         params.put("user_id",userId);
         try {
@@ -471,59 +368,30 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getSubArea(Integer pid, Integer holdFlag, CallBack callBack) {
-        HashMap<String,Object> params = getParam();
-        params.put("pid",String.valueOf(pid));
-        params.put("hold",String.valueOf(holdFlag));
-        try {
-            getModel().post(GlobalParams.urlGetSubArea,params,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错，请稍后再试.");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlGetSubArea,"访问出错，请稍后再试.",
+                new String[]{"pid","hold"},
+                pid,holdFlag);
     }
 
     @Override
     public void saveUserInfo(UserVO user, CallBack callBack) {
-        HashMap<String,Object> params = getParam();
-        params.put("user",JSON.toJSONString(user));
-        try {
-            getModel().post(GlobalParams.urlSaveUserInfo,params,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错，请稍后再试.");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlSaveUserInfo,"访问出错，请稍后再试.",
+                new String[]{"user"},
+                JSON.toJSONString(user));
     }
 
     @Override
     public void loginByThirdPlatform(String paramJSON,CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("param",paramJSON);
-        try {
-            getModel().post(GlobalParams.urlthirdLogin,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错，请稍后再试.");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlthirdLogin,"访问出错，请稍后再试.",
+                new String[]{"param"},
+                paramJSON);
     }
 
     @Override
     public void shareBook(String shareJson, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("param",shareJson);
-        try {
-            getModel().post(GlobalParams.urlShareBook,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错，请稍后再试.");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlShareBook,"访问出错，请稍后再试.",
+                new String[]{"param"},
+                shareJson);
     }
 
     @Override
@@ -551,106 +419,71 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getAllShareBooks(String pro, String city, String county, int pageNo, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("pro",pro);
-        param.put("city",city);
-        param.put("county",county);
-        param.put("pageNo",pageNo+"");
-        try{
-            getModel().post(GlobalParams.urlGetSharedBooks,param,callBack);
-        }catch (Exception e){
-            if(callBack!=null){
-                callBack.onFailure("访问出错");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlGetSharedBooks,"请求出错.",
+                new String[]{"pro","city","county","pageNo"},
+                pro,city,county,pageNo);
     }
 
     @Override
     public void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("userId",String.valueOf(user.getUserid()));
-        param.put("relUserId",String.valueOf(relUserId));
-        param.put("bookId",book.getId());
-        param.put("bookTitle",book.getTitle());
-        param.put("shareType",shareType+"");
-
-        param.put("uid",user.getUid());
-        param.put("headIcon",user.getHeadIcon());
-        param.put("nickName",user.getLoginName());
-        try {
-            getModel().post(GlobalParams.urlSendBegMsg,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("请求出错.");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlSendBegMsg,"请求出错.",
+                new String[]{"userId","relUserId","bookId","bookTitle","shareType","uid","headIcon","nickName"},
+                user.getUserid(),relUserId,book.getId(),book.getTitle(),shareType,user.getUid(),user.getHeadIcon(),user.getLoginName());
     }
 
     @Override
     public void getAllBorrowBegs(Integer userId,int pageNo,CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("userId",userId+"");
-        param.put("pageNo",pageNo+"");
-        try {
-            getModel().post(GlobalParams.urlGetBookBorrowBegs,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("获取出错！");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlGetBookBorrowBegs,"获取出错",
+                new String[]{"userId","pageNo"},
+                userId,pageNo);
     }
 
     @Override
     public void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId, int status, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("userId",currentUser);
-        param.put("relUid",chatUserId);
-        param.put("bid",bookId);
-        param.put("status",status+"");
-        try {
-            getModel().post(GlobalParams.urlSetFollowStauts,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("更改状态出错");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
+                new String[]{"userId","relUid","bid","status"},
+                currentUser,chatUserId,bookId,status);
     }
 
     @Override
     public void swapBook(String userBookId,String bookId, String bookTitle, String bookAuthor, String msg, CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("userBookId",userBookId);
-        param.put("bookId",bookId);
-        param.put("bookTitle",StringUtil.isEmpty(bookTitle)?"":bookTitle);
-        param.put("bookAuthor",StringUtil.isEmpty(bookAuthor)?"":bookAuthor);
-        param.put("msg",StringUtil.isEmpty(msg)?"":msg);
-        try {
-            getModel().post(GlobalParams.urlSwapBook,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错");
-            }
-        }
+        getDataWithPost(callBack,GlobalParams.urlSwapBook,"访问出错",
+                new String[]{"userBookId","bookId","bookTitle","bookAuthor","msg"},
+                userBookId,bookId,StringUtil.isEmpty(bookTitle)?"":bookTitle,StringUtil.isEmpty(bookAuthor)?"":bookAuthor,StringUtil.isEmpty(msg)?"":msg);
     }
 
     @Override
     public void cancelSwapBook(String userBookId,String swapId,CallBack callBack) {
-        HashMap<String,Object> param = getParam();
-        param.put("userBookId",userBookId);
-        param.put("swapId",swapId);
-        try {
-            getModel().post(GlobalParams.urlCancelSwapBook,param,callBack);
-        } catch (IOException e) {
-            e.printStackTrace();
-            if(callBack!=null){
-                callBack.onFailure("访问出错");
+        getDataWithPost(callBack,GlobalParams.urlCancelSwapBook,"访问出错",new String[]{"userBookId","swapId"},userBookId,swapId);
+    }
+
+    private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
+        if(argNames.length != values.length){
+            throw new RuntimeException("参数个数不匹配--自定义异常");
+        }
+        if(argNames.length!=0){
+            ArrayMap<String,Object> param = new ArrayMap<>();
+            for(int i=0;i<argNames.length;i++){
+                if(values[i] instanceof String){
+                    param.put(argNames[i],values[i]);
+                }else if(values[i] instanceof Integer){
+                    param.put(argNames[i],String.valueOf(values[i]));
+                }
             }
+            post(callBack,url,param,failureDesc);
+        }else{
+            post(callBack,url,null,failureDesc);
         }
     }
 
-
+    private void post(CallBack callBack,String url,ArrayMap<String,Object> params,String failureDesc){
+        try {
+            getModel().post(url, params, callBack);
+        }catch(Exception e){
+            e.printStackTrace();
+            if(callBack!=null){
+                callBack.onFailure(failureDesc);
+            }
+        }
+    }
 }

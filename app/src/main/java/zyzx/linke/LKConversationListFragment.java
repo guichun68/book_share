@@ -53,13 +53,8 @@ public class LKConversationListFragment extends BaseFragment {
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        DefindResponseJson drj;
-                        if(obj == null || StringUtil.isEmpty((String)obj)){
-                            UIUtil.showToastSafe("未能获取用户信息");
-                            return;
-                        }
-                        drj = new DefindResponseJson((String)obj);
-                        if(drj.data.getItems()==null || drj.data.getItems().isEmpty()){
+                        DefindResponseJson drj = new DefindResponseJson((String)obj);
+                        if(obj == null || DefindResponseJson.NO_DATA == drj.errorCode || drj.data.getItems()==null || drj.data.getItems().isEmpty()){
                             UIUtil.showToastSafe("未能获取用户信息");
                             return;
                         }

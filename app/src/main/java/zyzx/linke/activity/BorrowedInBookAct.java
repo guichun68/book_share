@@ -117,14 +117,20 @@ public class BorrowedInBookAct extends BaseActivity implements PullToRefreshBase
             @Override
             public void onFailure(Object obj, int... code) {
                 dismissProgress();
-                mPullRefreshListView.onRefreshComplete();
-                mPullRefreshListView.clearAnimation();
-                if(isLoadingMore){
-                    mPageNum--;
-                    if(mPageNum<0)mPageNum=0;
-                    isLoadingMore = false;
-                }
-                UIUtil.showToastSafe("未能获取书籍信息!");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullRefreshListView.onRefreshComplete();
+                        mPullRefreshListView.clearAnimation();
+                        if(isLoadingMore){
+                            mPageNum--;
+                            if(mPageNum<0)mPageNum=0;
+                            isLoadingMore = false;
+                        }
+                        UIUtil.showToastSafe("未能获取书籍信息!");
+                    }
+                });
+
             }
         });
     }

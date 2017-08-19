@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.util.HashMap;
 
 import zxing.CaptureActivity;
 import zyzx.linke.activity.AboutUsAct;
@@ -179,7 +179,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
      * 下载导出的excle清单（由服务器生成excel，实际客户端为下载操作）
      */
     protected void downloadFile() {
-        HashMap<String, Object> param = new HashMap<>();
+        ArrayMap<String, Object> param = new ArrayMap<>();
         param.put("uid", PreferenceManager.getInstance().getLastLoginUserUUId());
         DownloadUtil.get().download(GlobalParams.urlExportExcle, GlobalParams.BaseDir, param, new DownloadUtil.OnDownloadListener() {
             @Override

@@ -273,11 +273,12 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         mDialogExchange.dismiss();
                         dismissProgress();
                         String response = (String) obj;
-                        if(StringUtil.isEmpty(response)){
+                        DefindResponseJson drj = new DefindResponseJson(response);
+                        if(DefindResponseJson.NO_DATA == drj.errorCode){
                             UIUtil.showToastSafe("访问出错");
                             return;
                         }
-                        DefindResponseJson drj = new DefindResponseJson(response);
+
                         switch (drj.errorCode) {
                             case 2:
                                 runOnUiThread(new Runnable() {
@@ -367,7 +368,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                                     }
                                     String json = (String) obj;
                                     ResponseJson rj = new ResponseJson(json);
-                                    if (rj.errorCode != null) {
+                                    if (rj.errorCode != null && rj.errorCode != ResponseJson.NO_DATA) {
                                         switch (rj.errorCode) {
                                             case 1://成功
                                                 UIUtil.showToastSafe(rj.errorMsg);
@@ -409,7 +410,7 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                             }
                             String json = (String) obj;
                             final ResponseJson rj = new ResponseJson(json);
-                            if (rj.errorCode != null) {
+                            if (rj.errorCode != null && rj.errorCode != ResponseJson.NO_DATA) {
                                 switch (rj.errorCode) {
                                     case 1://成功
                                         runOnUiThread(new Runnable() {
@@ -448,11 +449,12 @@ public class MyBooksAct extends BaseActivity implements PullToRefreshBase.OnRefr
                         public void onSuccess(Object obj, int... code) {
                             dismissProgress();
                             String response = (String) obj;
-                            if(StringUtil.isEmpty(response)){
+                            DefindResponseJson drj = new DefindResponseJson(response);
+                            if(DefindResponseJson.NO_DATA == drj.errorCode){
                                 UIUtil.showToastSafe("访问出错");
                                 return;
                             }
-                            DefindResponseJson drj = new DefindResponseJson(response);
+
                             switch (drj.errorCode) {
                                 case 2:
                                     runOnUiThread(new Runnable() {

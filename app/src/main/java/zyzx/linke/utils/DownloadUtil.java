@@ -2,12 +2,12 @@ package zyzx.linke.utils;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.util.ArrayMap;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -40,7 +40,7 @@ public class DownloadUtil {
      * @param saveDir  储存下载文件的SDCard目录
      * @param listener 下载监听
      */
-    public void download(final String url, final String saveDir, HashMap<String, Object> param, final OnDownloadListener listener) {
+    public void download(final String url, final String saveDir, ArrayMap<String, Object> param, final OnDownloadListener listener) {
         Request request;
         if (param != null) {
             FormBody.Builder fb = new FormBody.Builder();
