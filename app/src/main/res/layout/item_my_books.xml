@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_marginBottom="2dp"
-    android:layout_height="match_parent">
+    android:background="@drawable/bg_selector"
+    android:layout_height="110dp">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -67,7 +70,6 @@
             android:textStyle="bold"
             android:layout_marginTop="5dp"
             android:drawablePadding="5dp"
-            android:layout_marginBottom="5dp"
             android:textColor="@color/bg_gray2"
             android:drawableLeft="@drawable/press_shape"
             android:textSize="16sp"/>
@@ -90,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="3dp"
             android:maxLines="3"
             android:drawableLeft="@drawable/press_shape"
             android:ellipsize="end"
@@ -99,6 +101,7 @@
             />
 
     </LinearLayout>
+
 
 
 </LinearLayout>

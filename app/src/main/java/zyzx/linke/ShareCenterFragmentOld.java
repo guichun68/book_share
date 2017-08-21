@@ -1,3 +1,4 @@
+/*
 package zyzx.linke;
 
 
@@ -36,14 +37,14 @@ import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CityUtil;
-import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
-/**
+*
  * 主页界面
- */
-public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRefreshListener2<ListView>, View.OnClickListener, AMapLocationListener {
-    private final String TAG = HomeFragment.class.getSimpleName();
+
+
+public class ShareCenterFragmentOld extends BaseFragment implements PullToRefreshBase.OnRefreshListener2<ListView>, View.OnClickListener, AMapLocationListener {
+    private final String TAG = ShareCenterFragmentOld.class.getSimpleName();
     private final int CITY_CHOOSE_REQUEST_CODE = 10;
     private final int POI_CHOOSE_REQUEST_CODE = 20;
     private String mKeywords = "";
@@ -151,11 +152,12 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         dialog.show();
     }
 
-    /**
+*
      * 根据选择的城市和行政区进行搜索
      *
      * @param pagenum pageNO
-     */
+
+
     private void searchByLocal(int pagenum) {
         showDefProgress();
         Log.e(TAG, "在城市(" + mCurrCity + "->"+ mCurrCounty +") 查找第" + pagenum + "页的所有书籍信息--待完善");
@@ -227,10 +229,11 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
     private ArrayMap<String, String[]> mDistrictsOfcityMap = new ArrayMap<>();
 
-    /**
+*
      * @param city city
      * @return 根据城市名字，得到该城市下对应的所有行政区的字符串数组
-     */
+
+
     private String[] getDistrictsBasedonCityName(String city) {
         if (mDistrictsOfcityMap.containsKey(city)) {
             return mDistrictsOfcityMap.get(city);
@@ -246,17 +249,19 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
 
 
 
-    /**
+*
      * 方法必须重写
-     */
+
+
     @Override
     public void onPause() {
         super.onPause();
         stopLocation();//停止定位，
     }
-    /**
+*
      * 销毁定位
-     */
+
+
     private void stopLocation() {
         if (mAMapLocationClient != null) {
             mAMapLocationClient.unRegisterLocationListener(this);
@@ -345,14 +350,16 @@ public class HomeFragment extends BaseFragment implements PullToRefreshBase.OnRe
         }
     }
 
-    /**
+*
      * 进行默认的搜索 类型为根据城市行政区的搜索 默认的城市可以自己配置
      *
      * @param pagenum 页码
-     */
+
+
     private void searchDefault(int pagenum) {
         mCurrCity = getResources().getString(R.string.default_city);
         searchByLocal(pagenum);
     }
 
 }
+*/

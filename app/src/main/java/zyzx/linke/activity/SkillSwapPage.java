@@ -3,15 +3,10 @@ package zyzx.linke.activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -48,7 +43,6 @@ public class SkillSwapPage extends BaseSwapPager {
     private final int SUCCESS = 0x47B,FAILURE = 0xB52;
     private boolean isRefreshing = false;
     private boolean canLoadingMore = false;
-    private int lastVisibleItemPosition;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -60,7 +54,7 @@ public class SkillSwapPage extends BaseSwapPager {
                 if(drj.errorCode == DefindResponseJson.NO_DATA){
                     UIUtil.showToastSafe("未能获取数据");
                     dismissLoading();
-                    mAdapter.changeMoreStatus(MyCommonAdapter.STATUS_LOADING_END);
+                    mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                     return;
                 }
                 switch (drj.errorCode){
@@ -79,22 +73,24 @@ public class SkillSwapPage extends BaseSwapPager {
                         }
                         dismissProgress();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.changeMoreStatus(MyCommonAdapter.STATUS_LOADING_END);
+                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         break;
                     case 3:
                         UIUtil.showToastSafe("没有更多了");
-                        mAdapter.changeMoreStatus(MyCommonAdapter.STATUS_NO_MORE_DATE);
+                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                         dismissLoading();
                         break;
                     default:
                         UIUtil.showToastSafe("未能获取数据");
                         dismissLoading();
+                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         return;
                 }
                 break;
             case FAILURE:
                 UIUtil.showToastSafe("未能获取数据");
                 dismissLoading();
+                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                 break;
         }
     }
@@ -115,18 +111,9 @@ public class SkillSwapPage extends BaseSwapPager {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
                 android.R.color.holo_red_light,android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
-        /*mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));*/
-        linearLayoutManager =new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        //添加分隔线
-//        mRecyclerView.addItemDecoration(new AdvanceDecoration(context, OrientationHelper.VERTICAL));
-        mAdapter = new SkillAdapter(context,mSwapSkillVos,R.layout.item_skill,R.layout.view_footer);
+        mAdapter = new SkillAdapter(context,mSwapSkillVos,R.layout.item_skill,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
 
         mRecyclerView.setAdapter(mAdapter);
-//        mHeaderAndFooterWrapper.notifyDataSetChanged();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -138,57 +125,17 @@ public class SkillSwapPage extends BaseSwapPager {
         });
         mRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.i(TAG, "onScrollStateChanged----newState: " + newState);
-                //RecyclerView.SCROLL_STATE_DRAGGING==1
-                if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition + 1 ==mAdapter.getItemCount()) {
-                    if(mRecyclerView.getSlidStatus()==MyRecyclerViewWapper.SLIDE_UP
-                            && ((SkillAdapter)mRecyclerView.getAdapter()).load_more_status!=MyCommonAdapter.STATUS_NO_MORE_DATE){
-                        UIUtil.showTestLog("TTG","LoadingMore");
-                        isRefreshing = false;
-                        getData(++mPageNum);
-                        mAdapter.changeMoreStatus(SkillAdapter.STATUS_PULLUP_LOAD_MORE);
-                    }
-                    mRecyclerView.setSlidStatus(MyRecyclerViewWapper.SLIDE_IDLE);
+            public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadMore) {
+                if(isLoadMore){
+                    isRefreshing = false;
+                    getData(++mPageNum);
+                    mAdapter.setFooterStatus(SkillAdapter.Status.STATUS_PULLUP_LOAD_MORE);
                 }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView,dx, dy);
-                lastVisibleItemPosition =linearLayoutManager.findLastCompletelyVisibleItemPosition();
-
-                if(dy<0){//向下滑动
-                    if(Math.abs(dy)>=SLOP){
-                        isRefreshing = true;
-                        UIUtil.showTestLog("isRefreshing1",isRefreshing+"");
-                    }
-                }else{
-                    if(dy!=0){
-                        //向上滑动
-                        isRefreshing = false;
-                        UIUtil.showTestLog("isRefreshing2",isRefreshing+"");
-                    }
-                }
-                Log.i(TAG, "-----------onScrolled2-----------");
-                Log.i(TAG, "dx: " + dx);
-                Log.i(TAG, "dy: " + dy);
-                Log.i(TAG, "CHECK_SCROLL_UP: " + recyclerView.canScrollVertically(-5));
-                Log.i(TAG, "CHECK_SCROLL_DOWN: " + recyclerView.canScrollVertically(5));
-
             }
         });
         getData(mPageNum=1);
@@ -196,16 +143,16 @@ public class SkillSwapPage extends BaseSwapPager {
 
     private class SkillAdapter extends MyCommonAdapter<SwapSkillVo>{
 
-        private SkillAdapter( Context context, List<SwapSkillVo> datas,int itemLayoutResId, int footerLayoutId) {
-            super(context, datas, itemLayoutResId, footerLayoutId);
+        private SkillAdapter( Context context, List<SwapSkillVo> datas,int itemLayoutResId, int footerLayoutId,int footerProgressResId,int footerTextTipResId) {
+            super(context, datas, itemLayoutResId, footerLayoutId,footerProgressResId,footerTextTipResId);
         }
 
         @Override
         public void convert(MyViewHolder holder, SwapSkillVo ssVO,int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
-                ((TextView)holder.getView(R.id.tv_title)).setText(ssVO.getSkillTitle());
-                ((TextView)holder.getView(R.id.tv_want)).setText(ssVO.getSkillWantName());
-                ((TextView)holder.getView(R.id.tv_have)).setText(ssVO.getSkillHaveName());
+                holder.setText(R.id.tv_title,ssVO.getSkillTitle());
+                holder.setText(R.id.tv_want,ssVO.getSkillWantName());
+                holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){
                     Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().into( (ImageView)holder.getView(R.id.iv));
                 }else if(ssVO.getHeadIcon().contains("http")){
@@ -214,31 +161,6 @@ public class SkillSwapPage extends BaseSwapPager {
                     Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).into((ImageView)holder.getView(R.id.iv));
                 }
                 holder.itemView.setTag(position);
-            }else if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_FOOTER){
-                switch (load_more_status){
-                    case STATUS_PULLUP_LOAD_MORE:
-                        holder.getView(R.id.rl_root).setVisibility(View.VISIBLE);
-                        holder.getView(R.id.rl_root).setBackgroundColor(ContextCompat.getColor(context,R.color.transparent));
-                        holder.getView(R.id.load_progress).setVisibility(View.VISIBLE);
-                        ((TextView)holder.getView(R.id.tv_tip)).setText("加载更多内容");
-                        break;
-                    case STATUS_LOADING_MORE:
-                        holder.getView(R.id.rl_root).setVisibility(View.VISIBLE);
-                        holder.getView(R.id.load_progress).setVisibility(View.VISIBLE);
-                        ((TextView)holder.getView(R.id.tv_tip)).setText("正在加载...");
-                        break;
-                    case STATUS_LOADING_END:
-                        holder.getView(R.id.rl_root).setVisibility(View.GONE);
-                        holder.getView(R.id.rl_root).setBackgroundColor(ContextCompat.getColor(context,R.color.transparent));
-                        break;
-                    case STATUS_NO_MORE_DATE:
-                        holder.getView(R.id.rl_root).setVisibility(View.VISIBLE);
-                        holder.getView(R.id.load_progress).setVisibility(View.GONE);
-                        holder.getView(R.id.rl_root).setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                        ((TextView)holder.getView(R.id.tv_tip)).setText("无更多内容");
-                        break;
-
-                }
             }
         }
     }

@@ -5,15 +5,15 @@
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
-    },
-    {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\push_top_in.xml",
-        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\anim\\push_top_in.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\voice_to_icon.xml",
         "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\anim\\voice_to_icon.xml"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\push_top_in.xml",
+        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\anim\\push_top_in.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\push_bottom_out.xml",
@@ -21,11 +21,11 @@
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_out_top.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_out_top.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\push_bottom_in.xml",
@@ -33,7 +33,7 @@
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_fade_out.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_fade_out.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\fade_out.xml",
@@ -57,15 +57,15 @@
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_in_top.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_in_top.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_popup_exit.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_popup_exit.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_fade_in.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_fade_in.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\head_in.xml",
@@ -73,15 +73,15 @@
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_in_bottom.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_in_bottom.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_out_bottom.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_slide_out_bottom.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
-        "source": "C:\\Users\\austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_popup_enter.xml"
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\anim\\abc_popup_enter.xml"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\anim\\push_top_in2.xml",

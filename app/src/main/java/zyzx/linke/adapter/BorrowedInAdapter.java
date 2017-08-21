@@ -2,14 +2,11 @@ package zyzx.linke.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.global.Const;
@@ -21,123 +18,88 @@ import zyzx.linke.utils.AppUtil;
  * Desc: BorrowedBookAct 页面中我借入的书籍Adapter
  */
 
-public class BorrowedInAdapter extends BaseAdapter {
+public class BorrowedInAdapter extends MyCommonAdapter<MyBookDetailVO> {
 
-    ArrayList<MyBookDetailVO> books;
-    private Context context;
 
-    public BorrowedInAdapter(Context context, ArrayList<MyBookDetailVO> books){
-        this.context = context;
-        this.books = books;
+    public BorrowedInAdapter(Context context, List<MyBookDetailVO> datas, int itemLayoutResId, int footerLayoutId, int footerProgressResId, int footerTextTipResId) {
+        super(context, datas, itemLayoutResId, footerLayoutId, footerProgressResId, footerTextTipResId);
     }
 
     @Override
-    public int getCount() {
-        return books.size();
-    }
-
-    @Override
-    public MyBookDetailVO getItem(int position) {
-        return books.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-      final MyBookViewHolder holder;
-        if(convertView == null){
-            convertView = View.inflate(context,R.layout.item_my_books,null);
-            holder = new MyBookViewHolder(convertView);
-            convertView.setTag(holder);
-        }else{
-            holder = (MyBookViewHolder) convertView.getTag();
-        }
-        String imageUrl = AppUtil.getMostDistinctPicUrl(getItem(position).getBook());
+    public void convert(MyViewHolder holder, final MyBookDetailVO bookDetailVO, final int position) {
+        String imageUrl = AppUtil.getMostDistinctPicUrl(bookDetailVO.getBook());
         if(imageUrl!=null){
-            Glide.with(context).load(imageUrl).into(holder.ivCover);
+            Glide.with(mContext).load(imageUrl).into((ImageView)holder.getView(R.id.iv));
         }else{
-            Glide.with(context).load(R.mipmap.defaultcover).asBitmap().into(holder.ivCover) ;
+            Glide.with(mContext).load(R.mipmap.defaultcover).asBitmap().into((ImageView)holder.getView(R.id.iv)) ;
         }
-        holder.tvBookName.setText(getItem(position).getBook().getTitle());
+        holder.setText(R.id.tv_book_name,bookDetailVO.getBook().getTitle());
         StringBuilder sb = new StringBuilder();
-        if(getItem(position).getBook().getAuthor()!=null){
-            for(String author:getItem(position).getBook().getAuthor()){
+        if(bookDetailVO.getBook().getAuthor()!=null){
+            for(String author:bookDetailVO.getBook().getAuthor()){
                 sb.append(author).append(";");
             }
             if(sb.length()>0) {
                 sb.deleteCharAt(sb.length()-1);
             }
         }
+        holder.setText(R.id.tv_author,sb.toString());
+        holder.setText(R.id.tv_intro,bookDetailVO.getBook().getSummary());
 
-        holder.tvAuthor.setText(sb.toString());
-        holder.tvIntro.setText(getItem(position).getBook().getSummary());
-        holder.refreshBookState(getItem(position).getBookStatusId());
-        return convertView;
-    }
-
-
-    class MyBookViewHolder {
-        private final View root;
-        //四种不同状态：在库、已分享、已借出、已借入
-        private final ImageView ivInStock,ivSharing,ivBorrowedOut,ivBorrowedIn;
-        private final ImageView ivCover;//图书封面
-        private final TextView tvBookName;
-        private final TextView tvAuthor;
-        private final TextView tvIntro;
-
-        MyBookViewHolder(View root) {
-            this.root = root;
-            this.ivCover = (ImageView) root.findViewById(R.id.iv);
-            this.ivInStock = (ImageView) root.findViewById(R.id.iv_corner_in_stock);
-            this.ivSharing = (ImageView) root.findViewById(R.id.iv_corner_sharing);
-            this.ivBorrowedOut = (ImageView) root.findViewById(R.id.iv_corner_borrowed);
-            this.ivBorrowedIn = (ImageView) root.findViewById(R.id.iv_corner_borrowed_in);
-            this.tvBookName = (TextView) root.findViewById(R.id.tv_book_name);
-            this.tvAuthor = (TextView) root.findViewById(R.id.tv_author);
-            this.tvIntro = (TextView) root.findViewById(R.id.tv_intro);
+        switch (bookDetailVO.getBookStatusId()){
+            case Const.BOOK_STATUS_ONSHELF:
+                holder.getView(R.id.iv_corner_in_stock).setVisibility(View.VISIBLE);
+                holder.getView(R.id.iv_corner_sharing).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed_in).setVisibility(View.INVISIBLE);
+                break;
+            case Const.BOOK_STATUS_SHARED:
+                holder.getView(R.id.iv_corner_in_stock).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_sharing).setVisibility(View.VISIBLE);
+                holder.getView(R.id.iv_corner_borrowed).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed_in).setVisibility(View.INVISIBLE);
+                break;
+            case Const.BOOK_STATUS_LOANED:
+                holder.getView(R.id.iv_corner_in_stock).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_sharing).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed).setVisibility(View.VISIBLE);
+                holder.getView(R.id.iv_corner_borrowed_in).setVisibility(View.INVISIBLE);
+                break;
+            case Const.BOOK_STATUS_BORROWED:
+                holder.getView(R.id.iv_corner_borrowed_in).setVisibility(View.VISIBLE);
+                holder.getView(R.id.iv_corner_in_stock).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_sharing).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed).setVisibility(View.INVISIBLE);
+                break;
+            default:
+                holder.getView(R.id.iv_corner_borrowed).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_in_stock).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_sharing).setVisibility(View.INVISIBLE);
+                holder.getView(R.id.iv_corner_borrowed_in).setVisibility(View.INVISIBLE);
         }
-
-        /**
-         * 更新书籍状态
-         * @param state 1:在库， 2:分享中， 3:已借出 ,4:已借入
-         */
-        public void refreshBookState(String state){
-            switch (state){
-                case Const.BOOK_STATUS_ONSHELF:
-                    this.ivInStock.setVisibility(View.VISIBLE);
-                    this.ivSharing.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
-                    break;
-                case Const.BOOK_STATUS_SHARED:
-                    this.ivInStock.setVisibility(View.INVISIBLE);
-                    this.ivSharing.setVisibility(View.VISIBLE);
-                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
-                    break;
-                case Const.BOOK_STATUS_LOANED:
-                    this.ivInStock.setVisibility(View.INVISIBLE);
-                    this.ivSharing.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedOut.setVisibility(View.VISIBLE);
-                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
-                    break;
-                case Const.BOOK_STATUS_BORROWED:
-                    this.ivBorrowedIn.setVisibility(View.VISIBLE);
-                    this.ivInStock.setVisibility(View.INVISIBLE);
-                    this.ivSharing.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
-                    break;
-                default:
-                    this.ivBorrowedOut.setVisibility(View.INVISIBLE);
-                    this.ivInStock.setVisibility(View.INVISIBLE);
-                    this.ivSharing.setVisibility(View.INVISIBLE);
-                    this.ivBorrowedIn.setVisibility(View.INVISIBLE);
+        holder.setOnLongClickListener(R.id.ll_root, new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return clickListener!=null && clickListener.onLongItemClickListener(v,bookDetailVO,position);
             }
-        }
+        });
+        holder.setOnClickListener(R.id.ll_root, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(clickListener!=null){
+                    clickListener.onItemClickListener(v,bookDetailVO,position);
+                }
+            }
+        });
+    }
+    private OnClickListener clickListener;
+
+    public void setOnClickListener(OnClickListener listener){
+        this.clickListener = listener;
     }
 
+    public interface OnClickListener {
+        boolean onLongItemClickListener(View view,MyBookDetailVO bookDetailVO,int position);
+        void onItemClickListener(View view,MyBookDetailVO bookDetailVO,int position);
+    }
 }

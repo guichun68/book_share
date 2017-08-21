@@ -1,3 +1,4 @@
+/*
 package zyzx.linke.activity;
 
 import android.app.Activity;
@@ -9,10 +10,8 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.OrientationHelper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,19 +20,23 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllMyBookAdapter;
-import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
@@ -46,19 +49,17 @@ import zyzx.linke.model.bean.UserBooks;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
-import zyzx.linke.views.AdvanceDecoration;
-import zyzx.linke.views.MyRecyclerViewWapper;
 
+*/
 /**
  * Created by austin on 2017/3/16.
  * Desc: 我的所有书籍列表页(除借入书籍外)--我的书架
- */
+ *//*
 
-public class MyBooksAct extends BaseActivity{
+
+public class MyBooksActOld extends BaseActivity implements PullToRefreshBase.OnRefreshListener {
     private LinearLayout llRoot;
-    private MyRecyclerViewWapper mMyRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
+    private PullToRefreshListView mPullRefreshListView;
     private AllMyBookAdapter myBookAdapter;
     private ArrayList<MyBookDetailVO> mBooks;
     private int mPageNum = 1;
@@ -76,36 +77,6 @@ public class MyBooksAct extends BaseActivity{
     @Override
     protected void initView(Bundle saveInstanceState) {
         act = this;
-        mBooks = new ArrayList<>();
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
-                android.R.color.holo_red_light,android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //下拉刷新
-                isLoadingMore = false;
-                mPageNum = 1;
-                getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
-            }
-        });
-        mMyRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);
-        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
-        myBookAdapter = new AllMyBookAdapter(this, mBooks,R.layout.item_my_books,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
-        mMyRecyclerView.setAdapter(myBookAdapter);
-        mMyRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
-            @Override
-            public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadMore) {
-                if(isLoadMore){
-                    mPageNum++;
-                    isLoadingMore = true;
-                    getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
-                    myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_PULLUP_LOAD_MORE);
-                }
-            }
-        });
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -114,14 +85,17 @@ public class MyBooksAct extends BaseActivity{
 
         llRoot = (LinearLayout) findViewById(R.id.ll_root);
         mTitleText.setText("我的书架");
-
-
-        myBookAdapter.setOnClickListener(new AllMyBookAdapter.OnClickListener() {
+        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+        mPullRefreshListView.setOnRefreshListener(this);
+        mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);//上拉加载更多
+        ListView actualListView = mPullRefreshListView.getRefreshableView();
+        // Need to use the Actual ListView when registering for Context Menu
+        registerForContextMenu(actualListView);
+        actualListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onLongItemClickListener(View view, MyBookDetailVO bookDetailVO, int position) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 View popView = View.inflate(mContext, R.layout.pop_modify_book, null);
-
-                setPopwinViewControls(popView, bookDetailVO, position);
+                setPopwinViewControls(popView, (MyBookDetailVO) parent.getItemAtPosition(position), position);
                 //测量布局的大小
                 popView.measure(0, 0);view.getMeasuredHeight();
                 int popWidth = popView.getMeasuredWidth();
@@ -138,9 +112,9 @@ public class MyBooksAct extends BaseActivity{
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
                 if(popHeight<view.getMeasuredHeight()){
-                    pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
+                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
                 }else{
-                    pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
+                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
                 }
                 AlphaAnimation aa = new AlphaAnimation(0.2f, 1.0f);
                 aa.setDuration(100);
@@ -153,42 +127,42 @@ public class MyBooksAct extends BaseActivity{
                 popView.startAnimation(set);
                 return true;
             }
+        });
 
+        actualListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClickListener(View view, MyBookDetailVO myBookDetailVO, int position) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //进入图书详情页
                 if (pop != null && pop.isShowing()) {
                     pop.dismiss();
                     return;
                 }
-                Intent intent = new Intent(MyBooksAct.this, BookDetailAct.class);
+                MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MyBooksActOld.this, BookDetailAct.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("book",myBookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
-                MyBooksAct.this.startActivity(intent);
+                MyBooksActOld.this.startActivity(intent);
             }
         });
 
-
-
-      /*  mMyRecyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });*/
+        mBooks = new ArrayList<>();
+        myBookAdapter = new AllMyBookAdapter(mContext, mBooks);
+        actualListView.setAdapter(myBookAdapter);
     }
 
     private Dialog mPromptDialog;
     private int tempPosition;//临时记录点击条目跳转到分享页面时的position
 
-    /**
+    */
+/**
      * 初始化并设置popupWin中的控件
      *
      * @param popView      popWindow View
      * @param bookDetailVO book detail bean
-     */
+     *//*
+
     private void setPopwinViewControls(final View popView, final MyBookDetailVO bookDetailVO, final int position) {
 
         final TextView item1 = (TextView) popView.findViewById(R.id.tv_item1);//删除
@@ -203,7 +177,7 @@ public class MyBooksAct extends BaseActivity{
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksActOld.this, "确定要删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "保留",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
                     }
@@ -234,7 +208,7 @@ public class MyBooksAct extends BaseActivity{
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定要取消交换《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksActOld.this, "确定要取消交换《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SWAP_BOOK), null);
                         mPromptDialog.show();
                     }
@@ -250,7 +224,7 @@ public class MyBooksAct extends BaseActivity{
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksActOld.this, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
 
@@ -260,7 +234,7 @@ public class MyBooksAct extends BaseActivity{
                     @Override
                     public void onClick(View v) {
                         pop.dismiss();
-                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksActOld.this, "确定取消分享《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SHARE), null);
                         mPromptDialog.show();
 
@@ -275,7 +249,7 @@ public class MyBooksAct extends BaseActivity{
 
     private void showExchangeDialog(final String bookId, final String userBookId,final int position) {
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        LayoutInflater inflater = (LayoutInflater) MyBooksAct.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) MyBooksActOld.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog_exchange, null);
         final AppCompatEditText etBookTitle = (AppCompatEditText) view.findViewById(R.id.acet_title);
         final AppCompatEditText etBookAuthor = (AppCompatEditText) view.findViewById(R.id.acet_author);
@@ -369,10 +343,12 @@ public class MyBooksAct extends BaseActivity{
         private static final int CANCEL_SWAP_BOOK = 2;//取消图书交换
         private int position;//在listView中的位置索引
 
-        /**
+        */
+/**
          * @param bookDetailVO 操作的书籍
          * @param operId       操作id
-         */
+         *//*
+
         PopItemClickListener(MyBookDetailVO bookDetailVO, int position, Integer operId) {
             this.operId = operId;
             this.bookDetailVO = bookDetailVO;
@@ -491,7 +467,7 @@ public class MyBooksAct extends BaseActivity{
                                         @Override
                                         public void run() {
                                             UIUtil.showToastSafe("已取消交换");
-                                            mBooks.get(position).setBookStatusId(Const.BOOK_STATUS_ONSHELF);
+                                            mBooks.get(position-1).setBookStatusId(Const.BOOK_STATUS_ONSHELF);
                                             myBookAdapter.notifyDataSetChanged();
                                         }
                                     });
@@ -541,12 +517,30 @@ public class MyBooksAct extends BaseActivity{
         getBooks(GlobalParams.getLastLoginUser().getUid(), 1);
     }
 
-    /**
+    @Override
+    public void onRefresh(PullToRefreshBase refreshView) {
+        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel(getResources().getString(R.string.pull_label));
+        endLabels.setRefreshingLabel(getResources().getString(
+                R.string.refresh_label));
+        endLabels.setReleaseLabel(getResources().getString(
+                R.string.release_label));
+        endLabels.setLoadingDrawable(getResources().getDrawable(
+                R.mipmap.publicloading));
+        mPageNum++;
+        isLoadingMore = true;
+        getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
+    }
+
+    */
+/**
      * 获取我的所有书籍（不包含借入的书籍）
      *
      * @param uid     user's uuid
      * @param pageNum pageNo
-     */
+     *//*
+
     private void getBooks(String uid, int pageNum) {
         getBookPresenter().getMyBooks(uid, pageNum, new CallBack() {
             @Override
@@ -555,24 +549,19 @@ public class MyBooksAct extends BaseActivity{
                     @Override
                     public void run() {
                         dismissProgress();
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        mPullRefreshListView.onRefreshComplete();
+                        mPullRefreshListView.clearAnimation();
                         ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
                         if (books == null || books.isEmpty()) {
                             UIUtil.showToastSafe("没有更多书籍了!");
-                            myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             if (isLoadingMore) {
                                 mPageNum--;
                                 if (mPageNum < 0) mPageNum = 0;
                                 isLoadingMore = false;
                             }
                         } else {
-                            if(isLoadingMore){
-                                mBooks.addAll(books);
-                            }else{
-                                mBooks.clear();
-                                mBooks.addAll(books);
-                            }
-                            myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+                            mBooks.addAll(books);
+                            myBookAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -583,10 +572,9 @@ public class MyBooksAct extends BaseActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         dismissProgress();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        mMyRecyclerView.clearAnimation();
+                        mPullRefreshListView.onRefreshComplete();
+                        mPullRefreshListView.clearAnimation();
                         if (isLoadingMore) {
                             mPageNum--;
                             if (mPageNum < 0) mPageNum = 0;
@@ -616,3 +604,4 @@ public class MyBooksAct extends BaseActivity{
         super.onBackPressed();
     }
 }
+*/

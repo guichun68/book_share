@@ -4,23 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
-import com.handmark.pulltorefresh.library.ILoadingLayout;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.zhy.adapter.abslistview.CommonAdapter;
-import com.zhy.adapter.abslistview.ViewHolder;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.R;
+import zyzx.linke.adapter.MyCommonAdapter;
+import zyzx.linke.adapter.MyViewHolder;
 import zyzx.linke.base.BaseSwapPager;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
@@ -28,21 +25,20 @@ import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.SwapBookVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.UIUtil;
-
-import static zyzx.linke.utils.UIUtil.getResources;
+import zyzx.linke.views.MyRecyclerViewWapper;
 
 /**
  * Created by austin on 2017/8/12.
  * Desc: 书籍交换选项卡页
  */
 
-public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnRefreshListener2<ListView>, AdapterView.OnItemClickListener {
-
+public class BookSwapPage extends BaseSwapPager{
 
     private SwapAdapter mAdapter;
     private final int SUCCFLAG = 0x738A,FAILUREFLAG = 0x891A;
     private List<SwapBookVO> mSwapBookVOs;
-    private PullToRefreshListView mPullRefreshListView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private MyRecyclerViewWapper mRecyclerView;
     private int mPageNum = 1;
     private boolean isRefreshing;
 
@@ -58,6 +54,7 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
                 if(drj.errorCode == ResponseJson.NO_DATA){
                     UIUtil.showToastSafe("未能获取数据");
                     dismisLoading();
+                    mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                     return;
                 }
                 switch (drj.errorCode){
@@ -66,12 +63,15 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
                         if(isRefreshing){
                             mSwapBookVOs.clear();
                             mSwapBookVOs.addAll(swapBookVOs);
+                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }else{
                             if(swapBookVOs.isEmpty()){
                                 mPageNum--;
                                 UIUtil.showToastSafe("没有更多了！");
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }else{
                                 mSwapBookVOs.addAll(swapBookVOs);
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                             }
                         }
                         dismisLoading();
@@ -80,12 +80,14 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
                     default:
                         UIUtil.showToastSafe("未能获取数据");
                         dismisLoading();
+                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         return;
                 }
                 break;
             case FAILUREFLAG:
                 UIUtil.showToastSafe("未能获取数据");
                 dismisLoading();
+                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                 break;
         }
     }
@@ -96,25 +98,44 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
 
     @Override
     public void initView() {
-        ListView listView;
-        mPullRefreshListView = (PullToRefreshListView) getRootView().findViewById(R.id.pull_refresh_list);
-        mPullRefreshListView.setOnRefreshListener(this);
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         if(mSwapBookVOs == null){
             mSwapBookVOs = new ArrayList<>();
         }
-        mAdapter = new SwapAdapter(context,R.layout.item_swap_book,mSwapBookVOs);
-        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(false, true);
-        endLabels.setPullLabel(getResources().getString(R.string.pull_label));
-        endLabels.setRefreshingLabel(getResources().getString(
-                R.string.refresh_label));
-        endLabels.setReleaseLabel(getResources().getString(
-                R.string.release_label));
-        endLabels.setLoadingDrawable(getResources().getDrawable(
-                R.mipmap.publicloading));
-        listView = mPullRefreshListView.getRefreshableView();
-        listView.setAdapter(mAdapter);
-        mPullRefreshListView.setOnItemClickListener(this);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getRootView().findViewById(R.id.swipeRefreshLayout);
+        mRecyclerView = (MyRecyclerViewWapper) getRootView().findViewById(R.id.recyclerView);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
+                android.R.color.holo_red_light,android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefreshing = true;
+                mPageNum = 1;
+                getData(mPageNum);
+            }
+        });
+        mRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
+            @Override
+            public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadingMore) {
+                if(isLoadingMore){
+                    isRefreshing = false;
+                    if(mPageNum==1 && mSwapBookVOs.isEmpty()){
+                        getData(mPageNum);
+                    }else{
+                        getData(++mPageNum);
+                    }
+                    mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_PULLUP_LOAD_MORE);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView,dx, dy);
+            }
+        });
+
+        mAdapter = new SwapAdapter(context,mSwapBookVOs,R.layout.item_swap_book,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
+        mRecyclerView.setAdapter(mAdapter);
         mPageNum = 1;
         showDefProgress();
         getData(1);
@@ -124,30 +145,6 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
         return handler;
     }
 
-    @Override
-    public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-            isRefreshing = true;
-            mPageNum = 1;
-            getData(mPageNum);
-    }
-
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-        isRefreshing = false;
-        if(mPageNum==1 && mSwapBookVOs.isEmpty()){
-            getData(mPageNum);
-        }else{
-            getData(++mPageNum);
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SwapBookVO sbv = (SwapBookVO)parent.getItemAtPosition(position);
-        Intent intent = new Intent((context),BookSwapAct.class);
-        intent.putExtra(BundleFlag.SWAP_BOOK_VO,sbv);
-        context.startActivity(intent);
-    }
 
     private static class MyHandler extends Handler {
         WeakReference<BookSwapPage> mCurrPage;
@@ -165,20 +162,33 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
         }
     }
 
-    private class SwapAdapter extends CommonAdapter<SwapBookVO> {
+    private class SwapAdapter extends MyCommonAdapter<SwapBookVO> {
 
-        private SwapAdapter(Context context, int layoutId, List<SwapBookVO> datas) {
-            super(context, layoutId, datas);
+        private SwapAdapter(Context context, List<SwapBookVO> datas, int itemLayoutResId,int footItemLayoutResId,int footerProgressResId,int footerTextTipResId) {
+            super(context, datas, itemLayoutResId,footItemLayoutResId, footerProgressResId, footerTextTipResId);
         }
 
         @Override
-        protected void convert(ViewHolder holder, SwapBookVO swapBookVO, int position) {
+        public void convert(MyViewHolder holder, final SwapBookVO swapBookVO, int position) {
             Glide.with(context).load(swapBookVO.getBookImageLarge()).into((ImageView)holder.getView(R.id.iv));
             holder.setText(R.id.tv_have_book_name,"《"+swapBookVO.getBookTitle()+"》");
             holder.setText(R.id.tv_have_author,"作者："+swapBookVO.getBookAuthor());
             holder.setText(R.id.tv_want_book_name,"《"+swapBookVO.getSwapBookTitle()+"》");
             holder.setText(R.id.tv_want_author,"作者："+swapBookVO.getSwapBookAuthor());
+            holder.setOnClickListener(R.id.ll_root, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent((context),BookSwapAct.class);
+                    intent.putExtra(BundleFlag.SWAP_BOOK_VO,swapBookVO);
+                    context.startActivity(intent);
+                }
+            });
         }
+
+        /*@Override
+        protected void convert(ViewHolder holder, SwapBookVO swapBookVO, int position) {
+
+        }*/
 
     }
 
@@ -210,7 +220,7 @@ public class BookSwapPage extends BaseSwapPager implements PullToRefreshBase.OnR
                 mPageNum = 1;
             }
         }
-        mPullRefreshListView.onRefreshComplete();
+        mSwipeRefreshLayout.setRefreshing(false);
         isRefreshing = false;
     }
 }

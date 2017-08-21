@@ -53,7 +53,6 @@ import java.util.UUID;
 import zyzx.linke.R;
 import zyzx.linke.ShareModel;
 import zyzx.linke.activity.ChatActivity;
-import zyzx.linke.activity.HomeAct;
 import zyzx.linke.db.HXDBManager;
 import zyzx.linke.db.HXUserDao;
 import zyzx.linke.db.InviteMessgeDao;
@@ -931,10 +930,14 @@ public class EaseUIHelper {
      */
     protected void onUserException(String exception){
         EMLog.e(TAG, "onUserException: " + exception);
-        Intent intent = new Intent(appContext, HomeAct.class);
+       /* Intent intent = new Intent(appContext, HomeAct.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(exception, true);
-        appContext.startActivity(intent);
+        appContext.startActivity(intent);*/
+        Intent intent2 = new Intent(appContext,ErrActivity.class);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent2.putExtra("error_type", exception);
+        appContext.startActivity(intent2);
     }
 
     private EaseUser getUserInfo(EMMessage message,String username){

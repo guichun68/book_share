@@ -3,6 +3,7 @@ package zyzx.linke.base;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Window;
 
 import com.hyphenate.util.EMLog;
@@ -33,7 +34,7 @@ public class ErrActivity extends BaseActivity {
 	@Override
 	protected void initData() {}
 	
-	private android.app.AlertDialog.Builder exceptionBuilder;
+	private AlertDialog.Builder exceptionBuilder;
 	// user logged into another device
 	public boolean isConflict = false;
 	// user account was removed
@@ -60,7 +61,7 @@ public class ErrActivity extends BaseActivity {
 			// clear up global variables
 			try {
 				if (exceptionBuilder == null)
-					exceptionBuilder = new android.app.AlertDialog.Builder(ErrActivity.this);
+					exceptionBuilder = new AlertDialog.Builder(ErrActivity.this);
 				exceptionBuilder.setTitle(st);
 				exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
 				exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

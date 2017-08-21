@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_root"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,22 +8,19 @@
 
     <include layout="@layout/title_bar"/>
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pull_refresh_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_bar_layout"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@color/bg_divider_line"
-        android:dividerHeight="@dimen/divider_width"
-        android:fadingEdge="none"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true"
-        android:smoothScrollbar="true"
-        ptr:ptrDrawable="@mipmap/publicloading"
-        ptr:ptrHeaderTextColor="@color/title_color" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <zyzx.linke.views.MyRecyclerViewWapper
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:scrollbars="vertical"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

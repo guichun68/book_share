@@ -24,16 +24,24 @@ import zyzx.linke.utils.StringUtil;
 
 public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHolder>{
     //上拉加载更多
-    public static final int STATUS_PULLUP_LOAD_MORE =0;
+    private static Status STATUS_PULLUP_LOAD_MORE = Status.STATUS_PULLUP_LOAD_MORE;
     //正在加载中
-    public static final int STATUS_LOADING_MORE =1;
+    private static Status STATUS_LOADING_MORE =Status.STATUS_LOADING_MORE;
     //没有加载的时候
-    public static final int STATUS_LOADING_END = 2;
+    private static Status STATUS_LOADING_END = Status.STATUS_LOADING_END;
     //没有更多内容了
-    public static final int STATUS_NO_MORE_DATE = 3;
+    private static Status STATUS_NO_MORE_DATE = Status.STATUS_NO_MORE_DATE;
 
     //上拉加载更多状态-默认为0
-    public int load_more_status=0;
+    public Status load_more_status = Status.STATUS_PULLUP_LOAD_MORE;
+    Status d;
+
+    public enum Status{
+        STATUS_PULLUP_LOAD_MORE,
+        STATUS_LOADING_MORE,
+        STATUS_LOADING_END,//隐藏footer
+        STATUS_NO_MORE_DATE;
+    }
 
     private static final int TYPE_ITEM =0;  //普通Item View
     private static final int TYPE_FOOTER = 1;  //底部FootView
@@ -43,6 +51,10 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
     private LayoutInflater mInflater;
     private Integer itemLayoutId;
     private Integer footerLayoutId;
+    private View footerView;
+    private int footerProgressResId,footerTextTipResId;
+    private ProgressBar footerProgressBar;
+    private TextView footerTextTip;
 
     public MyCommonAdapter(Context context,List<T> datas,int itemLayoutResId){
         this.mDatas = datas;
@@ -50,9 +62,11 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
         mInflater = ((Activity)context).getLayoutInflater();
         this.itemLayoutId = itemLayoutResId;
     }
-    public MyCommonAdapter(Context context,List<T> datas,int itemLayoutResId,int footerLayoutId){
+    public MyCommonAdapter(Context context,List<T> datas,int itemLayoutResId,int footerLayoutId,int footerProgressResId,int footerTextTipResId){
         this(context,datas,itemLayoutResId);
         this.footerLayoutId = footerLayoutId;
+        this.footerProgressResId = footerProgressResId;
+        this.footerTextTipResId = footerTextTipResId;
     }
 
     @Override
@@ -69,7 +83,10 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
             return itemViewHolder;
 
         }else if(viewType==TYPE_FOOTER){
-            MyViewHolder footViewHolder = MyViewHolder.createViewHolder(mContext,parent,footerLayoutId);
+            footerView = LayoutInflater.from(mContext).inflate(footerLayoutId, parent, false);
+            footerProgressBar = (ProgressBar) footerView.findViewById(footerProgressResId);
+            footerTextTip = (TextView) footerView.findViewById(footerTextTipResId);
+            MyViewHolder footViewHolder = MyViewHolder.createViewHolder(mContext,footerView);
             footViewHolder.setHolderType(MyViewHolder.HOLDER_TYPE_FOOTER);
             return footViewHolder;
         }
@@ -87,7 +104,30 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
         if(holder.getHolderType() == MyViewHolder.HOLDER_TYPE_NORMAL){
             convert(holder, mDatas.get(position),position);
         }else if(holder.getHolderType() == MyViewHolder.HOLDER_TYPE_FOOTER){
-            convert(holder, null,position);
+                switch (load_more_status){
+                    case STATUS_PULLUP_LOAD_MORE:
+                        footerView.setVisibility(View.VISIBLE);
+                        footerView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
+                        footerProgressBar.setVisibility(View.VISIBLE);
+                        footerTextTip.setText("加载更多内容");
+                        break;
+                    case STATUS_LOADING_MORE:
+                        footerView.setVisibility(View.VISIBLE);
+                        footerProgressBar.setVisibility(View.VISIBLE);
+                        footerTextTip.setText("正在加载...");
+                        break;
+                    case STATUS_LOADING_END:
+                        footerView.setVisibility(View.GONE);
+                        footerView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
+                        break;
+                    case STATUS_NO_MORE_DATE:
+                        footerView.setVisibility(View.VISIBLE);
+                        footerProgressBar.setVisibility(View.GONE);
+                        footerView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
+                        footerTextTip.setText("无更多内容");
+                        break;
+                }
+//            convert(holder, null,position);
         }
     }
 
@@ -100,7 +140,7 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
      * NO_MORE_DATA=2;
      * @param status
      */
-    public void changeMoreStatus(int status){
+    public void setFooterStatus(Status status){
         load_more_status=status;
         notifyDataSetChanged();
     }

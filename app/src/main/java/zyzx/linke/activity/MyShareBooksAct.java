@@ -7,6 +7,8 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.OrientationHelper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -14,22 +16,18 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.handmark.pulltorefresh.library.ILoadingLayout;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.AllMyBookAdapter;
+import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
@@ -40,15 +38,18 @@ import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserBooks;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
+import zyzx.linke.views.AdvanceDecoration;
+import zyzx.linke.views.MyRecyclerViewWapper;
 
 /**
  * Created by austin on 2017/3/16.
  * Desc: 我的所有分享的书籍
  */
 
-public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.OnRefreshListener {
+public class MyShareBooksAct extends BaseActivity {
     private LinearLayout llRoot;
-    private PullToRefreshListView mPullRefreshListView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private MyRecyclerViewWapper mMyRecyclerView;
     private AllMyBookAdapter myBookAdapter;
     private ArrayList<MyBookDetailVO> mBooks;
     private int mPageNum = 1;
@@ -63,6 +64,36 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
+                android.R.color.holo_red_light,android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //下拉刷新
+                isLoadingMore = false;
+                mPageNum = 1;
+                getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
+            }
+        });
+        mBooks = new ArrayList<>();
+        mMyRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);
+        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
+        myBookAdapter = new AllMyBookAdapter(this, mBooks,R.layout.item_my_books,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
+        mMyRecyclerView.setAdapter(myBookAdapter);
+        mMyRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
+            @Override
+            public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadMore) {
+                if(isLoadMore){
+                    mPageNum++;
+                    isLoadingMore = true;
+                    getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
+                    myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_PULLUP_LOAD_MORE);
+                }
+            }
+        });
+
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -71,17 +102,12 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
 
         llRoot = (LinearLayout) findViewById(R.id.ll_root);
         mTitleText.setText("我的分享");
-        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
-        mPullRefreshListView.setOnRefreshListener(this);
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);//上拉加载更多
-        ListView actualListView = mPullRefreshListView.getRefreshableView();
-        // Need to use the Actual ListView when registering for Context Menu
-        registerForContextMenu(actualListView);
-        actualListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        myBookAdapter.setOnClickListener(new AllMyBookAdapter.OnClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onLongItemClickListener(View view, MyBookDetailVO bookDetailVO, int position) {
                 View popView = View.inflate(mContext, R.layout.pop_modify_book, null);
-                setPopwinViewControls(popView, (MyBookDetailVO) parent.getItemAtPosition(position), position);
+                setPopwinViewControls(popView, bookDetailVO, position);
                 //测量布局的大小
                 popView.measure(0, 0);view.getMeasuredHeight();
                 int popWidth = popView.getMeasuredWidth();
@@ -98,9 +124,9 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
                 if(popHeight<view.getMeasuredHeight()){
-                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
+                    pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
                 }else{
-                    pop.showAtLocation(parent, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
+                    pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
                 }
                 AlphaAnimation aa = new AlphaAnimation(0.2f, 1.0f);
                 aa.setDuration(100);
@@ -113,17 +139,15 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                 popView.startAnimation(set);
                 return true;
             }
-        });
 
-        actualListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClickListener(View view, MyBookDetailVO bookDetailVO, int position) {
                 //进入图书详情页
                 if (pop != null && pop.isShowing()) {
                     pop.dismiss();
                     return;
                 }
-                MyBookDetailVO myBookDetailVO = (MyBookDetailVO) parent.getItemAtPosition(position);
+                MyBookDetailVO myBookDetailVO = bookDetailVO;
                 Intent intent = new Intent(mContext, BookDetailAct.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("book",myBookDetailVO);
@@ -132,10 +156,6 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                 MyShareBooksAct.this.startActivity(intent);
             }
         });
-
-        mBooks = new ArrayList<>();
-        myBookAdapter = new AllMyBookAdapter(mContext, mBooks);
-        actualListView.setAdapter(myBookAdapter);
     }
 
     private Dialog mPromptDialog;
@@ -359,21 +379,6 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
         getBooks(GlobalParams.getLastLoginUser().getUid(), 1);
     }
 
-    @Override
-    public void onRefresh(PullToRefreshBase refreshView) {
-        ILoadingLayout endLabels = mPullRefreshListView.getLoadingLayoutProxy(
-                false, true);
-        endLabels.setPullLabel(getResources().getString(R.string.pull_label));
-        endLabels.setRefreshingLabel(getResources().getString(
-                R.string.refresh_label));
-        endLabels.setReleaseLabel(getResources().getString(
-                R.string.release_label));
-        endLabels.setLoadingDrawable(getResources().getDrawable(
-                R.mipmap.publicloading));
-        mPageNum++;
-        isLoadingMore = true;
-        getBooks(GlobalParams.getLastLoginUser().getUid(), mPageNum);
-    }
 
     /**
      * 获取我的所有书籍（不包含借入的书籍）
@@ -389,11 +394,11 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                     @Override
                     public void run() {
                         dismissProgress();
-                        mPullRefreshListView.onRefreshComplete();
-                        mPullRefreshListView.clearAnimation();
+                        mSwipeRefreshLayout.setRefreshing(false);
                         ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
                         if (books == null || books.isEmpty()) {
                             UIUtil.showToastSafe("没有更多书籍了!");
+                            myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             if (isLoadingMore) {
                                 mPageNum--;
                                 if (mPageNum < 0) mPageNum = 0;
@@ -401,7 +406,7 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                             }
                         } else {
                             mBooks.addAll(books);
-                            myBookAdapter.notifyDataSetChanged();
+                            myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }
                     }
                 });
@@ -413,13 +418,13 @@ public class MyShareBooksAct extends BaseActivity implements PullToRefreshBase.O
                     @Override
                     public void run() {
                         dismissProgress();
-                        mPullRefreshListView.onRefreshComplete();
-                        mPullRefreshListView.clearAnimation();
+                        mSwipeRefreshLayout.setRefreshing(false);
                         if (isLoadingMore) {
                             mPageNum--;
                             if (mPageNum < 0) mPageNum = 0;
                             isLoadingMore = false;
                         }
+                        myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         UIUtil.showToastSafe("未能获取书籍信息!");
                     }
                 });
