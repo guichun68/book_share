@@ -14,9 +14,11 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.BorrowedInVO;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Page;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.presentation.IBookPresenter;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
@@ -214,13 +216,27 @@ public class BookPresenter extends IBookPresenter {
                              @Override
                              public void onSuccess(Object obj, int... code) {
                                  String json = (String) obj;
-                                 if(StringUtil.isEmpty(json)){
-                                     if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
+                                 DefindResponseJson rj = new DefindResponseJson(json);
+                                 if(DefindResponseJson.NO_DATA == rj.errorCode){
+                                     UIUtil.showToastSafe("未能获取数据");
                                      return;
                                  }
-                                 List<MyBookDetailVO> myBookDetailVOs = JSON.parseArray(json, MyBookDetailVO.class);
-                                 if(viewCallBack!=null){
-                                     viewCallBack.onSuccess(myBookDetailVOs);
+                                 List<BorrowedInVO> borrowedInVOs = new ArrayList<BorrowedInVO>();
+                                 switch (rj.errorCode){
+                                     case 2:
+                                         borrowedInVOs = AppUtil.getBorrowedBooks(rj.data.getItems());
+                                         if(viewCallBack!=null){
+                                             viewCallBack.onSuccess(borrowedInVOs);
+                                         }
+                                         break;
+                                     case 3:
+                                         if(viewCallBack!=null){
+                                             viewCallBack.onSuccess(borrowedInVOs);
+                                         }
+                                         break;
+                                     default:
+                                         if(viewCallBack!=null)viewCallBack.onFailure("未能获取数据");
+                                         break;
                                  }
                              }
 
@@ -229,7 +245,7 @@ public class BookPresenter extends IBookPresenter {
                                  if(viewCallBack!=null)viewCallBack.onFailure("未能成功获取书籍信息");
                              }
                          },GlobalParams.urlGetMyBorrowedInBooks,"未能成功获取书籍信息",
-                new String[]{"user_id","page_num"},
+                new String[]{"uid","pageNum"},
                 userid,pageNum);
     }
 
@@ -256,6 +272,11 @@ public class BookPresenter extends IBookPresenter {
     @Override
     public void getSwapSkills(int pageNum, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlGetSwapSkills,"未能获取数据",new String[]{"pageNo"},pageNum);
+    }
+
+    @Override
+    public void getMySwapSkills(int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetMySwapSkills,"未能获取数据",new String[]{"pageNo"},pageNum);
     }
 
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){

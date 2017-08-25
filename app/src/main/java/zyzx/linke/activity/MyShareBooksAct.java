@@ -79,7 +79,7 @@ public class MyShareBooksAct extends BaseActivity {
         });
         mBooks = new ArrayList<>();
         mMyRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);
-        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
+//        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
         myBookAdapter = new AllMyBookAdapter(this, mBooks,R.layout.item_my_books,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
         mMyRecyclerView.setAdapter(myBookAdapter);
         mMyRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {

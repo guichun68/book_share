@@ -102,4 +102,6 @@ public abstract class IBookPresenter extends IPresenter {
 
     //获取指定页码的交换中的技能（们）
     public abstract void getSwapSkills(int pageNum, CallBack callBack);
+    //得到我发布的所有技能交换信息
+    public abstract void getMySwapSkills(int pageNum, CallBack callBack);
 }

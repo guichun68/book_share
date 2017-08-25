@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="2dp"
+    android:background="@drawable/bg_selector"
+    android:layout_height="110dp">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="2dp"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@mipmap/defaultcover"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_corner_borrowed_in"
+            style="@style/corner_style"
+            android:visibility="visible"
+            android:src="@mipmap/book_borrowed_in" />
+
+        <ImageView
+            android:id="@+id/iv_corner_in_stock"
+            style="@style/corner_style"
+            android:src="@mipmap/book_in_stock_corner"
+            android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/iv_corner_sharing"
+            style="@style/corner_style"
+            android:visibility="invisible"
+            android:src="@mipmap/sharing_corner" />
+        <ImageView
+            android:id="@+id/iv_corner_borrowed"
+            style="@style/corner_style"
+            android:visibility="invisible"
+            android:src="@mipmap/book_borrowed_corner" />
+        <ImageView
+            android:id="@+id/iv_corner_exchanging"
+            style="@style/corner_style"
+            android:visibility="invisible"
+            android:src="@mipmap/book_on_exchange_corner" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_book_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tool:text="历史深处的民国"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:drawablePadding="5dp"
+            android:textColor="@color/bg_gray2"
+            android:drawableLeft="@drawable/press_shape"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tool:text="书籍作者：江城"
+            android:textStyle="bold"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:textColor="@color/bg_gray2"
+            android:drawableLeft="@drawable/press_shape"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="3"
+            android:drawableLeft="@drawable/press_shape"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/bg_gray2"
+            tool:text="所有者：阿拉蕾"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

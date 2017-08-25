@@ -1,14 +1,11 @@
 package zyzx.linke.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
+import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
 
@@ -16,27 +13,26 @@ import zyzx.linke.R;
 import zyzx.linke.adapter.BorrowedInAdapter;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseActivity;
-import zyzx.linke.global.BundleFlag;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.CallBack;
-import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.model.bean.BorrowedInVO;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.AdvanceDecoration;
 import zyzx.linke.views.MyRecyclerViewWapper;
 
 /**
  * Created by austin on 2017/3/20.
- * Desc： 借入的书籍列表
+ * Desc： 我的借入的书籍列表
  */
 
 public class BorrowedInBookAct extends BaseActivity{
 
     private MyRecyclerViewWapper mMyRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ArrayList<MyBookDetailVO> mBooks;
+    private ArrayList<BorrowedInVO> mBooks;
     private BorrowedInAdapter mBorrowedInAdapter;
     private boolean isLoadingMore;//是否是加载更多的动作
-    private int mPageNum;
+    private int mPageNum = 1;
 
     @Override
     protected int getLayoutId() {
@@ -55,14 +51,14 @@ public class BorrowedInBookAct extends BaseActivity{
                 mBooks.clear();
                 //下拉刷新
                 isLoadingMore = false;
-                mPageNum = 0;
-                getBooks(GlobalParams.getLastLoginUser().getUserid(), mPageNum);
+                mPageNum = 1;
+                getBooks(Integer.parseInt(EMClient.getInstance().getCurrentUser()), mPageNum);
             }
         });
         mBooks = new ArrayList<>();
         mMyRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);
-        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
-        mBorrowedInAdapter = new BorrowedInAdapter(this, mBooks,R.layout.item_my_books,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
+//        mMyRecyclerView.addItemDecoration(new AdvanceDecoration(this, OrientationHelper.HORIZONTAL));
+        mBorrowedInAdapter = new BorrowedInAdapter(this, mBooks,R.layout.item_borrowed_books,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
         mMyRecyclerView.setAdapter(mBorrowedInAdapter);
         mMyRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
             @Override
@@ -70,7 +66,7 @@ public class BorrowedInBookAct extends BaseActivity{
                 if(isLoadMore){
                     mPageNum++;
                     isLoadingMore = true;
-                    getBooks(Integer.parseInt(GlobalParams.getLastLoginUser().getUid()), mPageNum);
+                    getBooks(Integer.parseInt(EMClient.getInstance().getCurrentUser()), mPageNum);
                     mBorrowedInAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_PULLUP_LOAD_MORE);
                 }
             }
@@ -78,20 +74,20 @@ public class BorrowedInBookAct extends BaseActivity{
         mTitleText.setText("我借入的书");
         mBorrowedInAdapter.setOnClickListener(new BorrowedInAdapter.OnClickListener() {
             @Override
-            public boolean onLongItemClickListener(View view, MyBookDetailVO bookDetailVO, int position) {
+            public boolean onLongItemClickListener(View view, BorrowedInVO bookDetailVO, int position) {
                 UIUtil.showTestToast(mContext,"长按事件");
                 return false;
             }
 
             @Override
-            public void onItemClickListener(View view, MyBookDetailVO bookDetailVO, int position) {
+            public void onItemClickListener(View view, BorrowedInVO bookDetailVO, int position) {
                 //进入图书详情页
-                Intent intent = new Intent(mContext, CommonBookDetailAct.class);
+                /*Intent intent = new Intent(mContext, CommonBookDetailAct.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("book", bookDetailVO);
                 intent.putExtra(BundleFlag.SHOWADDRESS, false);
                 intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                mContext.startActivity(intent);*/
             }
         });
 
@@ -101,17 +97,18 @@ public class BorrowedInBookAct extends BaseActivity{
     protected void initData() {
         mBooks.clear();
         showDefProgress();
-        getBooks(GlobalParams.getLastLoginUser().getUserid(), 0);
+        mPageNum = 1;
+        getBooks(Integer.parseInt(EMClient.getInstance().getCurrentUser()), mPageNum);
     }
 
     /**
      * 获取所有我借入的书籍
      *
-     * @param userid userId
+     * @param userId userId
      * @param pageNum pageNo
      */
-    private void getBooks(Integer userid, int pageNum) {
-        getBookPresenter().getMyBorrowedInBooks(userid, pageNum, new CallBack() {
+    private void getBooks(Integer userId, int pageNum) {
+        getBookPresenter().getMyBorrowedInBooks(userId, pageNum, new CallBack() {
             @Override
             public void onSuccess(final Object obj, int... code) {
                 runOnUiThread(new Runnable() {
@@ -119,13 +116,13 @@ public class BorrowedInBookAct extends BaseActivity{
                     public void run() {
                         dismissProgress();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
+                        ArrayList<BorrowedInVO> books = (ArrayList<BorrowedInVO>) obj;
                         if (books == null || books.isEmpty()) {
                             UIUtil.showToastSafe("没有更多书籍了!");
                             mBorrowedInAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             if(isLoadingMore){
                                 mPageNum--;
-                                if(mPageNum<0)mPageNum=0;
+                                if(mPageNum<=0)mPageNum=1;
                                 isLoadingMore=false;
                             }
                         } else {
@@ -145,7 +142,7 @@ public class BorrowedInBookAct extends BaseActivity{
                         mSwipeRefreshLayout.setRefreshing(false);
                         if(isLoadingMore){
                             mPageNum--;
-                            if(mPageNum<0)mPageNum=0;
+                            if(mPageNum<=0)mPageNum=1;
                             isLoadingMore = false;
                         }
                         UIUtil.showToastSafe("未能获取书籍信息!");

@@ -1,3 +1,4 @@
+/*
 package zyzx.linke.activity;
 
 import android.content.Intent;
@@ -28,10 +29,12 @@ import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
 
+*/
 /**
  * Created by austin on 2017/3/4.
  * Desc: 好友主页（显示好友信息并展示其在地图中分享的书籍,即其在zyzx_user_books表中book_status=2的所有书籍）
- */
+ *//*
+
 
 public class FriendHomePageAct_old extends BaseActivity implements PullToRefreshBase.OnRefreshListener<ListView> {
 
@@ -201,3 +204,4 @@ public class FriendHomePageAct_old extends BaseActivity implements PullToRefresh
 //        getBooks(mCloudItem.getCustomfield().get("uid"),pageNum);
     }
 }
+*/

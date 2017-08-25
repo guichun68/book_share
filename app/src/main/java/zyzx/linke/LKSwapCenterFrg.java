@@ -19,8 +19,8 @@ import zyzx.linke.activity.BookSwapPage;
 import zyzx.linke.activity.SkillSwapPage;
 import zyzx.linke.adapter.ExchangeCenterVPAdapter;
 import zyzx.linke.base.BaseFragment;
-import zyzx.linke.utils.UIUtil;
 import zyzx.linke.base.BaseSwapPager;
+import zyzx.linke.utils.UIUtil;
 
 /**
  * 交换中心页面
@@ -51,6 +51,7 @@ public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListene
                 setIndicator(mTabLayout,30,30);
             }
         });
+
 
         LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
         linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
@@ -87,7 +88,6 @@ public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-
         }
     }
 

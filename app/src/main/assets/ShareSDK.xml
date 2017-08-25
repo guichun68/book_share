@@ -98,7 +98,7 @@
         SortId="4"
         AppId="wx512881096233ce48"
         AppSecret="fedf61435f8a16910077e8947a8f2fed"
-		userName="gh_afb25ac019c9"
+		ownerName="gh_afb25ac019c9"
 		path="/page/API/pages/share/share"
         BypassApproval="false"
         Enable="true" />

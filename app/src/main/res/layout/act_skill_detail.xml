@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <include layout="@layout/title_bar"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="交换发起人:"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/holo_blue_light"
+            android:layout_margin="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_publisher"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_sel"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            tool:text="阿拉蕾蕾蕾"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_light"
+        android:text="标题："/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        tool:text="会注塑机操作想交换外语（英语学习）"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="拥有"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:text="技能类型:"/>
+
+    <TextView
+        android:id="@+id/tv_skill_type"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        tool:text="音乐"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tool:text="技能："/>
+    <TextView
+        android:id="@+id/tv_own_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        tool:text="钻木取火，空中翻筋斗"/>
+
+    <View
+        android:layout_margin="10dp"
+        style="@style/line"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="想要交换"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:text="技能类型:"/>
+
+        <TextView
+            android:id="@+id/tv_swap_skill_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp"
+            tool:text="音乐"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        tool:text="技能："/>
+
+    <TextView
+        android:id="@+id/tv_swap_skill_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        tool:text="钻木取火，空中翻筋斗" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="其他说明："
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tool:text="喜欢摄影，平日没时间，可以周六日交流学习。希望能提供麻豆。"/>
+</LinearLayout>

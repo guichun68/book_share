@@ -216,6 +216,7 @@
     <string name="default_city">北京</string>
     <string name="scan_input">扫码录入(推荐)</string>
     <string name="borrow_in">我的借入</string>
+    <string name="swap_skill">我的技能交换</string>
     <string name="all_my_book">我的书架</string>
     <string name="my_share">我的分享</string>
     <string name="borrow_out">借出的书籍</string>

@@ -78,7 +78,7 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
             //view.setBackgroundColor(Color.RED);
             MyViewHolder itemViewHolder = MyViewHolder.createViewHolder(mContext, parent, itemLayoutId);
             onViewHolderCreated(itemViewHolder,itemViewHolder.getConvertView());
-            setListener(parent, itemViewHolder, viewType);
+
             itemViewHolder.setHolderType(MyViewHolder.HOLDER_TYPE_NORMAL);
             return itemViewHolder;
 
@@ -97,12 +97,15 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
 
     }
 
-    public abstract void convert(MyViewHolder holder, T t,int position);
+    public void convert(MyViewHolder holder, T t,int position){
+        setListener(holder, t,position);
+    }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if(holder.getHolderType() == MyViewHolder.HOLDER_TYPE_NORMAL){
             convert(holder, mDatas.get(position),position);
+
         }else if(holder.getHolderType() == MyViewHolder.HOLDER_TYPE_FOOTER){
                 switch (load_more_status){
                     case STATUS_PULLUP_LOAD_MORE:
@@ -172,14 +175,14 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
         return true;
     }
     protected OnItemClickListener mOnItemClickListener;
-    protected void setListener(final ViewGroup parent, final MyViewHolder viewHolder, int viewType) {
-        if (!isEnabled(viewType)) return;
+    protected void setListener(final MyViewHolder viewHolder,final T t,int position) {
+        if (!isEnabled(viewHolder.getItemViewType())) return;
         viewHolder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    mOnItemClickListener.onItemClick(v, viewHolder , position);
+                    mOnItemClickListener.onItemClick(v, viewHolder ,t,position);
                 }
             }
         });
@@ -189,17 +192,17 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
             public boolean onLongClick(View v) {
                 if (mOnItemClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    return mOnItemClickListener.onItemLongClick(v, viewHolder, position);
+                    return mOnItemClickListener.onItemLongClick(v, viewHolder, t,position);
                 }
                 return false;
             }
         });
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, RecyclerView.ViewHolder holder,  int position);
+    public interface OnItemClickListener<T> {
+        void onItemClick(View view, RecyclerView.ViewHolder holder,T t,  int position);
 
-        boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,  int position);
+        boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, T t ,int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

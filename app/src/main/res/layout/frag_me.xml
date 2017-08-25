@@ -254,9 +254,7 @@
                 android:id="@+id/rl_borrow_in"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_top_selr"
-                android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp" >
 
@@ -280,6 +278,40 @@
 
                 <ImageView
                     android:id="@+id/imageview_jiantou3"
+                    style="@style/rightArrow"/>
+            </RelativeLayout>
+            <View
+                style="@style/line"/>
+            <RelativeLayout
+                android:id="@+id/rl_swap_skill"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_top_selr"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp" >
+
+                <ImageView
+                    android:id="@+id/iv12"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/myborrows" />
+
+                <TextView
+                    android:id="@+id/tv12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@+id/iv12"
+                    android:text="@string/swap_skill"
+                    android:textSize="@dimen/sp_19"
+                    android:textColor="@color/text_tip_color"  />
+
+                <ImageView
+                    android:id="@+id/imageview_jiantou12"
                     style="@style/rightArrow"/>
             </RelativeLayout>
 

@@ -34,6 +34,7 @@ import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CityUtil;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.MyRecyclerViewWapper;
 
@@ -53,7 +54,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
     private boolean isRefresh = true;//是否是刷新行为,默认刷新
     private BookVOAdapter mAdapter;
     private MyRecyclerViewWapper mMyRecyclerView;
-    private String mCurrPro, mCurrCity, mCurrCounty;
+    private String mCurrPro = "北京", mCurrCity = "北京", mCurrCounty;
     private int mCurrentPageNum = 1;
     private ArrayList<MyBookDetailVO> mListViewItems = new ArrayList<>();
 
@@ -361,6 +362,9 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
      * @param pagenum 页码
      */
     private void searchDefault(int pagenum) {
+        if(StringUtil.isEmpty(mCurrPro)){
+            mCurrPro = getResources().getString(R.string.default_city);
+        }
         mCurrCity = getResources().getString(R.string.default_city);
         searchByLocal(pagenum);
     }

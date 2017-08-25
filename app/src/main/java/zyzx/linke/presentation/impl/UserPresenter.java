@@ -457,6 +457,24 @@ public class UserPresenter extends IUserPresenter {
         getDataWithPost(callBack,GlobalParams.urlCancelSwapBook,"访问出错",new String[]{"userBookId","swapId"},userBookId,swapId);
     }
 
+    @Override
+    public void getSkillClassify(CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetSkillType,"未能获取技能类型",new String[]{});
+    }
+
+    @Override
+    public void publishMySkillSwap(String title, String ownSkillType, String ownSkillName, String swapSkillType, String swapSkillName, String detail, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlPulishSkill,"未能成功发布",
+                new String[]{"title","ownSkillType","ownSkillName","swapSkillType","swapSkillName","detail"},
+                title,ownSkillType,ownSkillName,swapSkillType,swapSkillName,detail);
+    }
+
+    @Override
+    public void getSwapSkillDeatil(String swapSkillId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetSwapSkillDetal,"未能获取技能交换信息",
+                new String[]{"swapSkillId"},swapSkillId);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

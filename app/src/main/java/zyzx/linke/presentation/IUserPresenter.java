@@ -189,4 +189,28 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void cancelSwapBook(String userBookId, String swapId, CallBack callBack);
+
+    /**
+     * 得到交换的技能类型
+     */
+    public abstract void getSkillClassify(CallBack callBack);
+
+    /**
+     * 发布技能交换帖
+     * @param title 技能交换标题
+     * @param ownSkillType 我拥有的技能类型
+     * @param ownSkillName 我拥有的技能名（简短）
+     * @param swapSkillType 我想要交换的技能类型
+     * @param swapSkillName 我想要交换的技能（简短描述）
+     * @param detail 具体描述
+     * @param callBack
+     */
+    public abstract void publishMySkillSwap(String title, String ownSkillType, String ownSkillName, String swapSkillType, String swapSkillName, String detail, CallBack callBack);
+
+    /**
+     * 获取单个技能交换详情
+     * @param swapSkillId 技能交换表主键
+     * @param callBack
+     */
+    public abstract void getSwapSkillDeatil(String swapSkillId, CallBack callBack);
 }

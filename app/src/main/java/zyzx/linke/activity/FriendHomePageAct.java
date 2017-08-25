@@ -86,7 +86,7 @@ public class FriendHomePageAct extends BaseActivity {
             case R.id.iv_icon:
                 break;
             case R.id.btn_send_msg:
-                if(mUser.getUserid().equals(EMClient.getInstance().getCurrentUser())){
+                if((""+mUser.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
                     UIUtil.showToastSafe("无需同自己聊天");
                     return;
                 }

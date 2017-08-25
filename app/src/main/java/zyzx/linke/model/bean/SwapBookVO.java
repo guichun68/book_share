@@ -9,7 +9,7 @@ import android.os.Parcelable;
  */
 public class SwapBookVO implements Parcelable{
     private String userBookId;
-    private String userId;
+    private String userId;//uuid
     private String bookTitle;
     private String bookImageLarge;
     private String swapId;

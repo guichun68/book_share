@@ -19,5 +19,6 @@ public class BundleFlag {
 	public static final String LOGIN_NAME="login_name";
 	public static final String SHOULD_REFRESH = "ifRefresh";//是否需要刷新
 	public static final String FLAG_USER = "user";//
+	public static final String FLAG_SKILL_SWAP = "swap_skill";//
 
 }

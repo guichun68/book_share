@@ -49,6 +49,9 @@ public class GlobalParams {
 	public static String urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 	public static String urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
 	public static String urlGetSubArea = GlobalParams.BASE_URL+"/area/mobileSDK/getArea.action";
+	public static String urlGetSkillType = GlobalParams.BASE_URL+"/user/mobileSDK/getSkillType.action";
+	public static String urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
+	public static String urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -139,12 +142,13 @@ public class GlobalParams {
 	/**
 	 * 得到我借入的书籍
 	 */
-	public static String urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
+	public static String urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getUserBorrowedBooks.action";
 
 	public static String urlGetSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBooks.action";
 	public static String urlGetSwapBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBookInfo.action";
 
 	public static String urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
+	public static String urlGetMySwapSkills = GlobalParams.BASE_URL+"/user/mobileSDK/getMySwapSkills.action";
 
 	/**
 	 * 注册
@@ -204,6 +208,9 @@ public class GlobalParams {
 		urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 		urlDeleteUserBooks= GlobalParams.BASE_URL+"/user/mobileSDK/delBook.action";
 		urlShareBook = GlobalParams.BASE_URL+"/user/mobileSDK/shareBook.action";
+		urlGetSkillType = GlobalParams.BASE_URL+"/user/mobileSDK/getSkillType.action";
+		urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
+		urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
@@ -211,8 +218,10 @@ public class GlobalParams {
 		urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/zyzx/getMyBorrowedInBooks.action";
 		urlGetSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBooks.action";
 		urlGetSwapBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapBookInfo.action";
+        urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getUserBorrowedBooks.action";
 		urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
+		urlGetMySwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getMySwapSkills.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 		urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";

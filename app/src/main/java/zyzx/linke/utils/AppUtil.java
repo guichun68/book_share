@@ -32,6 +32,8 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.BorrowFlow;
 import zyzx.linke.model.bean.BorrowFlowVO;
+import zyzx.linke.model.bean.BorrowedInVO;
+import zyzx.linke.model.bean.EnumConst;
 import zyzx.linke.model.bean.Images;
 import zyzx.linke.model.bean.MyBookDetailVO;
 import zyzx.linke.model.bean.Rating;
@@ -554,6 +556,42 @@ public class AppUtil {
 		return mBvos;
     }
 
+    public static ArrayList<BorrowedInVO> getBorrowedBooks(List<JSONObject> items) {
+		ArrayList<BorrowedInVO> mBvos = new ArrayList<>();
+		for (JSONObject jo:items) {
+			BorrowedInVO biv = new BorrowedInVO();
+
+			String imageUrlL = jo.getString("image_large");
+			String imageUrlS = jo.getString("image_small");
+			if(StringUtil.isEmpty(imageUrlL)){
+				if(!StringUtil.isEmpty(imageUrlS)){
+					biv.setBookImage(imageUrlS);
+				}
+			}else{
+				biv.setBookImage(imageUrlL);
+			}
+			String borrowFlowId = jo.getString("borrowFlowId");
+			biv.setBorrowFlowId(borrowFlowId);
+			String flowId = jo.getString("flow_id");
+			biv.setFlowId(flowId);
+			String uid = jo.getString("uid");
+			biv.setUid(uid);
+			String relUid = jo.getString("rel_uid");
+			biv.setRelUid(relUid);
+			String title = jo.getString("title");
+			biv.setBookTitle(title);
+			String bookId = jo.getString("id");
+			biv.setBookId(bookId);
+			String loginName = jo.getString("login_name");
+			biv.setOwnerName(loginName);
+
+			String author = jo.getString("a_author");
+			biv.setBookAuthor(author);
+			mBvos.add(biv);
+		}
+		return mBvos;
+    }
+
     public static ArrayList<BorrowFlowVO> getBorrowBegs(JSONArray items){
 		ArrayList<BorrowFlowVO> result = new ArrayList<>();
 		for (int i = 0;i<items.size();i++){
@@ -597,6 +635,20 @@ public class AppUtil {
 		return result;
 	}
 
+	public static ArrayList<EnumConst> getSwapSkillTyps(JSONArray items) {
+		ArrayList<EnumConst> result = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			EnumConst sbVO = new EnumConst();
+			JSONObject jo = (JSONObject) items.get(i);
+			sbVO.setId(jo.getString("ID"));
+			sbVO.setName(jo.getString("NAME"));
+			sbVO.setCode(jo.getString("CODE"));
+			sbVO.setNameSpace(jo.getString("NAMESPACE"));
+			result.add(sbVO);
+		}
+		return result;
+	}
+
 	public static ArrayList<SwapSkillVo> getSwapSkills(List<JSONObject> items) {
 		ArrayList<SwapSkillVo> result = new ArrayList<>();
 		for (int i = 0; i < items.size(); i++) {
@@ -608,6 +660,8 @@ public class AppUtil {
 			sbVO.setUid(jo.getString("uid"));
 			sbVO.setSkillHaveName(jo.getString("skillHaveName"));
 			sbVO.setSkillWantName(jo.getString("skillWantName"));
+			sbVO.setSkillType(jo.getString("haveType"));
+			sbVO.setSwapSkillType(jo.getString("wantType"));
 			result.add(sbVO);
 		}
 		return result;

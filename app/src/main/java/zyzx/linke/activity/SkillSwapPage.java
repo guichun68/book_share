@@ -1,11 +1,14 @@
 package zyzx.linke.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -19,10 +22,12 @@ import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.adapter.MyViewHolder;
 import zyzx.linke.base.BaseSwapPager;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.SwapSkillVo;
 import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.GlideCircleTransform;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.MyRecyclerViewWapper;
@@ -43,6 +48,7 @@ public class SkillSwapPage extends BaseSwapPager {
     private final int SUCCESS = 0x47B,FAILURE = 0xB52;
     private boolean isRefreshing = false;
     private boolean canLoadingMore = false;
+    private FloatingActionButton mFloatButton;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -103,6 +109,7 @@ public class SkillSwapPage extends BaseSwapPager {
         if(mSwapSkillVos == null){
             mSwapSkillVos = new ArrayList<>();
         }
+        mFloatButton = (FloatingActionButton) getRootView().findViewById(R.id.floatButton);
         mSwipeRefreshLayout = (SwipeRefreshLayout) getRootView().findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (MyRecyclerViewWapper) getRootView().findViewById(R.id.recyclerView);
 
@@ -114,6 +121,7 @@ public class SkillSwapPage extends BaseSwapPager {
         mAdapter = new SkillAdapter(context,mSwapSkillVos,R.layout.item_skill,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
 
         mRecyclerView.setAdapter(mAdapter);
+
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -138,6 +146,13 @@ public class SkillSwapPage extends BaseSwapPager {
                 super.onScrolled(recyclerView,dx, dy);
             }
         });
+        mFloatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(context,SkillInputAct.class);
+                context.startActivity(in);
+            }
+        });
         getData(mPageNum=1);
     }
 
@@ -148,19 +163,28 @@ public class SkillSwapPage extends BaseSwapPager {
         }
 
         @Override
-        public void convert(MyViewHolder holder, SwapSkillVo ssVO,int position) {
+        public void convert(MyViewHolder holder, final SwapSkillVo ssVO, int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
                 holder.setText(R.id.tv_title,ssVO.getSkillTitle());
                 holder.setText(R.id.tv_want,ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){
-                    Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().into( (ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().transform(new GlideCircleTransform(mContext)).into( (ImageView)holder.getView(R.id.iv));
                 }else if(ssVO.getHeadIcon().contains("http")){
-                    Glide.with(context).load(ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
                 }else{
-                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
                 }
                 holder.itemView.setTag(position);
+
+                holder.setOnClickListener(R.id.ll_root, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent in = new Intent(context,SkillDeatilAct.class);
+                        in.putExtra(BundleFlag.FLAG_SKILL_SWAP,ssVO);
+                        context.startActivity(in);
+                    }
+                });
             }
         }
     }

@@ -79,5 +79,6 @@
     <color name="text_gray1">#777777</color>
     <color name="custom_black2">#6D6D6D</color>
     <color name="text_tip_color">#737373</color>
+    <color name="darkYellow">#ffb68f</color>
 
 </resources>

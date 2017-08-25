@@ -30,6 +30,7 @@ import zyzx.linke.activity.ManualInputAct;
 import zyzx.linke.activity.MyBooksAct;
 import zyzx.linke.activity.MyBorrowBegsAct;
 import zyzx.linke.activity.MyShareBooksAct;
+import zyzx.linke.activity.MySkillSwapsAct;
 import zyzx.linke.activity.PersonalCenterAct;
 import zyzx.linke.base.BaseFragment;
 import zyzx.linke.base.EaseUIHelper;
@@ -49,7 +50,7 @@ import zyzx.linke.views.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * 主页界面
+ * 主页界面--个人中心
  */
 public class MeFragment extends BaseFragment implements View.OnClickListener {
     private final int EXCEL_FILE_SELECT_CODE = 11;
@@ -82,6 +83,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         mRootView.findViewById(R.id.rl_export).setOnClickListener(this);//导出
         mRootView.findViewById(R.id.rl_import).setOnClickListener(this);//导入
         mRootView.findViewById(R.id.rl_my_borrow_beg).setOnClickListener(this);//导入
+        mRootView.findViewById(R.id.rl_swap_skill).setOnClickListener(this);
 
         intiData();
     }
@@ -159,6 +161,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.rl_top:
                 Intent in = new Intent(getActivity(), PersonalCenterAct.class);
                 startActivityForResult(in, REQUEST_CODE_PERSONAL_ACT);
+                break;
+            case R.id.rl_swap_skill:
+                //我的技能交换
+                Intent i = new Intent(getActivity(),MySkillSwapsAct.class);
+                startActivity(i);
                 break;
         }
     }
