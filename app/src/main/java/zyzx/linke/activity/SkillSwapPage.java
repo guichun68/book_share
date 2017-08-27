@@ -6,10 +6,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -40,14 +44,13 @@ import zyzx.linke.views.MyRecyclerViewWapper;
 public class SkillSwapPage extends BaseSwapPager {
     private final String TAG = SkillSwapPage.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private LinearLayoutManager linearLayoutManager;
+    private AppCompatEditText etSearch;
     private MyRecyclerViewWapper mRecyclerView;
     private SkillAdapter mAdapter;
     private ArrayList<SwapSkillVo> mSwapSkillVos;
     private int mPageNum;
     private final int SUCCESS = 0x47B,FAILURE = 0xB52;
     private boolean isRefreshing = false;
-    private boolean canLoadingMore = false;
     private FloatingActionButton mFloatButton;
 
     private MyHandler handler = new MyHandler(this);
@@ -112,7 +115,7 @@ public class SkillSwapPage extends BaseSwapPager {
         mFloatButton = (FloatingActionButton) getRootView().findViewById(R.id.floatButton);
         mSwipeRefreshLayout = (SwipeRefreshLayout) getRootView().findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (MyRecyclerViewWapper) getRootView().findViewById(R.id.recyclerView);
-
+        etSearch = (AppCompatEditText) getRootView().findViewById(R.id.et_search);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.white);
         //设置刷新时动画的颜色，可以设置4个
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
@@ -154,6 +157,27 @@ public class SkillSwapPage extends BaseSwapPager {
             }
         });
         getData(mPageNum=1);
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId== EditorInfo.IME_ACTION_SEND ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER)) {
+                    switch (event.getAction()){
+                        case KeyEvent.ACTION_UP:
+                            if(StringUtil.isEmpty(v.getText().toString())){
+                                UIUtil.showToastSafe("请输入搜索关键字");
+                                return true;
+                            }
+                            Intent i = new Intent(context,SwapSkillSearchResultAct.class);
+                            i.putExtra(BundleFlag.KEY_WORD,v.getText().toString());
+                            context.startActivity(i);
+                            return true;
+                        default:
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private class SkillAdapter extends MyCommonAdapter<SwapSkillVo>{
@@ -166,7 +190,7 @@ public class SkillSwapPage extends BaseSwapPager {
         public void convert(MyViewHolder holder, final SwapSkillVo ssVO, int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
                 holder.setText(R.id.tv_title,ssVO.getSkillTitle());
-                holder.setText(R.id.tv_want,ssVO.getSkillWantName());
+                holder.setText(R.id.tv_want,StringUtil.isEmpty(ssVO.getSkillWantName())?"现金交换":ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){
                     Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().transform(new GlideCircleTransform(mContext)).into( (ImageView)holder.getView(R.id.iv));

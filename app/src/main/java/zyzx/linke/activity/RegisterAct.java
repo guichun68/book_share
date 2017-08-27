@@ -1,7 +1,6 @@
 package zyzx.linke.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
@@ -75,8 +74,8 @@ public class RegisterAct extends BaseActivity {
                             @Override
                             public void run() {
                                 String errMsg = (String)obj;
-                                if(code.length>0)
-                                    switch (code[0]) {
+                                if(code.length>0){
+                                    /*switch (code[0]) {
                                         case 2:
                                             aetPhone.setError(errMsg);
                                             Snackbar.make(aetPhone, errMsg, Snackbar.LENGTH_SHORT).show();
@@ -88,7 +87,9 @@ public class RegisterAct extends BaseActivity {
                                         default:
                                             Snackbar.make(aetLoginName,errMsg+code[0]+"",Snackbar.LENGTH_SHORT).show();
                                             break;
-                                    }
+                                    }*/
+                                    UIUtil.showToastSafe(errMsg);
+                                }
                                 else{
                                   UIUtil.showToastSafe(errMsg);
                                 }
@@ -104,50 +105,59 @@ public class RegisterAct extends BaseActivity {
     private boolean checkInput() {
         //判空
         if (StringUtil.isEmpty(aetLoginName.getText().toString())) {
-            Snackbar.make(aetLoginName, "用户名不能为空", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetLoginName, "用户名不能为空", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("用户名不能为空");
             aetLoginName.setError("用户名不能为空");
             return false;
         }
         if(StringUtil.checkIfHasSpecialChar(aetLoginName.getText().toString())){
-            Snackbar.make(aetLoginName, "用户名不合法", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetLoginName, "用户名不合法", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("用户名不能有特殊字符");
             aetLoginName.setError("用户名不能有特殊字符");
             return false;
         }
 
         if (StringUtil.isEmpty(aetPhone.getText().toString())) {
-            Snackbar.make(aetPhone, "手机号不能为空", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetPhone, "手机号不能为空", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("手机号不能为空");
             aetPhone.setError("手机号不能为空");
             return false;
         }
         if (StringUtil.isEmpty(aetPsw.getText().toString())) {
-            Snackbar.make(aetPsw, "密码不能为空", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetPsw, "密码不能为空", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("密码不能为空");
             aetPsw.setError("密码不能为空");
             return false;
         }
         if (StringUtil.isEmpty(aetRePsw.getText().toString())) {
-            Snackbar.make(aetRePsw, "请再次输入密码", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetRePsw, "请再次输入密码", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("请再次输入密码");
             aetRePsw.setError("请再次输入密码");
             return false;
         }
         if (aetPsw.getText().toString().contains(" ")) {
-            Snackbar.make(aetPsw, "密码不能包含空字符", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetPsw, "密码不能包含空字符", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("密码不能包含空字符");
             aetPsw.setError("密码不能包含空字符");
             return false;
         }
         if (aetPsw.getText().toString().length() < 6) {
-            Snackbar.make(aetPsw, "密码至少6位", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetPsw, "密码至少6位", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("密码至少6位");
             aetPsw.setError("密码至少6位");
             return false;
         }
         //判断手机号是否合法
         if (!CheckPhone.isPhone(aetPhone.getText().toString())) {
-            Snackbar.make(aetPhone, "手机号不合法", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetPhone, "手机号不合法", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("手机号不合法");
             aetPhone.setError("手机号不合法");
             return false;
         }
         //两次密码是否一致
         if (!aetPsw.getText().toString().equals(aetRePsw.getText().toString())) {
-            Snackbar.make(aetRePsw, "两次密码不一致", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(aetRePsw, "两次密码不一致", Snackbar.LENGTH_SHORT).show();
+            UIUtil.showToastSafe("两次密码不一致");
             aetRePsw.setError("两次密码不一致");
             return false;
         }

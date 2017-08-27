@@ -6,12 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -22,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.activity.AreaSelAct;
+import zyzx.linke.activity.BookSearchResultAct;
+import zyzx.linke.activity.ShareBookSearchAct;
 import zyzx.linke.adapter.BookVOAdapter;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseFragment;
@@ -40,6 +46,7 @@ import zyzx.linke.views.MyRecyclerViewWapper;
 
 /**
  * 主页界面
+ * Desc: 分享中心
  */
 public class ShareCenterFragment extends BaseFragment implements  View.OnClickListener, AMapLocationListener {
     private final String TAG = ShareCenterFragment.class.getSimpleName();
@@ -58,6 +65,8 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
     private int mCurrentPageNum = 1;
     private ArrayList<MyBookDetailVO> mListViewItems = new ArrayList<>();
 
+    private AppCompatEditText etSearch;
+
 
 
     public String getCurrentCity() {
@@ -75,13 +84,38 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
         mTvLeftTip.setVisibility(View.VISIBLE);
         mTvLeftTip.setClickable(true);
         mTitleText.setText("分享中心");
+        mRightBtn.setVisibility(View.VISIBLE);
+        mRightBtn.setOnClickListener(this);
         mTvLeftTip.setText("城市选择");
         mTvLeftTip.setOnClickListener(this);
         mToolbar = (Toolbar) mRootView.findViewById(R.id.id_toolbar);
+        etSearch = (AppCompatEditText) mRootView.findViewById(R.id.et_search);
+        etSearch.setVisibility(View.INVISIBLE);
         // 设置显示Toolbar
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         showToastDialog(Const.LODING_LOCATION);
 
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId== EditorInfo.IME_ACTION_SEND ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER)) {
+                    switch (event.getAction()){
+                        case KeyEvent.ACTION_UP:
+                            if(StringUtil.isEmpty(v.getText().toString())){
+                                UIUtil.showToastSafe("请输入搜索关键字");
+                                return true;
+                            }
+                            Intent i = new Intent(getContext(),BookSearchResultAct.class);
+                            i.putExtra(BundleFlag.KEY_WORD,v.getText().toString());
+                            startActivity(i);
+                            return true;
+                        default:
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
         // 注册地理位置回调监听
         AMapLocationClientOption locationOption = new AMapLocationClientOption();
         locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
@@ -130,6 +164,19 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
         switch (v.getId()) {
             case R.id.tvLeftTip:
                 showAreaPopupWindow();
+                break;
+            case R.id.right_img:
+//                Intent search = new Intent(getContext(),ShareBookSearchAct.class);
+//                startActivity(search);
+                if(etSearch.getVisibility()==View.VISIBLE){
+                    mRightBtn.setImageResource(R.mipmap.search_icon_white);
+                    etSearch.setVisibility(View.INVISIBLE);
+                    mTitleText.setVisibility(View.VISIBLE);
+                }else{
+                    mRightBtn.setImageResource(R.mipmap.delete);
+                    etSearch.setVisibility(View.VISIBLE);
+                    mTitleText.setVisibility(View.INVISIBLE);
+                }
                 break;
         }
     }

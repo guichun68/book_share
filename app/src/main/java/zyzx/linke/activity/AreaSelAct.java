@@ -217,7 +217,7 @@ public class AreaSelAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        progress = CustomProgressDialog.getNewProgressBarNoTip(mContext);
+        progress = CustomProgressDialog.getNewProgressBarNoTip(this);
         tvPro = (TextView) findViewById(R.id.tv_pro);
         tvCity = (TextView) findViewById(R.id.tv_city);
         tvCounty = (TextView) findViewById(R.id.tv_county);

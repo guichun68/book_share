@@ -7,12 +7,32 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/height_top_bar</item>
     </style>
-
+    <!--?attr/actionBarSize-->
+    <!--@dimen/height_top_bar-->
     <style name="title_text_style">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/common_black_color</item>
     </style>
 
+    <style name="dialogstyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <!--设置dialog的背景-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--设置Dialog的windowFrame框为无-->
+        <item name="android:windowFrame">@null</item>
+        <!--设置无标题-->
+        <item name="windowNoTitle">true</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否半透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--设置窗口内容不覆盖-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--设置动画，在这里使用让它继承系统的Animation.Dialog-->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!--背景是否模糊显示-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 
     <style name="inputBook">
         <item name="android:layout_width">match_parent</item>
@@ -106,11 +126,11 @@
     <style name="MyThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!--选中状态icon的颜色和字体颜色-->
-        <item name="colorPrimary">@color/main_blue_light</item>
-        <item name="colorPrimaryDark">@color/bar_color</item>
-        <item name="colorAccent">@color/main_blue_light</item>
+        <item name="colorPrimary">@color/darkYellow</item>
+        <item name="colorPrimaryDark">@color/darkYellow</item>
+        <item name="colorAccent">@color/darkYellow</item>
         <!--正常状态下字体颜色和icon颜色-->
-         <item name="android:textColor">@color/backgroud_black</item>
+         <!--<item name="android:textColor">@color/backgroud_black</item>-->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
         <item name="windowActionBar">false</item>

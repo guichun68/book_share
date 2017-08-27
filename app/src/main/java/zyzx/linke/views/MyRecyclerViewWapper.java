@@ -2,7 +2,6 @@ package zyzx.linke.views;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -19,7 +18,7 @@ import zyzx.linke.utils.UIUtil;
 
 public class MyRecyclerViewWapper extends RecyclerView{
 
-    private LinearLayoutManager linearLayoutManager;
+    private WrapContentLinearLayoutManager linearLayoutManager;
     private float x1,y1,x2,y2;
     private int slidStatus = 0;
     private final int SLOP = 5;//垂直方向最小滑动响应距离
@@ -28,21 +27,21 @@ public class MyRecyclerViewWapper extends RecyclerView{
 
     public MyRecyclerViewWapper(Context context) {
         super(context);
-        linearLayoutManager =new LinearLayoutManager(context);
+        linearLayoutManager =new WrapContentLinearLayoutManager(context);
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.setLayoutManager(linearLayoutManager);
     }
 
     public MyRecyclerViewWapper(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        linearLayoutManager =new LinearLayoutManager(context);
+        linearLayoutManager =new WrapContentLinearLayoutManager(context);
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.setLayoutManager(linearLayoutManager);
     }
 
     public MyRecyclerViewWapper(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        linearLayoutManager =new LinearLayoutManager(context);
+        linearLayoutManager =new WrapContentLinearLayoutManager(context);
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         this.setLayoutManager(linearLayoutManager);
     }

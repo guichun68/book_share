@@ -90,7 +90,7 @@ public class ManualPersonBookAct extends BaseActivity{
                             bookId = (String) ((Map) rj.data.get(0)).get("bookId");
                             mBook.setId(bookId);
                             UIUtil.showToastSafe("添加成功");
-                            dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, "添加成功，继续添加？", "完成", "继续", new View.OnClickListener() {
+                            dialog = CustomProgressDialog.getPromptDialog2Btn(ManualPersonBookAct.this, "添加成功，继续添加？", "完成", "继续", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     setResult(777);

@@ -213,4 +213,6 @@ public abstract class IUserPresenter extends IPresenter{
      * @param callBack
      */
     public abstract void getSwapSkillDeatil(String swapSkillId, CallBack callBack);
+
+    public abstract void deleteSwapSkill(String swapSkillId,CallBack callBack);
 }

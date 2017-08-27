@@ -21,4 +21,5 @@ public class BundleFlag {
 	public static final String FLAG_USER = "user";//
 	public static final String FLAG_SKILL_SWAP = "swap_skill";//
 
+    public static final String KEY_WORD = "KeyWord";
 }

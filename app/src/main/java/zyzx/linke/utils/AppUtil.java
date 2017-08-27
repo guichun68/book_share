@@ -635,6 +635,25 @@ public class AppUtil {
 		return result;
 	}
 
+	public static ArrayList<SwapBookVO> getSwapBooksSearch(List<JSONObject> items) {
+		ArrayList<SwapBookVO> result = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			SwapBookVO sbVO = new SwapBookVO();
+			JSONObject jo = (JSONObject) items.get(i);
+			sbVO.setUserBookId(jo.getString("id"));
+			sbVO.setUserId(jo.getString("user_id"));
+			sbVO.setBookTitle(jo.getString("title"));
+			sbVO.setBookImageLarge(jo.getString("image_large"));
+			sbVO.setSwapId(jo.getString("sb_id"));
+			sbVO.setSwapBookTitle(jo.getString("swap_book_title"));
+			sbVO.setSwapBookAuthor(jo.getString("swap_book_author"));
+			sbVO.setSwapMsg(jo.getString("swap_msg"));
+			sbVO.setBookAuthor(jo.getString("a_name"));
+			result.add(sbVO);
+		}
+		return result;
+	}
+
 	public static ArrayList<EnumConst> getSwapSkillTyps(JSONArray items) {
 		ArrayList<EnumConst> result = new ArrayList<>();
 		for (int i = 0; i < items.size(); i++) {

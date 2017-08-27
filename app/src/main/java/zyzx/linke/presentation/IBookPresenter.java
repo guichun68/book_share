@@ -104,4 +104,17 @@ public abstract class IBookPresenter extends IPresenter {
     public abstract void getSwapSkills(int pageNum, CallBack callBack);
     //得到我发布的所有技能交换信息
     public abstract void getMySwapSkills(int pageNum, CallBack callBack);
+
+    //搜索图书
+    public abstract void searchBooks(String keyword,int pageNum, CallBack callBack);
+
+    //搜索图书
+    public abstract void searchSwapBooks(String keyword,int pageNum, CallBack callBack);
+    //通过关键字从 “所有用户拥有的技能” 中搜索技能交换信息
+    public abstract void searchSwapSkills(String keyWord, int pageNum, CallBack callBack);
+
+    //从用户想要得到的书籍中搜索
+    public abstract void searchSwapWantBooks(String keyWord, int pageNum, CallBack callBack);
+    //从用户想要得到的技能中搜索
+    public abstract void searchSwapWantSkills(String keyWord, int pageNum, CallBack callBack);
 }

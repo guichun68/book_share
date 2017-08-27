@@ -32,16 +32,16 @@
         "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\drawable-xhdpi-v4\\abc_ic_star_black_48dp.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_star_half_black_36dp.png",
-        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\drawable-xhdpi-v4\\abc_ic_star_half_black_36dp.png"
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ease_chat_voice_call_self.png",
+        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-xhdpi\\ease_chat_voice_call_self.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ease_chatting_biaoqing_btn_enable.png",
         "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-xhdpi\\ease_chatting_biaoqing_btn_enable.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ease_chat_voice_call_self.png",
-        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-xhdpi\\ease_chat_voice_call_self.png"
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\abc_ic_star_half_black_36dp.png",
+        "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\drawable-xhdpi-v4\\abc_ic_star_half_black_36dp.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ease_close_icon.png",

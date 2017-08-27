@@ -13,6 +13,7 @@ public class MyEaseConstant extends EaseConstant{
     public static final String CHAT_ROOM = "item_chatroom";
     public static final String ACCOUNT_REMOVED = "account_removed";
     public static final String ACCOUNT_CONFLICT = "conflict";
+    public static final String ACCOUNT_LOST_CONN = "lost_con";
     public static final String ACCOUNT_FORBIDDEN = "user_forbidden";
     public static final String CHAT_ROBOT = "item_robots";
     public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";

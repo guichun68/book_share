@@ -16,12 +16,12 @@
         "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chat_face_pressed.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_mm_listitem_grey_normal.9.png",
-        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ease_mm_listitem_grey_normal.9.png"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_pressed_holo_light.9.png",
         "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\drawable-hdpi-v4\\abc_list_pressed_holo_light.9.png"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_mm_listitem_grey_normal.9.png",
+        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ease_mm_listitem_grey_normal.9.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_27.png",

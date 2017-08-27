@@ -159,6 +159,7 @@ public class EaseUIHelper {
         if (EaseUI.getInstance().init(context, options)) {
             appContext = context;
 
+
             //debug mode, you'd better set it to false, if you want release your App officially.
             EMClient.getInstance().setDebugMode(true);
             //get easeui instance
@@ -244,6 +245,8 @@ public class EaseUIHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
+
+        options.setAutoLogin(true);
 
         //you need apply & set your own id if you want to use google cloud messaging.
         options.setGCMNumber("324169311137");
@@ -539,6 +542,9 @@ public class EaseUIHelper {
                     onUserException(MyEaseConstant.ACCOUNT_CONFLICT);
                 } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
                     onUserException(MyEaseConstant.ACCOUNT_FORBIDDEN);
+                }else{
+//                    onUserException(MyEaseConstant.ACCOUNT_LOST_CONN);
+                    GlobalParams.isLostEaseConn = true;
                 }
             }
 

@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.OrientationHelper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,7 +45,6 @@ import zyzx.linke.model.bean.UserBooks;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
-import zyzx.linke.views.AdvanceDecoration;
 import zyzx.linke.views.MyRecyclerViewWapper;
 
 /**
@@ -65,7 +63,6 @@ public class MyBooksAct extends BaseActivity{
     private PopupWindow pop;
     private int mWindowWidth;
     private boolean isLoadingMore;//是否是加载更多的动作
-    private Activity act;
     private AlertDialog mDialogExchange;
 
     @Override
@@ -75,7 +72,6 @@ public class MyBooksAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle saveInstanceState) {
-        act = this;
         mBooks = new ArrayList<>();
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
@@ -181,7 +177,7 @@ public class MyBooksAct extends BaseActivity{
     }
 
     private Dialog mPromptDialog;
-    private int tempPosition;//临时记录点击条目跳转到分享页面时的position
+//    private int tempPosition;//临时记录点击条目跳转到分享页面时的position
 
     /**
      * 初始化并设置popupWin中的控件
@@ -236,6 +232,15 @@ public class MyBooksAct extends BaseActivity{
                         pop.dismiss();
                         mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定要取消交换《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
                                 new PopItemClickListener(bookDetailVO, position, PopItemClickListener.CANCEL_SWAP_BOOK), null);
+                        mPromptDialog.show();
+                    }
+                });
+                item1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定删除《" + bookDetailVO.getBook().getTitle() + "》这本书么?", "确定", "取消",
+                                new PopItemClickListener(bookDetailVO, position, PopItemClickListener.DELETE), null);
                         mPromptDialog.show();
                     }
                 });
@@ -315,7 +320,7 @@ public class MyBooksAct extends BaseActivity{
                                     @Override
                                     public void run() {
                                         UIUtil.showToastSafe("交换设置成功");
-                                        mBooks.get(position-1).setBookStatusId(Const.BOOK_STATUS_EXCHANGING);
+                                        mBooks.get(position).setBookStatusId(Const.BOOK_STATUS_EXCHANGING);
                                         myBookAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -448,7 +453,7 @@ public class MyBooksAct extends BaseActivity{
                                             public void run() {
                                                 UIUtil.showToastSafe(rj.errorMsg);
                                                 UserBooks ub = JSON.parseObject(JSONObject.parseObject((String)((JSONObject)rj.data.get(0)).get("userBook")).get("ub").toString(),UserBooks.class);
-                                                mBooks.get(position-1).setUserBook(ub);
+                                                mBooks.get(position).setUserBook(ub);
                                                 myBookAdapter.notifyDataSetChanged();
                                             }
                                         });
@@ -525,10 +530,10 @@ public class MyBooksAct extends BaseActivity{
                 initData();
             }else{
                 UserBooks ub = data.getParcelableExtra("userBook");
-                mBooks.get(bookIndex-1).setBookStatusId(Const.BOOK_STATUS_SHARED);
-                mBooks.get(bookIndex-1).setShareAreaId(ub.getShareAreaId());
-                mBooks.get(bookIndex-1).setShareMsg(ub.getShareMsg());
-                mBooks.get(bookIndex-1).setShareType(ub.getShareType());
+                mBooks.get(bookIndex).setBookStatusId(Const.BOOK_STATUS_SHARED);
+                mBooks.get(bookIndex).setShareAreaId(ub.getShareAreaId());
+                mBooks.get(bookIndex).setShareMsg(ub.getShareMsg());
+                mBooks.get(bookIndex).setShareType(ub.getShareType());
                 myBookAdapter.notifyDataSetChanged();
             }
         }

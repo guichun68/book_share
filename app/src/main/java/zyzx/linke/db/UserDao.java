@@ -206,9 +206,9 @@ public class UserDao {
 			values.put("zipcode", areas.get(i).getZipcode());
 			long affectRows = db.insert(TABLE_PROVINCE, null, values);
 			if(affectRows>0){
-				UIUtil.showTestLog(Const.TAG,"插入第"+i+"条数据成功");
+				UIUtil.showTestLog(Const.TAG,"insert "+i+" data success");
 			}else{
-				UIUtil.showTestLog(Const.TAG,"插入第"+i+"条数据失败-----"+areas.get(i));
+				UIUtil.showTestLog(Const.TAG,"insert "+i+" data failure-----"+areas.get(i));
 			}
 		}
 	}

@@ -9,6 +9,7 @@ public class UpdateBeanVO {
 	private String url;
 	private String des;
 	private String forceUpdate;
+	private String apkFileName;
 	
 	public int getCode() {
 		return code;
@@ -34,6 +35,13 @@ public class UpdateBeanVO {
 	public void setForceUpdate(String forceUpdate) {
 		this.forceUpdate = forceUpdate;
 	}
-	
 
+
+    public String getApkFileName() {
+        return apkFileName;
+    }
+
+    public void setApkFileName(String apkFileName) {
+        this.apkFileName = apkFileName;
+    }
 }

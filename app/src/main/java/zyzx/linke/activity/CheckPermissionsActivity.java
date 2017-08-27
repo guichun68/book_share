@@ -38,6 +38,7 @@ public class CheckPermissionsActivity extends AppCompatActivity
 	 * 需要进行检测的权限数组
 	 */
 	protected String[] needPermissions = {
+			Manifest.permission.SYSTEM_ALERT_WINDOW,
 			Manifest.permission.ACCESS_COARSE_LOCATION,
 			Manifest.permission.ACCESS_FINE_LOCATION,
 			Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -59,6 +60,8 @@ public class CheckPermissionsActivity extends AppCompatActivity
 		super.onResume();
 		if(isNeedCheck){
 			checkPermissions(needPermissions);
+			//TODO false,否则这里死循环
+			isNeedCheck = false;
 		}
 	}
 	
@@ -116,7 +119,7 @@ public class CheckPermissionsActivity extends AppCompatActivity
 		return true;
 	}
 
-	@Override
+/*	@Override
 	public void onRequestPermissionsResult(int requestCode,
 										   String[] permissions, int[] paramArrayOfInt) {
 		if (requestCode == PERMISSON_REQUESTCODE) {
@@ -125,7 +128,7 @@ public class CheckPermissionsActivity extends AppCompatActivity
 				isNeedCheck = false;
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * 显示提示信息

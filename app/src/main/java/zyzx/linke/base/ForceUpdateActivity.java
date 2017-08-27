@@ -1,183 +1,140 @@
 package zyzx.linke.base;
 
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qiangxi.checkupdatelibrary.callback.DownloadCallback;
+import com.qiangxi.checkupdatelibrary.http.HttpRequest;
+import com.qiangxi.checkupdatelibrary.utils.ApplicationUtil;
+import com.qiangxi.checkupdatelibrary.utils.NetWorkUtil;
 
 import java.io.File;
 import java.io.IOException;
 
 import zyzx.linke.R;
-import zyzx.linke.model.bean.UIProgressResponseListener;
-import zyzx.linke.utils.AppUtil;
-import zyzx.linke.utils.DownloadUtil;
-import zyzx.linke.utils.FileUtil;
-import zyzx.linke.utils.ProgressHelper;
+import zyzx.linke.activity.AppManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
-public class ForceUpdateActivity extends Activity {
-    NotificationCompat.Builder mBuilder;
-    /**
-     * Notification管理
-     */
-    public NotificationManager mNotificationManager;
-    private String desc, url;
+public class ForceUpdateActivity extends BaseActivity {
+    private ContentLoadingProgressBar pb;
+    private long timeRange = 0;
+    private String mDesc,mUrl,mFileName;
+    private Button dialogBtn;
+    private String filePath;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//			setBehindContentView(R.layout.frame_menu);
-        desc = getIntent().getStringExtra("desc");
-        url = getIntent().getStringExtra("url");
-        mBuilder = new NotificationCompat.Builder(this);
-        initNotify();
-        showConfirmUpdateDialog();
+    protected int getLayoutId() {
+        return R.layout.dialog_force_update;
     }
 
-    /**
-     * 初始化通知栏
-     */
-    private void initNotify() {
-        mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setWhen(System.currentTimeMillis())// 通知产生的时间，会在通知信息里显示
-                .setContentIntent(getDefalutIntent(0))
-                // .setNumber(number)//显示数量
-                .setPriority(0)// 设置该通知优先级
-                // .setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
-                .setOngoing(false)// ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
-                //.setDefaults(Notification.DEFAULT_VIBRATE)// 向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
-                // Notification.DEFAULT_ALL Notification.DEFAULT_SOUND 添加声音 //
-                // requires VIBRATE permission
-                .setSmallIcon(R.mipmap.ic_launcher);
+    @Override
+    protected void initView(Bundle saveInstanceState) {
+        mDesc = getIntent().getStringExtra("desc");
+        mUrl = getIntent().getStringExtra("url");
+        mFileName = getIntent().getStringExtra("fileName");
 
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    }
+        TextView dialog_txt = (TextView) findViewById(R.id.dialog_txt);
+        dialogBtn = (Button) findViewById(R.id.dialog_btn);
+        pb = (ContentLoadingProgressBar) findViewById(R.id.pb);
 
-    /**
-     * @获取默认的pendingIntent,为了防止2.3及以下版本报错
-     * @flags属性: 在顶部常驻:Notification.FLAG_ONGOING_EVENT
-     * 点击去除： Notification.FLAG_AUTO_CANCEL
-     */
-    public PendingIntent getDefalutIntent(int flags) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, new Intent(), flags);
-        return pendingIntent;
-    }
+        dialogBtn.setText("下载更新");
 
-    private ProgressBar mProgressBar1;
-    private Button mBtn_ok, mBtn_cancel;
-    private TextView tv_desc;
-    LinearLayout ll_btn;
+        dialog_txt.setText(mDesc);
 
-    /**
-     * 显示，提示用户升级对话框
-     */
-    protected void showConfirmUpdateDialog() {
-//			AlertDialog.Builder adb = new AlertDialog.Builder(BaseActivity.getForegroundActivity());
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setCancelable(false);
-        View view = View.inflate(this, R.layout.dialog_forceupdate, null);
-        ll_btn = (LinearLayout) view.findViewById(R.id.ll_btn);
-        mBtn_ok = (Button) view.findViewById(R.id.btn_ok);
-        mBtn_cancel = (Button) view.findViewById(R.id.btn_cancel);
-        mProgressBar1 = (ProgressBar) view.findViewById(R.id.progressBar1);
-        tv_desc = (TextView) view.findViewById(R.id.tv_desc);
-
-        final AlertDialog dialog = adb.create();
-        dialog.setView(view, 0, 0, 0, 0);
-        tv_desc.setText(desc);
-        mBtn_ok.setOnClickListener(new OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   ll_btn.setVisibility(View.GONE);
-                   mProgressBar1.setVisibility(View.VISIBLE);
-                   new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            UIUtil.showToastSafe("正在下载……");
-                            downloadFile();
-                        }
-                    }).start();
-               }
-        });
-//        mBtn_ok.setOnClickListener(new OnClickListener(View v)  {
-//            ll_btn.setVisibility(View.GONE);
-//            mProgressBar1.setVisibility(View.VISIBLE);
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    downloadFile();
-//                }
-//            }).start();
-//        });
-        mBtn_cancel.setOnClickListener(new OnClickListener() {
+        dialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
-                ((BaseApplication) BaseApplication.getApplication()).exitApp(ForceUpdateActivity.this);
+                //防抖动,两次点击间隔小于500ms都return;
+                if (System.currentTimeMillis() - timeRange < 500) {
+                    return;
+                }
+                timeRange = System.currentTimeMillis();
+                if (!NetWorkUtil.hasNetConnection(ForceUpdateActivity.this)) {
+                    Toast.makeText(ForceUpdateActivity.this, "当前无网络连接", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if ("点击安装".equals(dialogBtn.getText().toString().trim())) {
+
+                    try {
+                        File file = new File(isExistDir(GlobalParams.BaseDir), mFileName);
+                        if (file.exists()) {
+                            ApplicationUtil.installApk(ForceUpdateActivity.this, file);
+                        } else {
+                            download();
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return;
+                }
+                download();
             }
         });
-        dialog.show();
 
-        int height = AppUtil.getScreenHeight(ForceUpdateActivity.this);
-        int width = AppUtil.getScreenWidth(ForceUpdateActivity.this);
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = width - 50;
-        params.height = height / 2;
-        dialog.getWindow().setAttributes(params);
     }
 
-    /**
-     * 下载新版app
-     */
-    protected void downloadFile() {
-        GlobalParams.downloadFileName = StringUtil.getExtraName(url);
-        DownloadUtil.get().download(url, GlobalParams.BaseDir, null, new DownloadUtil.OnDownloadListener() {
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        UIUtil.showToastSafe("未安装更新，即将退出！");
+        super.onDestroy();
+        AppManager.getAppManager().finishAllActivity();
+        BaseApplication.getInstance().exitApp(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        UIUtil.showToastSafe("未能更新，即将退出！");
+        super.onBackPressed();
+        AppManager.getAppManager().finishAllActivity();
+        BaseApplication.getInstance().exitApp(this);
+    }
+
+    private void download() {
+        pb.setVisibility(View.VISIBLE);
+        if(StringUtil.isEmpty(filePath)){
+            try {
+                filePath = isExistDir(GlobalParams.BaseDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        HttpRequest.download(mUrl, filePath, mFileName, new DownloadCallback() {
             @Override
-            public void onDownloadSuccess() {
-                mBuilder.setContentText("下载完成");
-                mNotificationManager.notify(0x00000fff, mBuilder.build());
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.addCategory("android.intent.category.DEFAULT");
-                File downloadFile = new File(Environment.getExternalStorageDirectory(), GlobalParams.BaseDir + "/" + GlobalParams.downloadFileName);
-                Toast.makeText(ForceUpdateActivity.this, "已下载到" + downloadFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
-                intent.setDataAndType(Uri.fromFile(downloadFile), "application/vnd.android.package-archive");
-                startActivityForResult(intent, 0);
+            public void onDownloadSuccess(File file) {
+                dialogBtn.setEnabled(true);
+                dialogBtn.setText("点击安装");
+                ApplicationUtil.installApk(ForceUpdateActivity.this, file);
             }
 
             @Override
-            public void onDownloading(long total, int progress) {
-                mBuilder.setProgress(100, progress, false);
-                mNotificationManager.notify(0x00000fff, mBuilder.build());
+            public void onProgress(long currentProgress, long totalProgress) {
+                dialogBtn.setEnabled(false);
+                dialogBtn.setText("正在下载");
+                pb.setMax((int) (totalProgress));
+                pb.setProgress((int) (currentProgress));
             }
 
             @Override
-            public void onDownloadFailed() {
-                String message = "下载出错了：";
-                UIUtil.showToastSafe(message);
-                ForceUpdateActivity.this.finish();
+            public void onDownloadFailure(String failureMessage) {
+                dialogBtn.setEnabled(true);
+                dialogBtn.setText("重新下载");
             }
         });
     }
+
 
     /**
      * @param saveDir

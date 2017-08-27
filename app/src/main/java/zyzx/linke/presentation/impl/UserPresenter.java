@@ -77,6 +77,7 @@ public class UserPresenter extends IUserPresenter {
                                             u.setUid(jo.getString("uid"));
                                         }
                                         GlobalParams.saveUser(u);
+                                        EMClient.getInstance().getOptions().setAutoLogin(true);
                                         if(viewCallBack!=null){
                                             viewCallBack.onSuccess(true);
                                         }
@@ -472,6 +473,12 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void getSwapSkillDeatil(String swapSkillId, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlGetSwapSkillDetal,"未能获取技能交换信息",
+                new String[]{"swapSkillId"},swapSkillId);
+    }
+
+    @Override
+    public void deleteSwapSkill(String swapSkillId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlDelSkillSwap,"删除失败",
                 new String[]{"swapSkillId"},swapSkillId);
     }
 

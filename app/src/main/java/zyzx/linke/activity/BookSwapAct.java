@@ -263,7 +263,7 @@ public class BookSwapAct extends BaseActivity {
         tvSwapAuthor = (TextView) findViewById(R.id.tv_swap_author);
         tvSwapMsg = (TextView) findViewById(R.id.tv_swap_msg);
 
-        Glide.with(this).load(mSwapBookVO.getBookImageLarge()).into(ivBookImage);
+        Glide.with(this).load(mSwapBookVO.getBookImageLarge()).placeholder(R.mipmap.defaultcover).into(ivBookImage);
         refreshUI();
     }
 

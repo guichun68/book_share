@@ -26,7 +26,8 @@ public abstract class BaseFragment extends Fragment{
     private Dialog mProgressDialog,mProDialogWithTip,mToastDialog;
 
     protected Context mContext;
-    protected TextView mTitleText,mTvLeftTip;
+    protected TextView mTitleText,mTvLeftTip,mTvRight;
+
     protected ImageView mBackBtn;
     protected ImageView mRightBtn;
     protected View mRootView;
@@ -60,6 +61,7 @@ public abstract class BaseFragment extends Fragment{
         mTvLeftTip = (TextView) mRootView.findViewById(R.id.tvLeftTip);
         mBackBtn = (ImageView)mRootView. findViewById(R.id.back_img);
         mRightBtn = (ImageView)mRootView. findViewById(R.id.right_img);
+        mTvRight = (TextView) mRootView.findViewById(R.id.tv_add_mylib);
        /* try{
 //            mBackBtn.setOnClickListener(this);
         }catch (NullPointerException e){

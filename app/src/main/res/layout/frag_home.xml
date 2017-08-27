@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/title_bar"
-        layout="@layout/title_bar"
+        layout="@layout/sharecenter_title_bar"
         android:visibility="visible" />
 
     <android.support.v7.widget.Toolbar

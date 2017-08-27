@@ -33,7 +33,7 @@ import zyzx.linke.utils.UIUtil;
 
 public class SkillDeatilAct extends BaseActivity {
 
-    private TextView tvPublisher,tvTitle,tvOwnSkillType,tvOwnSkillName,tvSwapSkillType,tvSwapSkillName,tvDesc;
+    private TextView tvPublisher,tvTitle,tvOwnSkillType,tvOwnSkillName,tvSwapSkillType,tvSkillTip,tvSwapSkillName,tvDesc;
     private String publisherUserId,publisherLoginName,skillDesc;
     private SwapSkillVo swapSkillVo;
     private UserVO mFriend = new UserVO();
@@ -143,6 +143,7 @@ public class SkillDeatilAct extends BaseActivity {
         tvOwnSkillName = (TextView) findViewById(R.id.tv_own_skill);
         tvSwapSkillType = (TextView) findViewById(R.id.tv_swap_skill_type);
         tvSwapSkillName = (TextView) findViewById(R.id.tv_swap_skill_name);
+        tvSkillTip = (TextView) findViewById(R.id.tv_skill_tip);
         tvDesc = (TextView) findViewById(R.id.tv_desc);
     }
 
@@ -162,7 +163,15 @@ public class SkillDeatilAct extends BaseActivity {
         tvOwnSkillType.setText(swapSkillVo.getSkillType());
         tvOwnSkillName.setText(swapSkillVo.getSkillHaveName());
         tvSwapSkillType.setText(swapSkillVo.getSwapSkillType());
-        tvSwapSkillName.setText(swapSkillVo.getSkillWantName());
+
+        if(StringUtil.isEmpty(swapSkillVo.getSkillWantName())){
+            tvSwapSkillName.setVisibility(View.GONE);
+            tvSkillTip.setVisibility(View.GONE);
+        }else{
+            tvSwapSkillName.setVisibility(View.VISIBLE);
+            tvSkillTip.setVisibility(View.VISIBLE);
+            tvSwapSkillName.setText(swapSkillVo.getSkillWantName());
+        }
 
         showDefProgress();
         getUserPresenter().getSwapSkillDeatil(swapSkillVo.getSwapSkillId(),new CallBack(){

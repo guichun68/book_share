@@ -25,7 +25,7 @@ import zyzx.linke.utils.UIUtil;
 /**
  * 交换中心页面
  */
-public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListener {
+public class LKSwapCenterFrg extends BaseFragment {
 
     private ViewPager mViewPager;
     private ExchangeCenterVPAdapter mViewPagerAdapter;
@@ -34,6 +34,7 @@ public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListene
     private String[] titles = {"书籍交换","技能交换"};
     private BaseSwapPager bookExchangePage,skillExchangePage;
     private ArgbEvaluator evaluator;
+    private LinearLayout llSearch;
 
 
     @Override
@@ -85,11 +86,6 @@ public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListene
 
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-        }
-    }
 
     //修改TabLayout下划线长度
     public void setIndicator (TabLayout tabs,int leftDip,int rightDip) {
@@ -122,4 +118,6 @@ public class LKSwapCenterFrg extends BaseFragment implements View.OnClickListene
             child.invalidate();
         }
     }
+
+
 }

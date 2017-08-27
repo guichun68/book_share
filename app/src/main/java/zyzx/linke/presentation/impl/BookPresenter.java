@@ -279,6 +279,31 @@ public class BookPresenter extends IBookPresenter {
         getDataWithPost(callBack,GlobalParams.urlGetMySwapSkills,"未能获取数据",new String[]{"pageNo"},pageNum);
     }
 
+    @Override
+    public void searchBooks(String keyword,int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlSearchBooks,"未能获取数据",new String[]{"keyword","pageNo"},keyword,pageNum);
+    }
+
+    @Override
+    public void searchSwapBooks(String keyword, int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlSearchSwapBooks,"未能获取数据",new String[]{"keyword","pageNo"},keyword,pageNum);
+    }
+
+    @Override
+    public void searchSwapSkills(String keyWord, int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlSearchSwapSkills,"未能获取数据",new String[]{"keyword","pageNo"},keyWord,pageNum);
+    }
+
+    @Override
+    public void searchSwapWantBooks(String keyWord, int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlSearchSwapWantBooks,"未能获取数据",new String[]{"keyword","pageNo"},keyWord,pageNum);
+    }
+
+    @Override
+    public void searchSwapWantSkills(String keyWord, int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlSearchSwapWantSkills,"未能获取数据",new String[]{"keyword","pageNo"},keyWord,pageNum);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

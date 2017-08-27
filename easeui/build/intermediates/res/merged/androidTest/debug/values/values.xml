@@ -341,7 +341,7 @@
     <dimen name="field_margin_right">5dp</dimen>
     <dimen name="field_textsize">14sp</dimen>
     <dimen name="height_row_weixin">59dp</dimen>
-    <dimen name="height_top_bar">46dp</dimen>
+    <dimen name="height_top_bar">45dp</dimen>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>

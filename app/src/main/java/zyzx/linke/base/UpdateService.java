@@ -9,17 +9,19 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.alibaba.fastjson.JSON;
+import com.qiangxi.checkupdatelibrary.bean.CheckUpdateInfo;
+import com.qiangxi.checkupdatelibrary.service.BaseService;
 
+import java.io.File;
 import java.util.Map;
 
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UpdateBeanVO;
-import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
 
-public class UpdateService extends Service implements CallBack {
+public class UpdateService extends BaseService implements CallBack {
 
 	private PackageManager pm;
 	private int currVersionCode;
@@ -29,7 +31,7 @@ public class UpdateService extends Service implements CallBack {
 
 	@Override
 	public void onCreate() {
-		
+
 		pm = getPackageManager();
 		PackageInfo pi;
 		try {
@@ -39,11 +41,27 @@ public class UpdateService extends Service implements CallBack {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	private CheckUpdateInfo mCheckUpdateInfo;
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return localBinder;
+	}
+
+	@Override
+	public void downloading(int currentProgress, int totalProgress) {
+
+	}
+
+	@Override
+	public void downloadSuccess(File file) {
+
+	}
+
+	@Override
+	public void downloadFailure(String failureMessage) {
+
 	}
 
 	@Override
@@ -73,6 +91,7 @@ public class UpdateService extends Service implements CallBack {
 				inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				inten.putExtra("desc", update.getDes());
 				inten.putExtra("url", update.getUrl());
+				inten.putExtra("fileName",update.getApkFileName());
 				startActivity(inten);
 				break;
 			case 3://不强制更新
@@ -83,6 +102,7 @@ public class UpdateService extends Service implements CallBack {
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra("desc", update2.getDes());
 				intent.putExtra("url", update2.getUrl());
+				intent.putExtra("fileName",update2.getApkFileName());
 				startActivity(intent);
 				break;
 		}
@@ -105,10 +125,12 @@ public class UpdateService extends Service implements CallBack {
 		this.callBack = callBack;
 		GlobalParams.getBookPresenter().checkUpdate(currVersionCode,UpdateService.this,false);
 	}
-	
+
 
 	public interface CheckUpdateCallBack{
 		void shouldUpdate(boolean shoudUpdate);
 	}
-	
+
+
+
 }

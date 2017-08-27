@@ -1,13 +1,19 @@
 package zyzx.linke.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -24,6 +30,7 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.SwapBookVO;
 import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.MyRecyclerViewWapper;
 
@@ -34,6 +41,7 @@ import zyzx.linke.views.MyRecyclerViewWapper;
 
 public class BookSwapPage extends BaseSwapPager{
 
+    private AppCompatEditText etSearch;
     private SwapAdapter mAdapter;
     private final int SUCCFLAG = 0x738A,FAILUREFLAG = 0x891A;
     private List<SwapBookVO> mSwapBookVOs;
@@ -41,7 +49,10 @@ public class BookSwapPage extends BaseSwapPager{
     private MyRecyclerViewWapper mRecyclerView;
     private int mPageNum = 1;
     private boolean isRefreshing;
-
+    private LinearLayout llSearch;
+    private int searchBarHeight;
+    int disy;//一次滑动的距离
+    private boolean isSearchBarShow = true;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -101,7 +112,10 @@ public class BookSwapPage extends BaseSwapPager{
         if(mSwapBookVOs == null){
             mSwapBookVOs = new ArrayList<>();
         }
+        llSearch = (LinearLayout) getRootView().findViewById(R.id.ll_search);
+        searchBarHeight = llSearch.getHeight();
         mSwipeRefreshLayout = (SwipeRefreshLayout) getRootView().findViewById(R.id.swipeRefreshLayout);
+        etSearch = (AppCompatEditText) getRootView().findViewById(R.id.et_search);
         mRecyclerView = (MyRecyclerViewWapper) getRootView().findViewById(R.id.recyclerView);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
                 android.R.color.holo_red_light,android.R.color.holo_orange_light,
@@ -114,6 +128,7 @@ public class BookSwapPage extends BaseSwapPager{
                 getData(mPageNum);
             }
         });
+
         mRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
             @Override
             public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadingMore) {
@@ -126,11 +141,38 @@ public class BookSwapPage extends BaseSwapPager{
                     }
                     mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_PULLUP_LOAD_MORE);
                 }
+
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView,dx, dy);
+                //得到第一个item
+                /*int firstVisibleItem = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                //当前可见item的第一个是否是列表的第一个，如果是第一个应该显示
+                if(firstVisibleItem == 0){
+                    if(!isSearchBarShow){
+                        //如果此时没有显示，则显示
+                        isSearchBarShow = true;
+                        showSearchBar();
+                    }
+                }else{//不是第一个
+                    if(disy>100 && isSearchBarShow){//滑动距离大于100且toolbar显示中，继续向下滚，隐藏
+                        isSearchBarShow = false;
+//                    ((IMainView)getActivity()).hideToolBar();
+                        hideSearchBar();
+                        disy = 0;
+                    }
+                    if(disy<-100 && !isSearchBarShow){//向上滑动且距离大于100且toolbar隐藏中，则显示
+                        isSearchBarShow = true;
+//                    ((IMainView)getActivity()).showToolBar();
+                        showSearchBar();
+                        disy = 0;
+                    }
+                }
+                if((isSearchBarShow && dy>0)||(!isSearchBarShow && dy <0)){//增加滑动的距离，只有再出发两种状态的时候才进行叠加
+                    disy += dy;
+                }*/
             }
         });
 
@@ -139,6 +181,28 @@ public class BookSwapPage extends BaseSwapPager{
         mPageNum = 1;
         showDefProgress();
         getData(1);
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId== EditorInfo.IME_ACTION_SEND ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER)) {
+                    switch (event.getAction()){
+                        case KeyEvent.ACTION_UP:
+                            if(StringUtil.isEmpty(v.getText().toString())){
+                                UIUtil.showToastSafe("请输入搜索关键字");
+                                return true;
+                            }
+                            Intent i = new Intent(context,SwapBookSearchResultAct.class);
+                            i.putExtra(BundleFlag.KEY_WORD,v.getText().toString());
+                            context.startActivity(i);
+                            return true;
+                        default:
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     public Handler getHandler(){
@@ -170,11 +234,11 @@ public class BookSwapPage extends BaseSwapPager{
 
         @Override
         public void convert(MyViewHolder holder, final SwapBookVO swapBookVO, int position) {
-            Glide.with(context).load(swapBookVO.getBookImageLarge()).into((ImageView)holder.getView(R.id.iv));
+            Glide.with(context).load(swapBookVO.getBookImageLarge()).placeholder(R.mipmap.defaultcover).into((ImageView)holder.getView(R.id.iv));
             holder.setText(R.id.tv_have_book_name,"《"+swapBookVO.getBookTitle()+"》");
-            holder.setText(R.id.tv_have_author,"作者："+swapBookVO.getBookAuthor());
+            holder.setText(R.id.tv_have_author,"作者："+ (StringUtil.isEmpty(swapBookVO.getBookAuthor())?"暂无":swapBookVO.getBookAuthor()));
             holder.setText(R.id.tv_want_book_name,"《"+swapBookVO.getSwapBookTitle()+"》");
-            holder.setText(R.id.tv_want_author,"作者："+swapBookVO.getSwapBookAuthor());
+            holder.setText(R.id.tv_want_author,"作者："+(StringUtil.isEmpty(swapBookVO.getSwapBookAuthor())?"暂无":swapBookVO.getSwapBookAuthor()));
             holder.setOnClickListener(R.id.ll_root, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -222,5 +286,17 @@ public class BookSwapPage extends BaseSwapPager{
         }
         mSwipeRefreshLayout.setRefreshing(false);
         isRefreshing = false;
+    }
+
+    private void hideSearchBar(){
+        ObjectAnimator oa = ObjectAnimator.ofFloat(llSearch,View.TRANSLATION_Y,0,-searchBarHeight);
+        oa.setDuration(500);
+        oa.start();
+    }
+
+    private void showSearchBar(){
+        ObjectAnimator oa = ObjectAnimator.ofFloat(llSearch,View.TRANSLATION_Y,-searchBarHeight,0);
+        oa.setDuration(500);
+        oa.start();
     }
 }

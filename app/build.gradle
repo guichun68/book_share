@@ -72,6 +72,11 @@ android {
             keyPassword '1006000'//key密码
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 
 }
 
@@ -91,4 +96,5 @@ dependencies {
     compile project(':easeui')
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'com.zhy:base-adapter:3.0.3'
+    compile 'com.qiangxi.checkupdatelibrary:checkupdatelibrary:1.0.3'
 }

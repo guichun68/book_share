@@ -46,8 +46,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:contentDescription="@null"
-        android:layout_margin="10dp"
-        android:src="@mipmap/refresh"
+        android:src="@mipmap/search_icon_white"
+        android:layout_marginRight="20dp"
         android:visibility="gone"/>
 
     <TextView
@@ -58,6 +58,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         tools:text="保存"
+        android:visibility="visible"
         android:textSize="20sp"
         android:paddingRight="10dp"
         android:clickable="true"

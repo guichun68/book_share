@@ -6,6 +6,9 @@ import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.alibaba.fastjson.JSONArray;
@@ -33,6 +36,8 @@ import zyzx.linke.utils.UIUtil;
 public class SkillInputAct extends BaseActivity {
 
     private Spinner spSkillClassify,spSwapClassify;
+    private RadioButton rbSkill;
+    private LinearLayout llSkillType;
     private AppCompatEditText etSkillName,etSwapSkillName,etSwapDetail,etTitle;
     private Button btnSubmit;
     private SkillTypeAdapter mAdapter;
@@ -112,6 +117,8 @@ public class SkillInputAct extends BaseActivity {
         spSkillClassify = (Spinner) findViewById(R.id.sp_skill_classify);
         spSwapClassify = (Spinner) findViewById(R.id.sp_swap_skill_type);
         etSkillName = (AppCompatEditText) findViewById(R.id.acet_skill_name);
+        rbSkill = (RadioButton) findViewById(R.id.rb_skil);
+        llSkillType = (LinearLayout) findViewById(R.id.ll_skill_type);
         etSwapSkillName = (AppCompatEditText) findViewById(R.id.acet_swap_name);
         etSwapDetail = (AppCompatEditText) findViewById(R.id.acet_detail);
         etTitle = (AppCompatEditText) findViewById(R.id.acet_title);
@@ -122,6 +129,14 @@ public class SkillInputAct extends BaseActivity {
         mAdapter = new SkillTypeAdapter(mSkillClassifies);
         spSkillClassify.setAdapter(mAdapter);
         spSwapClassify.setAdapter(mAdapter);
+
+        rbSkill.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                llSkillType.setVisibility(isChecked?View.VISIBLE:View.GONE);
+                etSwapSkillName.setVisibility(isChecked?View.VISIBLE:View.GONE);
+            }
+        });
     }
 
     @Override
@@ -174,23 +189,24 @@ public class SkillInputAct extends BaseActivity {
                     return;
                 }
                 showDefProgress();
+
                 getUserPresenter().publishMySkillSwap(
                         etTitle.getText().toString(),((EnumConst)spSkillClassify.getSelectedItem()).getId(),etSkillName.getText().toString(),
-                        ((EnumConst)spSwapClassify.getSelectedItem()).getId(),etSwapSkillName.getText().toString(),etSwapDetail.getText().toString(),
-                new CallBack(){
-                    @Override
-                    public void onSuccess(Object obj, int... code) {
-                        Message msg = handler.obtainMessage();
-                        msg.obj = obj;
-                        msg.what = SUCESS_PUBLISH;
-                        handler.sendMessage(msg);
-                    }
+                        rbSkill.isChecked()?((EnumConst)spSwapClassify.getSelectedItem()).getId():null,etSwapSkillName.getText().toString(),etSwapDetail.getText().toString(),
+                        new CallBack(){
+                            @Override
+                            public void onSuccess(Object obj, int... code) {
+                                Message msg = handler.obtainMessage();
+                                msg.obj = obj;
+                                msg.what = SUCESS_PUBLISH;
+                                handler.sendMessage(msg);
+                            }
 
-                    @Override
-                    public void onFailure(Object obj, int... code) {
-                        handler.sendEmptyMessage(FAILURE_PUBLISH);
-                    }
-                });
+                            @Override
+                            public void onFailure(Object obj, int... code) {
+                                handler.sendEmptyMessage(FAILURE_PUBLISH);
+                            }
+                        });
                 break;
         }
     }
@@ -200,10 +216,12 @@ public class SkillInputAct extends BaseActivity {
             UIUtil.showToastSafe("请输入您拥有的技能");
             return false;
         }
-        if(StringUtil.isEmpty(etSwapSkillName.getText().toString())){
+
+        if(rbSkill.isChecked() && StringUtil.isEmpty(etSwapSkillName.getText().toString())){
             UIUtil.showToastSafe("请输入您想要交换的技能");
             return false;
         }
+
         if(StringUtil.isEmpty(etTitle.getText().toString())){
             UIUtil.showToastSafe("请输入标题");
             return false;

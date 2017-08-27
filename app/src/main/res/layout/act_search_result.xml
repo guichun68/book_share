@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/title_bar" />
+
+    <TextView
+        android:id="@+id/tv_search_want"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="从想要交换中搜索"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:background="@drawable/btn_sel3"/>
+
+    <zyzx.linke.views.MyRecyclerViewWapper
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="vertical"/>
+</LinearLayout>

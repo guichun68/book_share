@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -248,18 +247,20 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
 
     public void showSnack(String btnText, String msg) {
-        final Snackbar snackbar = Snackbar.make(mRootView.findViewById(R.id.civ), msg, Snackbar.LENGTH_LONG);
+        /*final Snackbar snackbar = Snackbar.make(mRootView.findViewById(R.id.civ), msg, Snackbar.LENGTH_LONG);
         snackbar.setAction(btnText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();
             }
         });
-        snackbar.show();
+        snackbar.show();*/
+        UIUtil.showToastSafe(msg);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        dismissProgress();
         super.onActivityResult(requestCode, resultCode, intent);
         if ((resultCode != RESULT_OK)) {
             UIUtil.showToastSafe("已取消选择");

@@ -28,11 +28,11 @@ import com.hyphenate.chat.EMMessage;
 import java.io.File;
 import java.util.List;
 
-import zyzx.linke.ShareCenterFragment;
 import zyzx.linke.LKConversationListFragment;
 import zyzx.linke.LKSwapCenterFrg;
 import zyzx.linke.MeFragment;
 import zyzx.linke.R;
+import zyzx.linke.ShareCenterFragment;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.ErrActivity;
@@ -93,7 +93,9 @@ public class HomeAct extends BaseActivity {
             mTabHost.getTabWidget().setDividerDrawable(null);
 
         }
+
     }
+
 
     View tabView2;//底部第二个tab（消息）的布局
     TextView unreadLabel;
@@ -144,6 +146,7 @@ public class HomeAct extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     private long exitTime = 0;
     @Override

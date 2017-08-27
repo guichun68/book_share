@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="zyzx.linke">
 
+
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <!-- Normal Permissions 不需要运行时注册 -->
@@ -164,7 +166,34 @@
             android:screenOrientation="portrait"
             />
         <activity
+            android:name=".activity.ShareBookSearchAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".activity.ChatActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.BookSearchResultAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.SwapBookSearchResultAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.SwapSkillSearchResultAct"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             />
@@ -175,17 +204,24 @@
             />
         <activity
             android:name=".base.ForceUpdateActivity"
-            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/dialogstyle"
+            />
+<!--
+        <activity
+            android:name=".base.ForceUpdateActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:theme="@style/Base.V7.Theme.AppCompat.Dialog"
             />
+-->
         <activity
             android:name=".base.UpdateActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:theme="@style/Base.V7.Theme.AppCompat.Dialog"
+            android:theme="@style/dialogstyle"
             />
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
             android:label="@string/app_name"

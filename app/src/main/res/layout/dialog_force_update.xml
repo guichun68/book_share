@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_allyuanjiao"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更新提示"
+        android:layout_gravity="start"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_light"/>
+
+    <!-- 只有文字和一个按钮 -->
+
+    <TextView
+        android:id="@+id/dialog_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dip"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="start"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/common_black_color"
+        tool:text="确定要添加《你好的我的dadadafd士大夫撒都是垃圾范德萨对了撒就范德萨范德萨疯掉了卡萨解放东路撒酒疯大是咖啡的三的》这本书么？"
+        android:textSize="19sp" />
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/pb"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="0"
+        />
+
+    <View
+        style="@style/line"/>
+
+
+
+        <Button
+            android:id="@+id/dialog_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_sel2"
+            android:text="@string/confirm"
+            android:visibility="visible"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp" />
+
+</LinearLayout>

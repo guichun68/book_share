@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
@@ -393,7 +392,9 @@ public class PersonalCenterAct extends BaseActivity {
                         Iterator<Object> it = rj.data.iterator();
                         while(it.hasNext()){
                             JSONObject jo = (JSONObject) it.next();
-                            String headUrl = jo.getString("headUrl");
+                            String headUrlTemp = jo.getString("headUrl");
+//                            mUser.setHeadIcon(headUrl);
+                            String headUrl =  GlobalParams.BASE_URL+GlobalParams.AvatarDirName+headUrlTemp;
                             mUser.setHeadIcon(headUrl);
                             GlobalParams.setCurrUserHeadAvatar(headUrl);
                             UserDao.getInstance(mContext).updateUser(mUser);
@@ -425,14 +426,15 @@ public class PersonalCenterAct extends BaseActivity {
 
 
     public void showSnack(String btnText,String msg) {
-        final Snackbar snackbar = Snackbar.make(mCiv, msg, Snackbar.LENGTH_LONG);
+        /*final Snackbar snackbar = Snackbar.make(mCiv, msg, Snackbar.LENGTH_LONG);
         snackbar.setAction(btnText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();
             }
         });
-        snackbar.show();
+        snackbar.show();*/
+        UIUtil.showToastSafe(msg);
     }
 
     @Override

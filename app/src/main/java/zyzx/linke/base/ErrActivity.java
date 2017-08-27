@@ -47,6 +47,8 @@ public class ErrActivity extends BaseActivity {
 			return R.string.em_user_remove;
 		} else if (exceptionType.equals(MyEaseConstant.ACCOUNT_FORBIDDEN)) {
 			return R.string.user_forbidden;
+		} else if(exceptionType.equals(MyEaseConstant.ACCOUNT_LOST_CONN)){
+			return R.string.lost_conn;
 		}
 		return R.string.Network_error;
 	}

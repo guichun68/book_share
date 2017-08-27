@@ -23,7 +23,8 @@ public class GlobalParams {
 	public static String image_file_location;//图片本地存储地址
 	public static boolean isCheckedUpdate;//是否已经自动检查更新了
 	public static String BaseDir = "NearBook";//本地默认保存文件夹名
-
+	//环信是否已经断开
+    public static boolean isLostEaseConn;
 
 
     static{
@@ -52,6 +53,7 @@ public class GlobalParams {
 	public static String urlGetSkillType = GlobalParams.BASE_URL+"/user/mobileSDK/getSkillType.action";
 	public static String urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
 	public static String urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
+	public static String urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -149,6 +151,11 @@ public class GlobalParams {
 
 	public static String urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
 	public static String urlGetMySwapSkills = GlobalParams.BASE_URL+"/user/mobileSDK/getMySwapSkills.action";
+	public static String urlSearchBooks = GlobalParams.BASE_URL+"/user/mobileSDK/searchBook.action";
+	public static String urlSearchSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapBook.action";
+	public static String urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
+	public static String urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
+	public static String urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
 
 	/**
 	 * 注册
@@ -211,6 +218,7 @@ public class GlobalParams {
 		urlGetSkillType = GlobalParams.BASE_URL+"/user/mobileSDK/getSkillType.action";
 		urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
 		urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
+        urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
@@ -222,6 +230,11 @@ public class GlobalParams {
 		urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 		urlGetMySwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getMySwapSkills.action";
+		urlSearchBooks = GlobalParams.BASE_URL+"/user/mobileSDK/searchBook.action";
+		urlSearchSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapBook.action";
+		urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
+		urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
+		urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 		urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";

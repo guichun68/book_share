@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:background="@drawable/local_popup_bg2"
+    android:background="@drawable/local_popup_bg23"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_item1"
         android:layout_width="wrap_content"
-        android:layout_height="43dp"
+        android:layout_height="match_parent"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
         android:textColor="@color/slide_item_sel"
@@ -22,6 +22,7 @@
         android:textSize="19sp" />
 
     <View
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/watermark_hint"
@@ -41,13 +42,16 @@
         android:clickable="true"
         android:textStyle="bold"
         android:text="分享"
-        android:textSize="19sp" />
+        android:textSize="19sp"
+       />
     <View
+        android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/watermark_hint"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        />
     <TextView
         android:id="@+id/tv_item3"
         android:layout_width="wrap_content"
