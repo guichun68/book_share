@@ -142,7 +142,7 @@ public class LoginAct extends BaseActivity {
 
     @Override
     protected void initData() {
-        aetLoginName.setText(PreferenceManager.getInstance().getCurrentUserNick());
+        aetLoginName.setText(PreferenceManager.getInstance().getCurrentUsername());
         aetPsw.setText(PreferenceManager.getInstance().getCurrentUserPsw());
         if (PreferenceManager.getInstance().getAutoLoginFlag()) {
             (findViewById(R.id.btn_login)).performClick();
@@ -284,6 +284,7 @@ public class LoginAct extends BaseActivity {
 
     private void loginSucc(){
         PreferenceManager.getInstance().setCurrentUserPSW(aetPsw.getText().toString());
+        PreferenceManager.getInstance().setCurrentUserName(aetLoginName.getText().toString());
         //记录用户名和uid
 //                EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserNick(u.getLogin_name());
         EaseUIHelper.getInstance().getUserProfileManager().setCurrentUserAvatar(GlobalParams.getLastLoginUser().getHeadIcon());

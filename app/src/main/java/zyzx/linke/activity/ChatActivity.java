@@ -242,7 +242,8 @@ public class ChatActivity extends BaseActivity {
                     showDefProgress();
                     try {
                         String bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
-                        msg.setMessageStatusCallback(new MyEMCallBack(true,"已回复", Const.BORROW_BORROWER_REPLY_REFUSE,bookId));
+                        String userBookId = message.getStringAttribute(BundleFlag.FLAG_USER_BOOK_ID);
+                        msg.setMessageStatusCallback(new MyEMCallBack(userBookId,true,"已回复", Const.BORROW_BORROWER_REPLY_REFUSE,bookId));
                         mChatFrag.sendMessage(msg);
                     } catch (HyphenateException e) {
                         e.printStackTrace();dismissProgress();
@@ -266,7 +267,8 @@ public class ChatActivity extends BaseActivity {
                     showDefProgress();
                     try {
                         String bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
-                        msg.setMessageStatusCallback(new MyEMCallBack(true,"已回复", Const.BORROW_BORROWER_REPLY_AGREE,bookId));
+                        String ubId = message.getStringAttribute(BundleFlag.FLAG_USER_BOOK_ID);
+                        msg.setMessageStatusCallback(new MyEMCallBack(ubId,true,"已回复", Const.BORROW_BORROWER_REPLY_AGREE,bookId));
                         mChatFrag.sendMessage(msg);
                     } catch (HyphenateException e) {
                         dismissProgress();
@@ -284,9 +286,11 @@ public class ChatActivity extends BaseActivity {
     private void showBegDialog(final EMMessage message) {
         Integer shareType = 0;
         String bookId = "";
+        String userBookId="";
         try {
             shareType = message.getIntAttribute(MyEaseConstant.EXTRA_SHARE_TYPE);
             bookId = message.getStringAttribute(MyEaseConstant.EXTRA_BOOKID);
+            userBookId = message.getStringAttribute(BundleFlag.FLAG_USER_BOOK_ID);
         } catch (HyphenateException e) {
             e.printStackTrace();
         }
@@ -360,6 +364,7 @@ public class ChatActivity extends BaseActivity {
         begReplyDialg = adb.create();
         begReplyDialg.setView(view, 0, 0, 0, 0);
         final String finalBookId = bookId;
+        final String finalUserBookId = userBookId;
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -381,7 +386,7 @@ public class ChatActivity extends BaseActivity {
                     msg.setFrom(EMClient.getInstance().getCurrentUser());
                     msg.setTo(chatUserId);
                     showDefProgress();
-                    msg.setMessageStatusCallback(new MyEMCallBack(true,"已回绝", Const.BORROW_OWNER_REJECT,finalBookId));
+                    msg.setMessageStatusCallback(new MyEMCallBack(finalUserBookId,true,"已回绝", Const.BORROW_OWNER_REJECT,finalBookId));
                     //发送消息
                     mChatFrag.sendMessage(msg);
                 } else {
@@ -413,12 +418,13 @@ public class ChatActivity extends BaseActivity {
                     message.setAttribute(MyEaseConstant.EXTRA_SHARE_TYPE, finalShareType + "");
                     message.setAttribute(MyEaseConstant.EXTRA_BEG_AGREE, true);
                     message.setAttribute(MyEaseConstant.EXTRA_BOOKID,finalBookId);
+                    message.setAttribute(BundleFlag.FLAG_USER_BOOK_ID, finalUserBookId);
                     message.setFrom(EMClient.getInstance().getCurrentUser());
                     message.setTo(chatUserId);
 
                     conversation.appendMessage(message);
                     showDefProgress();
-                    message.setMessageStatusCallback(new MyEMCallBack(true, "回复成功",Const.BORROW_OWNER_AGREE,finalBookId));
+                    message.setMessageStatusCallback(new MyEMCallBack(finalUserBookId,true, "回复成功",Const.BORROW_OWNER_AGREE,finalBookId));
                     //发送消息
                     mChatFrag.sendMessage(message);
 //                    EMClient.getInstance().chatManager().sendMessage(message);
@@ -429,7 +435,7 @@ public class ChatActivity extends BaseActivity {
                         locMsg.addBody(locBody);
                         locMsg.setTo(chatUserId);
                         conversation.appendMessage(locMsg);
-                        locMsg.setMessageStatusCallback(new MyEMCallBack(true, null,0,null));
+                        locMsg.setMessageStatusCallback(new MyEMCallBack(finalUserBookId,true, null,0,null));
 //                        EMClient.getInstance().chatManager().sendMessage(locMsg);
                         mChatFrag.sendMessage(locMsg);
                         longitude=0;
@@ -456,12 +462,14 @@ public class ChatActivity extends BaseActivity {
         private String succMsg;
         private int borrowFlowStatus;
         private String bookId;
+        private String userBookId;
 
-        public MyEMCallBack(boolean refreshList, String succMsg,int borrowFlowStatus,String bookId) {
+        public MyEMCallBack(String userBookId,boolean refreshList, String succMsg,int borrowFlowStatus,String bookId) {
             this.refreshList = refreshList;
             this.succMsg = succMsg;
             this.borrowFlowStatus = borrowFlowStatus;
             this.bookId = bookId;
+            this.userBookId = userBookId;
         }
 
         @Override
@@ -480,7 +488,7 @@ public class ChatActivity extends BaseActivity {
                 UIUtil.showToastSafe(succMsg);
             }
             if(borrowFlowStatus!=0){
-                getUserPresenter().setBorrowFlowstatus(EMClient.getInstance().getCurrentUser(),chatUserId,bookId,borrowFlowStatus,null);
+                getUserPresenter().setBorrowFlowstatus(userBookId,EMClient.getInstance().getCurrentUser(),chatUserId,bookId,borrowFlowStatus,null);
             }
         }
 

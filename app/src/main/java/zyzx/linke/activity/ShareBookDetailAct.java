@@ -50,6 +50,7 @@ public class ShareBookDetailAct extends BaseActivity {
     private TextView tvType,tvShareType;
     private BookDetail2 mBook;
     private MyBookDetailVO mBookVo;
+    private String userBookId;
     private TextView tvBookStatus,tvArea,tvMsg;
     private Button btnSharer;
     private UserVO mFriend = new UserVO();
@@ -148,6 +149,7 @@ public class ShareBookDetailAct extends BaseActivity {
         message.setAttribute(MyEaseConstant.EXTRA_TO_AVATAR,mFriend.getHeadIcon());
         message.setAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME,GlobalParams.getLastLoginUser().getLoginName());
         message.setAttribute(MyEaseConstant.EXTRA_TO_NICKNAME,mFriend.getLoginName());
+        message.setAttribute(BundleFlag.FLAG_USER_BOOK_ID,userBookId);
 
         message.setFrom(GlobalParams.getLastLoginUser().getUserid()+"");
         message.setTo(mFriend.getUserid()+"");
@@ -287,6 +289,7 @@ public class ShareBookDetailAct extends BaseActivity {
     protected void initData() {
         Intent in = getIntent();
         mBookVo = in.getParcelableExtra("book");
+        userBookId = in.getStringExtra(BundleFlag.FLAG_USER_BOOK_ID);
         int from = in.getIntExtra("from",0);
         if(from == Const.FROM_HOME_FRAG){
             btnBegBorrow.setVisibility(View.VISIBLE);

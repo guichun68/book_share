@@ -9,16 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qiangxi.checkupdatelibrary.bean.CheckUpdateInfo;
-import com.qiangxi.checkupdatelibrary.callback.DownloadCallback;
-import com.qiangxi.checkupdatelibrary.http.HttpRequest;
-import com.qiangxi.checkupdatelibrary.utils.ApplicationUtil;
-import com.qiangxi.checkupdatelibrary.utils.NetWorkUtil;
 
 import java.io.File;
 import java.io.IOException;
 
 import zyzx.linke.R;
+import zyzx.linke.checkupdate.bean.CheckUpdateInfo;
+import zyzx.linke.checkupdate.callback.DownloadCallback;
+import zyzx.linke.checkupdate.http.HttpRequest;
+import zyzx.linke.checkupdate.utils.ApplicationUtil;
+import zyzx.linke.checkupdate.utils.NetWorkUtil;
 import zyzx.linke.utils.StringUtil;
 
 public class UpdateActivity extends BaseActivity {
@@ -44,7 +44,7 @@ public class UpdateActivity extends BaseActivity {
 		mUrl = getIntent().getStringExtra("url");
 		mFileName = getIntent().getStringExtra("fileName");
 
-
+		if(StringUtil.isEmpty(mFileName))mFileName= StringUtil.getExtraName(mUrl);
 		TextView dialog_txt = (TextView) findViewById(R.id.dialog_txt);
 		dialogBtn = (Button) findViewById(R.id.dialog_btn);
 		tvTitle = (TextView) findViewById(R.id.tv_title);
@@ -52,7 +52,8 @@ public class UpdateActivity extends BaseActivity {
 		tvTitle.setText("有更新");
 		dialogBtn.setText("下载更新");
 
-		dialog_txt.setText(mDesc);
+		dialog_txt.setText(mDesc.replace("#","\n"));
+//		dialog_txt.setText(mDesc);
 
 		dialogBtn.setOnClickListener(new View.OnClickListener() {
 			@Override

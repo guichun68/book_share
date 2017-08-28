@@ -72,6 +72,8 @@ public class FriendHomePageAct extends BaseActivity {
     private void getIntentData() {
         Intent intent = getIntent();
         if (intent == null) {
+            UIUtil.showToastSafe("未能获取好友信息");
+            finish();
             return;
         }
         mUser = (UserVO) intent.getSerializableExtra(BundleFlag.FLAG_USER);

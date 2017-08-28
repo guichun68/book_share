@@ -27,7 +27,6 @@ import java.util.List;
 
 import zyzx.linke.activity.AreaSelAct;
 import zyzx.linke.activity.BookSearchResultAct;
-import zyzx.linke.activity.ShareBookSearchAct;
 import zyzx.linke.adapter.BookVOAdapter;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseFragment;
@@ -106,6 +105,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
                                 return true;
                             }
                             Intent i = new Intent(getContext(),BookSearchResultAct.class);
+                            i.putExtra(BundleFlag.FROM,BundleFlag.Share_Center);
                             i.putExtra(BundleFlag.KEY_WORD,v.getText().toString());
                             startActivity(i);
                             return true;
@@ -169,6 +169,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
 //                Intent search = new Intent(getContext(),ShareBookSearchAct.class);
 //                startActivity(search);
                 if(etSearch.getVisibility()==View.VISIBLE){
+                    etSearch.clearFocus();
                     mRightBtn.setImageResource(R.mipmap.search_icon_white);
                     etSearch.setVisibility(View.INVISIBLE);
                     mTitleText.setVisibility(View.VISIBLE);
@@ -176,6 +177,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
                     mRightBtn.setImageResource(R.mipmap.delete);
                     etSearch.setVisibility(View.VISIBLE);
                     mTitleText.setVisibility(View.INVISIBLE);
+                    etSearch.requestFocus();
                 }
                 break;
         }
@@ -323,7 +325,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
-        stopLocation();//停止定位，
+//        stopLocation();//停止定位，
     }
     /**
      * 销毁定位
@@ -398,7 +400,7 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
             mCurrCounty = location.getDistrict();
             mTvLeftTip.setText(mCurrCounty);
             // 并且设置当前的城市
-            setCurrentCity(location.getCity());
+            setCurrentCity(mCurrCity);
             searchByLocal(1);
         }
     }

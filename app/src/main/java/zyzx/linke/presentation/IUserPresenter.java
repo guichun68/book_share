@@ -169,7 +169,7 @@ public abstract class IUserPresenter extends IPresenter{
      *                          &#9; 5 借阅者-约会已同意
      * @param callBack 回调
      */
-    public abstract void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId,int status,CallBack callBack);
+    public abstract void setBorrowFlowstatus(String userBookId,String currentUser, String chatUserId, String bookId,int status,CallBack callBack);
 
     /**
      * 图书交换
@@ -215,4 +215,6 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void getSwapSkillDeatil(String swapSkillId, CallBack callBack);
 
     public abstract void deleteSwapSkill(String swapSkillId,CallBack callBack);
+
+    public abstract void getBookInfo(String bookId, CallBack callBack);
 }

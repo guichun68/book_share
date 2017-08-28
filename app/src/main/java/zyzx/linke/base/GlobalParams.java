@@ -54,6 +54,7 @@ public class GlobalParams {
 	public static String urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
 	public static String urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
 	public static String urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
+	public static String urlGetBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getBookInfo.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -219,6 +220,7 @@ public class GlobalParams {
 		urlPulishSkill = GlobalParams.BASE_URL+"/user/mobileSDK/publishSkill.action";
 		urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
         urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
+		urlGetBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getBookInfo.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";

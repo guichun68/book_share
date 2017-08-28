@@ -9,12 +9,12 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.alibaba.fastjson.JSON;
-import com.qiangxi.checkupdatelibrary.bean.CheckUpdateInfo;
-import com.qiangxi.checkupdatelibrary.service.BaseService;
 
 import java.io.File;
 import java.util.Map;
 
+import zyzx.linke.checkupdate.bean.CheckUpdateInfo;
+import zyzx.linke.checkupdate.service.BaseService;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UpdateBeanVO;

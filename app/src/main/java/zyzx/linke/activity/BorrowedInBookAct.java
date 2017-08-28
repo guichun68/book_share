@@ -1,5 +1,6 @@
 package zyzx.linke.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.OrientationHelper;
@@ -14,6 +15,7 @@ import zyzx.linke.adapter.BorrowedInAdapter;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BorrowedInVO;
 import zyzx.linke.utils.UIUtil;
@@ -82,12 +84,9 @@ public class BorrowedInBookAct extends BaseActivity{
             @Override
             public void onItemClickListener(View view, BorrowedInVO bookDetailVO, int position) {
                 //进入图书详情页
-                /*Intent intent = new Intent(mContext, CommonBookDetailAct.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("book", bookDetailVO);
-                intent.putExtra(BundleFlag.SHOWADDRESS, false);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);*/
+                Intent intent = new Intent(mContext, BorrowBookDetail.class);
+                intent.putExtra(BundleFlag.BOOK_BORROW,bookDetailVO);
+                BorrowedInBookAct.this.startActivity(intent);
             }
         });
 

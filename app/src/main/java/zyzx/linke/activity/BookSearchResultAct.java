@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -34,7 +36,8 @@ public class BookSearchResultAct extends BaseActivity {
     private int mPageNum;
     private final int SUCCESS = 0x47B2,FAILURE = 0xB52A;
     private boolean isRefreshing = false;
-
+    private String from;
+    private TextView tvSearchWant;
     private String keyWord;
 
     private MyHandler handler = new MyHandler(this);
@@ -137,11 +140,13 @@ public class BookSearchResultAct extends BaseActivity {
             }
         });
 
+        tvSearchWant = (TextView) findViewById(R.id.tv_search_want);
     }
 
 
 
     private void getData(int pageNum){
+
         getBookPresenter().searchBooks(keyWord,pageNum, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
@@ -161,9 +166,13 @@ public class BookSearchResultAct extends BaseActivity {
     @Override
     protected void initData() {
         keyWord = getIntent().getStringExtra(BundleFlag.KEY_WORD);
+        from = getIntent().getStringExtra(BundleFlag.FROM);
         if(StringUtil.isEmpty(keyWord)){
             UIUtil.showToastSafe("未能解析关键字");
             return;
+        }
+        if(!StringUtil.isEmpty(from)&& from.equals(BundleFlag.Share_Center)){
+            tvSearchWant.setVisibility(View.GONE);
         }
         getData(mPageNum=1);
     }

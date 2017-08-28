@@ -18,6 +18,7 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.FeedBack;
@@ -168,7 +169,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void getUserInfoByUserId(String userid, final CallBack viewCallBack) {
-        String url = GlobalParams.urlGetUserInfoByUid.replace("#",userid);
+        String url = GlobalParams.urlGetUserInfoByUserId.replace("#",userid);
         getModel().get(url, null, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
@@ -440,10 +441,16 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void setBorrowFlowstatus(String currentUser, String chatUserId, String bookId, int status, CallBack callBack) {
-        getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
-                new String[]{"userId","relUid","bid","status"},
-                currentUser,chatUserId,bookId,status);
+    public void setBorrowFlowstatus(String userBookId,String currentUser, String chatUserId, String bookId, int status, CallBack callBack) {
+        if(status==Const.BORROW_BORROWER_REPLY_AGREE){//借阅者-约会已同意
+            getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
+                    new String[]{"userBookId","userId","relUid","bid","status"},
+                    userBookId,currentUser,chatUserId,bookId,status);
+        }else{
+            getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
+                    new String[]{"userBookId","relUid","userId","bid","status"},
+                    userBookId,currentUser,chatUserId,bookId,status);
+        }
     }
 
     @Override
@@ -480,6 +487,12 @@ public class UserPresenter extends IUserPresenter {
     public void deleteSwapSkill(String swapSkillId, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlDelSkillSwap,"删除失败",
                 new String[]{"swapSkillId"},swapSkillId);
+    }
+
+    @Override
+    public void getBookInfo(String bookId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetBookInfo,"未能获取图书信息",
+                new String[]{"bid"},bookId);
     }
 
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){

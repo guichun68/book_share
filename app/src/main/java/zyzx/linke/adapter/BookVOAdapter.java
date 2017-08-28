@@ -39,6 +39,7 @@ public class BookVOAdapter extends MyCommonAdapter<MyBookDetailVO>{
                     Intent intent = new Intent(mContext, ShareBookDetailAct.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("book",o);
+                    bundle.putString(BundleFlag.FLAG_USER_BOOK_ID,o.getUserBookId());
                     bundle.putInt("from", Const.FROM_HOME_FRAG);
                     intent.putExtra(BundleFlag.SHOWADDRESS,false);
                     intent.putExtras(bundle);

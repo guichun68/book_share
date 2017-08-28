@@ -350,7 +350,12 @@ public class BookDetailAct extends BaseActivity {
         //设置出版日期------start---------
 
         if(mBook.getPubdateDateType()!=null){
-            tvPublishDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType()));
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(mBook.getPubdateDateType());
+            if(!date.equals("1970-01-01")){
+                tvPublishDate.setText(date);
+            }else{
+                tvPublishDate.setText("出版日期:");
+            }
         }else{
             tvPublishDate.setVisibility(View.GONE);
         }

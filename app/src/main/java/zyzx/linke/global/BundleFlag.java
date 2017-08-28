@@ -19,7 +19,11 @@ public class BundleFlag {
 	public static final String LOGIN_NAME="login_name";
 	public static final String SHOULD_REFRESH = "ifRefresh";//是否需要刷新
 	public static final String FLAG_USER = "user";//
+	public static final String FLAG_USER_BOOK_ID = "user_book_id";//用户书籍表主键
 	public static final String FLAG_SKILL_SWAP = "swap_skill";//
 
     public static final String KEY_WORD = "KeyWord";
+    public static final String FROM = "from";
+    public static final String Share_Center = "shareCenter";
+    public static final String BOOK_BORROW = "bb";
 }

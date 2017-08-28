@@ -172,12 +172,12 @@ public class CustomProgressDialog {
 		TextView dialog_txt = (TextView) view.findViewById(R.id.dialog_txt);
 		Button dialog_btn = (Button) view.findViewById(R.id.dialog_btn);
 		Button dialog_btn2 = (Button) view.findViewById(R.id.dialog_btn2);
-
+		dialog_txt.setText(msg);
 		dialog_btn.setText(okBtnText);
 		dialog_btn2.setText(cancelBtnText);
 		final AlertDialog dialog2 = adb.create();
 		dialog2.setView(view, 0, 0, 0, 0);
-		dialog_txt.setText(msg);
+
 		dialog_btn.setOnClickListener(okListener);
 		if(cancelListener==null){
 			dialog_btn2.setOnClickListener(new View.OnClickListener() {

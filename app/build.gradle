@@ -7,8 +7,8 @@ android {
         applicationId "zyzx.linke"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.1.0 beta"
+        versionCode 3
+        versionName "1.2.0 beta"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //为了开启Java8
@@ -68,7 +68,7 @@ android {
         release {//发布版签名配置
             storeFile file('C:\\Users\\austin\\Desktop\\sakuraGo')//密钥文件路径
             storePassword '1006000'//密钥文件密码
-            keyAlias 'austin'//key别名
+            keyAlias 'alias'//key别名
             keyPassword '1006000'//key密码
         }
     }
@@ -96,5 +96,5 @@ dependencies {
     compile project(':easeui')
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'com.zhy:base-adapter:3.0.3'
-    compile 'com.qiangxi.checkupdatelibrary:checkupdatelibrary:1.0.3'
+//    compile 'com.qiangxi.checkupdatelibrary:checkupdatelibrary:1.0.3'
 }

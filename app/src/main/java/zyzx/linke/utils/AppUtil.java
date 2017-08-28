@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.BorrowFlow;
 import zyzx.linke.model.bean.BorrowFlowVO;
@@ -570,23 +571,15 @@ public class AppUtil {
 			}else{
 				biv.setBookImage(imageUrlL);
 			}
-			String borrowFlowId = jo.getString("borrowFlowId");
-			biv.setBorrowFlowId(borrowFlowId);
-			String flowId = jo.getString("flow_id");
-			biv.setFlowId(flowId);
-			String uid = jo.getString("uid");
-			biv.setUid(uid);
-			String relUid = jo.getString("rel_uid");
-			biv.setRelUid(relUid);
-			String title = jo.getString("title");
-			biv.setBookTitle(title);
-			String bookId = jo.getString("id");
-			biv.setBookId(bookId);
-			String loginName = jo.getString("login_name");
-			biv.setOwnerName(loginName);
+			biv.setBorrowFlowId(jo.getString("borrowFlowId"));
+			biv.setFlowId(jo.getString("flow_id"));
+			biv.setUid(jo.getString("uid"));
+			biv.setRelUid(jo.getString("rel_uid"));
+			biv.setBookTitle(jo.getString("title"));
+			biv.setBookId(jo.getString("id"));
+			biv.setOwnerName(jo.getString("login_name"));
 
-			String author = jo.getString("a_author");
-			biv.setBookAuthor(author);
+			biv.setBookAuthor(jo.getString("a_name"));
 			mBvos.add(biv);
 		}
 		return mBvos;
@@ -717,6 +710,72 @@ public class AppUtil {
 				break;
 			default:
 				result=("借阅");
+		}
+		return result;
+	}
+
+	/**
+	 * 得到图书的分类名称
+	 * @param bType
+	 */
+	public static String getStringClassify(String bType) {
+		String result = "普通书籍";
+		if(!StringUtil.isEmpty(bType)){
+			switch (bType){
+				case Const.CLASSIFY_ZHONGKAO:
+					result=("中考-手写资料");
+					break;
+				case Const.CLASSIFY_GAOKAO:
+					result=("高考-手写资料");
+					break;
+				case Const.CLASSIFY_KAOYAN:
+					result=("考研-手写资料");
+					break;
+				case Const.CLASSIFY_ZIXUE:
+					result=("自学考试-手写资料");
+					break;
+				case Const.CLASSIFY_SIJI:
+					result=("四级-手写资料");
+					break;
+				case Const.CLASSIFY_LIUJI:
+					result=("六级-手写资料");
+					break;
+				case Const.CLASSIFY_GONGWUYUAN:
+					result=("公务员-手写资料");
+					break;
+				case Const.CLASSIFY_SIKAO:
+					result=("司考-手写资料");
+					break;
+				case Const.CLASSIFY_YIXUE:
+					result=("医学-手写资料");
+					break;
+				case Const.CLASSIFY_TUOFU:
+					result=("托福-手写资料");
+					break;
+				case Const.CLASSIFY_YASI:
+					result=("雅思-手写资料");
+					break;
+				case Const.CLASSIFY_GRE:
+					result=("GRE-手写资料");
+					break;
+				case Const.CLASSIFY_JLPT:
+					result=("JLPT-手写资料");
+					break;
+				case Const.CLASSIFY_XIAOYUZHONG:
+					result=("小语种-手写资料");
+					break;
+				case Const.CLASSIFY_BIJI:
+					result=("课堂笔记-手写资料");
+					break;
+				case Const.CLASSIFY_DAAN:
+					result=("答案-手写资料");
+					break;
+				case Const.CLASSIFY_QITA:
+					result=("其他-手写资料");
+					break;
+			}
+		}else{
+			result=("普通书籍");
 		}
 		return result;
 	}

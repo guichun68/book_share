@@ -134,6 +134,9 @@
         <activity android:name=".activity.MyBorrowBegsAct"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.BorrowBookDetail"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.ImportResultAct"
             android:screenOrientation="portrait"

@@ -31,6 +31,7 @@
         android:maxLines="3"
         android:ellipsize="end"
         android:layout_marginBottom="20dp"
+        android:textColor="@color/gray_normal"
         tool:text="确定要添加《你好的我的dadadafd士大夫撒都是垃圾范德萨对了撒就范德萨范德萨疯掉了卡萨解放东路撒酒疯大是咖啡的三的》这本书么？"
         android:textSize="19sp" />
 

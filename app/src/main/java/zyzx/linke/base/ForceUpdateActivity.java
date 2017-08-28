@@ -1,5 +1,6 @@
 package zyzx.linke.base;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -8,16 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qiangxi.checkupdatelibrary.callback.DownloadCallback;
-import com.qiangxi.checkupdatelibrary.http.HttpRequest;
-import com.qiangxi.checkupdatelibrary.utils.ApplicationUtil;
-import com.qiangxi.checkupdatelibrary.utils.NetWorkUtil;
-
 import java.io.File;
 import java.io.IOException;
 
 import zyzx.linke.R;
 import zyzx.linke.activity.AppManager;
+import zyzx.linke.checkupdate.callback.DownloadCallback;
+import zyzx.linke.checkupdate.http.HttpRequest;
+import zyzx.linke.checkupdate.utils.ApplicationUtil;
+import zyzx.linke.checkupdate.utils.NetWorkUtil;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -45,7 +46,7 @@ public class ForceUpdateActivity extends BaseActivity {
 
         dialogBtn.setText("下载更新");
 
-        dialog_txt.setText(mDesc);
+        dialog_txt.setText(mDesc.replace("#","\n"));
 
         dialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,21 +87,34 @@ public class ForceUpdateActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        UIUtil.showToastSafe("未安装更新，即将退出！");
-        super.onDestroy();
-        AppManager.getAppManager().finishAllActivity();
-        BaseApplication.getInstance().exitApp(this);
-    }
-
+    Dialog exitDialg;
     @Override
     public void onBackPressed() {
-        UIUtil.showToastSafe("未能更新，即将退出！");
-        super.onBackPressed();
-        AppManager.getAppManager().finishAllActivity();
-        BaseApplication.getInstance().exitApp(this);
+        if(exitDialg != null && exitDialg.isShowing()){
+            exitDialg.dismiss();
+            return;
+        }
+        if(exitDialg==null){
+            exitDialg = CustomProgressDialog.getPromptDialog2Btn(this, "此次为重要更新，需要更新后才能继续使用，确定退出么？","确定退出","取消",new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIUtil.showToastSafe("未安装更新，即将退出！");
+                    HttpRequest.setShouldCancel(true);
+                    AppManager.getAppManager().finishAllActivity();
+                    BaseApplication.getInstance().exitApp(ForceUpdateActivity.this);
+                }
+            },null);
+        }
+        exitDialg.show();
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+
 
     private void download() {
         pb.setVisibility(View.VISIBLE);
@@ -111,11 +125,14 @@ public class ForceUpdateActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+
+
         HttpRequest.download(mUrl, filePath, mFileName, new DownloadCallback() {
             @Override
             public void onDownloadSuccess(File file) {
                 dialogBtn.setEnabled(true);
                 dialogBtn.setText("点击安装");
+                dialogBtn.setClickable(true);
                 ApplicationUtil.installApk(ForceUpdateActivity.this, file);
             }
 
@@ -123,6 +140,7 @@ public class ForceUpdateActivity extends BaseActivity {
             public void onProgress(long currentProgress, long totalProgress) {
                 dialogBtn.setEnabled(false);
                 dialogBtn.setText("正在下载");
+                dialogBtn.setClickable(false);
                 pb.setMax((int) (totalProgress));
                 pb.setProgress((int) (currentProgress));
             }
@@ -130,9 +148,12 @@ public class ForceUpdateActivity extends BaseActivity {
             @Override
             public void onDownloadFailure(String failureMessage) {
                 dialogBtn.setEnabled(true);
+                dialogBtn.setClickable(true);
                 dialogBtn.setText("重新下载");
             }
         });
+
+
     }
 
 
