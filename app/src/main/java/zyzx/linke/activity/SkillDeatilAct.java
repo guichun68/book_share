@@ -34,7 +34,7 @@ import zyzx.linke.utils.UIUtil;
 public class SkillDeatilAct extends BaseActivity {
 
     private TextView tvPublisher,tvTitle,tvOwnSkillType,tvOwnSkillName,tvSwapSkillType,tvSkillTip,tvSwapSkillName,tvDesc;
-    private String publisherUserId,publisherLoginName,skillDesc;
+    private String publisherUserId,skillDesc;
     private SwapSkillVo swapSkillVo;
     private UserVO mFriend = new UserVO();
 
@@ -56,13 +56,9 @@ public class SkillDeatilAct extends BaseActivity {
                     case 2:
                         List items = drj.data.getItems();
                         for (int i = 0; i < items.size(); i++) {
-                            SwapSkillVo sbVO = new SwapSkillVo();
                             JSONObject jo = (JSONObject) items.get(i);
-                            publisherUserId =jo.getString("userid");
-                            publisherLoginName =jo.getString("login_name");
                             skillDesc = jo.getString("s_desc");
                         }
-                        tvPublisher.setText(publisherLoginName);
                         tvDesc.setText(skillDesc);
                         break;
                     case 3:
@@ -163,6 +159,7 @@ public class SkillDeatilAct extends BaseActivity {
         tvOwnSkillType.setText(swapSkillVo.getSkillType());
         tvOwnSkillName.setText(swapSkillVo.getSkillHaveName());
         tvSwapSkillType.setText(swapSkillVo.getSwapSkillType());
+        tvPublisher.setText(swapSkillVo.getLoginName());
 
         if(StringUtil.isEmpty(swapSkillVo.getSkillWantName())){
             tvSwapSkillName.setVisibility(View.GONE);
@@ -227,6 +224,20 @@ public class SkillDeatilAct extends BaseActivity {
     }
 
     public void getUserInfo(){
+        if(swapSkillVo == null){
+            CustomProgressDialog.getPromptDialog(this, "未能获取用户信息，请返回重试", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            }).show();
+            return;
+        }
+        if(GlobalParams.getLastLoginUser().getLoginName().equals(swapSkillVo.getLoginName())){
+            gotoActivity(PersonalCenterAct.class);
+            return;
+        }
+
         showDefProgress();
         getUserPresenter().getUserInfoByUid(swapSkillVo.getUid(), new CallBack() {
             @Override

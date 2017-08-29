@@ -55,6 +55,9 @@ public class GlobalParams {
 	public static String urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
 	public static String urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
 	public static String urlGetBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getBookInfo.action";
+	public static String urlAddAttention = GlobalParams.BASE_URL+"/user/mobileSDK/addAttention.action";
+	public static String urlCheckIfAtentioned = GlobalParams.BASE_URL+"/user/mobileSDK/checkIfAttentioned.action";
+	public static String urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -157,6 +160,7 @@ public class GlobalParams {
 	public static String urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
 	public static String urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
 	public static String urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
+	public static String urlGetAttentions = GlobalParams.BASE_URL+"/user/mobileSDK/getAttentions.action";
 
 	/**
 	 * 注册
@@ -221,6 +225,9 @@ public class GlobalParams {
 		urlGetSwapSkillDetal = GlobalParams.BASE_URL+"/user/mobileSDK/getSwapSkillDetail.action";
         urlDelSkillSwap = GlobalParams.BASE_URL+"/user/mobileSDK/delSkillSwap.action";
 		urlGetBookInfo = GlobalParams.BASE_URL+"/app/mobileSDK/getBookInfo.action";
+		urlAddAttention = GlobalParams.BASE_URL+"/user/mobileSDK/addAttention.action";
+		urlCheckIfAtentioned = GlobalParams.BASE_URL+"/user/mobileSDK/checkIfAttentioned.action";
+		urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";
 		urlCancelShare = GlobalParams.BASE_URL+"/user/mobileSDK/cancelShareBook.action";
@@ -237,6 +244,7 @@ public class GlobalParams {
 		urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
 		urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
 		urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
+		urlGetAttentions = GlobalParams.BASE_URL+"/user/mobileSDK/getAttentions.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 		urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";

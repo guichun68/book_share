@@ -298,6 +298,11 @@ public class BookSwapAct extends BaseActivity {
 
     private UserVO mFriend = new UserVO();
     public void getUserInfo(){
+        if(swapper!=null && GlobalParams.getLastLoginUser().getLoginName().equals(swapper)){
+            gotoActivity(PersonalCenterAct.class);
+            return;
+        }
+
         showDefProgress();
         getUserPresenter().getUserInfoByUid(mSwapBookVO.getUserId(), new CallBack() {
             @Override

@@ -98,6 +98,10 @@ public class ShareBookDetailAct extends BaseActivity {
                 showBegDialog();
                 break;
             case R.id.btn_sharer://好友名字
+                if(GlobalParams.getLastLoginUser().getLoginName().equals(mFriend.getLoginName())){
+                    gotoActivity(PersonalCenterAct.class);
+                    return;
+                }
                 Bundle ex = new Bundle();
                 ex.putSerializable("user",mFriend);
                 gotoActivity(FriendHomePageAct.class,false,ex);

@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,7 +23,7 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.adapter.MyViewHolder;
-import zyzx.linke.base.BaseSwapPager;
+import zyzx.linke.base.BasePager;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
@@ -41,8 +40,8 @@ import zyzx.linke.views.MyRecyclerViewWapper;
  * Desc: 技能交换选项卡页
  */
 
-public class SkillSwapPage extends BaseSwapPager {
-    private final String TAG = SkillSwapPage.class.getSimpleName();
+public class SkillPage extends BasePager {
+    private final String TAG = SkillPage.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AppCompatEditText etSearch;
     private MyRecyclerViewWapper mRecyclerView;
@@ -104,7 +103,7 @@ public class SkillSwapPage extends BaseSwapPager {
         }
     }
     private final int SLOP = 5;
-    public SkillSwapPage(Context context, int layoutResId) {
+    public SkillPage(Context context, int layoutResId) {
         super(context, layoutResId);
     }
     @Override
@@ -189,7 +188,7 @@ public class SkillSwapPage extends BaseSwapPager {
         @Override
         public void convert(MyViewHolder holder, final SwapSkillVo ssVO, int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
-                holder.setText(R.id.tv_title,ssVO.getSkillTitle());
+                holder.setText(R.id.tv_publisher,ssVO.getLoginName());
                 holder.setText(R.id.tv_want,StringUtil.isEmpty(ssVO.getSkillWantName())?"现金交换":ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){
@@ -232,14 +231,14 @@ public class SkillSwapPage extends BaseSwapPager {
 
 
     private static class MyHandler extends Handler{
-        WeakReference<SkillSwapPage> mActivity;
-        MyHandler(SkillSwapPage act){
-            this.mActivity = new WeakReference<SkillSwapPage>(act);
+        WeakReference<SkillPage> mActivity;
+        MyHandler(SkillPage act){
+            this.mActivity = new WeakReference<SkillPage>(act);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            SkillSwapPage act = mActivity==null?null:mActivity.get();
+            SkillPage act = mActivity==null?null:mActivity.get();
             if(act == null){
                 return;
             }

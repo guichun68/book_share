@@ -10,6 +10,7 @@ import android.os.Parcelable;
 public class SwapSkillVo implements Parcelable{
     private String swapSkillId;//zyzxz_swap_skill主键
     private String uid;//发起人id
+    private String loginName;//发起人用户名
     private String headIcon;
     private String skillTitle;
     private String skillType;//中文名
@@ -28,6 +29,7 @@ public class SwapSkillVo implements Parcelable{
         swapSkillType = in.readString();
         skillHaveName = in.readString();
         skillWantName = in.readString();
+        loginName = in.readString();
     }
 
     @Override
@@ -40,6 +42,7 @@ public class SwapSkillVo implements Parcelable{
         dest.writeString(swapSkillType);
         dest.writeString(skillHaveName);
         dest.writeString(skillWantName);
+        dest.writeString(loginName);
     }
 
     @Override
@@ -113,6 +116,14 @@ public class SwapSkillVo implements Parcelable{
 
     public void setSkillType(String skillType) {
         this.skillType = skillType;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getSwapSkillType() {

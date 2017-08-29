@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <zyzx.linke.views.CircleImageView
+        android:id="@+id/iv"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ease_default_avatar"
+        />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:textStyle="normal"
+        android:textSize="18sp"
+        tool:text="阿拉蕾"/>
+
+
+</LinearLayout>

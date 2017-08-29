@@ -13,14 +13,14 @@ import zyzx.linke.utils.CustomProgressDialog;
  * Desc: 交换市场选项卡页 抽取类
  */
 
-public abstract class BaseSwapPager {
+public abstract class BasePager {
     protected Context context;
     protected View rootView;
     private IUserPresenter mUserPresenter;
     private IBookPresenter mBookPresenter;
     private Dialog mProgressDialog;
 
-    public BaseSwapPager(Context context, int layoutResId){
+    public BasePager(Context context, int layoutResId){
         this.context = context;
         rootView = View.inflate(this.context,layoutResId,null);
         initView();

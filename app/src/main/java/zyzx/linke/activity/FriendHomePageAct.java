@@ -2,6 +2,8 @@ package zyzx.linke.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,14 +11,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BookAdapter;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
+import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.StringUtil;
@@ -37,13 +43,73 @@ public class FriendHomePageAct extends BaseActivity {
     private TextView tvSignature;
     private boolean headerClickable;
     private UserVO mUser;
-
+    private String from;//标记从哪个页面来,取值从BundleFlag类中FROM_xxx
 
     private BookAdapter mAdapter;
     private int pageNum = 0;
     private String mAddress;//中文地址描述
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
     private Button btnSendMsg;
+    private Button btnAttention;
+    private final int
+            /*添加关注 成功否 回调标识*/
+            SUCCESS = 0x919B,FAILURE= 0x4721,
+            /*检查是否已经关注 成功否 回调标识*/
+            SUCCESS_CHECK = 9,FAILURE_CHECK = 8,
+            /*取消关注 成功否 回调标识*/
+            SUCCESS_CANCEL_ATENTION = 10,FAILURE_CANCEL_ATENTION = 11;
+
+    private MyHandler handler = new MyHandler(this);
+
+    private void myHandleMessage(Message msg) {
+        dismissProgress();
+        switch (msg.what) {
+            case SUCCESS:
+                ResponseJson rj = new ResponseJson((String)msg.obj);
+                if(ResponseJson.NO_DATA == rj.errorCode){
+                    UIUtil.showToastSafe("未能关注成功,请稍后再试");
+                    return;
+                }
+                switch (rj.errorCode){
+                    case 2:
+                        UIUtil.showToastSafe("已关注");
+                        btnAttention.setText("已关注");
+                        break;
+                    case 3:
+                        UIUtil.showToastSafe("未能关注成功,请稍后再试");
+                        break;
+                }
+                break;
+            case FAILURE:
+                UIUtil.showToastSafe("未能关注成功,请稍后再试");
+                break;
+            case SUCCESS_CHECK:
+                ResponseJson rj2 = new ResponseJson((String) msg.obj);
+                if(ResponseJson.NO_DATA == rj2.errorCode){
+                    UIUtil.showToastSafe("未能获取关注信息");
+                    return;
+                }
+                switch (rj2.errorCode){
+                    case 2:
+                        btnAttention.setText("已关注");
+                        break;
+                    case 3:
+                        btnAttention.setText("+关注");
+                        break;
+                }
+                break;
+            case FAILURE_CHECK:
+                UIUtil.showToastSafe("未能获取关注信息");
+                break;
+            case SUCCESS_CANCEL_ATENTION:
+                UIUtil.showToastSafe("已取消关注");
+                btnAttention.setText("+关注");
+                break;
+            case FAILURE_CANCEL_ATENTION:
+                UIUtil.showToastSafe("未能取消关注");
+                break;
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -59,6 +125,8 @@ public class FriendHomePageAct extends BaseActivity {
         tvSignature = (TextView) findViewById(R.id.tv_signature);
         btnSendMsg = (Button) findViewById(R.id.btn_send_msg);
         btnSendMsg.setOnClickListener(this);
+        btnAttention = (Button) findViewById(R.id.btn_attention);
+        btnAttention.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +135,20 @@ public class FriendHomePageAct extends BaseActivity {
         if(headerClickable){
             ivHeadIcon.setOnClickListener(this);
         }
+        showDefProgress();
+        getUserPresenter().checkIfAttentioned(mUser.getUid(),new CallBack(){
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                Message msg = handler.obtainMessage(SUCCESS_CHECK);
+                msg.obj = obj;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                handler.sendEmptyMessage(FAILURE_CHECK);
+            }
+        });
     }
 
     private void getIntentData() {
@@ -77,6 +159,7 @@ public class FriendHomePageAct extends BaseActivity {
             return;
         }
         mUser = (UserVO) intent.getSerializableExtra(BundleFlag.FLAG_USER);
+        from = intent.getStringExtra(BundleFlag.FROM_CHAT_ACT);
         refreshUI();
     }
 
@@ -92,10 +175,52 @@ public class FriendHomePageAct extends BaseActivity {
                     UIUtil.showToastSafe("无需同自己聊天");
                     return;
                 }
-                Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
-                in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
-                in.putExtra(BundleFlag.LOGIN_NAME, mUser.getLoginName());
-                startActivity(in);
+                if(!StringUtil.isEmpty(from) && from.equals(BundleFlag.FROM_CHAT_ACT)){
+                    //从聊天页面跳转过来，直接finish掉当前页面即可
+                    finish();
+                }else{
+                    Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
+                    in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                    in.putExtra(BundleFlag.LOGIN_NAME, mUser.getLoginName());
+                    startActivity(in);
+                }
+                break;
+            case R.id.btn_attention:
+                //判断当前关注状态，如果是已关注，则取消关注，反之则添加关注
+                if(btnAttention.getText().toString().equals("+关注")){
+                    //添加关注
+                    getUserPresenter().addAttention(GlobalParams.getLastLoginUser().getUid(),mUser.getUid(),new CallBack(){
+                        @Override
+                        public void onSuccess(Object obj, int... code) {
+                            Message msg = handler.obtainMessage();
+                            msg.obj = obj;
+                            msg.what = SUCCESS;
+                            handler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void onFailure(Object obj, int... code) {
+                            handler.sendEmptyMessage(FAILURE);
+                        }
+                    });
+                }else{
+                    //取消关注
+                    getUserPresenter().cancelAttention(mUser.getUid(),new CallBack(){
+
+                        @Override
+                        public void onSuccess(Object obj, int... code) {
+                            Message msg = handler.obtainMessage(SUCCESS_CANCEL_ATENTION);
+                            msg.obj = obj;
+                            handler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void onFailure(Object obj, int... code) {
+                            handler.sendEmptyMessage(FAILURE_CANCEL_ATENTION);
+                        }
+                    });
+                }
+
                 break;
         }
     }
@@ -143,5 +268,27 @@ public class FriendHomePageAct extends BaseActivity {
             tvSignature.setText("未填写！");
         }
         Glide.with(mContext).load(mUser.getHeadIcon()).into(ivHeadIcon);
+    }
+
+    private static class MyHandler extends Handler {
+        WeakReference<FriendHomePageAct> mActivity;
+        MyHandler(FriendHomePageAct act){
+            this.mActivity = new WeakReference<>(act);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            FriendHomePageAct act = mActivity==null?null:mActivity.get();
+            if(act == null){
+                return;
+            }
+            act.myHandleMessage(msg);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
     }
 }

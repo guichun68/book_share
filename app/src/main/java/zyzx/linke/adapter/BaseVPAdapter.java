@@ -6,18 +6,18 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import zyzx.linke.base.BaseSwapPager;
+import zyzx.linke.base.BasePager;
 
 /**
  * Created by Austin on 2015/6/29.
  * Desc:交换中心VP之Adapter
  */
-public class ExchangeCenterVPAdapter extends PagerAdapter {
+public class BaseVPAdapter extends PagerAdapter {
 
-  ArrayList<BaseSwapPager> pagers;
+  ArrayList<BasePager> pagers;
   String []titles;
 
-  public ExchangeCenterVPAdapter(ArrayList<BaseSwapPager> pagers, String[] titles){
+  public BaseVPAdapter(ArrayList<BasePager> pagers, String[] titles){
     this.pagers = pagers;
     this.titles = titles;
   }

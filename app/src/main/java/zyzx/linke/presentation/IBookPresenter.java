@@ -117,4 +117,7 @@ public abstract class IBookPresenter extends IPresenter {
     public abstract void searchSwapWantBooks(String keyWord, int pageNum, CallBack callBack);
     //从用户想要得到的技能中搜索
     public abstract void searchSwapWantSkills(String keyWord, int pageNum, CallBack callBack);
+
+    //得到我关注的用户
+    public abstract void getAttentions(int pageNum, CallBack callBack);
 }

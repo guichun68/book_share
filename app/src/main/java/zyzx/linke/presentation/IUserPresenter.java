@@ -217,4 +217,17 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void deleteSwapSkill(String swapSkillId,CallBack callBack);
 
     public abstract void getBookInfo(String bookId, CallBack callBack);
+
+    /**
+     * 添加关注
+     * @param uid 当前登录用户（关注人）
+     * @param uid1 被关注人
+     * @param callBack
+     */
+    public abstract void addAttention(String uid, String uid1, CallBack callBack);
+
+    //检查当前登陆用户是否已经对uid关注了
+    public abstract void checkIfAttentioned(String uid, CallBack callBack);
+    //取消关注
+    public abstract void cancelAttention(String uid, CallBack callBack);
 }

@@ -26,4 +26,5 @@ public class BundleFlag {
     public static final String FROM = "from";
     public static final String Share_Center = "shareCenter";
     public static final String BOOK_BORROW = "bb";
+	public static final String FROM_CHAT_ACT = "chatAct";
 }

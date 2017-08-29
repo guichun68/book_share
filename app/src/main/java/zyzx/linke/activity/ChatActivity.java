@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.alibaba.fastjson.JSON;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -38,9 +39,13 @@ import java.util.Date;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
+import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.UserInfoResult;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.runtimepermissions.PermissionsManager;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.PreferenceManager;
@@ -64,6 +69,7 @@ public class ChatActivity extends BaseActivity {
     private EditText etMettingAddress;
     private double latitude, longitude;//见面地点
     private final int CODE_SEL_ADDRESS_ON_MAP = 777;
+    private UserVO mFriend = new UserVO();
 
     @Override
     protected int getLayoutId() {
@@ -122,13 +128,8 @@ public class ChatActivity extends BaseActivity {
             public void onAvatarClick(String username) {
 //                CloudItem item=new CloudItem("无", Const.TianAnMenPoint,"无","");//只是为了携带用户id到详情页
                 //进入好友详情页
-                ArrayMap<String, String> uidMap = new ArrayMap<>();
-                uidMap.put("uid", username);
 //                item.setCustomfield(uidMap);
-                Intent in = new Intent(mContext, FriendHomePageAct.class);
-                in.putExtra(BundleFlag.SHOWADDRESS, false);
-                in.putExtra(BundleFlag.HEADCLICKABLE, false);
-                mContext.startActivity(in);
+               getUserInfo();
             }
 
             @Override
@@ -589,10 +590,6 @@ public class ChatActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         mChatFrag.onBackPressed();
-        /*if (EasyUtils.isSingleActivity(this)) {
-            Intent intent = new Intent(this, HomeAct.class);
-            startActivity(intent);
-        }*/
     }
 
     public String getToChaUserLoginName() {
@@ -621,5 +618,64 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
+    private void getUserInfo() {
+        showDefProgress();
+        getUserPresenter().getUserInfoByUserId(chatUserId, new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                dismissProgress();
+                UserInfoResult ui = JSON.parseObject((String) obj, UserInfoResult.class);
+                if (ui.getErrorCode() == null || ui.getErrorCode().equals("0")) {
+                    //获取失败
+                    UIUtil.showToastSafe("用户信息获取失败！");
+                    return;
+                }
+                if (ui.getErrorCode().equals("1") && !ui.getData().getItems().isEmpty()) {
+                    UserInfoResult.DataEntity.ItemsEntity ie = ui.getData().getItems().get(0);
+                    mFriend.setUserid(ie.getUserid());
+                    mFriend.setUid(ie.getId());
+                    mFriend.setLoginName(ie.getLogin_name());
+                    mFriend.setMobilePhone(ie.getMobile_phone());
+                    mFriend.setAddress(ie.getAddress());
+                    mFriend.setPassword(ie.getPassword());
+                    mFriend.setProvinceName(ie.getPro());
+                    mFriend.setCityName(ie.getCity());
+                    mFriend.setCountyName(ie.getCounty());
+                    String genderStr = ie.getGender();
+                    Integer gender = Integer.parseInt(genderStr == null ? "0" : genderStr);
+                    mFriend.setGender(gender);
+                    mFriend.setHobby(ie.getHobby());
+                    mFriend.setEmail(ie.getEmail());
+                    mFriend.setRealName(ie.getReal_name());
+                    mFriend.setCityId(ie.getCity_id());
+                    mFriend.setLastLoginTime(ie.getLast_login_time());
 
+                    mFriend.setSignature(ie.getSignature());
+                    String headTemp = ie.getHead_icon();
+                    mFriend.setHeadIcon(StringUtil.isEmpty(headTemp) ? null : GlobalParams.BASE_URL + GlobalParams.AvatarDirName + headTemp);
+                    mFriend.setBak4(ie.getBak4());
+                    mFriend.setBirthday(ie.getBirthday());
+                    mFriend.setSchool(ie.getSchool());
+                    mFriend.setDepartment(ie.getDepartment());
+                    mFriend.setDiplomaId(ie.getDiploma_id());
+                    mFriend.setSoliloquy(ie.getSoliloquy());
+                    mFriend.setCreditScore(ie.getCredit_score());
+                    mFriend.setFromSystem(ie.getFrom_system());
+
+                    Intent in = new Intent(mContext, FriendHomePageAct.class);
+                    in.putExtra(BundleFlag.FLAG_USER,mFriend);
+                    in.putExtra(BundleFlag.FROM,BundleFlag.FROM_CHAT_ACT);
+                    ChatActivity.this.startActivity(in);
+                } else {
+                    UIUtil.showToastSafe("未能获取用户信息");
+                }
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                dismissProgresSingle();
+                UIUtil.showToastSafe("用户信息获取失败！");
+            }
+        });
+    }
 }

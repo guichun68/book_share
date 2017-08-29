@@ -495,6 +495,24 @@ public class UserPresenter extends IUserPresenter {
                 new String[]{"bid"},bookId);
     }
 
+    @Override
+    public void addAttention(String uid1, String uid2, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlAddAttention,"添加出错，请稍后再试",
+                new String[]{"a_uid","b_uid"},uid1,uid2);
+    }
+
+    @Override
+    public void checkIfAttentioned(String uid, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlCheckIfAtentioned,"未能检测到关注信息",
+                new String[]{"relUid"},uid);
+    }
+
+    @Override
+    public void cancelAttention(String uid, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlCancelAttention,"取消关注操作失败",
+                new String[]{"relUid"},uid);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

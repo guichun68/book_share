@@ -1,82 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/title_bar"/>
+    <include layout="@layout/title_bar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-       >
-    <zyzx.linke.views.CircleImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        app:border_color="@color/watermark_hint"
-        android:src="@mipmap/person"/>
+        android:layout_height="200dp"
+        android:background="@mipmap/bacgroud">
 
-        <TextView
-            android:id="@+id/tv_loginname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tool:text="铭蔚之乐"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_alignTop="@id/iv_icon"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/iv_icon"/>
+        <zyzx.linke.views.CircleImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/person"
+            app:border_color="@color/watermark_hint" />
 
-        <Button
-            android:id="@+id/btn_send_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="发消息"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/btn_sel"
-            android:layout_alignTop="@+id/tv_loginname"
-            android:layout_toEndOf="@+id/tv_loginname"
-            android:layout_marginStart="12dp" />
+        <LinearLayout
+            android:id="@+id/ll_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/iv_icon"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_loginname"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tool:text="铭蔚之乐"
+                />
+
+            <Button
+                android:id="@+id/btn_attention"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/btn_sel"
+                android:text="+关注"/>
+
+
+
+            <Button
+                android:id="@+id/btn_send_msg"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignBottom="@id/tv_loginname"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/tv_loginname"
+                android:background="@drawable/btn_sel"
+                android:text="发消息" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_sign_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="签名:"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:layout_below="@id/ll_top_bar"
             android:layout_marginTop="7dp"
-            android:layout_alignLeft="@id/tv_loginname"
-            android:layout_below="@id/tv_loginname"
-            />
+            android:text="签名:"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:textSize="16sp"
-            android:layout_alignLeft="@id/tv_loginname"
-            android:text="先天下之忧而忧，后天下之乐而乐,道，非常道，盗亦有道！"
+            android:layout_below="@id/tv_sign_tip"
             android:layout_marginRight="5dp"
             android:ellipsize="end"
-            android:layout_below="@id/tv_sign_tip"/>
+            android:maxLines="3"
+            android:layout_marginTop="3dp"
+            android:padding="5dp"
+            android:text="先天下之忧而忧，后天下之乐而乐,道，非常道，盗亦有道！"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2px"
-            android:background="@color/gray_white"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
-</RelativeLayout>
+            android:background="@color/gray_white" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -86,40 +110,40 @@
         <View
             android:layout_width="6dp"
             android:layout_height="match_parent"
-            android:background="@color/title"/>
+            android:background="@color/title" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray_white"
-        android:padding="10dp"
-        android:text="关于TA：" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_white"
+            android:padding="10dp"
+            android:text="关于TA：" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:paddingLeft="10dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
+        android:paddingLeft="10dp"
         android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="所在城市:"
             android:gravity="center_vertical"
+            android:text="所在城市:"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_location"
-            tool:text="山东省青岛市黄岛区"
-            style="@style/user_info.small"/>
+            style="@style/user_info.small"
+            tool:text="山东省青岛市黄岛区" />
     </LinearLayout>
-    <View
-        style="@style/line"/>
+
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,22 +151,21 @@
         android:orientation="horizontal">
 
         <TextView
+            style="@style/user_info"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="生日:"
-            android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            style="@style/user_info"/>
+            android:gravity="center_vertical"
+            android:text="生日:" />
 
         <TextView
             android:id="@+id/tv_birthday"
-            tool:text="1991.10.12"
-            style="@style/user_info.small"/>
+            style="@style/user_info.small"
+            tool:text="1991.10.12" />
 
     </LinearLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -151,22 +174,21 @@
         android:orientation="horizontal">
 
         <TextView
+            style="@style/user_info"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:text="性别:"
             android:gravity="center_vertical"
-            style="@style/user_info" />
+            android:text="性别:" />
 
         <TextView
             android:id="@+id/tv_gender"
             style="@style/user_info.small"
-            tool:text="男"/>
+            tool:text="男" />
 
     </LinearLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -175,22 +197,21 @@
         android:orientation="horizontal">
 
         <TextView
+            style="@style/user_info"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:text="学校:"
             android:gravity="center_vertical"
-            style="@style/user_info" />
+            android:text="学校:" />
 
         <TextView
             android:id="@+id/tv_school"
             style="@style/user_info.small"
-            tool:text="北京大学"/>
+            tool:text="北京大学" />
 
     </LinearLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -213,8 +234,7 @@
 
     </LinearLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -237,8 +257,7 @@
 
     </LinearLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -258,14 +277,13 @@
             android:id="@+id/tv_soliloquy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            tool:text="我叫***，今年 27 岁。1997 年 7 月我从**师范学校艺师美术专业计划内自费毕业。由于从 9 7 年起国家不再对自费生包分配，使我与“太阳底下最光辉的职业”失之交臂。幸好，当时河西 马厂完小师资不足，经人介绍，我在该完小担任了一年的临时代课教师。回想起那段时光真是既 甜蜜又美好，虽然代课工资很低，但听着同学们围在身旁“老师”、“老师”的叫个不停，看着 那一双双充满信任的眼睛， 那一张张稚气的小脸， 生活中的所有不快都顿时烟消云散了。 我原想， 即使不能转正，只要学校需要，就是当一辈子代课教师我也心甘情愿。不料，1998 年起国家开 始清退临时工和代课教师，接到了学校的口头通知后，我怀着恋恋不舍的心情，悄悄地离开了学校。"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:maxLines="30"
+            android:layout_marginTop="5dp"
             android:ellipsize="end"
+            android:maxLines="30"
             android:textSize="15sp"
-            />
+            tool:text="我叫***，今年 27 岁。1997 年 7 月我从**师范学校艺师美术专业计划内自费毕业。由于从 9 7 年起国家不再对自费生包分配，使我与“太阳底下最光辉的职业”失之交臂。幸好，当时河西 马厂完小师资不足，经人介绍，我在该完小担任了一年的临时代课教师。回想起那段时光真是既 甜蜜又美好，虽然代课工资很低，但听着同学们围在身旁“老师”、“老师”的叫个不停，看着 那一双双充满信任的眼睛， 那一张张稚气的小脸， 生活中的所有不快都顿时烟消云散了。 我原想， 即使不能转正，只要学校需要，就是当一辈子代课教师我也心甘情愿。不料，1998 年起国家开 始清退临时工和代课教师，接到了学校的口头通知后，我怀着恋恋不舍的心情，悄悄地离开了学校。" />
 
     </LinearLayout>
 

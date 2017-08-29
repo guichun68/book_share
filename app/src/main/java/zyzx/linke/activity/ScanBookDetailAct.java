@@ -165,7 +165,7 @@ public class ScanBookDetailAct extends BaseActivity {
         switch (msg.what) {
             case BOOKNOTGET:
                 if (prompt == null) {
-                    prompt = CustomProgressDialog.getPromptDialog(mContext, "未能获取书籍信息", new PromptDialogClickListener());
+                    prompt = CustomProgressDialog.getPromptDialog(ScanBookDetailAct.this, "未能获取书籍信息", new PromptDialogClickListener());
                 }
                 prompt.show();
                 break;

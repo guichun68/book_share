@@ -666,6 +666,7 @@ public class AppUtil {
 		for (int i = 0; i < items.size(); i++) {
 			SwapSkillVo sbVO = new SwapSkillVo();
 			JSONObject jo = items.get(i);
+			sbVO.setLoginName(jo.getString("login_name"));
 			sbVO.setHeadIcon(jo.getString("headIcon"));
 			sbVO.setSwapSkillId(jo.getString("swapSkillId"));
 			sbVO.setSkillTitle(jo.getString("skillTitle"));

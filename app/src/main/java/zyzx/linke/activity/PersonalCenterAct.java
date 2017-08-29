@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
@@ -21,11 +23,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import zyzx.linke.R;
+import zyzx.linke.adapter.BaseVPAdapter;
 import zyzx.linke.base.BaseActivity;
+import zyzx.linke.base.BasePager;
+import zyzx.linke.base.EaseUIHelper;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.global.BundleFlag;
@@ -36,8 +41,10 @@ import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CapturePhoto;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.FileUtil;
 import zyzx.linke.utils.ImageUtils;
+import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -53,11 +60,17 @@ public class PersonalCenterAct extends BaseActivity {
     private CircleImageView mCiv;
     private UserInfoImagePOP uimp;
     private CapturePhoto capture;
-    private TextView tvSignature;
+
     private UserVO mUser;
     private boolean isUserInfoUpdated;//用户是否修改了 头像信息
     private final int EDIT_USERINFO_CODE = 0x375B;
-    private TextView tvGender;
+
+    private ViewPager mViewPager;
+    private BaseVPAdapter mViewPagerAdapter;
+    private ArrayList<BasePager> mPages = new ArrayList<>();
+    private TabLayout mTabLayout;
+    private String[] titles = {"我的资料","我的关注"};
+    private BasePager myInfoPage,attentionPage;
 
     @Override
     protected int getLayoutId() {
@@ -70,60 +83,51 @@ public class PersonalCenterAct extends BaseActivity {
         mCiv = (CircleImageView)findViewById(R.id.civ);
         mCiv.setOnClickListener(this);
 
-        tvSignature = (TextView) findViewById(R.id.tv_signature);
-        tvGender = (TextView) findViewById(R.id.tv_gender);
-        tvSignature.setOnClickListener(this);
+
         findViewById(R.id.iv_edit).setOnClickListener(this);
+
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles[0]));
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles[1]));
+        mViewPager = (ViewPager)findViewById(R.id.vp_viewpager);
+        mTabLayout.setupWithViewPager(mViewPager);
+        myInfoPage = new MyInfoPage(this,R.layout.myinfo_page);
+        attentionPage = new AttentionPage(this,R.layout.attention_page);
+        mPages.add(myInfoPage);
+        mPages.add(attentionPage);
+
+        // 初始化ViewPager的适配器，并设置给它
+        mViewPagerAdapter = new BaseVPAdapter(mPages,titles);
+        mViewPager.setAdapter(mViewPagerAdapter);
     }
-
-
 
     //刷新界面（不刷新头像）
     private void refreshUI() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLoginName());
-        ((TextView)findViewById(R.id.tv_birthday)).setText(mUser.getBirthday()==null?"未填写":sdf.format(mUser.getBirthday()));
-        if(mUser.getGender()!=null)
-            switch (mUser.getGender()){
-                case 0:tvGender.setText("未填写");
-                    break;
-                case 1:tvGender.setText("男");
-                    break;
-                case 2:
-                    tvGender.setText("女");
-                    break;
-                case 3:
-                    tvGender.setText("保密");
-                    break;
-            }
-        else{
-            tvGender.setText("未填写");
-        }
-        StringBuilder sb = new StringBuilder();
-        if(!StringUtil.isEmpty(mUser.getProvinceName())){
-            sb.append(" ").append(mUser.getProvinceName());
-        }
-        if(!StringUtil.isEmpty(mUser.getCityName())){
-            sb.append(" ").append(mUser.getCityName());
-        }
-        if(!StringUtil.isEmpty(mUser.getCountyName())){
-            sb.append(" ").append(mUser.getCountyName());
-        }
-        ((TextView)findViewById(R.id.tv_location)).setText(StringUtil.isEmpty(sb.toString())?"未填写":sb.toString());
-        ((TextView)findViewById(R.id.tv_school)).setText(StringUtil.isEmpty(mUser.getSchool())?"未填写":mUser.getSchool());
-        ((TextView)findViewById(R.id.tv_department)).setText(StringUtil.isEmpty(mUser.getDepartment())?"未填写":mUser.getDepartment());
-        ((TextView)findViewById(R.id.tv_diploma)).setText(StringUtil.isEmpty(mUser.getDiplomaName())?"未填写":mUser.getDiplomaName());
-        ((TextView)findViewById(R.id.tv_soliloquy)).setText(StringUtil.isEmpty(mUser.getSoliloquy())?"未填写":mUser.getSoliloquy());
-        if(!StringUtil.isEmpty(mUser.getSignature())){
-            tvSignature.setText(mUser.getSignature());
-        }else{
-            tvSignature.setText("写点什么吧！");
-        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        ((AttentionPage)attentionPage).getHandler().removeCallbacksAndMessages(null);
+        super.onDestroy();
     }
 
     @Override
     protected void initData() {
         mUser = GlobalParams.getLastLoginUser();
+        if(mUser == null){
+            CustomProgressDialog.getPromptDialog(this, "未能获取账号信息,请重新登录", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EaseUIHelper.getInstance().logout(false,null);
+                    PreferenceManager.getInstance().setAutoLoginFlag(false);
+                    AppManager.getAppManager().finishAllActivity();
+                    gotoActivity(LoginAct.class);
+                }
+            }).show();
+            return;
+        };
         capture = new CapturePhoto(this);
         if(!StringUtil.isEmpty(mUser.getHeadIcon())){
             Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
@@ -173,6 +177,8 @@ public class PersonalCenterAct extends BaseActivity {
                         @Override
                         public void run() {
                             refreshUI();
+                            ((MyInfoPage)myInfoPage).setData(mUser);
+                            ((MyInfoPage)myInfoPage).refreshUI();
                         }
                     });
                 }
@@ -187,56 +193,7 @@ public class PersonalCenterAct extends BaseActivity {
         });
     }
 
-    private void showModifySignatureDialog() {
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        final View dialogView = View.inflate(this,R.layout.dialog_modify_signature,null);
-        adb.setView(dialogView);
-        final AlertDialog dialog = adb.create();//.show();
-        dialogView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String sig = ((TextView)dialogView.findViewById(R.id.acet_signature)).getText().toString();
-                if(StringUtil.isEmpty(sig)){
-                    UIUtil.showToastSafe("请输入签名");
-                    ((TextView) dialogView.findViewById(R.id.acet_signature)).setError("请输入签名");
-                    return;
-                }
-                getUserPresenter().mofiySignature(mUser.getUserid(),sig,new CallBack(){
-                    @Override
-                    public void onSuccess(Object obj, int... code) {
-                        String json = (String) obj;
-                        ResponseJson rj = new ResponseJson(json);
-                        if(rj.errorCode==null || ResponseJson.NO_DATA == rj.errorCode ) {
-                            UIUtil.showToastSafe("设置出错");
-                            return;
-                        }
-                        switch (rj.errorCode){
-                            case Const.SUCC_ERR_CODE:
-                                UIUtil.showToastSafe("设置成功");
-                                dialog.dismiss();
-                                GlobalParams.getLastLoginUser().setSignature(sig);
-                                mUser.setSignature(sig);
-                                break;
-                            default:
-                                UIUtil.showToastSafe("发生错误-未知错误");
-                                break;
-                            }
-                        }
-                    @Override
-                    public void onFailure(Object obj, int... code) {
-                        UIUtil.showToastSafe("设置出错-未知错误");
-                    }
-                });
-            }
-        });
-        dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                refreshUI();
-            }
-        });
-    }
+
 
 
     @Override
@@ -246,10 +203,6 @@ public class PersonalCenterAct extends BaseActivity {
             case R.id.civ:
                 uimp = new UserInfoImagePOP(this, new itemsOnClick(Const.AVATAR_SELECTION));
                 uimp.showAtLocation(findViewById(R.id.ll_root), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                break;
-            case R.id.tv_signature:
-                //弹出修改签名的dialog
-                showModifySignatureDialog();
                 break;
             case R.id.iv_edit:
                 if(!NetUtils.hasNetwork(this)){

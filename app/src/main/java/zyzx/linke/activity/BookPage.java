@@ -24,7 +24,7 @@ import java.util.List;
 import zyzx.linke.R;
 import zyzx.linke.adapter.MyCommonAdapter;
 import zyzx.linke.adapter.MyViewHolder;
-import zyzx.linke.base.BaseSwapPager;
+import zyzx.linke.base.BasePager;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
@@ -39,7 +39,7 @@ import zyzx.linke.views.MyRecyclerViewWapper;
  * Desc: 书籍交换选项卡页
  */
 
-public class BookSwapPage extends BaseSwapPager{
+public class BookPage extends BasePager {
 
     private AppCompatEditText etSearch;
     private SwapAdapter mAdapter;
@@ -103,7 +103,7 @@ public class BookSwapPage extends BaseSwapPager{
         }
     }
 
-    public BookSwapPage(Context context, int layoutResId) {
+    public BookPage(Context context, int layoutResId) {
         super(context, layoutResId);
     }
 
@@ -211,14 +211,14 @@ public class BookSwapPage extends BaseSwapPager{
 
 
     private static class MyHandler extends Handler {
-        WeakReference<BookSwapPage> mCurrPage;
-        MyHandler(BookSwapPage page){
+        WeakReference<BookPage> mCurrPage;
+        MyHandler(BookPage page){
             this.mCurrPage = new WeakReference<>(page);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            BookSwapPage page = mCurrPage==null?null:mCurrPage.get();
+            BookPage page = mCurrPage==null?null:mCurrPage.get();
             if(page == null){
                 return;
             }
