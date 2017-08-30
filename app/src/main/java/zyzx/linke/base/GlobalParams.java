@@ -59,6 +59,7 @@ public class GlobalParams {
 	public static String urlAddAttention = GlobalParams.BASE_URL+"/user/mobileSDK/addAttention.action";
 	public static String urlCheckIfAtentioned = GlobalParams.BASE_URL+"/user/mobileSDK/checkIfAttentioned.action";
 	public static String urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
+	public static String urlReport = GlobalParams.BASE_URL+"/user/mobileSDK/report.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -229,6 +230,7 @@ public class GlobalParams {
 		urlAddAttention = GlobalParams.BASE_URL+"/user/mobileSDK/addAttention.action";
 		urlCheckIfAtentioned = GlobalParams.BASE_URL+"/user/mobileSDK/checkIfAttentioned.action";
 		urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
+		urlReport = GlobalParams.BASE_URL+"/user/mobileSDK/report.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlGetArea2BookStatusId = GlobalParams.BASE_URL+"/app/mobileSDK/getAreaAndBookStatus.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";

@@ -233,4 +233,7 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void checkIfAttentioned(String uid, CallBack callBack);
     //取消关注
     public abstract void cancelAttention(String uid, CallBack callBack);
+
+    //举报
+    public abstract void report(String uid, String type, String desc, CallBack callBack);
 }

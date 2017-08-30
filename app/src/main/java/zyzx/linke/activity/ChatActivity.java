@@ -30,6 +30,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.exceptions.HyphenateException;
@@ -40,6 +41,7 @@ import java.util.Date;
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
+import zyzx.linke.db.HXUserDao;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
@@ -60,7 +62,7 @@ import zyzx.linke.utils.UIUtil;
 public class ChatActivity extends BaseActivity {
     EaseChatFragment mChatFrag;
     public static ChatActivity activityInstance;
-    String chatUserId, loginName;
+    String chatUserId, loginName,avatorUrl;
     protected static final int REQUEST_CODE_MAP = 1;
     private TextView tvMettingDate;//约见日期
     private TextView tvMettingTime;//会面时间
@@ -84,12 +86,22 @@ public class ChatActivity extends BaseActivity {
         Intent intent = getIntent();
         chatUserId = intent.getStringExtra(BundleFlag.UID);
         loginName = intent.getStringExtra(BundleFlag.LOGIN_NAME);
+        avatorUrl = intent.getStringExtra(BundleFlag.AVATOR);
         //传入参数
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         args.putString(EaseConstant.EXTRA_USER_ID, chatUserId);
         args.putString(BundleFlag.LOGIN_NAME, loginName);
         mChatFrag.setArguments(args);
+        mChatFrag.setOnSaveEaseUserListener(new EaseChatFragment.OnSaveEaseUserListener() {
+            @Override
+            public void saveEaseUser(EaseUser u) {
+                if(!StringUtil.isEmpty(avatorUrl)){
+                   u.setAvatar(avatorUrl);
+                }
+                HXUserDao.getInstance().saveContact(u);
+            }
+        });
         /*mChatFrag.setAdminListener(new EaseChatFragment.OnAdminConversationDelListener() {
             @Override
             public void onAdminConversationDelListener(List<EMMessage> msgs) {

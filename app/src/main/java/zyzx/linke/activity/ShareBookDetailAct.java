@@ -105,7 +105,7 @@ public class ShareBookDetailAct extends BaseActivity {
                     return;
                 }
                 Bundle ex = new Bundle();
-                ex.putSerializable("user",mFriend);
+                ex.putSerializable(BundleFlag.FLAG_USER,mFriend);
                 gotoActivity(FriendHomePageAct.class,false,ex);
                 break;
             case R.id.iv_book_image:

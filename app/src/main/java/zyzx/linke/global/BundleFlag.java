@@ -16,7 +16,8 @@ public class BundleFlag {
 	public final static String POI_ITEM = "poi_item";
 
 	//是否是从首页进入的图书详情页（如果是，则详情页不显示添加按钮）
-	public static final String LOGIN_NAME="login_name";
+	public static final String LOGIN_NAME="nick";
+	public static final String AVATOR="avator";
 	public static final String SHOULD_REFRESH = "ifRefresh";//是否需要刷新
 	public static final String FLAG_USER = "user";//
 	public static final int FLAG_FRIEND_HOME = 0x99A;//

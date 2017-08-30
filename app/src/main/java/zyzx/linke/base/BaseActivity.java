@@ -18,7 +18,7 @@ import zyzx.linke.utils.CustomProgressDialog;
 
 public abstract class BaseActivity extends BaseParentActivity implements View.OnClickListener{
 
-    protected TextView mTitleText;
+    protected TextView mTitleText,tvRight;
     protected ImageView mBackBtn;
     protected ImageView mRightBtn;
 
@@ -28,8 +28,10 @@ public abstract class BaseActivity extends BaseParentActivity implements View.On
         mTitleText = (TextView) findViewById(R.id.title_text);
         mBackBtn = (ImageView) findViewById(R.id.back_img);
         mRightBtn = (ImageView) findViewById(R.id.right_img);
+        tvRight = (TextView) findViewById(R.id.tv_add_mylib);
         try{
             mBackBtn.setOnClickListener(this);
+            tvRight.setOnClickListener(this);
         }catch (NullPointerException e){
             e.printStackTrace();
             throw new RuntimeException("check if you forget to include title layout in your layout xml file.");

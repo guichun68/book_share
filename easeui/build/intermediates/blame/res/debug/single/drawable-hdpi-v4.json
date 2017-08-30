@@ -72,12 +72,12 @@
         "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ease_video_play_btn_small_nor.png"
     },
     {
-        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_30.png",
-        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ee_30.png"
-    },
-    {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png",
         "source": "C:\\Users\\Austin\\.android\\build-cache\\fca223ec68ab337e580fee44eb9afd2d7d202526\\output\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
+    },
+    {
+        "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_30.png",
+        "source": "E:\\workspace\\linke\\easeui\\src\\main\\res\\drawable-hdpi\\ee_30.png"
     },
     {
         "merged": "E:\\workspace\\linke\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_seabar_input.9.png",

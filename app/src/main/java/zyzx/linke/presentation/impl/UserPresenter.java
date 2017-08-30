@@ -519,6 +519,12 @@ public class UserPresenter extends IUserPresenter {
                 new String[]{"relUid"},uid);
     }
 
+    @Override
+    public void report(String relUid, String type, String desc, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlReport,"提交失败，请稍后再试",
+                new String[]{"rRelUid","type","desc"},relUid,type,desc);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,7 +79,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      */
     protected Bundle fragmentArgs;
     protected int chatType;
-    protected String toChatUsername;
+    protected String toChatUsername,toChatNickName;
     protected EaseChatMessageList messageList;
     protected EaseChatInputMenu inputMenu;
 
@@ -125,7 +126,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         // userId you are chat with or group id
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
-
+        toChatNickName = fragmentArgs.getString(EaseConstant.EXTRA_NICKNAME);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -185,11 +186,23 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     protected void setUpView() {
-        titleBar.setTitle(toChatUsername);
+//        if(!TextUtils.isEmpty(toChatNickName)){
+//            titleBar.setTitle(toChatNickName);
+//        }else{
+            titleBar.setTitle(toChatUsername);
+//        }
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             // set title
             if(EaseUserUtils.getUserInfo(null,toChatUsername) != null){
                 EaseUser user = EaseUserUtils.getUserInfo(null,toChatUsername);
+                if(user.getNick().equals(user.getUsername()) && !TextUtils.isEmpty(toChatNickName)){
+                    user.setNickname(toChatNickName);
+                    if(saveEaseUserListener!=null){
+                        EaseUser e = new EaseUser(user.getUsername());
+                        e.setNickname(toChatNickName);
+                        saveEaseUserListener.saveEaseUser(e);
+                    }
+                }
                 if (user != null) {
                     titleBar.setTitle(user.getNick());
                 }
@@ -674,11 +687,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     }
     private LocationClickListener locationClickListener;
+    private OnSaveEaseUserListener saveEaseUserListener;
     public interface LocationClickListener{
         void onLocationClicked();
     }
     public void setLocationClickListener(LocationClickListener locationClickListener) {
         this.locationClickListener = locationClickListener;
+    }
+    public interface OnSaveEaseUserListener{
+        void saveEaseUser(EaseUser u);
+    }
+    public void setOnSaveEaseUserListener(OnSaveEaseUserListener s){
+        this.saveEaseUserListener = s;
     }
     /**
      * input @
@@ -691,6 +711,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
         EaseAtMessageHelper.get().addAtUser(username);
         EaseUser user = EaseUserUtils.getUserInfo(null,username);
+        if(TextUtils.isEmpty(user.getNick()) && !TextUtils.isEmpty(toChatNickName)){
+            user.setNickname(toChatNickName);
+        }
         if (user != null){
             username = user.getNick();
         }

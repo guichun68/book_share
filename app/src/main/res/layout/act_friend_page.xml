@@ -59,7 +59,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_alignBottom="@id/tv_loginname"
                 android:layout_marginStart="12dp"
-                android:layout_toEndOf="@+id/tv_loginname"
+                android:layout_toEndOf="@id/tv_loginname"
                 android:background="@drawable/btn_sel"
                 android:text="发消息" />
             <View

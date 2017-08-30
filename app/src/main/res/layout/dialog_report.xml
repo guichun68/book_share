@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_allyuanjiao"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="举报用户:"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvUser"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            tool:text="阿拉蕾幸福的使者" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="举报"
+        android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbLajiyingxiao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="垃圾营销"
+                android:textColor="@color/common_black_color" />
+
+            <RadioButton
+                android:id="@+id/rbBushixinxi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="不实信息"
+                android:textColor="@color/common_black_color" />
+        </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="举报"
+        android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbYouhaixinxi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="有害信息"
+                android:textColor="@color/common_black_color" />
+
+            <RadioButton
+                android:id="@+id/rbWeifaxinxi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="违法信息"
+                android:textColor="@color/common_black_color" />
+        </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="举报"
+        android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbYinhuiseqing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="淫秽色情"
+                android:textColor="@color/common_black_color" />
+
+            <RadioButton
+                android:id="@+id/rbRenshengongji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="人身攻击我"
+                android:textColor="@color/common_black_color" />
+        </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="举报"
+        android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbBaolixuexing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="暴力血腥"
+                android:textColor="@color/common_black_color" />
+
+            <RadioButton
+                android:id="@+id/rb_other"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="其他"
+                android:textColor="@color/common_black_color" />
+        </RadioGroup>
+
+    <View style="@style/line" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:text="简要说明:"
+        android:textColor="@color/backgroud_black"
+        android:textSize="19sp" />
+
+    <EditText
+        android:id="@+id/etDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:maxLength="300"
+        android:maxLines="10"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        tool:text="该账号涉嫌欺诈用户，有很多不实信息，并具有人身攻击的倾向，垃圾营销号。请平台相关人员予以取缔。" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sel2"
+            android:text="@string/confirm"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/update_press" />
+
+        <Button
+            android:id="@+id/dialog_btn2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_sel2"
+            android:text="@string/cancel"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            android:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>

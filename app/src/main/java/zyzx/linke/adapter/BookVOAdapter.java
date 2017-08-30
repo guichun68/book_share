@@ -48,7 +48,7 @@ public class BookVOAdapter extends MyCommonAdapter<MyBookDetailVO>{
             });
             BookDetail2 book = o.getBook();
             String url = AppUtil.getMostDistinctPicUrl(book);
-            Glide.with(mContext).load(url).into((ImageView)holder.getView(R.id.iv));
+            Glide.with(mContext).load(url).placeholder(R.mipmap.defaultcover).into((ImageView)holder.getView(R.id.iv));
             holder.setText(R.id.tv_book_name,book.getTitle());
             StringBuilder sb = new StringBuilder();
             if(book.getAuthor()!=null){

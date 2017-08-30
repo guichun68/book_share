@@ -351,10 +351,15 @@ public class EaseUIHelper {
                 EaseUser user = null;
                 try {
                     StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
-                    String headIcon,nickName;
+                    String headIcon=null,nickName=null;
                     if(conversation.getLatestMessageFromOthers()==null){
-                        headIcon = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_AVATAR);
-                        nickName = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_NICKNAME);
+                        try {
+                            headIcon = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_AVATAR);
+                            nickName = conversation.getLastMessage().getStringAttribute(MyEaseConstant.EXTRA_TO_NICKNAME);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            return getUserInfo(conversation.getLastMessage(),conversation.getLastMessage().getTo());
+                        }
                     }else{
                         headIcon = (conversation.getLatestMessageFromOthers().getStringAttribute(MyEaseConstant.EXTRA_FROM_AVATAR));
                         nickName = conversation.getLatestMessageFromOthers().getStringAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME);
@@ -961,6 +966,19 @@ public class EaseUIHelper {
         /*if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
         }*/
+        if(user==null && message != null && !message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
+            try {
+                String headIcon = message.getStringAttribute(MyEaseConstant.EXTRA_FROM_AVATAR);
+                String nickName = message.getStringAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME);
+                EaseUser e = new EaseUser(message.getFrom());
+                e.setAvatar(headIcon);
+                e.setNickname(nickName);
+                HXUserDao.getInstance().saveContact(e);
+                contactList.put(username,e);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+        }
         if(user == null && message != null){
             try {
                 StringBuilder headIconSB = new StringBuilder(GlobalParams.BASE_URL);
@@ -994,7 +1012,7 @@ public class EaseUIHelper {
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
         }
-        if(user.getAvatar()!=null && !user.getAvatar().contains("http")){
+        if((user.getAvatar()!=null) && (!(user.getAvatar().contains("http")))){
             user.setAvatar(GlobalParams.BASE_URL+ BeanFactoryUtil.properties.getProperty("AvatarDirName")+ user.getAvatar());
         }
         return user;

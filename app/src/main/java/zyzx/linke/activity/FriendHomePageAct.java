@@ -1,22 +1,28 @@
 package zyzx.linke.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.EaseConstant;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import zyzx.linke.R;
-import zyzx.linke.adapter.BookAdapter;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.BundleFlag;
@@ -25,6 +31,7 @@ import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 import zyzx.linke.views.CircleImageView;
@@ -38,18 +45,11 @@ public class FriendHomePageAct extends BaseActivity {
 
     private CircleImageView ivHeadIcon;
     private TextView tvGender;
-    private TextView tvLoginname;
-    private TextView tvLocation;
     private TextView tvSignature;
-    private boolean headerClickable;
     private UserVO mUser;
     private String from;//标记从哪个页面来,取值从BundleFlag类中FROM_xxx
 
-    private BookAdapter mAdapter;
-    private int pageNum = 0;
-    private String mAddress;//中文地址描述
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
-    private Button btnSendMsg;
     private Button btnAttention;
     private final int
             /*添加关注 成功否 回调标识*/
@@ -57,7 +57,9 @@ public class FriendHomePageAct extends BaseActivity {
             /*检查是否已经关注 成功否 回调标识*/
             SUCCESS_CHECK = 9,FAILURE_CHECK = 8,
             /*取消关注 成功否 回调标识*/
-            SUCCESS_CANCEL_ATENTION = 10,FAILURE_CANCEL_ATENTION = 11;
+            SUCCESS_CANCEL_ATENTION = 10,FAILURE_CANCEL_ATENTION = 11,
+            /*举报成功否 回调标识*/
+            SUCCESS_REPORT = 12,FAILURE_REPORT = 13;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -108,6 +110,20 @@ public class FriendHomePageAct extends BaseActivity {
             case FAILURE_CANCEL_ATENTION:
                 UIUtil.showToastSafe("未能取消关注");
                 break;
+            case SUCCESS_REPORT:
+                ResponseJson r = new ResponseJson((String)msg.obj);
+                if(ResponseJson.NO_DATA == r.errorCode){
+                    UIUtil.showToastSafe("提交失败,请稍后再试");
+                    return;
+                }
+                if(reportDialog != null && reportDialog.isShowing()){
+                    reportDialog.dismiss();
+                }
+                CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"您的举报信息已提交，谢谢反馈",null).show();
+                break;
+            case FAILURE_REPORT:
+                UIUtil.showToastSafe("提交失败,请稍后再试");
+                break;
         }
     }
 
@@ -121,20 +137,17 @@ public class FriendHomePageAct extends BaseActivity {
         mTitleText.setText("书友信息");
         tvGender = (TextView) findViewById(R.id.tv_gender);
         ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);
-        tvLoginname = (TextView) findViewById(R.id.tv_loginname);
         tvSignature = (TextView) findViewById(R.id.tv_signature);
-        btnSendMsg = (Button) findViewById(R.id.btn_send_msg);
-        btnSendMsg.setOnClickListener(this);
+        findViewById(R.id.btn_send_msg).setOnClickListener(this);
         btnAttention = (Button) findViewById(R.id.btn_attention);
         btnAttention.setOnClickListener(this);
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("举报");
     }
 
     @Override
     protected void initData() {
         getIntentData();
-        if(headerClickable){
-            ivHeadIcon.setOnClickListener(this);
-        }
         showDefProgress();
         getUserPresenter().checkIfAttentioned(mUser.getUid(),new CallBack(){
             @Override
@@ -180,8 +193,9 @@ public class FriendHomePageAct extends BaseActivity {
                     finish();
                 }else{
                     Intent in = new Intent(FriendHomePageAct.this,ChatActivity.class);
-                    in.putExtra(BundleFlag.UID,String.valueOf(mUser.getUserid()));
+                    in.putExtra(EaseConstant.EXTRA_USER_ID,String.valueOf(mUser.getUserid()));
                     in.putExtra(BundleFlag.LOGIN_NAME, mUser.getLoginName());
+                    in.putExtra(BundleFlag.AVATOR,mUser.getHeadIcon());
                     startActivity(in);
                 }
                 break;
@@ -222,6 +236,97 @@ public class FriendHomePageAct extends BaseActivity {
                 }
 
                 break;
+            case R.id.tv_add_mylib://举报
+                showReportDialog();
+                break;
+        }
+    }
+    private AlertDialog reportDialog;
+    private RadioGroup rg1,rg2,rg3,rg4;
+    //举报
+    private void showReportDialog(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View view = inflater.inflate(R.layout.dialog_report, null);
+
+        TextView tvUser = (TextView) view.findViewById(R.id.tvUser);
+        rg1 = (RadioGroup) view.findViewById(R.id.rg1);
+        rg2 = (RadioGroup) view.findViewById(R.id.rg2);
+        rg3 = (RadioGroup) view.findViewById(R.id.rg3);
+        rg4 = (RadioGroup) view.findViewById(R.id.rg4);
+        rg1.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
+        rg2.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
+        rg3.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
+        rg4.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
+
+        final EditText etDesc = (EditText) view.findViewById(R.id.etDesc);
+        Button btnOK = (Button) view.findViewById(R.id.dialog_btn);
+        Button btnCancel = (Button) view.findViewById(R.id.dialog_btn2);
+
+        reportDialog = adb.create();
+        reportDialog.setView(view, 0, 0, 0, 0);
+
+        tvUser.setText(mUser.getLoginName());
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reportDialog.dismiss();
+            }
+        });
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = ((RadioButton)view.findViewById(checkedRadioBtnId)).getText().toString();
+                String desc = etDesc.getText().toString();
+                showDefProgress();
+                getUserPresenter().report(mUser.getUid(),type,desc,new CallBack(){
+                    @Override
+                    public void onSuccess(Object obj, int... code) {
+                        Message msg = handler.obtainMessage(SUCCESS_REPORT);
+                        msg.obj = obj;
+                        handler.sendMessage(msg);
+                    }
+
+                    @Override
+                    public void onFailure(Object obj, int... code) {
+                        handler.sendEmptyMessage(FAILURE_REPORT);
+                    }
+                });
+
+            }
+        });
+        reportDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        reportDialog.show();
+    }
+
+    private Boolean changeedGroup = false;
+    private int checkedRadioBtnId;
+
+    class MyRadioGroupOnCheckedChangedListener implements RadioGroup.OnCheckedChangeListener {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (!changeedGroup) {
+                changeedGroup = true;
+                if (group == rg1) {
+                    rg2.clearCheck();
+                    rg3.clearCheck();
+                    rg4.clearCheck();
+                } else if (group == rg2) {
+                    rg1.clearCheck();
+                    rg3.clearCheck();
+                    rg4.clearCheck();
+                } else if (group == rg3) {
+                    rg1.clearCheck();
+                    rg2.clearCheck();
+                    rg4.clearCheck();
+                }else if(group == rg4){
+                    rg1.clearCheck();
+                    rg2.clearCheck();
+                    rg3.clearCheck();
+                }
+                checkedRadioBtnId = checkedId;
+                changeedGroup = false;
+            }
         }
     }
 
