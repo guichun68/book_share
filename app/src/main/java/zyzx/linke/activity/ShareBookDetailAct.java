@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -249,7 +251,18 @@ public class ShareBookDetailAct extends BaseActivity {
     }
 
     private String pro,city,county;
+    private String newBookStatusId="";//重新从服务器获取的图书的状态
     private void refreshShareView(){
+        if(!newBookStatusId.equals(mBookVo.getBookStatusId())){
+            CustomProgressDialog.getPromptDialog(ShareBookDetailAct.this, "该书状态已变化，请返回重新刷新列表", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShareBookDetailAct.this.finish();
+                }
+            }).show();
+            return;
+        }
+
         tvArea.setText("分享地： "+(StringUtil.isEmpty(pro)?"--":pro)+" "+(StringUtil.isEmpty(city)?"--":city)+" "+(StringUtil.isEmpty(county)?"--":county));
         switch (mBookVo.getBookStatusId()){
             case Const.BOOK_STATUS_BORROWED://借入
@@ -300,6 +313,7 @@ public class ShareBookDetailAct extends BaseActivity {
             findViewById(R.id.ll_sharer).setVisibility(View.VISIBLE);
         }
         mBook = mBookVo.getBook();
+        newBookStatusId = mBookVo.getBookStatusId();
         refreshShareView();
         if(!StringUtil.isEmpty(mBook.getBookClassify())){
             switch (mBook.getBookClassify()){
@@ -362,21 +376,30 @@ public class ShareBookDetailAct extends BaseActivity {
 
         if(mBookVo.getShareAreaId()!=-1) {
             showDefProgress();
-            getUserPresenter().getSharerArea(mBookVo.getShareAreaId(),new CallBack(){
+            getUserPresenter().getSharerArea2BookStatus(mBookVo.getShareAreaId(),mBookVo.getUserBookId(),new CallBack(){
 
                 @Override
                 public void onSuccess(Object obj, int... code) {
                     dismissProgress();
-                    DefindResponseJson drj = JSON.parseObject((String)obj, DefindResponseJson.class);
-                    if(drj.getErrorCode()==0){
+                    JSONObject jsonObject = JSON.parseObject((String) obj);
+                    Integer errorCode = jsonObject.getInteger("errorCode");
+                    String errorMsg = jsonObject.getString("errorMsg");
+                    JSONArray ja = jsonObject.getJSONArray("data");
+
+//                    DefindResponseJson drj = JSON.parseObject((String)obj, DefindResponseJson.class);
+                    if(errorCode==0){
                         //获取失败
                         UIUtil.showToastSafe("地理位置获取失败！");
                         return;
                     }
-                    if(drj.getErrorCode()==1){
-                        pro = (String)((Map)drj.getData().getItems().get(0)).get("pro");
-                        city = (String)((Map)drj.getData().getItems().get(0)).get("city");
-                        county = (String)((Map)drj.getData().getItems().get(0)).get("dis");
+                    if(errorCode==2){
+                        pro = ((JSONObject)ja.get(0)).getString("pro");
+                        city = ((JSONObject)ja.get(0)).getString("city");
+                        county = ((JSONObject)ja.get(0)).getString("dis");
+                        newBookStatusId = ((JSONObject)ja.get(1)).getString("bookStatusId");
+//                        city = (String)((Map)drj.getData().getItems().get(0)).get("city");
+//                        county = (String)((Map)drj.getData().getItems().get(0)).get("dis");
+//                        newBookStatusId = (String)((Map)drj.getData().getItems().get(1)).get("dis");
                         if(StringUtil.isEmpty(pro)){
                             pro = city;
                         }

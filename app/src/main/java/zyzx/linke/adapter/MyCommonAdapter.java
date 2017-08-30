@@ -47,6 +47,7 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
     private int footerProgressResId,footerTextTipResId;
     private ProgressBar footerProgressBar;
     private TextView footerTextTip;
+    private int noMoreDataColorRes;
 
     public MyCommonAdapter(Context context,List<T> datas,int itemLayoutResId){
         this.mDatas = datas;
@@ -118,12 +119,20 @@ public abstract class MyCommonAdapter<T> extends RecyclerView.Adapter<MyViewHold
                     case STATUS_NO_MORE_DATE:
                         footerView.setVisibility(View.VISIBLE);
                         footerProgressBar.setVisibility(View.GONE);
-                        footerView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
+                        if(noMoreDataColorRes!=0){
+                            footerView.setBackgroundColor(ContextCompat.getColor(mContext,noMoreDataColorRes));
+                        }else{
+                            footerView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.white));
+                        }
                         footerTextTip.setText("无更多内容");
                         break;
                 }
 //            convert(holder, null,position);
         }
+    }
+
+    public void setNoMoreDataColorRes(int noMoreDataColorRes) {
+        this.noMoreDataColorRes = noMoreDataColorRes;
     }
 
     /**

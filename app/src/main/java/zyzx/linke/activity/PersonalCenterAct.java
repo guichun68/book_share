@@ -104,7 +104,10 @@ public class PersonalCenterAct extends BaseActivity {
 
     //刷新界面（不刷新头像）
     private void refreshUI() {
+        mUser = GlobalParams.getLastLoginUser();
         ((TextView) findViewById(R.id.tv_user_login_name)).setText(mUser.getLoginName());
+        ((MyInfoPage)myInfoPage).setData(mUser);
+        ((MyInfoPage)myInfoPage).refreshUI();
     }
 
     @Override
@@ -130,7 +133,7 @@ public class PersonalCenterAct extends BaseActivity {
         };
         capture = new CapturePhoto(this);
         if(!StringUtil.isEmpty(mUser.getHeadIcon())){
-            Glide.with(mContext).load(mUser.getHeadIcon()).into(mCiv);
+            Glide.with(mContext).load(mUser.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().into(mCiv);
         }
         showDefProgress();
         getUserPresenter().getUserInfoByUid(String.valueOf(mUser.getUid()), new CallBack() {
@@ -290,6 +293,8 @@ public class PersonalCenterAct extends BaseActivity {
         }else if(requestCode==EDIT_USERINFO_CODE){
             mUser = GlobalParams.getLastLoginUser();
             refreshUI();
+        }else if(requestCode == BundleFlag.FLAG_FRIEND_HOME){
+            ((AttentionPage)attentionPage).refresh();
         }
     }
 

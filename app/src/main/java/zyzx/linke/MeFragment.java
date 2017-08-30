@@ -94,6 +94,14 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        if (!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())) {
+            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().into((CircleImageView) mRootView.findViewById(R.id.civ));
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_scan_input:
@@ -303,7 +311,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tvUserName.setText(GlobalParams.getLastLoginUser().getLoginName());
         tvCreditScore.setText(String.valueOf(GlobalParams.getLastLoginUser().getCreditScore()));
         if (!StringUtil.isEmpty(GlobalParams.getLastLoginUser().getHeadIcon())) {
-            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).into((CircleImageView) mRootView.findViewById(R.id.civ));
+            Glide.with(mContext).load(GlobalParams.getLastLoginUser().getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().into((CircleImageView) mRootView.findViewById(R.id.civ));
         }
     }
 

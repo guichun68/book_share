@@ -148,6 +148,9 @@ public abstract class IUserPresenter extends IPresenter{
     //根据zyzx_area ID 获取 记录
     public abstract void getSharerArea(Integer shareAreaId, CallBack callBack);
 
+    //根据zyzx_area ID 获取 省市县字符串名和书籍状态
+    public abstract void getSharerArea2BookStatus(Integer shareAreaId,String userBookId, CallBack callBack);
+
     //获取指定城市所有的分享的书籍
     public abstract void getAllShareBooks(String pro,String city,String county,int pageNo,CallBack callBack);
 

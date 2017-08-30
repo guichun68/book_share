@@ -267,7 +267,14 @@ public class FriendHomePageAct extends BaseActivity {
         }else{
             tvSignature.setText("未填写！");
         }
-        Glide.with(mContext).load(mUser.getHeadIcon()).into(ivHeadIcon);
+        Glide.with(mContext).load(mUser.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().into(ivHeadIcon);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+        super.onBackPressed();
     }
 
     private static class MyHandler extends Handler {

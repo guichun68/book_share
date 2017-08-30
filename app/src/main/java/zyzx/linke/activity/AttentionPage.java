@@ -2,10 +2,8 @@ package zyzx.linke.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +26,6 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
-import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.GlideCircleTransform;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -40,13 +37,15 @@ import zyzx.linke.views.MyRecyclerViewWapper;
  */
 
 public class AttentionPage extends BasePager {
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private MyRecyclerViewWapper mRecyclerView;
     private AttentionAdapter mAdapter;
     private ArrayList<Attention> mAttentions;
     private int mPageNum;
     private final int SUCCESS = 0x47B3,FAILURE = 0xB522;
-    private boolean isRefreshing = false;
+    private boolean isRefreshing = true;
+
+    public AttentionPage(Context context, int layoutResId) {
+        super(context, layoutResId);
+    }
 
     private MyHandler handler = new MyHandler(this);
 
@@ -85,11 +84,12 @@ public class AttentionPage extends BasePager {
                             }
                         }
                         dismissProgress();
-                        mSwipeRefreshLayout.setRefreshing(false);
                         mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         break;
                     case 3:
-                        UIUtil.showToastSafe("没有更多了");
+                        if(!isRefreshing) {
+                            UIUtil.showToastSafe("没有更多了");
+                        }
                         mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                         dismissLoading();
                         break;
@@ -107,34 +107,20 @@ public class AttentionPage extends BasePager {
                 break;
         }
     }
-    public AttentionPage(Context context, int layoutResId) {
-        super(context, layoutResId);
-    }
+
+
     @Override
     public void initView() {
         if(mAttentions == null){
             mAttentions = new ArrayList<>();
         }
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getRootView().findViewById(R.id.swipeRefreshLayout);
+        MyRecyclerViewWapper mRecyclerView;
         mRecyclerView = (MyRecyclerViewWapper) getRootView().findViewById(R.id.recyclerView);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.white);
-        //设置刷新时动画的颜色，可以设置4个
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
-                android.R.color.holo_red_light,android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);
         mAdapter = new AttentionAdapter(context, mAttentions,R.layout.item_attention,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
+        mAdapter.setNoMoreDataColorRes(android.R.color.transparent);
 
         mRecyclerView.setAdapter(mAdapter);
 
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                isRefreshing = true;
-                mPageNum = 1;
-                getData(mPageNum);
-            }
-        });
         mRecyclerView.AddMyOnScrollListener(new MyRecyclerViewWapper.MyOnScrollListener() {
             @Override
             public void onScrollStateChanged(MyRecyclerViewWapper recyclerView, int newState,boolean isLoadMore) {
@@ -153,6 +139,13 @@ public class AttentionPage extends BasePager {
         getData(mPageNum=1);
     }
 
+    //刷新
+    public void refresh() {
+        isRefreshing = true;
+        mAttentions.clear();
+        getData(mPageNum=1);
+    }
+
     private class AttentionAdapter extends MyCommonAdapter<Attention>{
 
         private AttentionAdapter( Context context, List<Attention> datas,int itemLayoutResId, int footerLayoutId,int footerProgressResId,int footerTextTipResId) {
@@ -164,11 +157,11 @@ public class AttentionPage extends BasePager {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
                 holder.setText(R.id.tv_user_name,attention.getUserName());
                 if(StringUtil.isEmpty(attention.getHeadIcon())){
-                    Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().transform(new GlideCircleTransform(mContext)).into( (ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(R.mipmap.person).asBitmap().dontAnimate().transform(new GlideCircleTransform(mContext)).into( (ImageView)holder.getView(R.id.iv));
                 }else if(attention.getHeadIcon().contains("http")){
-                    Glide.with(context).load(attention.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(attention.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
                 }else{
-                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+attention.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+attention.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
                 }
                 holder.itemView.setTag(position);
 
@@ -183,6 +176,7 @@ public class AttentionPage extends BasePager {
     }
 
     private void getData(int pageNum){
+        isRefreshing = true;
         getBookPresenter().getAttentions(pageNum, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
@@ -231,7 +225,6 @@ public class AttentionPage extends BasePager {
             }
         }
         isRefreshing = false;
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private class Attention{
@@ -256,11 +249,11 @@ public class AttentionPage extends BasePager {
             this.userId = userId;
         }
 
-        public String getUserName() {
+        private String getUserName() {
             return userName;
         }
 
-        public void setUserName(String userName) {
+        private void setUserName(String userName) {
             this.userName = userName;
         }
 
@@ -276,7 +269,7 @@ public class AttentionPage extends BasePager {
 
     private UserVO mFriend = new UserVO();
     //获得用户名并跳转到用户详情页
-    public void getUserInfo(String uid){
+    private void getUserInfo(String uid){
         showDefProgress();
         getUserPresenter().getUserInfoByUid(uid, new CallBack() {
             @Override
@@ -324,7 +317,8 @@ public class AttentionPage extends BasePager {
                     Intent in = new Intent(context,FriendHomePageAct.class);
 //                    in.putExtra(BundleFlag.FLAG_USER,ex);
                     in.putExtra(BundleFlag.FLAG_USER,mFriend);
-                    context.startActivity(in);
+//                    context.startActivity(in);
+                    ((PersonalCenterAct)context).startActivityForResult(in,BundleFlag.FLAG_FRIEND_HOME);
                 }else{
                     UIUtil.showToastSafe("未能获取用户信息");
                 }

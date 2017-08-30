@@ -420,6 +420,12 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
+    public void getSharerArea2BookStatus(Integer shareAreaId, String userBookId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetArea2BookStatusId,"未能获取书籍状态",
+                new String[]{"areaId","userBookId"},shareAreaId,userBookId);
+    }
+
+    @Override
     public void getAllShareBooks(String pro, String city, String county, int pageNo, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlGetSharedBooks,"请求出错.",
                 new String[]{"pro","city","county","pageNo"},

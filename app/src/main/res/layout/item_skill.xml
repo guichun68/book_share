@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_root"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -14,9 +15,11 @@
         android:layout_height="100dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:src="@mipmap/ease_default_avatar"
+        android:layout_weight="1"
         android:paddingBottom="2dp"
-        android:layout_weight="1"/>
+        app:border_color="@color/transparent"
+        android:src="@mipmap/person"
+         />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -39,7 +42,7 @@
             android:ellipsize="end"
             android:textSize="16sp"
             android:textStyle="bold"
-            tool:text="技能交换摄影技巧与摄影模特交流学习" />
+            tool:text="流星蝴蝶剑" />
 
         <TextView
             android:id="@+id/tv_have"

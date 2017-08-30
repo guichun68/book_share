@@ -111,6 +111,8 @@ public class ForceUpdateActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        HttpRequest.setShouldCancel(true);
+        AppManager.getAppManager().finishAllActivity();
         super.onDestroy();
     }
 

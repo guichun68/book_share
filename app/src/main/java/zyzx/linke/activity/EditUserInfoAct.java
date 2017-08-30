@@ -415,7 +415,7 @@ public class EditUserInfoAct extends BaseActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currDate == null ? new Date() : currDate);
 
-                final DatePickerDialog dateDialog = new DatePickerDialog(mContext, null,
+                final DatePickerDialog dateDialog = new DatePickerDialog(this, null,
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
 

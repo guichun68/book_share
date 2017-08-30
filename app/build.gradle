@@ -7,7 +7,7 @@ android {
         applicationId "zyzx.linke"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 3
+        versionCode 4
         versionName "1.2.0 beta"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

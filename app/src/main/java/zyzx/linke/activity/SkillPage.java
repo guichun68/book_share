@@ -192,11 +192,11 @@ public class SkillPage extends BasePager {
                 holder.setText(R.id.tv_want,StringUtil.isEmpty(ssVO.getSkillWantName())?"现金交换":ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){
-                    Glide.with(context).load(R.mipmap.ease_default_avatar).asBitmap().transform(new GlideCircleTransform(mContext)).into( (ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(R.mipmap.person).asBitmap().transform(new GlideCircleTransform(mContext)).dontAnimate().into( (ImageView)holder.getView(R.id.iv));
                 }else if(ssVO.getHeadIcon().contains("http")){
-                    Glide.with(context).load(ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(ssVO.getHeadIcon()).placeholder(R.mipmap.person).transform(new GlideCircleTransform(mContext)).dontAnimate().into((ImageView)holder.getView(R.id.iv));
                 }else{
-                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+ssVO.getHeadIcon()).placeholder(R.mipmap.ease_default_avatar).transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
+                    Glide.with(context).load(GlobalParams.BASE_URL+GlobalParams.AvatarDirName+ssVO.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().transform(new GlideCircleTransform(mContext)).into((ImageView)holder.getView(R.id.iv));
                 }
                 holder.itemView.setTag(position);
 
