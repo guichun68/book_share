@@ -1,15 +1,23 @@
 package zyzx.linke.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -47,7 +55,10 @@ public class FriendHomePageAct extends BaseActivity {
     private TextView tvGender;
     private TextView tvSignature;
     private UserVO mUser;
+    private Boolean isInFriendsBlackList;
     private String from;//标记从哪个页面来,取值从BundleFlag类中FROM_xxx
+    private String[] popUpTitle = {"举报", "拉黑"};
+
 
     private ArrayList<BookDetail2> mBooks = new ArrayList<>();
     private Button btnAttention;
@@ -59,7 +70,9 @@ public class FriendHomePageAct extends BaseActivity {
             /*取消关注 成功否 回调标识*/
             SUCCESS_CANCEL_ATENTION = 10,FAILURE_CANCEL_ATENTION = 11,
             /*举报成功否 回调标识*/
-            SUCCESS_REPORT = 12,FAILURE_REPORT = 13;
+            SUCCESS_REPORT = 12,FAILURE_REPORT = 13,
+            /*添加黑名单 成功否 回调标识*/
+            SUCCESS_ADD_BLACK = 14,FAILURE_ADD_BLACK = 15;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -79,6 +92,10 @@ public class FriendHomePageAct extends BaseActivity {
                         break;
                     case 3:
                         UIUtil.showToastSafe("未能关注成功,请稍后再试");
+                        break;
+                    case 4:
+                        CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"关注失败，对方已限制您添加关注",null).show();
+                        btnAttention.setText("+关注");
                         break;
                 }
                 break;
@@ -124,6 +141,22 @@ public class FriendHomePageAct extends BaseActivity {
             case FAILURE_REPORT:
                 UIUtil.showToastSafe("提交失败,请稍后再试");
                 break;
+            case SUCCESS_ADD_BLACK:
+
+                ResponseJson j = new ResponseJson((String) msg.obj);
+                if(ResponseJson.NO_DATA == j.errorCode){
+                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加失败，请稍后再试",null).show();
+                    return;
+                }
+                if(j.errorCode==2)
+                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加到黑名单成功",null).show();
+                else
+                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加失败，请稍后再试",null).show();
+                break;
+            case FAILURE_ADD_BLACK:
+                CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加失败，请稍后再试",null).show();
+                break;
+
         }
     }
 
@@ -142,7 +175,7 @@ public class FriendHomePageAct extends BaseActivity {
         btnAttention = (Button) findViewById(R.id.btn_attention);
         btnAttention.setOnClickListener(this);
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("举报");
+        tvRight.setText("更多");
     }
 
     @Override
@@ -172,6 +205,11 @@ public class FriendHomePageAct extends BaseActivity {
             return;
         }
         mUser = (UserVO) intent.getSerializableExtra(BundleFlag.FLAG_USER);
+        if(mUser == null){
+            UIUtil.showToastSafe("未能获取书友信息");
+            return;
+        }
+        isInFriendsBlackList = intent.getBooleanExtra(BundleFlag.IS_IN_FRIENDS_BLACLIST,false);
         from = intent.getStringExtra(BundleFlag.FROM_CHAT_ACT);
         refreshUI();
     }
@@ -186,6 +224,10 @@ public class FriendHomePageAct extends BaseActivity {
             case R.id.btn_send_msg:
                 if((""+mUser.getUserid()).equals(EMClient.getInstance().getCurrentUser())){
                     UIUtil.showToastSafe("无需同自己聊天");
+                    return;
+                }
+                if(isInFriendsBlackList){
+                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"对不起，对方已拒绝您的聊天请求",null).show();
                     return;
                 }
                 if(!StringUtil.isEmpty(from) && from.equals(BundleFlag.FROM_CHAT_ACT)){
@@ -236,13 +278,73 @@ public class FriendHomePageAct extends BaseActivity {
                 }
 
                 break;
-            case R.id.tv_add_mylib://举报
-                showReportDialog();
+            case R.id.tv_add_mylib://更多
+                //构建一个popupwindow的布局
+                View popupView = FriendHomePageAct.this.getLayoutInflater().inflate(R.layout.popupwindow, null);
+
+                ListView lsvMore = (ListView) popupView.findViewById(R.id.lsvMore);
+                lsvMore.setAdapter(new ArrayAdapter<>(FriendHomePageAct.this, R.layout.item_pop, popUpTitle));
+
+                // 创建PopupWindow对象，指定宽度和高度
+//                final PopupWindow window = new PopupWindow(popupView, 300, 600);
+
+                final PopupWindow window=new PopupWindow(popupView, 400, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                window.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                window.setBackgroundDrawable(new ColorDrawable(0));
+                int popHeight=window.getContentView().getMeasuredHeight();
+//                window.showAsDropDown(view, 0, -popHeight);
+
+
+
+                // 设置动画
+                window.setAnimationStyle(R.style.popup_window_anim);
+                // 设置背景颜色
+                window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F8F8F8")));
+                // 置可以获取焦点
+                window.setFocusable(true);
+                // 设置可以触摸弹出框以外的区域
+                window.setOutsideTouchable(true);
+                // 更新popupwindow的状态
+                window.update();
+                // 以下拉的方式显示，并且可以设置显示的位置
+                window.showAsDropDown(view, 0, 0);
+                lsvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(position==0){
+                            window.dismiss();
+                            showReportDialog();
+                        }else{
+                            window.dismiss();
+                            CustomProgressDialog.getPromptDialog2Btn2(FriendHomePageAct.this, "确定要将\"" + mUser.getLoginName() + "\"加入黑名单么","确定","取消", new CustomProgressDialog.MyDialogClickListener() {
+                                @Override
+                                public void onClick(final Dialog dialog, View v) {
+                                    showDefProgress();
+                                    getUserPresenter().addBlackList(mUser.getUid(), new CallBack() {
+                                        @Override
+                                        public void onSuccess(Object obj, int... code) {
+                                            dialog.dismiss();
+                                            Message msg = handler.obtainMessage(SUCCESS_ADD_BLACK);
+                                            msg.obj = obj;
+                                            handler.sendMessage(msg);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Object obj, int... code) {
+                                            dialog.dismiss();
+                                            handler.sendEmptyMessage(FAILURE_ADD_BLACK);
+                                        }
+                                    });
+                                }
+                            },null).show();
+                        }
+                    }
+                });
                 break;
         }
     }
     private AlertDialog reportDialog;
-    private RadioGroup rg1,rg2,rg3,rg4;
+    private RadioGroup rg1,rg2,rg3;
     //举报
     private void showReportDialog(){
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -253,11 +355,9 @@ public class FriendHomePageAct extends BaseActivity {
         rg1 = (RadioGroup) view.findViewById(R.id.rg1);
         rg2 = (RadioGroup) view.findViewById(R.id.rg2);
         rg3 = (RadioGroup) view.findViewById(R.id.rg3);
-        rg4 = (RadioGroup) view.findViewById(R.id.rg4);
         rg1.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
         rg2.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
         rg3.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
-        rg4.setOnCheckedChangeListener(new MyRadioGroupOnCheckedChangedListener());
 
         final EditText etDesc = (EditText) view.findViewById(R.id.etDesc);
         Button btnOK = (Button) view.findViewById(R.id.dialog_btn);
@@ -310,19 +410,12 @@ public class FriendHomePageAct extends BaseActivity {
                 if (group == rg1) {
                     rg2.clearCheck();
                     rg3.clearCheck();
-                    rg4.clearCheck();
                 } else if (group == rg2) {
                     rg1.clearCheck();
                     rg3.clearCheck();
-                    rg4.clearCheck();
                 } else if (group == rg3) {
                     rg1.clearCheck();
                     rg2.clearCheck();
-                    rg4.clearCheck();
-                }else if(group == rg4){
-                    rg1.clearCheck();
-                    rg2.clearCheck();
-                    rg3.clearCheck();
                 }
                 checkedRadioBtnId = checkedId;
                 changeedGroup = false;

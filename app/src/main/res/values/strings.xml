@@ -221,6 +221,7 @@
     <string name="my_share">我的分享</string>
     <string name="borrow_out">借出的书籍</string>
     <string name="logout">注销登录</string>
+    <string name="blackhome">我的小黑屋</string>
     <string name="update">检查更新</string>
     <string name="manual_input">手动录入书籍信息</string>
     <string name="findbookFriend">找书友</string>

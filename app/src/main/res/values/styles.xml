@@ -262,4 +262,9 @@
         <!-- 选择的底线颜色 -->
         <item name="colorControlActivated">#c6174e</item>
     </style>
+
+    <style name="popup_window_anim">
+        <item name="android:windowEnterAnimation">@anim/in</item>
+        <item name="android:windowExitAnimation">@anim/out</item>
+    </style>
 </resources>

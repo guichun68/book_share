@@ -20,6 +20,7 @@ public class BundleFlag {
 	public static final String AVATOR="avator";
 	public static final String SHOULD_REFRESH = "ifRefresh";//是否需要刷新
 	public static final String FLAG_USER = "user";//
+	public static final String IS_IN_FRIENDS_BLACLIST = "isBlack";//
 	public static final int FLAG_FRIEND_HOME = 0x99A;//
 	public static final String FLAG_USER_BOOK_ID = "user_book_id";//用户书籍表主键
 	public static final String FLAG_SKILL_SWAP = "swap_skill";//

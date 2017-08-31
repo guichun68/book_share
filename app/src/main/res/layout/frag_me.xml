@@ -42,59 +42,60 @@
                     android:id="@+id/iv_sex"
                     android:layout_width="15dp"
                     android:layout_height="30dp"
-                    android:layout_toRightOf="@id/civ"
                     android:layout_marginLeft="10dp"
-                    tool:src="@mipmap/dannsei"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/civ"
+                    tool:src="@mipmap/dannsei" />
 
                 <TextView
                     android:id="@+id/tv_user_login_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_tip_color"
                     android:layout_alignBottom="@id/iv_sex"
                     android:layout_marginBottom="3dp"
-                    android:textSize="17sp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/iv_sex"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="17sp"
                     tool:text="王者风范" />
+
                 <TextView
                     android:id="@+id/tv_credit_score_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_tip_color"
-                    android:textSize="17sp"
                     android:layout_below="@id/tv_user_login_name"
-                    android:layout_toRightOf="@id/civ"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="4dp"
-                    android:text="信用积分:" />
+                    android:layout_toRightOf="@id/civ"
+                    android:text="信用积分:"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="17sp" />
+
                 <TextView
                     android:id="@+id/tv_credit_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_tip_color"
-                    android:textSize="17sp"
-                    android:layout_toRightOf="@id/tv_credit_score_tip"
                     android:layout_alignTop="@id/tv_credit_score_tip"
                     android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/tv_credit_score_tip"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="17sp"
                     tool:text="65" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou"
-                    android:paddingRight="20dp"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow"
+                    android:paddingRight="20dp" />
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="17dp"
                 android:text="@string/newbookcheckin"
-                android:textSize="17sp"
-                android:gravity="center_vertical"
-                 />
+                android:textSize="17sp" />
 
 
             <RelativeLayout
@@ -104,14 +105,14 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv1"
                     android:layout_width="@dimen/dp_50"
-                    android:paddingRight="5dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:paddingRight="5dp"
                     android:src="@mipmap/scan" />
 
                 <TextView
@@ -122,12 +123,12 @@
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv1"
                     android:text="@string/scan_input"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color" />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou1"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
 
             <TextView
@@ -143,7 +144,7 @@
                 android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_10"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv2"
@@ -155,27 +156,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_22"
-                    android:text="@string/manual_input"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/iv2" />
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toEndOf="@+id/iv2"
+                    android:text="@string/manual_input"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou2"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:paddingLeft="17dp"
                 android:text="@string/manage_book"
-                android:textSize="17sp"
-                android:gravity="center_vertical"
-                 />
+                android:textSize="17sp" />
 
             <RelativeLayout
                 android:id="@+id/rl_all_checkin"
@@ -185,7 +185,7 @@
                 android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv0"
@@ -202,11 +202,12 @@
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv0"
                     android:text="@string/all_my_book"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color" />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
                 <ImageView
                     android:id="@+id/imageview_jiantou0"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
 
             <TextView
@@ -221,7 +222,7 @@
                 android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv_share"
@@ -238,11 +239,12 @@
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv_share"
                     android:text="@string/my_share"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color" />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
                 <ImageView
                     android:id="@+id/imageview_jiantou_share"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
 
             <TextView
@@ -256,7 +258,7 @@
                 android:layout_height="@dimen/dp_50"
                 android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv3"
@@ -273,24 +275,25 @@
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv3"
                     android:text="@string/borrow_in"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou3"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
-            <View
-                style="@style/line"/>
+
+            <View style="@style/line" />
+
             <RelativeLayout
                 android:id="@+id/rl_swap_skill"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginBottom="5dp"
+
                 android:background="@drawable/btn_top_selr"
                 android:paddingBottom="@dimen/dp_6"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/iv12"
@@ -307,96 +310,18 @@
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@+id/iv12"
                     android:text="@string/swap_skill"
-                    android:textSize="@dimen/sp_19"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou12"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
 
-
-            <TextView
-                android:id="@+id/tv_set_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="17dp"
-                android:text="@string/setting"
-                android:textSize="17sp"
-                android:gravity="center_vertical"
-                />
-
-            <RelativeLayout
-                android:id="@+id/rl_my_borrow_beg"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/btn_top_selr"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/iv11"
-                    android:layout_width="50dp"
-                    android:padding="3dp"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/modify_psw" />
-
-                <TextView
-                    android:id="@+id/tv17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_22"
-                    android:layout_toRightOf="@id/iv11"
-                    android:textSize="@dimen/sp_19"
-                    android:text="@string/my_borrow_beg_record"
-                    android:textColor="@color/text_tip_color"  />
-
-                <ImageView
-                    android:id="@+id/imageview_jiantou17"
-                    style="@style/rightArrow"/>
-            </RelativeLayout>
-            <TextView
-                android:id="@+id/fenge18"
-                style="@style/fengexian" />
-            <RelativeLayout
-                android:id="@+id/rl_modify_psw"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:background="@drawable/btn_top_selr"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/iv7"
-                    android:layout_width="50dp"
-                    android:padding="3dp"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/modify_psw" />
-
-                <TextView
-                    android:id="@+id/tv7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_22"
-                    android:layout_toRightOf="@id/iv7"
-                    android:textSize="@dimen/sp_19"
-                    android:text="@string/modify_psw"
-                    android:textColor="@color/text_tip_color"  />
-
-                <ImageView
-                    android:id="@+id/imageview_jiantou7"
-                    style="@style/rightArrow"/>
-            </RelativeLayout>
             <TextView
                 android:id="@+id/fenge8"
                 style="@style/fengexian" />
+
 
             <RelativeLayout
                 android:id="@+id/rl_import"
@@ -422,22 +347,22 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv10"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/import_excel"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
-                <ImageView
-                    style="@style/rightArrow"/>
+                <ImageView style="@style/rightArrow" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/fenge7"
-                style="@style/fengexian"
-                />
+                style="@style/fengexian" />
 
             <RelativeLayout
                 android:id="@+id/rl_export"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_top_selr"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -458,13 +383,94 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv9"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/export_excel"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
+                <ImageView style="@style/rightArrow" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_set_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="17dp"
+                android:text="@string/setting"
+                android:textSize="17sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_my_borrow_beg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_top_selr"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
 
                 <ImageView
-                    style="@style/rightArrow"/>
+                    android:id="@+id/iv11"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:padding="3dp"
+                    android:src="@mipmap/modify_psw" />
+
+                <TextView
+                    android:id="@+id/tv17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv11"
+                    android:text="@string/my_borrow_beg_record"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
+                <ImageView
+                    android:id="@+id/imageview_jiantou17"
+                    style="@style/rightArrow" />
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/fenge18"
+                style="@style/fengexian" />
+
+            <RelativeLayout
+                android:id="@+id/rl_modify_psw"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/btn_top_selr"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv7"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:padding="3dp"
+                    android:src="@mipmap/modify_psw" />
+
+                <TextView
+                    android:id="@+id/tv7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv7"
+                    android:text="@string/modify_psw"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
+                <ImageView
+                    android:id="@+id/imageview_jiantou7"
+                    style="@style/rightArrow" />
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/fenge4"
                 style="@style/fengexian"
@@ -493,14 +499,52 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv4"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/logout"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou4"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/fenge14"
+                style="@style/fengexian"
+                android:layout_below="@id/rl_scan_input" />
+
+            <RelativeLayout
+                android:id="@+id/rl_my_black_list"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@drawable/btn_top_selr"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv14"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/logout" />
+
+                <TextView
+                    android:id="@+id/tv14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_22"
+                    android:layout_toRightOf="@id/iv14"
+                    android:text="@string/blackhome"
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
+
+                <ImageView
+                    android:id="@+id/imageview_jiantou14"
+                    style="@style/rightArrow" />
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/fenge6"
                 style="@style/fengexian"
@@ -530,13 +574,13 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv8"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/feed_back"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
-                <ImageView
-                    style="@style/rightArrow"/>
+                <ImageView style="@style/rightArrow" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/fenge9"
                 style="@style/fengexian" />
@@ -554,8 +598,8 @@
                     android:id="@+id/iv5"
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
-                    android:padding="3dp"
                     android:layout_centerVertical="true"
+                    android:padding="3dp"
                     android:src="@mipmap/checkupdate" />
 
                 <TextView
@@ -565,14 +609,15 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv5"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/update"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou5"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/fenge5"
                 style="@style/fengexian"
@@ -591,8 +636,8 @@
                     android:id="@+id/iv6"
                     android:layout_width="50dp"
                     android:layout_height="@dimen/dp_50"
-                    android:padding="3dp"
                     android:layout_centerVertical="true"
+                    android:padding="3dp"
                     android:src="@mipmap/about_me" />
 
                 <TextView
@@ -602,13 +647,13 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_22"
                     android:layout_toRightOf="@id/iv6"
-                    android:textSize="@dimen/sp_19"
                     android:text="@string/about_us"
-                    android:textColor="@color/text_tip_color"  />
+                    android:textColor="@color/text_tip_color"
+                    android:textSize="@dimen/sp_19" />
 
                 <ImageView
                     android:id="@+id/imageview_jiantou6"
-                    style="@style/rightArrow"/>
+                    style="@style/rightArrow" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

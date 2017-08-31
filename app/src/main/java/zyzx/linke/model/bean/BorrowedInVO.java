@@ -11,7 +11,7 @@ import android.os.Parcelable;
 public class BorrowedInVO implements Parcelable{
     private String borrowFlowId;//借阅流程表主键
     private String flowId;//单一借阅流程id
-    private String uid;//
+    private String uid;//环信id
     private String relUid;
     private String bookTitle;
     private String bookId;

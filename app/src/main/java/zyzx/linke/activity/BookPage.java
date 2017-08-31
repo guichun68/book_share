@@ -52,7 +52,6 @@ public class BookPage extends BasePager {
     private LinearLayout llSearch;
     private int searchBarHeight;
     int disy;//一次滑动的距离
-    private boolean isSearchBarShow = true;
 
     private MyHandler handler = new MyHandler(this);
 
@@ -86,7 +85,6 @@ public class BookPage extends BasePager {
                             }
                         }
                         dismisLoading();
-                        mAdapter.notifyDataSetChanged();
                         break;
                     default:
                         UIUtil.showToastSafe("未能获取数据");

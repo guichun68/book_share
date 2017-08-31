@@ -41,7 +41,6 @@ import zyzx.linke.views.MyRecyclerViewWapper;
  */
 
 public class SkillPage extends BasePager {
-    private final String TAG = SkillPage.class.getSimpleName();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AppCompatEditText etSearch;
     private MyRecyclerViewWapper mRecyclerView;
@@ -71,17 +70,19 @@ public class SkillPage extends BasePager {
                         if(isRefreshing){
                             mSwapSkillVos.clear();
                             mSwapSkillVos.addAll(swapSkillVOs);
+                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }else{
                             if(swapSkillVOs.isEmpty()){
                                 mPageNum--;
                                 UIUtil.showToastSafe("没有更多了！");
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }else{
                                 mSwapSkillVos.addAll(swapSkillVOs);
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                             }
                         }
                         dismissProgress();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         break;
                     case 3:
                         UIUtil.showToastSafe("没有更多了");

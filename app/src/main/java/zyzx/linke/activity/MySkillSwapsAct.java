@@ -86,17 +86,20 @@ public class MySkillSwapsAct extends BaseActivity {
                         if(isRefreshing){
                             mSwapSkillVos.clear();
                             mSwapSkillVos.addAll(swapSkillVOs);
+                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }else{
                             if(swapSkillVOs.isEmpty()){
                                 mPageNum--;
                                 UIUtil.showToastSafe("没有更多了！");
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }else{
                                 mSwapSkillVos.addAll(swapSkillVOs);
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                             }
                         }
                         dismissProgress();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+
                         break;
                     case 3:
                         UIUtil.showToastSafe("没有更多了");

@@ -67,16 +67,19 @@ public class SwapSkillSearchResultAct extends BaseActivity {
                         if(isRefreshing){
                             mSwapSkills.clear();
                             mSwapSkills.addAll(swapBookVOs);
+                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }else{
                             if(swapBookVOs.isEmpty()){
                                 mPageNum--;
                                 UIUtil.showToastSafe("没有更多了！");
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }else{
                                 mSwapSkills.addAll(swapBookVOs);
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                             }
                         }
                         dismissProgress();
-                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+
                         break;
                     case 3:
                         UIUtil.showToastSafe("没有更多了");

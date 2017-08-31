@@ -194,6 +194,48 @@ public class CustomProgressDialog {
 		return dialog2;
 	}
 
+	public static Dialog getPromptDialog2Btn2(Context context, String msg, final String okBtnText, String cancelBtnText, final MyDialogClickListener okListener, View.OnClickListener cancelListener) {
+		AlertDialog.Builder adb = new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.dialog_text_btn2, null);
+		TextView dialog_txt = (TextView) view.findViewById(R.id.dialog_txt);
+		Button dialog_btn = (Button) view.findViewById(R.id.dialog_btn);
+		Button dialog_btn2 = (Button) view.findViewById(R.id.dialog_btn2);
+		dialog_txt.setText(msg);
+		dialog_btn.setText(okBtnText);
+		dialog_btn2.setText(cancelBtnText);
+		final AlertDialog dialog2 = adb.create();
+		dialog2.setView(view, 0, 0, 0, 0);
+
+		dialog_btn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(okListener!=null){
+					okListener.onClick(dialog2,v);
+				}else{
+					dialog2.dismiss();
+				}
+			}
+		});
+		if(cancelListener==null){
+			dialog_btn2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog2.dismiss();
+				}
+			});
+		}else{
+			dialog_btn2.setOnClickListener(cancelListener);
+		}
+		dialog2.setCanceledOnTouchOutside(false);
+		dialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		return dialog2;
+	}
+
+	public interface MyDialogClickListener{
+		void onClick(Dialog dialog,View v);
+	}
+
 	/**
 	 * 上方有loading转圈动画图标，下方提示文字的dialog
 	 * @param context

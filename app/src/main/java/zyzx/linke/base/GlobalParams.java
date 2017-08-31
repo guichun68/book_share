@@ -90,7 +90,7 @@ public class GlobalParams {
 	//localhost//
 	public static String urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
 	//添加到黑名单
-	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
+	public static String urlAddBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/addBlackList.action";
 	//检查是否在对方的黑名单中
 	public static String urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
 	//发起添加好友的请求
@@ -113,6 +113,8 @@ public class GlobalParams {
 	public static String urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
 	public static String urlGetUserInfoByUserId = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 	public static String urlGetUserInfoByUid = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfoByUid&page.searchValue.uid=#&page.pageSize=1&page.curPage=1";
+	public static String urlGetUserInfoByUid2 = GlobalParams.BASE_URL+"/user/mobileSDK/getUserInfo.action";
+	public static String urlGetUserInfoByUserId2 = GlobalParams.BASE_URL+"/user/mobileSDK/getUserInfoByUserId.action";
 	/**
 	 * 用户删除指定书籍
 	 */
@@ -163,6 +165,7 @@ public class GlobalParams {
 	public static String urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
 	public static String urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
 	public static String urlGetAttentions = GlobalParams.BASE_URL+"/user/mobileSDK/getAttentions.action";
+	public static String urlGetMyBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBlackList.action";
 
 	/**
 	 * 注册
@@ -208,6 +211,8 @@ public class GlobalParams {
 //		urlAddBook2Map = GlobalParams.BASE_URL+"/zyzx/add2Map.action";
 		urlGetUserInfoByUserId = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 		urlGetUserInfoByUid = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfoByUid&page.searchValue.uid=#&page.pageSize=1&page.curPage=1";
+		urlGetUserInfoByUserId2 = GlobalParams.BASE_URL+"/user/mobileSDK/getUserInfoByUserId.action";
+		urlGetUserInfoByUid2 = GlobalParams.BASE_URL+"/user/mobileSDK/getUserInfo.action";
 		urlSetBookStatus = GlobalParams.BASE_URL+"/zyzx/set_zyzx_user_book_status.action";
 		urlGetUserBooks = GlobalParams.BASE_URL+"/zyzx/getUserBooks.action";
 		urlGetBooksByIds = GlobalParams.BASE_URL+"/zyzx/getBooksByIds.action";
@@ -248,12 +253,13 @@ public class GlobalParams {
 		urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
 		urlSearchSwapWantBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantBook.action";
 		urlSearchSwapWantSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapWantSkill.action";
+		urlGetMyBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBlackList.action";
 		urlGetAttentions = GlobalParams.BASE_URL+"/user/mobileSDK/getAttentions.action";
 		urlDefHeadIcon = GlobalParams.BASE_URL+"/pages/image/head.png";
 		urlGetFriends = GlobalParams.BASE_URL+"/zyzx/getAllFriends.action";
 		urlCheckUpdate = GlobalParams.BASE_URL+"/app/mobileSDK/checkupdate.action";
 		urlDelFriend = GlobalParams.BASE_URL+"/user/delFriend.action";
-		urlAddBlackList = GlobalParams.BASE_URL+"/user/addBlackList.action";
+		urlAddBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/addBlackList.action";
 		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
 		urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
         urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";

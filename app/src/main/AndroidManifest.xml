@@ -183,10 +183,16 @@
         <activity
             android:name=".activity.ChatActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             />
         <activity
             android:name=".activity.BookSearchResultAct"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.BlackListAct"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             />

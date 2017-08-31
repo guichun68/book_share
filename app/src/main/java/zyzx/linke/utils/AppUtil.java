@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import zyzx.linke.activity.BlackListAct;
 import zyzx.linke.base.GlobalParams;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.bean.BookDetail2;
@@ -41,6 +42,7 @@ import zyzx.linke.model.bean.Rating;
 import zyzx.linke.model.bean.SwapBookVO;
 import zyzx.linke.model.bean.SwapSkillVo;
 import zyzx.linke.model.bean.TelephonyManagerInfo;
+import zyzx.linke.model.bean.UserSimple;
 
 public class AppUtil {
 //	public static DbUtils db = DbUtils.create(GlobalParams.MAIN,
@@ -675,6 +677,20 @@ public class AppUtil {
 			sbVO.setSkillWantName(jo.getString("skillWantName"));
 			sbVO.setSkillType(jo.getString("haveType"));
 			sbVO.setSwapSkillType(jo.getString("wantType"));
+			result.add(sbVO);
+		}
+		return result;
+	}
+
+	public static ArrayList<UserSimple> getBlackLists(List<JSONObject> items) {
+		ArrayList<UserSimple> result = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			UserSimple sbVO = new UserSimple();
+			JSONObject jo = items.get(i);
+			sbVO.setUid(jo.getString("id"));
+			sbVO.setUserId(jo.getString("userid"));
+			sbVO.setUserName(jo.getString("login_name"));
+			sbVO.setHeadIcon(jo.getString("head_icon"));
 			result.add(sbVO);
 		}
 		return result;

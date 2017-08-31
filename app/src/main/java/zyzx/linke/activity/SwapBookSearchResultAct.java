@@ -65,16 +65,19 @@ public class SwapBookSearchResultAct extends BaseActivity {
                         if(isRefreshing){
                             mBooks.clear();
                             mBooks.addAll(swapBookVOs);
+                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                         }else{
                             if(swapBookVOs.isEmpty()){
                                 mPageNum--;
                                 UIUtil.showToastSafe("没有更多了！");
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }else{
                                 mBooks.addAll(swapBookVOs);
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                             }
                         }
                         dismissProgress();
-                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+
                         break;
                     case 3:
                         UIUtil.showToastSafe("没有更多了");

@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -46,6 +48,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.runtimepermissions.PermissionsManager;
@@ -141,6 +144,10 @@ public class ChatActivity extends BaseActivity {
 //                CloudItem item=new CloudItem("无", Const.TianAnMenPoint,"无","");//只是为了携带用户id到详情页
                 //进入好友详情页
 //                item.setCustomfield(uidMap);
+                if(EMClient.getInstance().getCurrentUser().equals(username)){
+                    gotoActivity(PersonalCenterAct.class);
+                    return;
+                }
                getUserInfo();
             }
 
@@ -632,55 +639,51 @@ public class ChatActivity extends BaseActivity {
 
     private void getUserInfo() {
         showDefProgress();
-        getUserPresenter().getUserInfoByUserId(chatUserId, new CallBack() {
+        getUserPresenter().getUserInfoByUserId2(chatUserId, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
-                UserInfoResult ui = JSON.parseObject((String) obj, UserInfoResult.class);
-                if (ui.getErrorCode() == null || ui.getErrorCode().equals("0")) {
-                    //获取失败
+                ResponseJson rj = new ResponseJson((String) obj);
+                if(ResponseJson.NO_DATA == rj.errorCode || rj.errorCode!=2){
                     UIUtil.showToastSafe("用户信息获取失败！");
                     return;
                 }
-                if (ui.getErrorCode().equals("1") && !ui.getData().getItems().isEmpty()) {
-                    UserInfoResult.DataEntity.ItemsEntity ie = ui.getData().getItems().get(0);
-                    mFriend.setUserid(ie.getUserid());
-                    mFriend.setUid(ie.getId());
-                    mFriend.setLoginName(ie.getLogin_name());
-                    mFriend.setMobilePhone(ie.getMobile_phone());
-                    mFriend.setAddress(ie.getAddress());
-                    mFriend.setPassword(ie.getPassword());
-                    mFriend.setProvinceName(ie.getPro());
-                    mFriend.setCityName(ie.getCity());
-                    mFriend.setCountyName(ie.getCounty());
-                    String genderStr = ie.getGender();
-                    Integer gender = Integer.parseInt(genderStr == null ? "0" : genderStr);
-                    mFriend.setGender(gender);
-                    mFriend.setHobby(ie.getHobby());
-                    mFriend.setEmail(ie.getEmail());
-                    mFriend.setRealName(ie.getReal_name());
-                    mFriend.setCityId(ie.getCity_id());
-                    mFriend.setLastLoginTime(ie.getLast_login_time());
+                JSONArray ja = (JSONArray) rj.data;
+                JSONObject jo = (JSONObject) ja.get(0);
+                boolean isInRelsBlackList = ((JSONObject)ja.get(1)).getBoolean("isInRelsBlackList");
+                mFriend.setUserid(jo.getInteger("userid"));
+                mFriend.setUid(jo.getString("id"));
+                mFriend.setLoginName(jo.getString("login_name"));
+                mFriend.setMobilePhone(jo.getString("mobile_phone"));
+                mFriend.setAddress(jo.getString("address"));
+                mFriend.setPassword(jo.getString("password"));
+                mFriend.setProvinceName(jo.getString("pro"));
+                mFriend.setCityName(jo.getString("city"));
+                mFriend.setCountyName(jo.getString("county"));
+                String genderStr = jo.getString("gender");
+                Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
+                mFriend.setGender(gender);
+                mFriend.setHobby(jo.getString("hobby"));
+                mFriend.setEmail(jo.getString("email"));
+                mFriend.setRealName(jo.getString("real_name"));
+                mFriend.setCityId(jo.getInteger("city_id"));
+                mFriend.setLastLoginTime(jo.getString("last_login_time"));
 
-                    mFriend.setSignature(ie.getSignature());
-                    String headTemp = ie.getHead_icon();
-                    mFriend.setHeadIcon(StringUtil.isEmpty(headTemp) ? null : GlobalParams.BASE_URL + GlobalParams.AvatarDirName + headTemp);
-                    mFriend.setBak4(ie.getBak4());
-                    mFriend.setBirthday(ie.getBirthday());
-                    mFriend.setSchool(ie.getSchool());
-                    mFriend.setDepartment(ie.getDepartment());
-                    mFriend.setDiplomaId(ie.getDiploma_id());
-                    mFriend.setSoliloquy(ie.getSoliloquy());
-                    mFriend.setCreditScore(ie.getCredit_score());
-                    mFriend.setFromSystem(ie.getFrom_system());
-
-                    Intent in = new Intent(mContext, FriendHomePageAct.class);
-                    in.putExtra(BundleFlag.FLAG_USER,mFriend);
-                    in.putExtra(BundleFlag.FROM,BundleFlag.FROM_CHAT_ACT);
-                    ChatActivity.this.startActivity(in);
-                } else {
-                    UIUtil.showToastSafe("未能获取用户信息");
-                }
+                mFriend.setSignature(jo.getString("signature"));
+                String headTemp = jo.getString("head_icon");
+                mFriend.setHeadIcon(StringUtil.isEmpty(headTemp)?null:GlobalParams.BASE_URL+GlobalParams.AvatarDirName+headTemp);
+                mFriend.setBak4(jo.getString("bak4"));
+                mFriend.setBirthday(jo.getDate("birthday"));
+                mFriend.setSchool(jo.getString("school"));
+                mFriend.setDepartment(jo.getString("department"));
+                mFriend.setDiplomaId(jo.getInteger("diploma_id"));
+                mFriend.setSoliloquy(jo.getString("soliloquy"));
+                mFriend.setCreditScore(jo.getInteger("credit_score"));
+                mFriend.setFromSystem(jo.getInteger("from_system"));
+                Intent in = new Intent(mContext, FriendHomePageAct.class);
+                in.putExtra(BundleFlag.FLAG_USER,mFriend);
+                in.putExtra(BundleFlag.FROM,BundleFlag.FROM_CHAT_ACT);
+                ChatActivity.this.startActivity(in);
             }
 
             @Override

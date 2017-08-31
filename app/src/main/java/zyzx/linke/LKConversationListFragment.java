@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
@@ -23,6 +25,7 @@ import zyzx.linke.global.Const;
 import zyzx.linke.global.MyEaseConstant;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -49,16 +52,23 @@ public class LKConversationListFragment extends BaseFragment {
             @Override
             public void onListItemClicked(final EMConversation conversation) {
                 showProgress("请稍后……");
-                getUserPresenter().getUserInfoInConversation(conversation.conversationId(),new CallBack(){
+                getUserPresenter().getUserInfoByUserId2(conversation.conversationId(),new CallBack(){
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        DefindResponseJson drj = new DefindResponseJson((String)obj);
-                        if(obj == null || DefindResponseJson.NO_DATA == drj.errorCode || drj.data.getItems()==null || drj.data.getItems().isEmpty()){
-                            UIUtil.showToastSafe("未能获取用户信息");
+                        ResponseJson rj = new ResponseJson((String) obj);
+                        if(ResponseJson.NO_DATA == rj.errorCode || rj.errorCode!=2){
+                            UIUtil.showToastSafe("用户信息获取失败！");
                             return;
                         }
-                        String loginName = (String) ((Map)drj.data.getItems().get(0)).get("login_name");
+                        JSONArray ja =  rj.data;
+                        JSONObject jo = (JSONObject) ja.get(0);
+                        boolean isInRelsBlackList = ((JSONObject)ja.get(1)).getBoolean("isInRelsBlackList");
+                        if(isInRelsBlackList){
+                            UIUtil.showToastSafe("对不起，对方已拒绝您的聊天请求");
+                            return;
+                        }
+                        String loginName = jo.getString("login_name");
                         Intent in = new Intent(getActivity(),ChatActivity.class);
                         in.putExtra(BundleFlag.LOGIN_NAME,loginName);
                         in.putExtra(BundleFlag.UID,conversation.conversationId());

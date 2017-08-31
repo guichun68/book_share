@@ -20,6 +20,7 @@ import java.io.File;
 
 import zxing.CaptureActivity;
 import zyzx.linke.activity.AboutUsAct;
+import zyzx.linke.activity.BlackListAct;
 import zyzx.linke.activity.BorrowedInBookAct;
 import zyzx.linke.activity.FeedBackAct;
 import zyzx.linke.activity.HomeAct;
@@ -83,6 +84,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         mRootView.findViewById(R.id.rl_import).setOnClickListener(this);//导入
         mRootView.findViewById(R.id.rl_my_borrow_beg).setOnClickListener(this);//导入
         mRootView.findViewById(R.id.rl_swap_skill).setOnClickListener(this);
+        mRootView.findViewById(R.id.rl_my_black_list).setOnClickListener(this);
+
 
         intiData();
     }
@@ -173,6 +176,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 //我的技能交换
                 Intent i = new Intent(getActivity(),MySkillSwapsAct.class);
                 startActivity(i);
+                break;
+            case R.id.rl_my_black_list:
+                gotoActivity(BlackListAct.class);
                 break;
         }
     }

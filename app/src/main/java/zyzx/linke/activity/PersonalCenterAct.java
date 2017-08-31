@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,12 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.hyphenate.util.NetUtils;
@@ -37,9 +35,7 @@ import zyzx.linke.global.BundleFlag;
 import zyzx.linke.global.Const;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.ResponseJson;
-import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
-import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CapturePhoto;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.FileUtil;
@@ -136,55 +132,55 @@ public class PersonalCenterAct extends BaseActivity {
             Glide.with(mContext).load(mUser.getHeadIcon()).placeholder(R.mipmap.person).dontAnimate().into(mCiv);
         }
         showDefProgress();
-        getUserPresenter().getUserInfoByUid(String.valueOf(mUser.getUid()), new CallBack() {
+        getUserPresenter().getUserInfoByUid2(String.valueOf(mUser.getUid()), new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {
                 dismissProgress();
-                UserInfoResult ui = JSON.parseObject((String)obj, UserInfoResult.class);
-                if(ui.getErrorCode().equals("0")){
-                    //获取失败
+                ResponseJson rj = new ResponseJson((String) obj);
+                if(ResponseJson.NO_DATA == rj.errorCode || rj.errorCode!=2){
                     UIUtil.showToastSafe("用户信息获取失败！");
                     return;
                 }
-                if(ui.getErrorCode().equals("1")){
-                    mUser = GlobalParams.getLastLoginUser();
-                    UserInfoResult.DataEntity.ItemsEntity ie = ui.getData().getItems().get(0);
-                    mUser.setLoginName(ie.getLogin_name());
-                    mUser.setMobilePhone(ie.getMobile_phone());
-                    mUser.setAddress(ie.getAddress());
-                    mUser.setPassword(ie.getPassword());
-                    mUser.setProvinceName(ie.getPro());
-                    mUser.setCityName(ie.getCity());
-                    mUser.setCountyName(ie.getCounty());
-                    String genderStr = ie.getGender();
-                    Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
-                    mUser.setGender(gender);
-                    mUser.setHobby(ie.getHobby());
-                    mUser.setEmail(ie.getEmail());
-                    mUser.setRealName(ie.getReal_name());
-                    mUser.setCityId(ie.getCity_id());
-                    mUser.setLastLoginTime(ie.getLast_login_time());
+                JSONArray ja = rj.data;
+                JSONObject jo = (JSONObject) ja.get(0);
+                boolean isInRelsBlackList = ((JSONObject)ja.get(1)).getBoolean("isInRelsBlackList");
+                mUser.setUserid(jo.getInteger("userid"));
+                mUser.setUid(jo.getString("id"));
+                mUser.setLoginName(jo.getString("login_name"));
+                mUser.setMobilePhone(jo.getString("mobile_phone"));
+                mUser.setAddress(jo.getString("address"));
+                mUser.setPassword(jo.getString("password"));
+                mUser.setProvinceName(jo.getString("pro"));
+                mUser.setCityName(jo.getString("city"));
+                mUser.setCountyName(jo.getString("county"));
+                String genderStr = jo.getString("gender");
+                Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
+                mUser.setGender(gender);
+                mUser.setHobby(jo.getString("hobby"));
+                mUser.setEmail(jo.getString("email"));
+                mUser.setRealName(jo.getString("real_name"));
+                mUser.setCityId(jo.getInteger("city_id"));
+                mUser.setLastLoginTime(jo.getString("last_login_time"));
 
-                    mUser.setSignature(ie.getSignature());
-//                  mUser.setHeadIcon(ie.getHead_icon());
-                    mUser.setBak4(ie.getBak4());
-                    mUser.setBirthday(ie.getBirthday());
-                    mUser.setSchool(ie.getSchool());
-                    mUser.setDepartment(ie.getDepartment());
-                    mUser.setDiplomaId(ie.getDiploma_id());
-                    mUser.setDiplomaName(AppUtil.getDiplomaName(mUser.getDiplomaId()));
-                    mUser.setSoliloquy(ie.getSoliloquy());
-                    mUser.setCreditScore(ie.getCredit_score());
-                    mUser.setFromSystem(ie.getFrom_system());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshUI();
-                            ((MyInfoPage)myInfoPage).setData(mUser);
-                            ((MyInfoPage)myInfoPage).refreshUI();
-                        }
-                    });
-                }
+                mUser.setSignature(jo.getString("signature"));
+                String headTemp = jo.getString("head_icon");
+                mUser.setHeadIcon(StringUtil.isEmpty(headTemp)?null:GlobalParams.BASE_URL+GlobalParams.AvatarDirName+headTemp);
+                mUser.setBak4(jo.getString("bak4"));
+                mUser.setBirthday(jo.getDate("birthday"));
+                mUser.setSchool(jo.getString("school"));
+                mUser.setDepartment(jo.getString("department"));
+                mUser.setDiplomaId(jo.getInteger("diploma_id"));
+                mUser.setSoliloquy(jo.getString("soliloquy"));
+                mUser.setCreditScore(jo.getInteger("credit_score"));
+                mUser.setFromSystem(jo.getInteger("from_system"));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshUI();
+                        ((MyInfoPage)myInfoPage).setData(mUser);
+                        ((MyInfoPage)myInfoPage).refreshUI();
+                    }
+                });
             }
 
             @Override

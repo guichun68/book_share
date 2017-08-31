@@ -309,6 +309,11 @@ public class BookPresenter extends IBookPresenter {
         getDataWithPost(callBack,GlobalParams.urlGetAttentions,"未能拉取我的关注",new String[]{"pageNo"},pageNum);
     }
 
+    @Override
+    public void getMyBlackList(int pageNum, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetMyBlackList,"未能获取列表",new String[]{"pageNo"},pageNum);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

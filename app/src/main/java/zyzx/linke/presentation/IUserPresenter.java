@@ -47,6 +47,8 @@ public abstract class IUserPresenter extends IPresenter{
      */
     public abstract void getUserInfoByUserId(String userId, CallBack callBack);
 
+    public abstract void getUserInfoByUserId2(String userId, CallBack callBack);
+
     /**
      * 根据uid获取用户信息
      * @param uid user's uuid
@@ -71,6 +73,8 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void mofiySignature(Integer userid, String sig, CallBack callBack);
 
 
+    public abstract void getUserInfoByUid2(String uid,CallBack callBack);
+
     public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
 
     /**
@@ -87,10 +91,10 @@ public abstract class IUserPresenter extends IPresenter{
 
     /**
      * 添加指定用户到黑名单
-     * @param userId 要把谁添加到我的黑名单
+     * @param relUid 要把谁添加到我的黑名单
      * @param callBack
      */
-    public abstract void addBlackList(String userId, CallBack callBack);
+    public abstract void addBlackList(String relUid, CallBack callBack);
 
     /**
      * 检查自己是否已被对方加入黑名单了

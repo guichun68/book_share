@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="垃圾营销"
+                android:text="广告营销"
                 android:textColor="@color/common_black_color" />
 
             <RadioButton
@@ -57,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="不实信息"
+                android:text="不诚信行为"
                 android:textColor="@color/common_black_color" />
         </RadioGroup>
 
@@ -76,7 +76,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="有害信息"
+                android:text="人身攻击"
                 android:textColor="@color/common_black_color" />
 
             <RadioButton
@@ -84,9 +84,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="违法信息"
+                android:text="有害信息"
                 android:textColor="@color/common_black_color" />
         </RadioGroup>
+
 
     <RadioGroup
         android:id="@+id/rg3"
@@ -97,41 +98,6 @@
         android:layout_marginTop="10dp"
         android:contentDescription="举报"
         android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbYinhuiseqing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="淫秽色情"
-                android:textColor="@color/common_black_color" />
-
-            <RadioButton
-                android:id="@+id/rbRenshengongji"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="人身攻击我"
-                android:textColor="@color/common_black_color" />
-        </RadioGroup>
-
-    <RadioGroup
-        android:id="@+id/rg4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:contentDescription="举报"
-        android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbBaolixuexing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="暴力血腥"
-                android:textColor="@color/common_black_color" />
 
             <RadioButton
                 android:id="@+id/rb_other"

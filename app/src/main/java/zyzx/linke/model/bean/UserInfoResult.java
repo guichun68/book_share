@@ -121,7 +121,6 @@ public class UserInfoResult {
             private String city;
             private String county;
             private Date birthday;
-
             private String last_login_time;
             public Integer getCity_id() {
                 return city_id;

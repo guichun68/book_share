@@ -168,6 +168,12 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
+    public void getUserInfoByUserId2(String userId, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetUserInfoByUserId2,"未能获取用户信息",
+                new String[]{"relUserId"},userId);
+    }
+
+    @Override
     public void getUserInfoByUserId(String userid, final CallBack viewCallBack) {
         String url = GlobalParams.urlGetUserInfoByUserId.replace("#",userid);
         getModel().get(url, null, new CallBack() {
@@ -235,6 +241,12 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
+    public void getUserInfoByUid2(String uid, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlGetUserInfoByUid2,"未能获取用户信息!",
+                new String[]{"rel"}, uid);
+    }
+
+    @Override
     public void searchFriend(String keyWord, int pageNum,CallBack viewCallBack) {
         getDataWithPost(viewCallBack,GlobalParams.urlSearchFriend,"查找失败!",
                 new String[]{"key_word","page_num"},
@@ -294,8 +306,7 @@ public class UserPresenter extends IUserPresenter {
     @Override
     public void addBlackList(String userId, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlAddBlackList,"添加失败!",
-                new String[]{"from_user_id","to_user_id"},
-                GlobalParams.getLastLoginUser().getUserid(),userId);
+                new String[]{"relUid"}, userId);
     }
 
     @Override

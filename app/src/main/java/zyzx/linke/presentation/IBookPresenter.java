@@ -120,4 +120,7 @@ public abstract class IBookPresenter extends IPresenter {
 
     //得到我关注的用户
     public abstract void getAttentions(int pageNum, CallBack callBack);
+
+    //获取我的黑名单列表
+    public abstract void getMyBlackList(int pageNum, CallBack callBack);
 }
