@@ -109,7 +109,7 @@ public class MyShareBooksAct extends BaseActivity {
                 View popView = View.inflate(mContext, R.layout.pop_modify_book, null);
                 setPopwinViewControls(popView, bookDetailVO, position);
                 //测量布局的大小
-                popView.measure(0, 0);view.getMeasuredHeight();
+                popView.measure(0, 0);
                 int popWidth = popView.getMeasuredWidth();
                 int popHeight = popView.getMeasuredHeight();
 //                pop = new PopupWindow(popView, popView.getMeasuredWidth(), popView.getMeasuredHeight(), true);

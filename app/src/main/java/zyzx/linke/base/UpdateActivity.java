@@ -1,5 +1,6 @@
 package zyzx.linke.base;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
@@ -14,12 +15,15 @@ import java.io.File;
 import java.io.IOException;
 
 import zyzx.linke.R;
+import zyzx.linke.activity.AppManager;
 import zyzx.linke.checkupdate.bean.CheckUpdateInfo;
 import zyzx.linke.checkupdate.callback.DownloadCallback;
 import zyzx.linke.checkupdate.http.HttpRequest;
 import zyzx.linke.checkupdate.utils.ApplicationUtil;
 import zyzx.linke.checkupdate.utils.NetWorkUtil;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
+import zyzx.linke.utils.UIUtil;
 
 public class UpdateActivity extends BaseActivity {
 	
@@ -110,6 +114,7 @@ public class UpdateActivity extends BaseActivity {
 	}
 
 	private void download() {
+		HttpRequest.setShouldCancel(false);
 		pb.setVisibility(View.VISIBLE);
 		if(StringUtil.isEmpty(filePath)){
 			try {
@@ -140,5 +145,35 @@ public class UpdateActivity extends BaseActivity {
 				dialogBtn.setText("重新下载");
 			}
 		});
+	}
+
+	Dialog exitDialg;
+	@Override
+	public void onBackPressed() {
+		if(exitDialg != null && exitDialg.isShowing()){
+			exitDialg.dismiss();
+			return;
+		}
+		if(exitDialg==null){
+			exitDialg = CustomProgressDialog.getPromptDialog2Btn(this, "此次为重要更新，需要更新后才能继续使用，确定退出么？","确定退出","取消",new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					UIUtil.showToastSafe("未安装更新，即将退出！");
+					HttpRequest.setShouldCancel(true);
+					AppManager.getAppManager().finishAllActivity();
+					BaseApplication.getInstance().exitApp(UpdateActivity.this);
+				}
+			},null);
+		}
+		exitDialg.show();
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		HttpRequest.setShouldCancel(true);
+		UIUtil.showToastSafe("已取消下载并退出");
+		AppManager.getAppManager().finishAllActivity();
+		super.onDestroy();
 	}
 }

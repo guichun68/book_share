@@ -536,6 +536,12 @@ public class UserPresenter extends IUserPresenter {
                 new String[]{"rRelUid","type","desc"},relUid,type,desc);
     }
 
+    @Override
+    public void deleteFromBlackList(String uid, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlDeleteFromBlackList,"未能成功删除",
+                new String[]{"uid"},uid);
+    }
+
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){
         if(argNames.length != values.length){
             throw new RuntimeException("参数个数不匹配--自定义异常");

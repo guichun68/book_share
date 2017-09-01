@@ -240,4 +240,6 @@ public abstract class IUserPresenter extends IPresenter{
 
     //举报
     public abstract void report(String uid, String type, String desc, CallBack callBack);
+    //从黑名单删除某人
+    public abstract void deleteFromBlackList(String uid, CallBack callBack);
 }

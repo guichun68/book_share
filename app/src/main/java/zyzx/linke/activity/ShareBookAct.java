@@ -1,7 +1,11 @@
 package zyzx.linke.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,6 +21,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -26,6 +31,7 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserBooks;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.UIUtil;
 
 /**
@@ -303,4 +309,68 @@ public class ShareBookAct extends BaseActivity {
         locationClient.startLocation();
     }
 
+
+    private boolean needCheckPermission = true;
+    @Override
+    protected void onResume() {
+        if(needCheckPermission){
+            checkPermissions(needPermissions);
+        }
+        super.onResume();
+    }
+
+    private static final int PERMISSON_REQUESTCODE = 0;
+    /**
+     * 需要进行检测的权限数组
+     */
+    protected String[] needPermissions = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,//--2
+            Manifest.permission.ACCESS_FINE_LOCATION//--2
+    };
+
+    private void checkPermissions(String... permissions) {
+        List<String> needRequestPermissonList = findDeniedPermissions(permissions);
+        if (null != needRequestPermissonList
+                && needRequestPermissonList.size() > 0) {
+            ActivityCompat.requestPermissions(this,
+                    needRequestPermissonList.toArray(
+                            new String[needRequestPermissonList.size()]),
+                    PERMISSON_REQUESTCODE);
+        }
+    }
+
+    private List<String> findDeniedPermissions(String[] permissions) {
+        List<String> needRequestPermissonList = new ArrayList<>();
+        for (String perm : permissions) {
+            if (ContextCompat.checkSelfPermission(this,
+                    perm) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, perm)) {
+                needRequestPermissonList.add(perm);
+            }
+        }
+        return needRequestPermissonList;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSON_REQUESTCODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+
+                } else {
+                    needCheckPermission = false;
+                    UIUtil.showToastSafe("您拒绝了定位权限，将使用默认位置。");
+//                    CustomProgressDialog.getPromptDialog(ShareBookAct.this,"",null).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
+    }
 }

@@ -39,13 +39,12 @@ public class CheckPermissionsActivity extends AppCompatActivity
 	 */
 	protected String[] needPermissions = {
 			Manifest.permission.SYSTEM_ALERT_WINDOW,
-			Manifest.permission.ACCESS_COARSE_LOCATION,
-			Manifest.permission.ACCESS_FINE_LOCATION,
-			Manifest.permission.WRITE_EXTERNAL_STORAGE,
-			Manifest.permission.READ_EXTERNAL_STORAGE,
+			Manifest.permission.ACCESS_COARSE_LOCATION,//--2
+			Manifest.permission.ACCESS_FINE_LOCATION,//--2
+			Manifest.permission.WRITE_EXTERNAL_STORAGE,//--3
+			Manifest.permission.READ_EXTERNAL_STORAGE,//--3
 			Manifest.permission.READ_PHONE_STATE,
-			Manifest.permission.CALL_PHONE,
-			Manifest.permission.CAMERA
+			Manifest.permission.CAMERA//--1
 			};
 	
 	private static final int PERMISSON_REQUESTCODE = 0;
@@ -91,7 +90,7 @@ public class CheckPermissionsActivity extends AppCompatActivity
 	 *
 	 */
 	private List<String> findDeniedPermissions(String[] permissions) {
-		List<String> needRequestPermissonList = new ArrayList<String>();
+		List<String> needRequestPermissonList = new ArrayList<>();
 		for (String perm : permissions) {
 			if (ContextCompat.checkSelfPermission(this,
 					perm) != PackageManager.PERMISSION_GRANTED

@@ -1,11 +1,14 @@
 package zyzx.linke.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
@@ -23,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.adapter.BaseVPAdapter;
@@ -230,25 +234,46 @@ public class PersonalCenterAct extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_camera:
-                    if (null == FileUtil.getImageFileLocation()) {
-                        UIUtil.showToastSafe("未检测到内存卡,无法拍照");
-                        return;
-                    }
-                    //检查是否有相机权限
-                    PackageManager pm = mContext.getPackageManager();
-                    boolean permission = (PackageManager.PERMISSION_GRANTED ==
-                            pm.checkPermission("android.permission.CAMERA", mContext.getPackageName()));
-                    if (permission) {
+                    List<String> needRequestPermisons = findDeniedPermissions(needCameraPermision);
+                    if (null != needRequestPermisons
+                            && needRequestPermisons.size() > 0) {
+                        UIUtil.showToastSafe("未能获取相机使用权限");
+                        ActivityCompat.requestPermissions(PersonalCenterAct.this,
+                                needRequestPermisons.toArray(
+                                        new String[needRequestPermisons.size()]),
+                                PERMISSON_CAMEAR);
+                    }else{
+                        if (null == FileUtil.getImageFileLocation()) {
+                            UIUtil.showToastSafe("未检测到内存卡,无法拍照");
+                            return;
+                        }
+                        //检查是否有相机权限
+                        PackageManager pm = mContext.getPackageManager();
+                        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                                pm.checkPermission("android.permission.CAMERA", mContext.getPackageName()));
+                        if (permission) {
 //                        imageUri = Uri.parse(FileUtil.getImageFileLocation());
-                        capture.dispatchTakePictureIntent(CapturePhoto.SHOT_IMAGE, requestCode);
-                        uimp.dismiss();
-                    }else {
-                        UIUtil.showToastSafe("未能获取相机权限,请在手机设置中赋予权限");
+                            capture.dispatchTakePictureIntent(CapturePhoto.SHOT_IMAGE, requestCode);
+                            uimp.dismiss();
+                        }else {
+                            UIUtil.showToastSafe("未能获取相机权限,请在手机设置中赋予权限");
+                        }
                     }
+
                     break;
                 case R.id.tv_photo:
-                    capture.dispatchTakePictureIntent(CapturePhoto.PICK_ALBUM_IMAGE, requestCode);
-                    uimp.dismiss();
+                    List<String> needRequestPermissonList = findDeniedPermissions(needPermissions);
+                    if (null != needRequestPermissonList
+                            && needRequestPermissonList.size() > 0) {
+                        UIUtil.showToastSafe("未能获取读SD卡权限");
+                        ActivityCompat.requestPermissions(PersonalCenterAct.this,
+                                needRequestPermissonList.toArray(
+                                        new String[needRequestPermissonList.size()]),
+                                PERMISSON_REQUESTCODE);
+                    }else{
+                        capture.dispatchTakePictureIntent(CapturePhoto.PICK_ALBUM_IMAGE, requestCode);
+                        uimp.dismiss();
+                    }
                     break;
             }
         }
@@ -403,5 +428,65 @@ public class PersonalCenterAct extends BaseActivity {
         finish();//此处一定要调用finish()方法
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
+    private static final int PERMISSON_REQUESTCODE = 0,PERMISSON_CAMEAR = 2;
+    /**
+     * 需要进行检测的权限数组
+     */
+    protected String[] needPermissions = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+    };
+
+    protected String[] needCameraPermision = {
+            Manifest.permission.CAMERA
+    };
+
+    private List<String> findDeniedPermissions(String[] permissions) {
+        List<String> needRequestPermissonList = new ArrayList<>();
+        for (String perm : permissions) {
+            if (ContextCompat.checkSelfPermission(this,
+                    perm) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, perm)) {
+                needRequestPermissonList.add(perm);
+            }
+        }
+        return needRequestPermissonList;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSON_REQUESTCODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+
+                } else {
+                    CustomProgressDialog.getPromptDialog(PersonalCenterAct.this,"未能获取读SD卡权限，请检查",null).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case PERMISSON_CAMEAR:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+                } else {
+                    CustomProgressDialog.getPromptDialog(PersonalCenterAct.this,"未能获取相机使用权限，请检查",null).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+        }
+    }
 }

@@ -112,6 +112,7 @@ public class ForceUpdateActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         HttpRequest.setShouldCancel(true);
+        UIUtil.showToastSafe("已取消下载并退出");
         AppManager.getAppManager().finishAllActivity();
         super.onDestroy();
     }
@@ -119,6 +120,7 @@ public class ForceUpdateActivity extends BaseActivity {
 
 
     private void download() {
+        HttpRequest.setShouldCancel(false);
         pb.setVisibility(View.VISIBLE);
         if(StringUtil.isEmpty(filePath)){
             try {

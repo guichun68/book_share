@@ -149,7 +149,7 @@ public class FriendHomePageAct extends BaseActivity {
                     return;
                 }
                 if(j.errorCode==2)
-                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加到黑名单成功",null).show();
+                    CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"已成功添加到黑名单",null).show();
                 else
                     CustomProgressDialog.getPromptDialog(FriendHomePageAct.this,"添加失败，请稍后再试",null).show();
                 break;
@@ -400,7 +400,7 @@ public class FriendHomePageAct extends BaseActivity {
     }
 
     private Boolean changeedGroup = false;
-    private int checkedRadioBtnId;
+    private int checkedRadioBtnId = R.id.rbLajiyingxiao;//默认选中垃圾营销
 
     class MyRadioGroupOnCheckedChangedListener implements RadioGroup.OnCheckedChangeListener {
         @Override

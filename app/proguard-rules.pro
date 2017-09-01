@@ -43,8 +43,39 @@
   public *;
 }
 
+#fastJson
+-keepattributes Singature   #避免混淆泛型
+-keepattributes *Annotation  #不混淆注释
+-keep class zyzx.linke.model.**{*;} #不混淆所有的zyzx.linke.model包下的类和这些类的所有成员变量
+
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+-keep class android.net.http.** { *; }
+-dontwarn android.net.http.**
 
 
+-ignorewarnings
+-keep class javax.ws.rs.** { *; }
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.** { *; }
+
+
+-keep class com.hyphenate.** {*;}
+-dontwarn  com.hyphenate.**
+-keep class com.superrtc.** {*;}
+
+-keep class zyzx.linke.presentation.** {*;}
+
+# support design
+#@link http://stackoverflow.com/a/31028536
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
+
+# 在混淆代码时默认会去掉class文件中的调试信息（源码的行号、源文件信息等），如需要要申明保持这些信息：
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
 #-keep class com.huawei.** { *; }
 #-dontwarn com.huawei.**
 #-keep class com.hianalytics.android.** {*;}

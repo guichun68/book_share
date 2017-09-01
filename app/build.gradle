@@ -7,8 +7,8 @@ android {
         applicationId "zyzx.linke"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.5.0 beta"
+        versionCode 7
+        versionName "1.7.0 beta"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //为了开启Java8
@@ -38,7 +38,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }*/
     //use legacy for android 6.0
-    useLibrary 'org.apache.http.legacy'
+//    useLibrary 'org.apache.http.legacy'
 
 
 

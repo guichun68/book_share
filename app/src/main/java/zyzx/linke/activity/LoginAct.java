@@ -1,11 +1,15 @@
 package zyzx.linke.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -27,6 +31,8 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
@@ -36,6 +42,7 @@ import zyzx.linke.base.GlobalParams;
 import zyzx.linke.db.UserDao;
 import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.UserVO;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -447,4 +454,71 @@ public class LoginAct extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private boolean needCheckPermission = true;
+    @Override
+    protected void onResume() {
+        if(needCheckPermission){
+            checkPermissions(needPermissions);
+        }
+        super.onResume();
+    }
+
+    private static final int PERMISSON_REQUESTCODE = 0;
+    /**
+     * 需要进行检测的权限数组
+     */
+    protected String[] needPermissions = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,//--2
+            Manifest.permission.ACCESS_FINE_LOCATION,//--2
+       /*     Manifest.permission.WRITE_EXTERNAL_STORAGE,//--3
+            Manifest.permission.READ_EXTERNAL_STORAGE,//--3
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CAMERA//--1*/
+    };
+
+    private void checkPermissions(String... permissions) {
+        List<String> needRequestPermissonList = findDeniedPermissions(permissions);
+        if (null != needRequestPermissonList
+                && needRequestPermissonList.size() > 0) {
+            ActivityCompat.requestPermissions(this,
+                    needRequestPermissonList.toArray(
+                            new String[needRequestPermissonList.size()]),
+                    PERMISSON_REQUESTCODE);
+        }
+    }
+
+    private List<String> findDeniedPermissions(String[] permissions) {
+        List<String> needRequestPermissonList = new ArrayList<>();
+        for (String perm : permissions) {
+            if (ContextCompat.checkSelfPermission(this,
+                    perm) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, perm)) {
+                needRequestPermissonList.add(perm);
+            }
+        }
+        return needRequestPermissonList;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSON_REQUESTCODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+
+                } else {
+                    needCheckPermission = false;
+                    CustomProgressDialog.getPromptDialog(LoginAct.this,"您拒绝了定位权限，APP将不能使用定位功能。",null).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
+    }
 }

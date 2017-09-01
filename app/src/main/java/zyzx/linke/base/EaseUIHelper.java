@@ -62,6 +62,7 @@ import zyzx.linke.model.easedomain.InviteMessage;
 import zyzx.linke.model.easedomain.InviteMessage.InviteMesageStatus;
 import zyzx.linke.model.easedomain.RobotUser;
 import zyzx.linke.receiver.CallReceiver;
+import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.PreferenceManager;
 import zyzx.linke.utils.StringUtil;
 
@@ -966,13 +967,16 @@ public class EaseUIHelper {
         /*if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
         }*/
-        if(user==null && message != null && !message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
+        if(message != null && !message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
             try {
                 String headIcon = message.getStringAttribute(MyEaseConstant.EXTRA_FROM_AVATAR);
                 String nickName = message.getStringAttribute(MyEaseConstant.EXTRA_FROM_NICKNAME);
                 EaseUser e = new EaseUser(message.getFrom());
                 e.setAvatar(headIcon);
                 e.setNickname(nickName);
+                if(user!=null){
+                    user.setAvatar(GlobalParams.BASE_URL+ BeanFactoryUtil.properties.getProperty("AvatarDirName")+headIcon);
+                }
                 HXUserDao.getInstance().saveContact(e);
                 contactList.put(username,e);
             } catch (HyphenateException e) {

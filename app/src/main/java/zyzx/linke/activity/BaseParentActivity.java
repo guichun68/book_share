@@ -10,7 +10,7 @@ import zyzx.linke.utils.NetworkUtil;
 import zyzx.linke.utils.UIUtil;
 
 
-public abstract class BaseParentActivity extends CheckPermissionsActivity{
+public abstract class BaseParentActivity extends AppCompatActivity{
     private static BaseParentActivity mForegroundActivity;
     protected LayoutInflater mInflater;
     protected Context mContext;

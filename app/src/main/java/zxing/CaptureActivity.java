@@ -1,10 +1,13 @@
 package zxing;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,6 +18,8 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -32,6 +37,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import zxing.camera.CameraManager;
@@ -40,6 +47,8 @@ import zxing.decoding.InactivityTimer;
 import zxing.view.ViewfinderView;
 import zyzx.linke.R;
 import zyzx.linke.activity.ScanBookDetailAct;
+import zyzx.linke.utils.CustomProgressDialog;
+import zyzx.linke.utils.UIUtil;
 //import com.zxing.android.camera.CameraManager;
 //import com.zxing.android.decoding.CaptureActivityHandler;
 //import com.zxing.android.decoding.InactivityTimer;
@@ -124,6 +133,9 @@ public class CaptureActivity extends Activity implements Callback {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if(needCheckPermission){
+			checkPermissions(needPermissions);
+		}
 		if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
@@ -379,4 +391,59 @@ public class CaptureActivity extends Activity implements Callback {
 		return super.onKeyDown(keyCode, event);
 	}
 
+
+	private boolean needCheckPermission = true;
+
+	private static final int PERMISSON_REQUESTCODE = 0;
+	/**
+	 * 需要进行检测的权限数组
+	 */
+	protected String[] needPermissions = {
+       /*     Manifest.permission.WRITE_EXTERNAL_STORAGE,//--3
+            Manifest.permission.READ_EXTERNAL_STORAGE,//--3
+            Manifest.permission.READ_PHONE_STATE,*/
+            Manifest.permission.CAMERA//--1
+	};
+
+	private void checkPermissions(String... permissions) {
+		List<String> needRequestPermissonList = findDeniedPermissions(permissions);
+		if (null != needRequestPermissonList
+				&& needRequestPermissonList.size() > 0) {
+			ActivityCompat.requestPermissions(this,
+					needRequestPermissonList.toArray(
+							new String[needRequestPermissonList.size()]),
+					PERMISSON_REQUESTCODE);
+		}
+	}
+
+	private List<String> findDeniedPermissions(String[] permissions) {
+		List<String> needRequestPermissonList = new ArrayList<>();
+		for (String perm : permissions) {
+			if (ContextCompat.checkSelfPermission(this,
+					perm) != PackageManager.PERMISSION_GRANTED
+					|| ActivityCompat.shouldShowRequestPermissionRationale(
+					this, perm)) {
+				needRequestPermissonList.add(perm);
+			}
+		}
+		return needRequestPermissonList;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSON_REQUESTCODE: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// permission was granted, yay!
+				} else {
+					needCheckPermission = false;
+					UIUtil.showToastSafe("未能获取相机权限，请检查");
+				}
+				return;
+			}
+		}
+	}
 }

@@ -1,12 +1,15 @@
 package zyzx.linke.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -16,6 +19,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -37,6 +41,7 @@ import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.UserSimple;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.GlideCircleTransform;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
@@ -54,14 +59,17 @@ public class BlackListAct extends BaseActivity {
     private BlackListAdapter mAdapter;
     private ArrayList<UserSimple> mBlacks;
     private int mPageNum;
-    private final int SUCCESS = 0x47B,FAILURE = 0xB52;
+    private final int SUCCESS = 0x47B,FAILURE = 0xB52,
+    /*从黑名单删除成功否回调标识*/
+    SUCCESS_DELETE = 0x478B,FAILURE_DELETE=0x345;
     private boolean isRefreshing = true;
     private PopupWindow pop;
-
+    private int mWindowWidth;
 
     private MyHandler handler = new MyHandler(this);
 
     private void myHandleMessage(Message msg){
+        dismissProgress();
         switch (msg.what){
             case SUCCESS:
                 String resp = (String) msg.obj;
@@ -78,7 +86,11 @@ public class BlackListAct extends BaseActivity {
                         if(isRefreshing){
                             mBlacks.clear();
                             mBlacks.addAll(tempBlackList);
-                            mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+                            if(tempBlackList.isEmpty()){
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
+                            }else{
+                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
+                            }
                         }else{
                             if(tempBlackList.isEmpty()){
                                 mPageNum--;
@@ -109,6 +121,32 @@ public class BlackListAct extends BaseActivity {
                 dismissLoading();
                 mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_LOADING_END);
                 break;
+            case SUCCESS_DELETE:
+                if(mPromptDialog!=null && mPromptDialog.isShowing()){
+                    mPromptDialog.dismiss();
+                }
+                ResponseJson rj = new ResponseJson((String) msg.obj);
+                if(ResponseJson.NO_DATA == rj.errorCode){
+                    UIUtil.showToastSafe("删除失败");
+                    return;
+                }
+                if(rj.errorCode == 2){
+                    UIUtil.showToastSafe("删除成功");
+                    mBlacks.remove(msg.arg1);
+                    mAdapter.notifyItemChanged(msg.arg1);
+                    if(mBlacks.isEmpty()){
+                        mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
+                    }
+                }else{
+                    UIUtil.showToastSafe("删除失败");
+                }
+                break;
+            case FAILURE_DELETE:
+                if(mPromptDialog!=null && mPromptDialog.isShowing()){
+                    mPromptDialog.dismiss();
+                }
+                CustomProgressDialog.getPromptDialog(this,"未能成功删除",null).show();
+                break;
         }
     }
 
@@ -123,6 +161,11 @@ public class BlackListAct extends BaseActivity {
         if(mBlacks == null){
             mBlacks = new ArrayList<>();
         }
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        mWindowWidth = size.x;
 
         mRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);
         mAdapter = new BlackListAdapter(this, mBlacks,R.layout.item_user,R.layout.view_footer,R.id.load_progress,R.id.tv_tip);
@@ -154,7 +197,7 @@ public class BlackListAct extends BaseActivity {
         }
 
         @Override
-        public void convert(MyViewHolder holder, final UserSimple userSimple, int position) {
+        public void convert(MyViewHolder holder, final UserSimple userSimple, final int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
                 holder.setText(R.id.tv_user_name,userSimple.getUserName());
                 if(StringUtil.isEmpty(userSimple.getHeadIcon())){
@@ -177,9 +220,9 @@ public class BlackListAct extends BaseActivity {
                     public boolean onLongClick(View v) {
                         View popView = View.inflate(mContext, R.layout.pop_modify_book, null);
 
-                        /*setPopwinViewControls(popView, bookDetailVO, position);
+                        setPopwinViewControls(popView, userSimple, position);
                         //测量布局的大小
-                        popView.measure(0, 0);view.getMeasuredHeight();
+                        popView.measure(0, 0);
                         int popWidth = popView.getMeasuredWidth();
                         int popHeight = popView.getMeasuredHeight();
                         pop = new PopupWindow(popView);
@@ -191,11 +234,11 @@ public class BlackListAct extends BaseActivity {
                         pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         pop.setContentView(popView);
                         int[] location = new int[2];
-                        view.getLocationInWindow(location);
-                        if(popHeight<view.getMeasuredHeight()){
-                            pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
+                        v.getLocationInWindow(location);
+                        if(popHeight<v.getMeasuredHeight()){
+                            pop.showAtLocation(v, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] + UIUtil.dip2px(10));
                         }else{
-                            pop.showAtLocation(view, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-view.getMeasuredHeight())/2));
+                            pop.showAtLocation(v, Gravity.TOP + Gravity.START, mWindowWidth / 2 - popWidth / 2, location[1] -((popHeight-v.getMeasuredHeight())/2));
                         }
                         AlphaAnimation aa = new AlphaAnimation(0.2f, 1.0f);
                         aa.setDuration(100);
@@ -205,13 +248,62 @@ public class BlackListAct extends BaseActivity {
                         AnimationSet set = new AnimationSet(false);
                         set.addAnimation(aa);
                         set.addAnimation(sa);
-                        popView.startAnimation(set);*/
+                        popView.startAnimation(set);
                         return true;
                     }
                 });
             }
         }
     }
+
+    private Dialog mPromptDialog;
+    /**
+     * 初始化并设置popupWin中的控件
+     *
+     * @param popView      popWindow View
+     * @param bookDetailVO book detail bean
+     */
+    private void setPopwinViewControls(final View popView, final UserSimple bookDetailVO, final int position) {
+
+        final TextView item1 = (TextView) popView.findViewById(R.id.tv_item1);//删除
+        final TextView item2 = (TextView) popView.findViewById(R.id.tv_item2);//分享
+        popView.findViewById(R.id.line1).setVisibility(View.INVISIBLE);
+        popView.findViewById(R.id.line2).setVisibility(View.INVISIBLE);
+        final TextView item3 = (TextView) popView.findViewById(R.id.tv_item3);//交换
+                item1.setText("从黑名单删除");
+                item2.setVisibility(View.GONE);
+                item3.setVisibility(View.GONE);
+                item1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(BlackListAct.this, "确定要将" + bookDetailVO.getUserName() + "从黑名单删除么?", "确定", "取消",
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        showDefProgress();
+                                        getUserPresenter().deleteFromBlackList(bookDetailVO.getUid(),new CallBack(){
+                                            @Override
+                                            public void onSuccess(Object obj, int... code) {
+                                                Message msg = handler.obtainMessage(SUCCESS_DELETE);
+                                                msg.obj = obj;
+                                                msg.arg1 = position;
+                                                handler.sendMessage(msg);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Object obj, int... code) {
+                                                handler.sendEmptyMessage(FAILURE_DELETE);
+                                            }
+                                        });
+                                    }
+                                }, null);
+                        mPromptDialog.show();
+                    }
+                });
+
+    }
+
 
     private void getData(int pageNum){
         getBookPresenter().getMyBlackList(pageNum, new CallBack() {
