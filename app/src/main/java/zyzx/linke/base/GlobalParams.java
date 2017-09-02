@@ -85,9 +85,9 @@ public class GlobalParams {
 	//保存用户信息
 	public static String urlSaveUserInfo = GlobalParams.BASE_URL+"/user/mobileSDK/saveUserInfo.action";
 	//验证短信验证码正确否的url
-	public static String urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
+	public static String urlVerifyForgotPswSMSCode = GlobalParams.BASE_URL+"/user/mobileSDK/verifyForgotPSWSMSCode.action";
 	//重置密码
-	public static String urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
+	public static String urlResetPsw = GlobalParams.BASE_URL+"/user/mobileSDK/resetPsw.action";
 	//localhost//
 	public static String urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";
 	//添加到黑名单
@@ -111,7 +111,7 @@ public class GlobalParams {
 
 	public static String urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
 	//忘记密码页发送验证码
-	public static String urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
+	public static String urlForgetPSWSms = GlobalParams.BASE_URL+"/user/mobileSDK/sendForgetPSWSMS.action";
 	public static String urlGetUserInfoByUserId = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfo&page.searchValue.userid=#&page.pageSize=1&page.curPage=1";
 	public static String urlGetUserInfoByUid = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getUserInfoByUid&page.searchValue.uid=#&page.pageSize=1&page.curPage=1";
 	public static String urlGetUserInfoByUid2 = GlobalParams.BASE_URL+"/user/mobileSDK/getUserInfo.action";
@@ -249,7 +249,7 @@ public class GlobalParams {
         urlGetMyBorrowedInBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getUserBorrowedBooks.action";
 		urlGetSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getSwapSkills.action";
 		urlSearchFriend = GlobalParams.BASE_URL+"/zyzx/searchFriend.action";
-		urlGetMySwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/getMySwapSkills.action";
+		urlGetMySwapSkills = GlobalParams.BASE_URL+"/user/mobileSDK/getMySwapSkills.action";
 		urlSearchBooks = GlobalParams.BASE_URL+"/user/mobileSDK/searchBook.action";
 		urlSearchSwapBooks = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapBook.action";
 		urlSearchSwapSkills = GlobalParams.BASE_URL+"/app/mobileSDK/searchSwapSkill.action";
@@ -265,9 +265,9 @@ public class GlobalParams {
 		urlCheckIfIMInBlackList = GlobalParams.BASE_URL+"/user/checkIfinBlackList.action";
 		urlAddFriend = GlobalParams.BASE_URL+"/user/addFriend.action";
         urlGetUserInfoInConversation = GlobalParams.BASE_URL+"/user/getUserInfoInConversation.action";
-		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/sendForgetPSWSMS.action";
-		urlVerifySMSCode = GlobalParams.BASE_URL+"/zyzx/verifySMSCode.action";
-		urlResetPsw = GlobalParams.BASE_URL+"/user/resetPsw.action";
+		urlForgetPSWSms = GlobalParams.BASE_URL+"/user/mobileSDK/sendForgetPSWSMS.action";
+		urlVerifyForgotPswSMSCode = GlobalParams.BASE_URL+"/user/mobileSDK/verifyForgotPSWSMSCode.action";
+		urlResetPsw = GlobalParams.BASE_URL+"/user/mobileSDK/resetPsw.action";
 		urlModifyPsw = GlobalParams.BASE_URL+"/user/mobileSDK/modifyPsw.action";
 		urlFeedBack = GlobalParams.BASE_URL+"/user/mobileSDK/feedback.action";
 		urlExportExcle = GlobalParams.BASE_URL+"/user/mobileSDK/getSummary.action";

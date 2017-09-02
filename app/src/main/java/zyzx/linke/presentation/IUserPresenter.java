@@ -118,12 +118,11 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void getUserInfoInConversation(String userId, CallBack callBack);
 
     /**
-     * 验证短信验证码是否正确
+     * 验证短信验证码是否正确(忘记密码时找回密码流程)
      * @param verifyCode 短信验证码
-     * @param type 验证码类型：1注册； 2忘记密码 ； 3短信登录
      * @param callBack
      */
-    public abstract void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack);
+    public abstract void verifyForgotPSWSMSCode(String uid,String verifyCode, CallBack callBack);
 
     /**
      * 重置密码

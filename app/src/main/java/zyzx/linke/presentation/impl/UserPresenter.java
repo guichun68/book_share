@@ -53,6 +53,9 @@ public class UserPresenter extends IUserPresenter {
                                 ResponseJson rj = new ResponseJson(response);
                                 if(ResponseJson.NO_DATA == rj.errorCode){
                                     Log.e("failure","登录失败");
+                                    if(viewCallBack!=null){
+                                        viewCallBack.onFailure(rj.errorCode);
+                                    }
                                     return;
                                 }
                                 switch (rj.errorCode){
@@ -87,8 +90,8 @@ public class UserPresenter extends IUserPresenter {
                                     case 0:
                                         Log.e("failure","登录失败");
                                         if(viewCallBack!=null) {
-                                            viewCallBack.onFailure(rj.errorMsg);
-                                        }
+                                        viewCallBack.onFailure(rj.errorMsg);
+                                    }
                                         break;
                                     default:
                                         if(viewCallBack!=null){
@@ -337,16 +340,16 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void verifySMSCode(String verifyCode, int userId,int type, CallBack callBack) {
-        getDataWithPost(callBack,GlobalParams.urlVerifySMSCode,"请求失败，请稍后重试!",
-                new String[]{"verify_code","verify_type","user_id"},
-                verifyCode,type,userId);
+    public void verifyForgotPSWSMSCode(String uid,String verifyCode, CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlVerifyForgotPswSMSCode,"请求失败，请稍后重试!",
+                new String[]{"verify_code","uid"},
+                verifyCode,uid);
     }
 
     @Override
     public void resetPsw(String userId,String newPsw, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlResetPsw,"请求失败，请稍后重试!",
-                new String[]{"new_psw","user_id"},
+                new String[]{"newPsw","uid"},
                 newPsw,userId);
     }
 

@@ -251,7 +251,7 @@ public class SwapSkillSearchResultAct extends BaseActivity {
         @Override
         public void convert(MyViewHolder holder, final SwapSkillVo ssVO, int position) {
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
-                holder.setText(R.id.tv_title,ssVO.getSkillTitle());
+                holder.setText(R.id.tv_publisher,ssVO.getSkillTitle());
                 holder.setText(R.id.tv_want,StringUtil.isEmpty(ssVO.getSkillWantName())?"现金交换":ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){

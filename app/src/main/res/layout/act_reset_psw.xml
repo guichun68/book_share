@@ -21,7 +21,7 @@
             android:paddingStart="5dp"
             android:paddingEnd="1dp"
             android:gravity="center"
-            android:text="@string/password"
+            android:text="@string/newPsw"
             android:id="@+id/textView" />
 
         <View

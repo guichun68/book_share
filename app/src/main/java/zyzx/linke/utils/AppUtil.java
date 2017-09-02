@@ -634,7 +634,7 @@ public class AppUtil {
 		ArrayList<SwapBookVO> result = new ArrayList<>();
 		for (int i = 0; i < items.size(); i++) {
 			SwapBookVO sbVO = new SwapBookVO();
-			JSONObject jo = (JSONObject) items.get(i);
+			JSONObject jo = items.get(i);
 			sbVO.setUserBookId(jo.getString("id"));
 			sbVO.setUserId(jo.getString("user_id"));
 			sbVO.setBookTitle(jo.getString("title"));
@@ -644,6 +644,7 @@ public class AppUtil {
 			sbVO.setSwapBookAuthor(jo.getString("swap_book_author"));
 			sbVO.setSwapMsg(jo.getString("swap_msg"));
 			sbVO.setBookAuthor(jo.getString("a_name"));
+			sbVO.setSwapperName(jo.getString("login_name"));
 			result.add(sbVO);
 		}
 		return result;

@@ -214,7 +214,7 @@ public class MySkillSwapsAct extends BaseActivity {
         public void convert(MyViewHolder holder, final SwapSkillVo ssVO, final int position) {
             super.convert(holder, ssVO, position);
             if(holder.getHolderType()==MyViewHolder.HOLDER_TYPE_NORMAL){
-                holder.setText(R.id.tv_title,ssVO.getSkillTitle());
+                holder.setText(R.id.tv_publisher,ssVO.getSkillTitle());
                 holder.setText(R.id.tv_want,ssVO.getSkillWantName());
                 holder.setText(R.id.tv_have,ssVO.getSkillHaveName());
                 if(StringUtil.isEmpty(ssVO.getHeadIcon())){

@@ -12,6 +12,8 @@ import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.UIUtil;
 
@@ -63,17 +65,23 @@ public class ResetPswAct extends BaseActivity{
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        String json = (String) obj;
-                        if(StringUtil.isEmpty(json)){
-                            UIUtil.showToastSafe(R.string.err_request);
+                        ResponseJson rj = new ResponseJson((String) obj);
+                        if(ResponseJson.NO_DATA == rj.errorCode){
+                            UIUtil.showToastSafe("网络错误，请稍后重试");
                             return;
                         }
-                        JSONObject jsonObj = JSON.parseObject(json);
-                        if(code[0] == 200){
-                            UIUtil.showToastSafe("重置成功,请重新登录");
-                            finish();
-                        }else{
-                            UIUtil.showToastSafe("重置密码错误，code="+code);
+                        switch (rj.errorCode){
+                            case 2:
+                                UIUtil.showToastSafe("修改成功");
+                                finish();
+                                break;
+                            case 3:
+                                CustomProgressDialog.getPromptDialog(ResetPswAct.this,"新密码不能与旧密码相同",null).show();
+                                UIUtil.showToastSafe("新密码不能与旧密码相同");
+                                break;
+                            default:
+                                UIUtil.showToastSafe("修改失败，请稍后重试");
+                                break;
                         }
                     }
 

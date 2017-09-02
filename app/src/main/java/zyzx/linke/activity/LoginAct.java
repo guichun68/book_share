@@ -179,8 +179,12 @@ public class LoginAct extends BaseActivity {
                     @Override
                     public void onFailure(Object obj, int... code) {
                         dismissProgress();
-//                        UIUtil.showToastSafe("用户名或密码错误.");
-                        UIUtil.showToastSafe((String) obj);
+                        if(obj instanceof String) {
+                            UIUtil.showToastSafe((String) obj);
+                        }else{
+                            UIUtil.showToastSafe("登陆失败");
+                        }
+
                     }
                 });
 

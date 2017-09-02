@@ -10,13 +10,14 @@ import android.os.Parcelable;
 public class SwapBookVO implements Parcelable{
     private String userBookId;
     private String userId;//uuid
-    private String bookTitle;
-    private String bookImageLarge;
+    private String bookTitle;//交换标题
+    private String bookImageLarge;//拥有的图书封面
     private String swapId;
-    private String swapBookTitle;
-    private String swapBookAuthor;
-    private String swapMsg;
-    private String bookAuthor;
+    private String swapBookTitle;//要交换的书的封面
+    private String swapBookAuthor;//要交换书的作者
+    private String swapMsg;//交换留言
+    private String bookAuthor;//拥有的书的作者
+    private String swapperName;//交换人的用户名
 
     public SwapBookVO(){
 
@@ -32,6 +33,7 @@ public class SwapBookVO implements Parcelable{
         swapMsg = in.readString();
         bookAuthor = in.readString();
         userBookId = in.readString();
+        swapperName = in.readString();
     }
 
     @Override
@@ -45,6 +47,7 @@ public class SwapBookVO implements Parcelable{
         dest.writeString(swapMsg);
         dest.writeString(bookAuthor);
         dest.writeString(userBookId);
+        dest.writeString(swapperName);
     }
 
     @Override
@@ -134,5 +137,13 @@ public class SwapBookVO implements Parcelable{
 
     public void setUserBookId(String userBookId) {
         this.userBookId = userBookId;
+    }
+
+    public String getSwapperName() {
+        return swapperName;
+    }
+
+    public void setSwapperName(String swapperName) {
+        this.swapperName = swapperName;
     }
 }

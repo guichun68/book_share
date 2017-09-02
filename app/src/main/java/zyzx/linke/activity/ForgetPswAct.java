@@ -1,7 +1,6 @@
 package zyzx.linke.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -11,13 +10,18 @@ import android.view.View;
 import android.widget.Button;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
+import java.util.Map;
 
 import zyzx.linke.R;
 import zyzx.linke.base.BaseActivity;
 import zyzx.linke.global.BundleFlag;
 import zyzx.linke.model.CallBack;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.utils.CheckPhone;
+import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
 import zyzx.linke.utils.TimeUtils;
 import zyzx.linke.utils.UIUtil;
@@ -30,7 +34,7 @@ import zyzx.linke.utils.UIUtil;
 public class ForgetPswAct extends BaseActivity{
     private Button btnNextPage,btnSendVerifyCode;
     private AppCompatEditText etPhone,etVerifycode;
-    private Integer mUserId;
+    private String mUserId;
 
     @Override
     protected int getLayoutId() {
@@ -75,31 +79,30 @@ public class ForgetPswAct extends BaseActivity{
                     etVerifycode.setError("请输入验证码");
                     return;
                 }
-                if(mUserId==null){
+                if(StringUtil.isEmpty(mUserId)){
                     UIUtil.showToastSafe("请先验证手机号");
                     return;
                 }
                 showProgress("请稍后…");
-                getUserPresenter().verifySMSCode(etVerifycode.getText().toString(),mUserId.intValue(),2,new CallBack(){
+                getUserPresenter().verifyForgotPSWSMSCode(mUserId,etVerifycode.getText().toString(),new CallBack(){
 
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        String json = (String) obj;
-                        if(StringUtil.isEmpty(json)){
-                            UIUtil.showToastSafe(R.string.err_request);
+                        ResponseJson rj = new ResponseJson((String) obj);
+                        if(ResponseJson.NO_DATA == rj.errorCode){
+                            UIUtil.showToastSafe("访问错误，请重试");
                             return;
                         }
-                        JSONObject jsonObj = JSON.parseObject(json);
-                        int code2 = jsonObj.getInteger("code");
-                        if(code2 ==200){
-                            Bundle bundle = new Bundle();
-                            bundle.putString(BundleFlag.UID,String.valueOf(mUserId));
-                            gotoActivity(ResetPswAct.class,true,bundle);
-                        }else if(code2 ==500){
-                            UIUtil.showToastSafe("验证码错误或已过期");
-                        }else{
-                            UIUtil.showToastSafe(R.string.err_request);
+                        switch (rj.errorCode){
+                            case 2:
+                                Bundle bundle = new Bundle();
+                                bundle.putString(BundleFlag.UID,String.valueOf(mUserId));
+                                gotoActivity(ResetPswAct.class,true,bundle);
+                                break;
+                            case 3:
+                                UIUtil.showToastSafe("验证码错误或已过期");
+                                break;
                         }
                     }
 
@@ -121,24 +124,29 @@ public class ForgetPswAct extends BaseActivity{
                     @Override
                     public void onSuccess(Object obj, int... code) {
                         dismissProgress();
-                        String json = (String) obj;
-                        if(StringUtil.isEmpty(json)){
-                            UIUtil.showToastSafe("未能成功发送短信,请稍后再试");
+                        ResponseJson rj = new ResponseJson((String) obj);
+                        if(ResponseJson.NO_DATA == rj.errorCode){
+                            UIUtil.showToastSafe("发送失败");
                             return;
                         }
-                        JSONObject jsonObj = JSON.parseObject(json);
-                        int code2 = jsonObj.getInteger("code");
-
-                        switch (code2){
-                            case 200://发送成功
+                        switch (rj.errorCode){
+                            case 2:
                                 tu.runTimer();
-                                mUserId = jsonObj.getInteger("uid");
+                                mUserId = (String)((Map)rj.data.get(0)).get("uid");
+                                UIUtil.showToastSafe("短信已发送，请查收");
                                 break;
-                            case 404://手机号对应用户不存在
-                                UIUtil.showToastSafe("手机号对应用户不存在");
+                            case 3:
+                                CustomProgressDialog.getPromptDialog(ForgetPswAct.this,"该手机号对应用户不存在",null).show();
                                 break;
-                            default://发送失败
-                                Snackbar.make(btnSendVerifyCode,"未能成功发送短信,请稍后再试",Snackbar.LENGTH_LONG).show();
+                            case 4:
+                                UIUtil.showToastSafe("服务器错误，请联系管理员");
+                                break;
+                            case 7:
+                                CustomProgressDialog.getPromptDialog(ForgetPswAct.this,"该手机号短信验证过于频繁，请稍后再试",null).show();
+                                break;
+                            case 5:
+                            case 11:
+                                UIUtil.showToastSafe("发送失败，请稍后再试");
                                 break;
                         }
                     }
@@ -146,8 +154,8 @@ public class ForgetPswAct extends BaseActivity{
                     @Override
                     public void onFailure(Object obj, int... code) {
                         dismissProgress();
-                        UIUtil.showToastSafe("未能成功发送.");
-                        UIUtil.showTestLog("zyzx","sms verifyCode send failure.");
+                        UIUtil.showToastSafe("发送失败.");
+                        UIUtil.showTestLog("shareBook","sms verifyCode send failure.");
                     }
                 });
                 break;
