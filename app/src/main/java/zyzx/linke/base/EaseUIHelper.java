@@ -974,10 +974,21 @@ public class EaseUIHelper {
                 EaseUser e = new EaseUser(message.getFrom());
                 e.setAvatar(headIcon);
                 e.setNickname(nickName);
-                if(user!=null){
-                    user.setAvatar(GlobalParams.BASE_URL+ BeanFactoryUtil.properties.getProperty("AvatarDirName")+headIcon);
+                if(headIcon.contains("http")){
+                    e.setAvatar(StringUtil.getExtraName(headIcon));
                 }
                 HXUserDao.getInstance().saveContact(e);
+
+                if(user!=null){
+                    if(!user.getAvatar().contains("http")) {
+                        user.setAvatar(GlobalParams.BASE_URL + BeanFactoryUtil.properties.getProperty("AvatarDirName") + headIcon);
+                    }else{
+                        user.setAvatar(headIcon);
+                    }
+                }else{
+                    user = new EaseUser(username);
+                    user.setAvatar(headIcon);
+                }
                 contactList.put(username,e);
             } catch (HyphenateException e) {
                 e.printStackTrace();

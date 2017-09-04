@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class BorrowBookDetail extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
         ivBookImage.setOnClickListener(this);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);

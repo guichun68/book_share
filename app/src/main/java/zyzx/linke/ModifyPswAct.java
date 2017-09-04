@@ -3,6 +3,7 @@ package zyzx.linke;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.alibaba.fastjson.JSON;
@@ -31,6 +32,7 @@ public class ModifyPswAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("修改密码");
         etOldPsw = (AppCompatEditText) findViewById(R.id.aet_old_psw);
         etNewPsw = (AppCompatEditText) findViewById(R.id.aet_new_psw);

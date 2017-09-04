@@ -3,6 +3,7 @@ package zyzx.linke.activity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import zyzx.linke.R;
@@ -28,6 +29,7 @@ public class RegisterAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("用户注册");
         //aetLoginName,aetPhone,aetPsw,aetRePsw;
         aetLoginName = (AppCompatEditText) findViewById(R.id.aet_login_name);

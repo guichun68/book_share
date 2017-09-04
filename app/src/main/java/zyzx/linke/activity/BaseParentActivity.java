@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 
 import zyzx.linke.utils.NetworkUtil;
 import zyzx.linke.utils.UIUtil;

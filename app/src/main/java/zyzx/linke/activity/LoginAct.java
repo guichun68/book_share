@@ -19,6 +19,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.util.ArrayMap;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -117,7 +118,7 @@ public class LoginAct extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 //        ShareSDK.initSDK(mContext);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("用户登录");
         mBackBtn.setVisibility(View.INVISIBLE);
 

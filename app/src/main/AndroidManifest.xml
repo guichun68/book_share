@@ -216,7 +216,8 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:theme="@style/dialogstyle"
-            />
+            android:windowCloseOnTouchOutside="false"
+        />
 <!--
         <activity
             android:name=".base.ForceUpdateActivity"
@@ -231,7 +232,8 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:theme="@style/dialogstyle"
-            />
+            android:windowCloseOnTouchOutside="false"
+        />
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>

@@ -7,11 +7,8 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 
@@ -43,6 +40,7 @@ public class ForgetPswAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText(R.string.forget_psw_title);
         btnNextPage = (Button) findViewById(R.id.btn_next_page);
         etPhone = (AppCompatEditText) findViewById(R.id.aet_phone);

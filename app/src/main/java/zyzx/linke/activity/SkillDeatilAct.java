@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -22,7 +22,6 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.SwapSkillVo;
-import zyzx.linke.model.bean.UserInfoResult;
 import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
@@ -130,6 +129,7 @@ public class SkillDeatilAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("技能交换详情");
         tvPublisher = (TextView) findViewById(R.id.tv_publisher);
         tvPublisher.setClickable(true);

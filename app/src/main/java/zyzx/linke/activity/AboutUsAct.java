@@ -2,6 +2,7 @@ package zyzx.linke.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,6 +29,7 @@ public class AboutUsAct extends BaseActivity {
     }
 
     public void initView(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ((TextView) findViewById(R.id.version)).setText("当前版本："+AppUtil.getAppVersionName(this));
         mRightBtn.setVisibility(View.VISIBLE);
 

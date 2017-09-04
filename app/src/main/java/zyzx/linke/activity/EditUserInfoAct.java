@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -231,6 +232,7 @@ public class EditUserInfoAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         progress = CustomProgressDialog.getNewProgressBarNoTip(this);
         mUser = GlobalParams.getLastLoginUser();
         mTitleText.setText("基本资料编辑");

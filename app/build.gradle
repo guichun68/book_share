@@ -7,8 +7,8 @@ android {
         applicationId "zyzx.linke"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 8
-        versionName "1.8.0 beta"
+        versionCode 9
+        versionName "1.9.0 beta"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //为了开启Java8

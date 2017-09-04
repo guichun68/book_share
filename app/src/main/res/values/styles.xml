@@ -1,10 +1,11 @@
 <resources>
 
     <style name="title_bar_style">
-        <item name="android:background">@color/title</item>
+        <item name="android:src">@mipmap/login_bg</item>
         <item name="android:paddingLeft">0.0dip</item>
         <item name="android:paddingRight">0.0dip</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:scaleType">matrix</item>
         <item name="android:layout_height">@dimen/height_top_bar</item>
     </style>
     <!--?attr/actionBarSize-->

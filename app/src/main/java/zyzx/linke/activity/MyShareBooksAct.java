@@ -12,6 +12,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -64,6 +65,7 @@ public class MyShareBooksAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
                 android.R.color.holo_red_light,android.R.color.holo_orange_light,

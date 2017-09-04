@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.OrientationHelper;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.hyphenate.chat.EMClient;
 
@@ -43,6 +44,7 @@ public class BorrowedInBookAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.title,
                 android.R.color.holo_red_light,android.R.color.holo_orange_light,

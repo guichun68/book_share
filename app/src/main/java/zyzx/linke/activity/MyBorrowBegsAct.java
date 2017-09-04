@@ -2,6 +2,7 @@ package zyzx.linke.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class MyBorrowBegsAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         MyRecyclerViewWapper myRecyclerView;
         mTitleText.setText("求借求赠送记录");
         myRecyclerView = (MyRecyclerViewWapper) findViewById(R.id.recyclerView);

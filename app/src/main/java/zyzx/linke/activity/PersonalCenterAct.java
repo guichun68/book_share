@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -79,6 +80,7 @@ public class PersonalCenterAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("个人资料");
         mCiv = (CircleImageView)findViewById(R.id.civ);
         mCiv.setOnClickListener(this);

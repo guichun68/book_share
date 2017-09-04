@@ -76,7 +76,7 @@ public class ResetPswAct extends BaseActivity{
                                 finish();
                                 break;
                             case 3:
-                                CustomProgressDialog.getPromptDialog(ResetPswAct.this,"新密码不能与旧密码相同",null).show();
+//                                CustomProgressDialog.getPromptDialog(ResetPswAct.this,"新密码不能与旧密码相同",null).show();
                                 UIUtil.showToastSafe("新密码不能与旧密码相同");
                                 break;
                             default:

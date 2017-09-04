@@ -7,6 +7,7 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -40,6 +41,7 @@ public class FeedBackAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mEtContactWay = (EditText) findViewById(R.id.et_contact);
         SpannableString ss = new SpannableString("QQ、Email、电话、MSN等");
         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(16, true);

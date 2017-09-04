@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -167,6 +168,7 @@ public class FriendHomePageAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("书友信息");
         tvGender = (TextView) findViewById(R.id.tv_gender);
         ivHeadIcon = (CircleImageView) findViewById(R.id.iv_icon);

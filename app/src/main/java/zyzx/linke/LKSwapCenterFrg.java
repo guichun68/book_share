@@ -78,9 +78,12 @@ public class LKSwapCenterFrg extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        ((BookPage)bookExchangePage).getHandler().removeCallbacksAndMessages(null);
+        if(bookExchangePage!=null) {
+            if (((BookPage) bookExchangePage).getHandler() != null){
+                ((BookPage) bookExchangePage).getHandler().removeCallbacksAndMessages(null);
+            }
+        }
         super.onDestroy();
-
     }
 
 

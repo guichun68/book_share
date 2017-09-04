@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -113,6 +114,7 @@ public class SkillInputAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("发布技能交换");
         spSkillClassify = (Spinner) findViewById(R.id.sp_skill_classify);
         spSwapClassify = (Spinner) findViewById(R.id.sp_swap_skill_type);

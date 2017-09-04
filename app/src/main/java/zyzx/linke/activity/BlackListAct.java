@@ -12,6 +12,7 @@ import android.os.Message;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -157,6 +158,7 @@ public class BlackListAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("我的黑名单");
         if(mBlacks == null){
             mBlacks = new ArrayList<>();

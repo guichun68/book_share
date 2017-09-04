@@ -1,6 +1,7 @@
 package zyzx.linke.activity;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class ImportResultAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mTitleText.setText("导入结果");
         mListView = (ListView) findViewById(R.id.lv);
         tvTip = (TextView) findViewById(R.id.tv_tip);

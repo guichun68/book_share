@@ -1,11 +1,13 @@
 package zyzx.linke.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -113,6 +115,7 @@ public class AttentionPage extends BasePager {
 
     @Override
     public void initView() {
+        ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         if(mAttentions == null){
             mAttentions = new ArrayList<>();
         }

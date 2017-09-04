@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class BookDetailAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);

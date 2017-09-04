@@ -1,6 +1,5 @@
 package zyzx.linke.activity;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,19 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -31,7 +27,6 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import zyzx.linke.LKConversationListFragment;
@@ -71,6 +66,7 @@ public class HomeAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //make sure activity will not in background if user is logged into another device or removed
         if (savedInstanceState != null && savedInstanceState.getBoolean(MyEaseConstant.ACCOUNT_REMOVED, false)) {
             EaseUIHelper.getInstance().logout(false,null);

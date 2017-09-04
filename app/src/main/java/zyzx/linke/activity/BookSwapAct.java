@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -241,6 +242,7 @@ public class BookSwapAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mSwapBookVO = getIntent().getParcelableExtra(BundleFlag.SWAP_BOOK_VO);
         if(mSwapBookVO == null){
             UIUtil.showToastSafe("解析图书信息出错");

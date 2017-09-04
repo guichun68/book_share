@@ -12,6 +12,7 @@ import android.text.format.DateFormat;
 import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -83,6 +84,7 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         activityInstance = this;
         mChatFrag = new EaseChatFragment();
 
