@@ -79,7 +79,7 @@ public class BorrowedInBookAct extends BaseActivity{
         mBorrowedInAdapter.setOnClickListener(new BorrowedInAdapter.OnClickListener() {
             @Override
             public boolean onLongItemClickListener(View view, BorrowedInVO bookDetailVO, int position) {
-                UIUtil.showTestToast(mContext,"长按事件");
+//                UIUtil.showTestToast(mContext,"长按事件");
                 return false;
             }
 

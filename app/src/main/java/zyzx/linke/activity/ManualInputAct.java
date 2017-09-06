@@ -16,6 +16,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -74,6 +75,7 @@ public class ManualInputAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         mItems = UIUtil.getStringArray(R.array.bookType);
         adapter = new ArrayAdapter<>(this,R.layout.item_book_classify, mItems);
         tvSave = (TextView) findViewById(R.id.tv_add_mylib);

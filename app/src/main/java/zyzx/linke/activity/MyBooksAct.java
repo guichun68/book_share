@@ -225,7 +225,7 @@ public class MyBooksAct extends BaseActivity{
                     }
                 });
                 break;
-            case Const.BOOK_STATUS_EXCHANGING:
+            case Const.BOOK_STATUS_EXCHANGING://交换中
                 item1.setText("删除此书");
                 item2.setText("取消交换");
                 item2.setOnClickListener(new View.OnClickListener() {
@@ -274,8 +274,19 @@ public class MyBooksAct extends BaseActivity{
                     }
                 });
                 break;
-            case Const.BOOK_STATUS_BORROWED://已借出
-
+            case Const.BOOK_STATUS_LOANED://已借出
+                item1.setText("对方已归还?");
+                item2.setVisibility(View.GONE);
+                item3.setVisibility(View.GONE);
+                item1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pop.dismiss();
+                        mPromptDialog = CustomProgressDialog.getPromptDialog2Btn(MyBooksAct.this, "确定对方已归还《" + bookDetailVO.getBook().getTitle() + "》这本书了么?", "确定", "取消",
+                                new PopItemClickListener(bookDetailVO, position, PopItemClickListener.RETURN), null);
+                        mPromptDialog.show();
+                    }
+                });
                 break;
         }
     }
@@ -372,6 +383,7 @@ public class MyBooksAct extends BaseActivity{
         private int operId;
         private MyBookDetailVO bookDetailVO;
         private static final int DELETE = 0;//从书架删除（无论之前什么状态）
+        private static final int RETURN = 4;//确定对方已归还图书
         private static final int CANCEL_SHARE = 1;//取消分享
         private static final int CANCEL_SWAP_BOOK = 2;//取消图书交换
         private int position;//在listView中的位置索引
@@ -519,6 +531,42 @@ public class MyBooksAct extends BaseActivity{
                         }
                     });
                     break;
+                case RETURN://归还图书
+                    showDefProgress();
+                    getUserPresenter().confirmReturnedBook(bookDetailVO.getUserBookId(),bookDetailVO.getRelatedUserId(),GlobalParams.getLastLoginUser().getUserid(),bookDetailVO.getBook().getId(),new CallBack(){
+
+                        @Override
+                        public void onSuccess(Object obj, int... code) {
+                            dismissProgress();
+                            ResponseJson rj = new ResponseJson((String) obj);
+                            if(ResponseJson.NO_DATA == rj.errorCode){
+                                UIUtil.showToastSafe("访问出错，请稍后重试");
+                                return;
+                            }
+                            switch (rj.errorCode){
+                                case 2:
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            UIUtil.showToastSafe("操作成功");
+                                            mBooks.get(position).setBookStatusId(Const.BOOK_STATUS_ONSHELF);
+                                            myBookAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                    break;
+                                case 3:
+                                    UIUtil.showToastSafe("操作失败，未能设置归还");
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Object obj, int... code) {
+                            dismissProgress();
+                            UIUtil.showToastSafe("访问出错,请稍后重试");
+                        }
+                    });
+                    break;
             }
         }
     }
@@ -565,12 +613,15 @@ public class MyBooksAct extends BaseActivity{
                         mSwipeRefreshLayout.setRefreshing(false);
                         ArrayList<MyBookDetailVO> books = (ArrayList<MyBookDetailVO>) obj;
                         if (books == null || books.isEmpty()) {
-                            UIUtil.showToastSafe("没有更多书籍了!");
-                            myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             if (isLoadingMore) {
+                                UIUtil.showToastSafe("没有更多书籍了!");
+                                myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                                 mPageNum--;
                                 if (mPageNum < 0) mPageNum = 0;
                                 isLoadingMore = false;
+                            }else{
+                                mBooks.clear();
+                                myBookAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                             }
                         } else {
                             if(isLoadingMore){

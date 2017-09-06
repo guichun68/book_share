@@ -554,6 +554,7 @@ public class AppUtil {
 			mBV.setRelatedUserId(jo.getString("related_user_id"));
 			mBV.setUid(jo.getString("user_id"));
 			mBV.setSwapId(jo.getString("swap_book_id"));
+			mBV.setRelLoginName(jo.getString("login_name"));
 			mBvos.add(mBV);
 		}
 		return mBvos;

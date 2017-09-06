@@ -47,6 +47,7 @@ public abstract class IUserPresenter extends IPresenter{
      */
     public abstract void getUserInfoByUserId(String userId, CallBack callBack);
 
+    //userid
     public abstract void getUserInfoByUserId2(String userId, CallBack callBack);
 
     /**
@@ -72,7 +73,7 @@ public abstract class IUserPresenter extends IPresenter{
      */
     public abstract void mofiySignature(Integer userid, String sig, CallBack callBack);
 
-
+    //uuid
     public abstract void getUserInfoByUid2(String uid,CallBack callBack);
 
     public abstract void searchFriend(String keyWord, int pageNum,CallBack viewCallBack);
@@ -158,7 +159,7 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void getAllShareBooks(String pro,String city,String county,int pageNo,CallBack callBack);
 
     //发送求借求赠送消息
-    public abstract void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack);
+    public abstract void sendBegBookMsg(Integer shareType,Integer userId, UserVO friend, BookDetail2 book, CallBack callBack);
 
     public abstract void getAllBorrowBegs(Integer userId,int pageNo,CallBack callBack);
 
@@ -241,4 +242,15 @@ public abstract class IUserPresenter extends IPresenter{
     public abstract void report(String uid, String type, String desc, CallBack callBack);
     //从黑名单删除某人
     public abstract void deleteFromBlackList(String uid, CallBack callBack);
+
+
+    /**
+     *确认图书已经归还
+     * @param userBookId userbook表主键
+     * @param uid  借阅人环信id
+     * @param relUid 拥有者环信id
+     * @param bid 书籍id
+     * @param callBack
+     */
+    public abstract void confirmReturnedBook(String userBookId,String uid,Integer relUid, String bid,CallBack callBack);
 }

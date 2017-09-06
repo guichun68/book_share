@@ -61,6 +61,7 @@ public class GlobalParams {
 	public static String urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
 	public static String urlReport = GlobalParams.BASE_URL+"/user/mobileSDK/report.action";
 	public static String urlDeleteFromBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/deleteFromBlacList.action";
+	public static String urlConfirmReturnedBook = GlobalParams.BASE_URL+"/user/mobileSDK/confirmReturnedBook.action";
 	/**
 	 * 保存手动录入的书籍信息(包含图片）url
 	 */
@@ -136,6 +137,7 @@ public class GlobalParams {
 	 * 获取我登录的所有书籍(借入的除外)
 	 */
 	public static String urlGetMyBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMyOwnBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
+	public static String urlGetMyBooks2 = GlobalParams.BASE_URL+"/user/mobileSDK/getMyBooks.action";
 	//获得我分享的所有书籍
 	public static String urlGetMyShareBooks = GlobalParams.BASE_URL+"/getMySql/mobileSDK/getSqlByCodeWithLogin.action?page.searchValue.queryId=getMySharedBooks&page.searchValue.uid={uid}&page.pageSize={pageSize}&page.curPage={curPage}";
 	/**
@@ -238,6 +240,7 @@ public class GlobalParams {
 		urlCancelAttention = GlobalParams.BASE_URL+"/user/mobileSDK/cancelAttention.action";
 		urlReport = GlobalParams.BASE_URL+"/user/mobileSDK/report.action";
 		urlDeleteFromBlackList = GlobalParams.BASE_URL+"/user/mobileSDK/deleteFromBlacList.action";
+		urlConfirmReturnedBook = GlobalParams.BASE_URL+"/user/mobileSDK/confirmReturnedBook.action";
 		urlGetSharedBooks = GlobalParams.BASE_URL+"/user/mobileSDK/getAllsharedBook.action";
 		urlGetArea2BookStatusId = GlobalParams.BASE_URL+"/app/mobileSDK/getAreaAndBookStatus.action";
 		urlSendBegMsg = GlobalParams.BASE_URL+"/user/mobileSDK/sendMessage.action";

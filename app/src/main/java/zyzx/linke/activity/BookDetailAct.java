@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 
@@ -27,7 +28,9 @@ import zyzx.linke.model.CallBack;
 import zyzx.linke.model.bean.BookDetail2;
 import zyzx.linke.model.bean.DefindResponseJson;
 import zyzx.linke.model.bean.MyBookDetailVO;
+import zyzx.linke.model.bean.ResponseJson;
 import zyzx.linke.model.bean.Tags;
+import zyzx.linke.model.bean.UserVO;
 import zyzx.linke.utils.AppUtil;
 import zyzx.linke.utils.CustomProgressDialog;
 import zyzx.linke.utils.StringUtil;
@@ -132,8 +135,69 @@ public class BookDetailAct extends BaseActivity {
             case R.id.btn_beg_borrow://求借
 
                 break;
+            case R.id.tv_book_tags:
+                getUserInfo(mBookVo.getRelatedUserId());
+                break;
         }
     }
+
+    private UserVO mFriend =new UserVO();
+    private void getUserInfo(String userId) {
+        showProgress("请稍后…", false);
+        getUserPresenter().getUserInfoByUserId2(userId, new CallBack() {
+            @Override
+            public void onSuccess(Object obj, int... code) {
+                dismissProgresSingle();
+                ResponseJson rj = new ResponseJson((String) obj);
+                if(ResponseJson.NO_DATA == rj.errorCode || rj.errorCode!=2){
+                    UIUtil.showToastSafe("用户信息获取失败！");
+                    return;
+                }
+                JSONArray ja = rj.data;
+                JSONObject jo = (JSONObject) ja.get(0);
+                boolean isInRelsBlackList = ((JSONObject)ja.get(1)).getBoolean("isInRelsBlackList");
+                mFriend.setUserid(jo.getInteger("userid"));
+                mFriend.setUid(jo.getString("id"));
+                mFriend.setLoginName(jo.getString("login_name"));
+                mFriend.setMobilePhone(jo.getString("mobile_phone"));
+                mFriend.setAddress(jo.getString("address"));
+                mFriend.setPassword(jo.getString("password"));
+                mFriend.setProvinceName(jo.getString("pro"));
+                mFriend.setCityName(jo.getString("city"));
+                mFriend.setCountyName(jo.getString("county"));
+                String genderStr = jo.getString("gender");
+                Integer gender = Integer.parseInt(genderStr==null?"0":genderStr);
+                mFriend.setGender(gender);
+                mFriend.setHobby(jo.getString("hobby"));
+                mFriend.setEmail(jo.getString("email"));
+                mFriend.setRealName(jo.getString("real_name"));
+                mFriend.setCityId(jo.getInteger("city_id"));
+                mFriend.setLastLoginTime(jo.getString("last_login_time"));
+
+                mFriend.setSignature(jo.getString("signature"));
+                String headTemp = jo.getString("head_icon");
+                mFriend.setHeadIcon(StringUtil.isEmpty(headTemp)?null:GlobalParams.BASE_URL+GlobalParams.AvatarDirName+headTemp);
+                mFriend.setBak4(jo.getString("bak4"));
+                mFriend.setBirthday(jo.getDate("birthday"));
+                mFriend.setSchool(jo.getString("school"));
+                mFriend.setDepartment(jo.getString("department"));
+                mFriend.setDiplomaId(jo.getInteger("diploma_id"));
+                mFriend.setSoliloquy(jo.getString("soliloquy"));
+                mFriend.setCreditScore(jo.getInteger("credit_score"));
+                mFriend.setFromSystem(jo.getInteger("from_system"));
+                Bundle ex = new Bundle();
+                ex.putSerializable(BundleFlag.FLAG_USER,mFriend);
+                gotoActivity(FriendHomePageAct.class,false,ex);
+            }
+
+            @Override
+            public void onFailure(Object obj, int... code) {
+                dismissProgresSingle();
+                UIUtil.showToastSafe("用户信息获取失败！");
+            }
+        });
+    }
+
 
     View.OnClickListener myOk;
     View.OnClickListener myCancel;
@@ -208,6 +272,13 @@ public class BookDetailAct extends BaseActivity {
         if(from == Const.FROM_HOME_FRAG){
             btnBegBorrow.setVisibility(View.VISIBLE);
             findViewById(R.id.ll_sharer).setVisibility(View.VISIBLE);
+        }
+        if(mBookVo.getBookStatusId().equals(Const.BOOK_STATUS_LOANED)){
+            tvTags.setText("借阅人："+mBookVo.getRelLoginName());
+            tvTags.setClickable(true);
+            tvTags.setOnClickListener(this);
+            tvTags.setBackground(getResources().getDrawable(R.drawable.btn_sel));
+//            tvTags.setBackground(getDrawable(R.drawable.btn_sel));
         }
         mBook = mBookVo.getBook();
         friendUserId = in.getIntExtra(BundleFlag.UID,0);
@@ -362,12 +433,14 @@ public class BookDetailAct extends BaseActivity {
             tvPublishDate.setVisibility(View.GONE);
         }
         //------标签---------------------
-        if (mBook.getTags() != null && !mBook.getTags().isEmpty()) {
-            for (Tags tag : mBook.getTags()) {
-                tvTags.append(tag.getName() + ";");
+        if(!mBookVo.getBookStatusId().equals(Const.BOOK_STATUS_LOANED)){
+            if (mBook.getTags() != null && !mBook.getTags().isEmpty()) {
+                for (Tags tag : mBook.getTags()) {
+                    tvTags.append(tag.getName() + ";");
+                }
+            }else{
+                tvTags.setVisibility(View.GONE);
             }
-        }else{
-            tvTags.setVisibility(View.GONE);
         }
         //-----简介-----------------------
         if (StringUtil.isEmpty(mBook.getSummary())) {

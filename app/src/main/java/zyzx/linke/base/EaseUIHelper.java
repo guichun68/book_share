@@ -953,6 +953,7 @@ public class EaseUIHelper {
     }
 
     private EaseUser getUserInfo(EMMessage message,String username){
+        //为了防止头像显示混乱，后期可考虑为cotactList加上时间戳，和message.getMsgTime()比较，如果消息的时间早于contactList时间戳，则不使用该message头像。
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;

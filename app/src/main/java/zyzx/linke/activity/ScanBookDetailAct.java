@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class ScanBookDetailAct extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         ivBookImage = (ImageView) findViewById(R.id.iv_book_image);
         tvTitle = (TextView) findViewById(R.id.tv_book_title);
         tvAuthor = (TextView) findViewById(R.id.tv_book_author);

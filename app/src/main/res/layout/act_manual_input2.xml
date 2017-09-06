@@ -4,7 +4,8 @@
     android:id="@+id/ll_munual"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_white"
+    android:background="@mipmap/bacgroud"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/title_bar" />

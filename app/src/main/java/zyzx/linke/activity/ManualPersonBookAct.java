@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -117,6 +118,7 @@ public class ManualPersonBookAct extends BaseActivity{
 
     @Override
     protected void initView(Bundle saveInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         spBookClassify = (AppCompatSpinner) findViewById(R.id.sp_book_classify);
         acivCover = (AppCompatImageView) findViewById(R.id.aciv_cover);
         mMaterialTitle = (AppCompatEditText) findViewById(R.id.acet_title);

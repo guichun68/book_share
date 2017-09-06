@@ -14,7 +14,7 @@
     <string name="server_err">服务器出错，请稍后再试</string>
     <string name="regist_err">注册失败，code=</string>
     <string name="modify_psw">修改密码</string>
-    <string name="my_borrow_beg_record">我发送的借书请求</string>
+    <string name="my_borrow_beg_record">我发送的求借请求</string>
     <string name="regist_succ">注册成功,请登录!</string>
     <string name="usernameOccupation">用户名已被注册</string>
     <string name="phone">手机号</string>

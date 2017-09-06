@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@color/gray_white"
+                android:background="@color/watermark_hint"
                 android:orientation="vertical">
 
                 <TextView

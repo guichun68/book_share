@@ -120,7 +120,7 @@ public class ShareBookDetailAct extends BaseActivity {
 
     private void showBegDialog() {
         begDialog =
-        CustomProgressDialog.getPromptDialog2Btn(this,"确定向对方发送消息"+btnBegBorrow.getText().toString()+"么？","确定","取消",new DialogListener(),null);
+        CustomProgressDialog.getPromptDialog2Btn(this,"确定向对方发送"+btnBegBorrow.getText().toString()+"消息么？","确定","取消",new DialogListener(),null);
         begDialog.show();
     }
 
@@ -190,7 +190,7 @@ public class ShareBookDetailAct extends BaseActivity {
 
     //上传请求记录到服务器，保存到server DB
     private void uploadBegRecord(){
-        getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),mFriend,GlobalParams.getLastLoginUser().getUserid(),mBook,new CallBack(){
+        getUserPresenter().sendBegBookMsg(mBookVo.getShareType(),GlobalParams.getLastLoginUser().getUserid(),mFriend,mBook,new CallBack(){
 
             @Override
             public void onSuccess(Object obj, int... code) {

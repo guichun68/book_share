@@ -447,10 +447,10 @@ public class UserPresenter extends IUserPresenter {
     }
 
     @Override
-    public void sendBegBookMsg(Integer shareType,UserVO user, Integer relUserId, BookDetail2 book, CallBack callBack) {
+    public void sendBegBookMsg(Integer shareType,Integer userid, UserVO user, BookDetail2 book, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlSendBegMsg,"请求出错.",
                 new String[]{"userId","relUserId","bookId","bookTitle","shareType","uid","headIcon","nickName"},
-                user.getUserid(),relUserId,book.getId(),book.getTitle(),shareType,user.getUid(),user.getHeadIcon(),user.getLoginName());
+                userid,user.getUserid(),book.getId(),book.getTitle(),shareType,user.getUid(),user.getHeadIcon(),user.getLoginName());
     }
 
     @Override
@@ -462,7 +462,7 @@ public class UserPresenter extends IUserPresenter {
 
     @Override
     public void setBorrowFlowstatus(String userBookId,String currentUser, String chatUserId, String bookId, int status, CallBack callBack) {
-        if(status==Const.BORROW_BORROWER_REPLY_AGREE){//借阅者-约会已同意
+        /*if(status==Const.BORROW_BORROWER_REPLY_AGREE){//借阅者-约会已同意
             getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
                     new String[]{"userBookId","userId","relUid","bid","status"},
                     userBookId,currentUser,chatUserId,bookId,status);
@@ -470,7 +470,10 @@ public class UserPresenter extends IUserPresenter {
             getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
                     new String[]{"userBookId","relUid","userId","bid","status"},
                     userBookId,currentUser,chatUserId,bookId,status);
-        }
+        }*/
+        getDataWithPost(callBack,GlobalParams.urlSetFollowStauts,"更改状态出错",
+                new String[]{"userBookId","userId","relUid","bid","status"},
+                userBookId,currentUser,chatUserId,bookId,status);
     }
 
     @Override
@@ -543,6 +546,12 @@ public class UserPresenter extends IUserPresenter {
     public void deleteFromBlackList(String uid, CallBack callBack) {
         getDataWithPost(callBack,GlobalParams.urlDeleteFromBlackList,"未能成功删除",
                 new String[]{"uid"},uid);
+    }
+
+    @Override
+    public void confirmReturnedBook(String userBookId,String uid, Integer relUid,String bid,CallBack callBack) {
+        getDataWithPost(callBack,GlobalParams.urlConfirmReturnedBook,"操作失败",
+                new String[]{"userBookId","uid","relUid","bid"},userBookId,uid,relUid,bid);
     }
 
     private void getDataWithPost(CallBack callBack, String url, String failureDesc, String[] argNames, Object ...values){

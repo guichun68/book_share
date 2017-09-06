@@ -151,7 +151,7 @@ public class BorrowBookDetail extends BaseActivity {
         super.onClick(view);
         switch (view.getId()){
             case R.id.tv_sharer://好友名字
-                getUserInfo(mBorrowInVO.getUid());
+                getUserInfo(mBorrowInVO.getRelUid());
 //                Bundle ex = new Bundle();
 //                ex.putSerializable("user",mFriend);
 //                gotoActivity(FriendHomePageAct.class,false,ex);

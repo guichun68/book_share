@@ -261,11 +261,13 @@ public class ShareCenterFragment extends BaseFragment implements  View.OnClickLi
                                 break;
                             case 2:
                                 UIUtil.showToastSafe("没有更多数据了");
-                                mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                                 if(isRefresh){
                                     mCurrentPageNum = 1;
+                                    mListViewItems.clear();
+                                    mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                                 }else{
                                     mCurrentPageNum--;
+                                    mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                                 }
                                 break;
                             default:
