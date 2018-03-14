@@ -51,7 +51,7 @@ public class LKConversationListFragment extends BaseFragment {
 
             @Override
             public void onListItemClicked(final EMConversation conversation) {
-                showProgress("请稍后……");
+                showProgress("请稍候……");
                 getUserPresenter().getUserInfoByUserId2(conversation.conversationId(),new CallBack(){
                     @Override
                     public void onSuccess(Object obj, int... code) {

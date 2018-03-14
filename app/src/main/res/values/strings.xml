@@ -27,7 +27,7 @@
 
     <string name="username">用户名</string>
     <string name="input_username">请输入用户名</string>
-    <string name="loading">请稍后…</string>
+    <string name="loading">请稍候…</string>
     <string name="password">密码</string>
     <string name="oldPsw">原密码</string>
     <string name="newPsw">新密码</string>

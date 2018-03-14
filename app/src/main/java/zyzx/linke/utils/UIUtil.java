@@ -37,7 +37,6 @@ public class UIUtil {
 	private static final boolean isShow = true;
 
 	public static Context getContext() {
-		// TODO 待查BaseApplication的用法
 		return BaseApplication.getApplication();
 	}
 

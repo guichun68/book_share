@@ -35,7 +35,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="BookShare\n\n爱读书，爱分享\n\n寻觅身边的美好"
+            android:text="BookShare\n\n爱读书，爱分享\n\n寻觅身边的美好\n\n联系我guichun68@vip.qq.com\n或者 caorb_@126.com"
             android:textColor="#BBffffff"
             android:layout_marginTop="100dp"
             android:gravity="center"

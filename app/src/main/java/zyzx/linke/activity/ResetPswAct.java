@@ -59,7 +59,7 @@ public class ResetPswAct extends BaseActivity{
                 }
 
                 String newPsw = etPsw.getText().toString().trim();
-                showProgress("请稍后…");
+                showProgress("请稍候…");
                 getUserPresenter().resetPsw(mUserId,newPsw,new CallBack(){
 
                     @Override

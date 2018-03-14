@@ -429,7 +429,7 @@ public class ShareBookDetailAct extends BaseActivity {
                 }
             });
         }
-        showProgress("请稍后…",false);
+        showProgress("请稍候…",false);
         getUserPresenter().getUserInfoByUid2(mBookVo.getUid(), new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {

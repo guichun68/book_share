@@ -224,7 +224,7 @@ public class LoginAct extends BaseActivity {
     }
 
  /*   public void loginByThirdPlatform(String platformName) {
-        showProgress("请稍后……");
+        showProgress("请稍候……");
         Platform platform = ShareSDK.getPlatform(platformName);
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
         platform.setPlatformActionListener(new PlatformActionListener() {

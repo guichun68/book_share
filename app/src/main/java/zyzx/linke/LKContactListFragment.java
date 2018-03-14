@@ -49,7 +49,7 @@ public class LKContactListFragment extends BaseFragment {
 
     //获取并刷新联系人列表
     private void refreshContacts() {
-        showProgress("请稍后…");
+        showProgress("请稍侯…");
         getUserPresenter().getAllMyContacts(new EMValueCallBack<List<EaseUser>>() {
             @Override
             public void onSuccess(final List<EaseUser> easeUsers) {

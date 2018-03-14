@@ -81,7 +81,7 @@ public class ForgetPswAct extends BaseActivity{
                     UIUtil.showToastSafe("请先验证手机号");
                     return;
                 }
-                showProgress("请稍后…");
+                showProgress("请稍候…");
                 getUserPresenter().verifyForgotPSWSMSCode(mUserId,etVerifycode.getText().toString(),new CallBack(){
 
                     @Override
@@ -116,7 +116,7 @@ public class ForgetPswAct extends BaseActivity{
                 if(!checkInput()){
                     return;
                 }
-                showProgress("请稍后…");
+                showProgress("请稍候…");
                 final TimeUtils tu = new TimeUtils(btnSendVerifyCode,"发送验证码");
                 getUserPresenter().sendForgetPswSMSVerifyCode(etPhone.getText().toString().trim(), new CallBack() {
                     @Override

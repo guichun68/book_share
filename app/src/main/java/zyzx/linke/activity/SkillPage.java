@@ -85,7 +85,10 @@ public class SkillPage extends BasePager {
                         mSwipeRefreshLayout.setRefreshing(false);
                         break;
                     case 3:
-                        UIUtil.showToastSafe("没有更多了");
+                        if(isRefreshing){
+                            mSwapSkillVos.clear();
+                        }
+                        UIUtil.showToastSafe("无更多内容了");
                         mAdapter.setFooterStatus(MyCommonAdapter.Status.STATUS_NO_MORE_DATE);
                         dismissLoading();
                         break;

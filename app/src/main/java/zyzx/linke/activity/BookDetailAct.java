@@ -143,7 +143,7 @@ public class BookDetailAct extends BaseActivity {
 
     private UserVO mFriend =new UserVO();
     private void getUserInfo(String userId) {
-        showProgress("请稍后…", false);
+        showProgress("请稍候…", false);
         getUserPresenter().getUserInfoByUserId2(userId, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {

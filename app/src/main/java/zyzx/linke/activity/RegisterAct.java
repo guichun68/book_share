@@ -54,7 +54,7 @@ public class RegisterAct extends BaseActivity {
                 if (!checkInput()) {
                     return;
                 }
-                showProgress("请稍后……");
+                showProgress("请稍候……");
                 getUserPresenter().regist(aetLoginName.getText().toString().trim(), aetPsw.getText().toString().trim(), aetPhone.getText().toString().trim(), new CallBack() {
                     @Override
                     public void onSuccess(final Object obj, int... code) {

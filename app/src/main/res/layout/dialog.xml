@@ -21,6 +21,6 @@
             android:layout_marginTop="8.0dip"
             android:textColor="#fff"
             android:textSize="16.0dip" 
-            android:text="请稍后..."/>
+            android:text="请稍侯..."/>
 
 </LinearLayout>

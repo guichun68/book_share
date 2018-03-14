@@ -186,7 +186,7 @@ public class BorrowBookDetail extends BaseActivity {
     }
 
     private void getUserInfo(String friendUid) {
-        showProgress("请稍后…", false);
+        showProgress("请稍候…", false);
         getUserPresenter().getUserInfoByUserId2(friendUid, new CallBack() {
             @Override
             public void onSuccess(Object obj, int... code) {

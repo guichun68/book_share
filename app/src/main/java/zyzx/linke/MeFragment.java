@@ -162,7 +162,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 dialog = CustomProgressDialog.getPromptDialog2Btn(mContext, UIUtil.getString(R.string.export_tip), UIUtil.getString(R.string.confirm), UIUtil.getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showProgress("请稍后…");
+                        showProgress("请稍候…");
                         downloadFile();
                     }
                 }, null);

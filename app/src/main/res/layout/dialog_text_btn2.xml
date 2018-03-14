@@ -47,13 +47,13 @@
         <Button
             android:id="@+id/dialog_btn"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/btn_sel2"
             android:text="@string/confirm"
-            android:visibility="visible"
             android:textColor="@android:color/holo_blue_light"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="visible" />
 
         <View
             android:layout_width="1px"
